@@ -316,12 +316,15 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
   "Minor for setup fonts names and scales"
   nil " Rem" cfs--profile-edit-mode-map)
 
+(defun cfs--select-profile (profile-name)
+  (setq cfs--current-profile-name profile-name)
+  (customize-save-variable 'cfs--current-profile-name profile-name)
+  (cfs--set-font-with-saved-size))
+
 (defun cfs--switch-profile ()
   (interactive)
   (let ((profile (ido-completing-read "Set chinese-fonts-setup profile to:" cfs--profiles)))
-    (setq cfs--current-profile-name profile)
-    (customize-save-variable 'cfs--current-profile-name profile)
-    (cfs--set-font-with-saved-size)))
+    (cfs--select-profile profile)))
 
 (defun cfs--next-profile (&optional step)
   (interactive)
