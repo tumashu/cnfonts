@@ -54,6 +54,7 @@ chinese-fonts-setup 在切换 profile 时通过自带的falback信息创建一�
 
 ### 调整字体大小 ###
 `chinese-fonts-setup` 使用下述两个命令调整字体大小:
+
 1.  `cfs--increase-font-size` 增大字体大小
 2.  `cfs--decrease-font-size` 减小字体大小
 
