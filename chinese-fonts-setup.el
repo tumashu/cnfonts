@@ -74,6 +74,13 @@
 ;; 3.  C-<down>    `cfs--decrement-font-scale-at-point'
 ;;                  减小光标下的scale数字，同时显示减小后的字体对齐效果
 ;;
+;; ### 调整字体大小 ###
+;; `chinese-fonts-setup' 使用下述两个命令调整字体大小:
+;; 1.  `cfs--increase-font-size' 增大字体大小
+;; 2.  `cfs--decrease-font-size' 减小字体大小
+;;
+;; 在调整字体大小的同时，字号信息也通过customize-save-variable函数保存到~/.emacs中了。
+;;
 
 ;;; Code:
 (require 'cl)
