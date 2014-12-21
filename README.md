@@ -60,6 +60,15 @@ chinese-fonts-setup 在切换 profile 时通过自带的falback信息创建一�
 
 在调整字体大小的同时，字号信息也通过customize-save-variable函数保存到~/.emacs中了。
 
+### 使用斜体和粗斜体 ###
+`chinese-fonts-setup` 默认使用正常字体代替斜体，粗体代替粗斜体。这样设置的原因是：
+大多数英文等宽字体包含的斜体不能将(9 10.5 11.5 12.5 14 16 18 20 22)这几个字号完全覆盖。
+如果想使用斜体和粗斜体：
+
+	  (setq cfs--ignore-italic nil)
+	  (setq cfs--ignore-bold-italic nil)
+
+与此同时，你要使用一个包含粗体和粗斜体的英文等宽字体。
 
 
 ---
