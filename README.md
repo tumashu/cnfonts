@@ -39,6 +39,7 @@ profile文件保存在`cfs--profiles-directory`对应的目录中。如果文件
 chinese-fonts-setup 在切换 profile 时通过自带的falback信息创建一个。
 
 切换 profile 的命令有：
+
 1. `cfs--switch-profile` (选择profile)
 2. `cfs--next-profile`   (直接切换到下一个profile)
 
@@ -63,7 +64,7 @@ chinese-fonts-setup 在切换 profile 时通过自带的falback信息创建一�
 ### 使用斜体和粗斜体 ###
 `chinese-fonts-setup` 默认使用正常字体代替斜体，粗体代替粗斜体。这样设置的原因是：
 大多数英文等宽字体包含的斜体不能将(9 10.5 11.5 12.5 14 16 18 20 22)这几个字号完全覆盖。
-如果想使用斜体和粗斜体：
+如果想使用斜体和粗斜体，请使用下面的设置：
 
 	  (setq cfs--ignore-italic nil)
 	  (setq cfs--ignore-bold-italic nil)
