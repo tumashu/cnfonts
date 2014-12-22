@@ -62,8 +62,9 @@
 ;;
 ;; 切换 profile 的命令有：
 ;;
-;; 1. `cfs--switch-profile' (选择profile)
-;; 2. `cfs--next-profile'   (直接切换到下一个profile)
+;; 1. `cfs--select-profile' (通过参数选择profile，可用于用户自定义profile切换命令)
+;; 2. `cfs--switch-profile' (选择profile)
+;; 3. `cfs--next-profile'   (直接切换到下一个profile)
 ;;
 ;; 如果当前的profile不适合时，可以通过`cfs--edit-profile'来编辑当前
 ;; 的profile文件。chinese-fonts-setup自带一个profile-edit编辑模式。
