@@ -93,6 +93,11 @@
 ;;       (setq cfs-ignore-bold-italic nil)
 ;;
 ;; 与此同时，你要使用一个包含粗体和粗斜体的英文等宽字体。
+;;
+;; ### 参考文章 ###
+;;
+;; http://baohaojun.github.io/perfect-emacs-chinese-font.html
+;; http://zhuoqiang.me/torture-emacs.html
 
 ;;; Code:
 (require 'cl)

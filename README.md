@@ -72,6 +72,11 @@ chinese-fonts-setup 在切换 profile 时通过自带的falback信息创建一�
 
 与此同时，你要使用一个包含粗体和粗斜体的英文等宽字体。
 
+### 参考文章 ###
+
+http://baohaojun.github.io/perfect-emacs-chinese-font.html
+http://zhuoqiang.me/torture-emacs.html
+
 
 ---
 Converted from `chinese-fonts-setup.el` by [*el2markdown*](https://github.com/Lindydancer/el2markdown).
