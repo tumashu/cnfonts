@@ -207,7 +207,10 @@
         (variable-fonts-scales "cfs--custom-set-fonts-scales"))
     (with-temp-buffer
       (erase-buffer)
-      (insert ";;; 设置默认字体列表，按`C-c C-c'测试字体显示效果")
+      (insert
+       (concat ";;; 设置默认字体列表，按`C-c C-c'测试字体显示效果。\n"
+               ";;; 另外，你可以使用命令: `describe-char' 来了解光标处字符使用什么字体。\n"
+               ";;; 也可以运行`(print (font-family-list))'来获得当前可用的字体的名称列表"))
       (cfs--dump-variable variable-fonts-names  fonts-names)
       (insert (format "\n;;; 为每个字号%s设置中文调整系数，使中英文等宽度。"
                       cfs--fontsizes-steps))
