@@ -204,7 +204,6 @@
 
 (defun cfs--save-profile (fonts-names fonts-scales)
   "Save fonts names and scales to current profile"
-  (interactive)
   (let ((variable-fonts-names "cfs--custom-set-fonts-names")
         (variable-fonts-scales "cfs--custom-set-fonts-scales"))
     (with-temp-buffer
