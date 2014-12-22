@@ -130,7 +130,7 @@
 
 (defvar cfs--profiles-fontsizes
   (mapcar (lambda (x)
-	    cfs--fontsize-fallback) cfs-profiles)
+            cfs--fontsize-fallback) cfs-profiles)
   "fontsizes list of all profiles.")
 
 (defconst cfs--fontsizes-steps
@@ -167,34 +167,34 @@
 
 (defun cfs--get-current-profile ()
   (let ((directory-name
-	 (expand-file-name
-	  (file-name-as-directory cfs-profiles-directory))))
+         (expand-file-name
+          (file-name-as-directory cfs-profiles-directory))))
     (make-directory directory-name t)
     (concat directory-name
-	    cfs--current-profile-name ".el")))
+            cfs--current-profile-name ".el")))
 
 (defun cfs--dump-variable (variable-name value)
   "Insert a \"(setq VARIABLE value)\" in the current buffer."
   (cond ((atom value)
-	 (insert (format "\n(setq %s %S)\n" variable-name value)))
-	((atom (car value))
-	 (insert (format "\n(setq %s\n       '%S)\n" variable-name value)))
-	(t (insert (format "\n(setq %s\n      '(" variable-name))
-	   (dolist (e value)
-	     (insert (format "\n        %S" e)))
-	   (insert "\n       ))\n"))))
+         (insert (format "\n(setq %s %S)\n" variable-name value)))
+        ((atom (car value))
+         (insert (format "\n(setq %s\n       '%S)\n" variable-name value)))
+        (t (insert (format "\n(setq %s\n      '(" variable-name))
+           (dolist (e value)
+             (insert (format "\n        %S" e)))
+           (insert "\n       ))\n"))))
 
 (defun cfs--save-current-profile-fontsize (profile-name size)
   (let* ((profiles-names cfs-profiles)
-	 (profiles-fontsizes cfs--profiles-fontsizes)
-	 (length1 (length profiles-names))
-	 (length2 (length profiles-fontsizes))
-	 (index (position profile-name cfs-profiles :test #'string=)))
+         (profiles-fontsizes cfs--profiles-fontsizes)
+         (length1 (length profiles-names))
+         (length2 (length profiles-fontsizes))
+         (index (position profile-name cfs-profiles :test #'string=)))
     (if (= length1 length2)
-	(setf (nth index profiles-fontsizes) size)
+        (setf (nth index profiles-fontsizes) size)
       (setq profiles-fontsize
-	    (mapcar (lambda (x)
-		      cfs--fontsize-fallback) profiles-names)))
+            (mapcar (lambda (x)
+                      cfs--fontsize-fallback) profiles-names)))
     (setq cfs--profiles-fontsizes profiles-fontsizes)
     (customize-save-variable 'cfs--profiles-fontsizes profiles-fontsizes)))
 
@@ -206,12 +206,13 @@
   "Save fonts names and scales to current profile"
   (interactive)
   (let ((variable-fonts-names "cfs--custom-set-fonts-names")
-	(variable-fonts-scales "cfs--custom-set-fonts-scales"))
+        (variable-fonts-scales "cfs--custom-set-fonts-scales"))
     (with-temp-buffer
       (erase-buffer)
       (insert ";;; 设置默认字体列表，按`C-c C-c'测试字体显示效果")
       (cfs--dump-variable variable-fonts-names  fonts-names)
-      (insert (format "\n;;; 为每个字号%s设置中文调整系数，使中英文等宽度。" cfs--fontsizes-steps))
+      (insert (format "\n;;; 为每个字号%s设置中文调整系数，使中英文等宽度。"
+                      cfs--fontsizes-steps))
       (cfs--dump-variable variable-fonts-scales fonts-scales)
       (write-file (cfs--get-current-profile)))))
 
@@ -222,11 +223,11 @@
     (when (file-readable-p file)
       (load-file file))
     (list (if (boundp 'cfs--custom-set-fonts-names)
-	      cfs--custom-set-fonts-names
-	    cfs--fontnames-fallback)
-	  (if (boundp 'cfs--custom-set-fonts-scales)
-	      cfs--custom-set-fonts-scales
-	    cfs--fontscales-fallback))))
+              cfs--custom-set-fonts-names
+            cfs--fontnames-fallback)
+          (if (boundp 'cfs--custom-set-fonts-scales)
+              cfs--custom-set-fonts-scales
+            cfs--fontscales-fallback))))
 
 (defun cfs--font-exists-p (font)
   (if (null (x-list-fonts font))
@@ -234,57 +235,57 @@
 
 (defun cfs--get-valid-fonts ()
   (mapcar (lambda (x)
-	    (find-if #'cfs--font-exists-p x))
-	  (car (cfs--read-profile))))
+            (find-if #'cfs--font-exists-p x))
+          (car (cfs--read-profile))))
 
 (defun cfs--make-font-string (fontname fontsize)
   (if (and (stringp fontsize)
-	   (equal ":" (string (elt fontsize 0))))
+           (equal ":" (string (elt fontsize 0))))
       (format "%s%s" fontname fontsize)
     (format "%s-%s" fontname fontsize)))
 
 (defun cfs--get-scale (&optional size)
   (let* ((scale-list (car (cdr (cfs--read-profile))))
-	 (index (or (position size cfs--fontsizes-steps) 1)))
+         (index (or (position size cfs--fontsizes-steps) 1)))
     (unless (file-exists-p (cfs--get-current-profile))
       (message "如果中英文不能对齐，请运行`cfs-edit-profile'编辑当前profile。"))
     (or (nth index scale-list) 1)))
 
 (defun cfs--set-font (fontsize &optional fontscale)
   (setq face-font-rescale-alist
-	(mapcar (lambda (x)
-		  (cons x (or fontscale 1.25)))
-		(nth 1 (car (cfs--read-profile)))))
+        (mapcar (lambda (x)
+                  (cons x (or fontscale 1.25)))
+                (nth 1 (car (cfs--read-profile)))))
   (cfs--set-font-internal fontsize))
 
 (defun cfs--set-font-internal (fontsize)
   "english-fontsize could be set to \":pixelsize=18\" or a integer.
 If set/leave chinese-fontsize to nil, it will follow english-fontsize"
   (let* ((valid-fonts (cfs--get-valid-fonts))
-	 (english-main-font (cfs--make-font-string (nth 0 valid-fonts) fontsize))
-	 (chinese-main-font (font-spec :family (nth 1 valid-fonts)))
-	 (english-bold-font
-	  (font-spec :slant 'normal :weight 'bold
-		     :size fontsize
-		     :family (nth 0 valid-fonts)))
-	 (english-italic-font
-	  (font-spec :slant 'italic :weight 'normal
-		     :size fontsize
-		     :family (nth 0 valid-fonts)))
-	 (english-bold-italic-font
-	  (font-spec :slant 'italic :weight 'bold
-		     :size fontsize
-		     :family (nth 0 valid-fonts)))
-	 (english-symbol-font (font-spec :family (nth 3 valid-fonts))))
+         (english-main-font (cfs--make-font-string (nth 0 valid-fonts) fontsize))
+         (chinese-main-font (font-spec :family (nth 1 valid-fonts)))
+         (english-bold-font
+          (font-spec :slant 'normal :weight 'bold
+                     :size fontsize
+                     :family (nth 0 valid-fonts)))
+         (english-italic-font
+          (font-spec :slant 'italic :weight 'normal
+                     :size fontsize
+                     :family (nth 0 valid-fonts)))
+         (english-bold-italic-font
+          (font-spec :slant 'italic :weight 'bold
+                     :size fontsize
+                     :family (nth 0 valid-fonts)))
+         (english-symbol-font (font-spec :family (nth 3 valid-fonts))))
     (set-face-attribute 'default nil :font english-main-font)
     (set-face-font 'italic
-		   (if cfs-ignore-italic
-		       english-main-font
-		     english-italic-font))
+                   (if cfs-ignore-italic
+                       english-main-font
+                     english-italic-font))
     (set-face-font 'bold-italic
-		   (if cfs-ignore-bold-italic
-		       english-bold-font
-		     english-bold-italic-font))
+                   (if cfs-ignore-bold-italic
+                       english-bold-font
+                     english-bold-italic-font))
     (set-fontset-font t 'symbol english-symbol-font)
     (set-fontset-font t nil (font-spec :family "DejaVu Sans"))
 
@@ -295,13 +296,13 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
 
 (defun cfs--step-fontsize (step)
   (let* ((profile-name cfs--current-profile-name)
-	 (steps cfs--fontsizes-steps)
-	 (current-size (cfs--read-current-profile-fontsize profile-name))
-	 next-size)
+         (steps cfs--fontsizes-steps)
+         (current-size (cfs--read-current-profile-fontsize profile-name))
+         next-size)
     (when (< step 0)
       (setq steps (reverse cfs--fontsizes-steps)))
     (setq next-size
-	  (cadr (member current-size steps)))
+          (cadr (member current-size steps)))
     (when next-size
       (cfs--set-font next-size (cfs--get-scale next-size))
       (cfs--save-current-profile-fontsize profile-name next-size)
@@ -309,17 +310,17 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
 
 (defun cfs-set-font-with-saved-size ()
   (let* ((profile-name cfs--current-profile-name)
-	 (fontsize (cfs--read-current-profile-fontsize profile-name))
-	 (fontsize-scale (cfs--get-scale fontsize)))
+         (fontsize (cfs--read-current-profile-fontsize profile-name))
+         (fontsize-scale (cfs--get-scale fontsize)))
     (when (display-graphic-p)
       (cfs--set-font fontsize fontsize-scale))))
 
 ;; 正常启动emacs时设置字体
 (if (and (fboundp 'daemonp) (daemonp))
     (add-hook 'after-make-frame-functions
-	      (lambda (frame)
-		(with-selected-frame frame
-		  (cfs-set-font-with-saved-size))))
+              (lambda (frame)
+                (with-selected-frame frame
+                  (cfs-set-font-with-saved-size))))
   (cfs-set-font-with-saved-size))
 
 (defun cfs-decrease-fontsize ()
@@ -351,17 +352,18 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
 
 (defun cfs-switch-profile ()
   (interactive)
-  (let ((profile (ido-completing-read "Set chinese-fonts-setup profile to:" cfs-profiles)))
+  (let ((profile
+         (ido-completing-read "Set chinese-fonts-setup profile to:" cfs-profiles)))
     (cfs-select-profile profile)))
 
 (defun cfs-next-profile (&optional step)
   (interactive)
   (let ((profiles cfs-profiles)
-	(current-profile cfs--current-profile-name)
-	next-profile)
+        (current-profile cfs--current-profile-name)
+        next-profile)
     (setq next-profile
-	  (or (cadr (member current-profile profiles))
-	      (car profiles)))
+          (or (cadr (member current-profile profiles))
+              (car profiles)))
     (when next-profile
       (setq cfs--current-profile-name next-profile)
       (customize-save-variable 'cfs--current-profile-name next-profile))
@@ -374,7 +376,7 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
   (let ((file (cfs--get-current-profile)))
     (unless (file-readable-p file)
       (cfs--save-profile cfs--fontnames-fallback
-			 cfs--fontscales-fallback))
+                         cfs--fontscales-fallback))
     (find-file file)
     (cfs-profile-edit-mode 1)
     (goto-char (point-min))))
@@ -385,18 +387,18 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
   (let (scale size index)
     (setq scale (sexp-at-point))
     (if (and scale (numberp scale))
-	(progn
-	  (setq index
-		(save-excursion
-		  (let* ((point1 (point))
-			 (point2 (progn (search-backward "(")
-					(point))))
-		    (length (split-string
-			     (buffer-substring-no-properties point1 point2)
-			     " ")))))
-	  (setq size (nth (1- index) cfs--fontsizes-steps))
-	  (cfs--set-font size scale)
-	  (cfs--show-font-effect size scale))
+        (progn
+          (setq index
+                (save-excursion
+                  (let* ((point1 (point))
+                         (point2 (progn (search-backward "(")
+                                        (point))))
+                    (length (split-string
+                             (buffer-substring-no-properties point1 point2)
+                             " ")))))
+          (setq size (nth (1- index) cfs--fontsizes-steps))
+          (cfs--set-font size scale)
+          (cfs--show-font-effect size scale))
       (cfs--set-font 14 1.25)
       (cfs--show-font-effect 14 1.25 t))))
 
@@ -407,8 +409,8 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
       (error "No number at point"))
   (replace-match
    (format "%.5s"
-	   (number-to-string
-	    (+ step (string-to-number (match-string 0))))))
+           (number-to-string
+            (+ step (string-to-number (match-string 0))))))
   (backward-char 1)
   (cfs-test-fontscale-at-point))
 
@@ -427,25 +429,25 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
     (with-output-to-temp-buffer buffer-name
       (set-buffer buffer-name)
       (when (featurep 'org)
-	(org-mode))
+        (org-mode))
       (setq truncate-lines 1)
       (when size
-	(insert (format "# 英文字体大小设置为: %s ; " size)))
+        (insert (format "# 英文字体大小设置为: %s ; " size)))
       (when scale
-	(insert (format "中文字体调整系数(scale)设置为: %s 。\n" scale)))
+        (insert (format "中文字体调整系数(scale)设置为: %s 。\n" scale)))
       (when info
-	(insert
-	 (concat
-	  "# 将光标移动到`cfs--custom-set-fonts-scales‘中各个数字上，"
-	  "C-<up> 增大 scale 的值，C-<down> 减小 scale 的值。")))
+        (insert
+         (concat
+          "# 将光标移动到`cfs--custom-set-fonts-scales‘中各个数字上，"
+          "C-<up> 增大 scale 的值，C-<down> 减小 scale 的值。")))
       (insert
        (replace-regexp-in-string
-	"\\^"  "\\\\"
-	(replace-regexp-in-string
-	 "@@"  "   "
-	 cfs--test-string)))
+        "\\^"  "\\\\"
+        (replace-regexp-in-string
+         "@@"  "   "
+         cfs--test-string)))
       (when (and size scale)
-	(cfs--set-font size scale)))))
+        (cfs--set-font size scale)))))
 
 ;;;###autoload(require 'chinese-fonts-setup)
 (provide 'chinese-fonts-setup)
