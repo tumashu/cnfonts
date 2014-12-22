@@ -40,14 +40,17 @@ chinese-fonts-setup 在切换 profile 时通过自带的falback信息创建一�
 
 切换 profile 的命令有：
 
-1. `cfs-select-profile` (通过参数选择profile，可用于用户自定义profile切换命令)
-2. `cfs-switch-profile` (选择profile)
-3. `cfs-next-profile`   (直接切换到下一个profile)
+1. `cfs-switch-profile` (使用ido切换profile)
+2. `cfs-next-profile`   (直接切换到下一个profile)
+
+用户也可以在配置文件中使用 `cfs-select-profile` 函数来切换profile，比如：
+
+	(cfs-select-profile "profile3")
 
 如果当前的profile不适合时，可以通过`cfs-edit-profile`来编辑当前
 的profile文件。chinese-fonts-setup自带一个profile-edit编辑模式。
 
-1.  C-c C-c     `cfs-test-scale-at-point`
+1.  C-c C-c     `cfs-test-fontscale-at-point`
 		 察看字体显示效果
 2.  C-<up>      `cfs-increment-fontscale-at-point`
 		 增大光标下的scale数字，同时显示增加后的字体对齐效果
