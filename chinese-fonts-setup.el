@@ -348,9 +348,11 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
   nil " Rem" cfs-profile-edit-mode-map)
 
 (defun cfs-select-profile (profile-name)
-  (setq cfs--current-profile-name profile-name)
-  (customize-save-variable 'cfs--current-profile-name profile-name)
-  (cfs-set-font-with-saved-size))
+  (if (member profile-name cfs-profiles)
+      (progn (setq cfs--current-profile-name profile-name)
+             (customize-save-variable 'cfs--current-profile-name profile-name)
+             (cfs-set-font-with-saved-size))
+    (message "%s doesn't exist." profile-name)))
 
 (defun cfs-switch-profile ()
   (interactive)
