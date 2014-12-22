@@ -120,13 +120,15 @@
 (defvar cfs--current-profile-name (car cfs--profiles)
   "Current profile name used by chinese-fonts-setup")
 
-(defvar cfs--current-size 12.5
-  "Current font size used by chinese-fonts-setup.")
+(defconst cfs--size-fallback 12.5)
+
+(defvar cfs--profiles-fontsizes
+  (mapcar (lambda (x)
+	    cfs--size-fallback) cfs--profiles)
+  "fontsizes list of all profiles.")
 
 (defconst cfs--size-steps
   '(9 10.5 11.5 12.5 14 16 18 20 22))
-
-(defconst cfs--size-fallback 12.5)
 
 (defconst cfs--scale-fallback
   '(1.05 1.05 1.10 1.10 1.10 1.05 1.00 1.05 1.05))
@@ -175,6 +177,24 @@
 	   (dolist (e value)
 	     (insert (format "\n        %S" e)))
 	   (insert "\n       ))\n"))))
+
+(defun cfs--save-current-profile-fontsize (profile-name size)
+  (let* ((profiles-names cfs--profiles)
+	 (profiles-fontsizes cfs--profiles-fontsizes)
+	 (length1 (length profiles-names))
+	 (length2 (length profiles-fontsizes))
+	 (index (position profile-name cfs--profiles :test #'string=)))
+    (if (= length1 length2)
+	(setf (nth index profiles-fontsizes) size)
+      (setq profiles-fontsize
+	    (mapcar (lambda (x)
+		      cfs--size-fallback) profiles-names)))
+    (setq cfs--profiles-fontsizes profiles-fontsizes)
+    (customize-save-variable 'cfs--profiles-fontsizes profiles-fontsizes)))
+
+(defun cfs--read-current-profile-fontsize (profile-name)
+  (let ((index (position profile-name cfs--profiles :test #'string=)))
+    (nth index cfs--profiles-fontsizes)))
 
 (defun cfs--save-profile (fonts-names fonts-scales)
   "Save fonts names and scales to current profile"
@@ -268,20 +288,22 @@ If set/leave chinese-font-size to nil, it will follow english-font-size"
       (set-fontset-font t charset chinese-main-font))))
 
 (defun cfs--step-font-size (step)
-  (let ((steps cfs--size-steps)
-	(current-size cfs--current-size)
-	next-size)
+  (let* ((profile-name cfs--current-profile-name)
+	 (steps cfs--size-steps)
+	 (current-size (cfs--read-current-profile-fontsize profile-name))
+	 next-size)
     (when (< step 0)
       (setq steps (reverse cfs--size-steps)))
     (setq next-size
 	  (cadr (member current-size steps)))
     (when next-size
       (cfs--set-font next-size (cfs--get-scale next-size))
-      (customize-save-variable 'cfs--current-size next-size)
+      (cfs--save-current-profile-fontsize profile-name next-size)
       (message "Your font size is set to %.1f" next-size))))
 
 (defun cfs--set-font-with-saved-size ()
-  (let* ((font-size cfs--current-size)
+  (let* ((profile-name cfs--current-profile-name)
+	 (font-size (cfs--read-current-profile-fontsize profile-name))
 	 (font-size-scale (cfs--get-scale font-size)))
     (when (display-graphic-p)
       (cfs--set-font font-size font-size-scale))))
