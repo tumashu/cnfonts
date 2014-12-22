@@ -65,10 +65,6 @@
 ;; 1. `cfs-switch-profile' (使用ido切换profile)
 ;; 2. `cfs-next-profile'   (直接切换到下一个profile)
 ;;
-;; 用户也可以在配置文件中使用 `cfs-select-profile' 函数来切换profile，比如：
-;;
-;;     (cfs-select-profile "profile3")
-;;
 ;; 如果当前的profile不适合时，可以通过`cfs-edit-profile'来编辑当前
 ;; 的profile文件。chinese-fonts-setup自带一个profile-edit编辑模式。
 ;;
@@ -347,7 +343,7 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
   "Minor for setup fonts names and scales"
   nil " Rem" cfs-profile-edit-mode-map)
 
-(defun cfs-select-profile (profile-name)
+(defun cfs--select-profile (profile-name)
   (if (member profile-name cfs-profiles)
       (progn (setq cfs--current-profile-name profile-name)
              (customize-save-variable 'cfs--current-profile-name profile-name)
@@ -358,7 +354,7 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
   (interactive)
   (let ((profile
          (ido-completing-read "Set chinese-fonts-setup profile to:" cfs-profiles)))
-    (cfs-select-profile profile)))
+    (cfs--select-profile profile)))
 
 (defun cfs-next-profile (&optional step)
   (interactive)

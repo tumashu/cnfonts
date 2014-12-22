@@ -43,10 +43,6 @@ chinese-fonts-setup 在切换 profile 时通过自带的falback信息创建一�
 1. `cfs-switch-profile` (使用ido切换profile)
 2. `cfs-next-profile`   (直接切换到下一个profile)
 
-用户也可以在配置文件中使用 `cfs-select-profile` 函数来切换profile，比如：
-
-        (cfs-select-profile "profile3")
-
 如果当前的profile不适合时，可以通过`cfs-edit-profile`来编辑当前
 的profile文件。chinese-fonts-setup自带一个profile-edit编辑模式。
 
