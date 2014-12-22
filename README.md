@@ -53,6 +53,8 @@ chinese-fonts-setup 在切换 profile 时通过自带的falback信息创建一�
 3.  C-<down>    `cfs-decrement-fontscale-at-point`
                  减小光标下的scale数字，同时显示减小后的字体对齐效果
 
+注意配置完成后，可能需要重启 Emacs。(参考： http://debbugs.gnu.org/db/17/1785.html)
+
 ### 调整字体大小 ###
 `chinese-fonts-setup` 使用下述两个命令调整字体大小:
 
