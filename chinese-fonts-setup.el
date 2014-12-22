@@ -96,8 +96,8 @@
 ;;
 ;; ### 参考文章 ###
 ;;
-;; http://baohaojun.github.io/perfect-emacs-chinese-font.html
-;; http://zhuoqiang.me/torture-emacs.html
+;; 1. http://baohaojun.github.io/perfect-emacs-chinese-font.html
+;; 2. http://zhuoqiang.me/torture-emacs.html
 
 ;;; Code:
 (require 'cl)
