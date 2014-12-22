@@ -69,7 +69,7 @@
 ;; 如果当前的profile不适合时，可以通过`cfs-edit-profile'来编辑当前
 ;; 的profile文件。chinese-fonts-setup自带一个profile-edit编辑模式。
 ;;
-;; 1.  C-c C-c     `cfs-test-scale-at-point'
+;; 1.  C-c C-c     `cfs-test-fontscale-at-point'
 ;;                  察看字体显示效果
 ;; 2.  C-<up>      `cfs-increment-fontscale-at-point'
 ;;                  增大光标下的scale数字，同时显示增加后的字体对齐效果
@@ -332,7 +332,7 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
 
 (defvar cfs-profile-edit-mode-map
   (let ((keymap (make-sparse-keymap)))
-    (define-key keymap "\C-c\C-c" 'cfs-test-scale-at-point)
+    (define-key keymap "\C-c\C-c" 'cfs-test-fontscale-at-point)
     (define-key keymap (kbd "C-<up>") 'cfs-increment-fontscale-at-point)
     (define-key keymap (kbd "C-<down>") 'cfs-decrement-fontscale-at-point)
     (define-key keymap (kbd "C-<right>") 'cfs-increment-fontscale-at-point)
@@ -420,7 +420,7 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
   (interactive)
   (cfs-change-fontscale-at-point -0.01))
 
-(defun cfs-show-font-effect (&optional size scale info)
+(defun cfs--show-font-effect (&optional size scale info)
   "show font and its size in a new buffer"
   (interactive)
   (let ((buffer-name "*Show-font-effect*"))
