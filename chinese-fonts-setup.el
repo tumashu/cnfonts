@@ -313,13 +313,14 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
     (when (display-graphic-p)
       (cfs--set-font fontsize fontsize-scale))))
 
-;; 正常启动emacs时设置字体
+;; emacs启动的时候激活chinese-fonts-setup。
 (if (and (fboundp 'daemonp) (daemonp))
     (add-hook 'after-make-frame-functions
               (lambda (frame)
                 (with-selected-frame frame
                   (cfs-set-font-with-saved-size))))
-  (cfs-set-font-with-saved-size))
+  (add-hook 'window-setup-hook
+            'cfs-set-font-with-saved-size))
 
 (defun cfs-decrease-fontsize ()
   (interactive)
