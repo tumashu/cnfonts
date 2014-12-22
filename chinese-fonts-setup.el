@@ -154,7 +154,6 @@
      "新宋体" "宋体" "楷体_GB2312" "仿宋_GB2312" "幼圆" "隶书"
      "方正姚体" "方正舒体" "方正粗圆_GBK" "华文仿宋" "华文中宋" "华文彩云"
      "华文新魏" "华文细黑" "华文行楷")
-    ("PragmataPro" "Courier New")
     ("HanaMinB" "SimSun-ExtB" "unifont")))
 
 (defconst cfs--test-string "
@@ -280,8 +279,7 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
           (font-spec :slant 'italic :weight 'bold
                      :size fontsize
                      :family (nth 0 valid-fonts)))
-         (english-symbol-font (font-spec :family (nth 2 valid-fonts)))
-         (prepend-font (font-spec :family (nth 3 valid-fonts))))
+         (prepend-font (font-spec :family (nth 2 valid-fonts))))
     (set-face-attribute 'default nil :font english-main-font)
     (set-face-font 'italic
                    (if cfs-ignore-italic
@@ -291,13 +289,10 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
                    (if cfs-ignore-bold-italic
                        english-bold-font
                      english-bold-italic-font))
-    (set-fontset-font t 'symbol english-symbol-font)
-    (set-fontset-font t 'symbol chinese-main-font nil 'prepend)
-    (set-fontset-font t nil (font-spec :family "DejaVu Sans"))
 
     ;; Set Chinese font and don't not use 'unicode charset,
     ;; it will cause the english font setting invalid.
-    (dolist (charset '(kana han cjk-misc bopomofo gb18030))
+    (dolist (charset '(kana han symbol cjk-misc bopomofo gb18030))
       (set-fontset-font t charset chinese-main-font))
 
     ;; Set font of chars which is not covered above.
