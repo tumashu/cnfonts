@@ -303,7 +303,7 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
     (set-fontset-font t 'symbol chinese-main-font nil 'prepend)
 
     ;; Set font of chars which is not covered above.
-    (set-fontset-font t nil chinese-extra-font)))
+    (set-fontset-font t nil chinese-extra-font nil 'prepend)))
 
 (defun cfs--step-fontsize (step)
   (let* ((profile-name cfs--current-profile-name)
