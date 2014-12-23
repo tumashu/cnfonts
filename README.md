@@ -3,8 +3,8 @@
 *Author:* Feng Shu <tumashu@gmail.com><br>
 *Version:* 0.0.1<br>
 
-`chinese-fonts-setup` 是一个emacs中文字体配置工具。可以比较方便的
-的实现中文字体和英文字体等宽（也就是大家常说的中英文对齐）。
+`chinese-fonts-setup` 是一个emacs中文字体配置工具。可以比较方便地
+实现中文字体和英文字体等宽（也就是大家常说的中英文对齐）。
 
 这个package特别适用于需要处理中英文混合表格的中文org-mode用户。
 
