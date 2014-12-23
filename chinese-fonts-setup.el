@@ -202,7 +202,7 @@
          (index (position profile-name cfs-profiles :test #'string=)))
     (if (= length1 length2)
         (setf (nth index profiles-fontsizes) size)
-      (setq profiles-fontsize
+      (setq profiles-fontsizes
             (mapcar (lambda (x)
                       cfs--fontsize-fallback) profiles-names)))
     (setq cfs--profiles-fontsizes profiles-fontsizes)
