@@ -1,4 +1,4 @@
-;;; chinese-fonts-setup.el --- 实现中英文字体等宽对齐的字体配置工具。
+;;; chinese-fonts-setup.el --- A fonts config tool enforcing double-width Chinese character display
 
 ;; Copyright (c) 2011-2014, Feng Shu
 

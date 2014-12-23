@@ -1,4 +1,4 @@
-# chinese-fonts-setup - 实现中英文字体等宽对齐的字体配置工具。
+# chinese-fonts-setup - A fonts config tool enforcing double-width Chinese character display
 
 *Author:* Feng Shu <tumashu@gmail.com><br>
 *Version:* 0.0.1<br>
