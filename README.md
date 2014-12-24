@@ -57,6 +57,10 @@ chinese-fonts-setup 默认使用三个profile: profile1, profile2 和 profile3,
 在运行profile编辑命令`cfs-edit-profile`的时候，缺失的falback文件
 将会自动创建，其原始内容为软件包自带的fallback信息。
 
+`chinese-fonts-setup` 默认不会覆盖已经存在的profile文件。当需要重置
+某个profile文件时，可以使用命令：`cfs-regenerate-profile`。这个命令
+会强制覆盖profile文件，请做好备份。
+
 切换 profile 的命令有：
 
 1. `cfs-switch-profile` (使用ido切换profile)
