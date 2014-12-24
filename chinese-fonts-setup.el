@@ -183,6 +183,21 @@
 ;; +----------------------------------+
 ")
 
+(defconst cfs--profile-comment-1 "
+;;; 1. 设置默认字体列表，按`C-c C-c'测试字体显示效果。
+;;; 2. 你可以使用命令: `describe-char' 来了解光标处字符使用什么字体。
+;;;    也可以运行`(print (font-family-list))'来获得当前可用的字体的名称列表。
+;;; 3. 在windows操作系统下，chinese-fonts-setup 无法识别许多中文字体，已知可以
+;;;    识别的中文字体有：华文仿宋 华文中宋 华文细黑 微软雅黑 文泉驿正黑。
+;;;    而windows自带的方正系列以及Sim系列的中文字体都无法识别，原因未知。")
+
+(defconst cfs--profile-comment-2 "
+;;; 1. 为每个字号(9 10.5 11.5 12.5 14 16 18 20 22)设置中文调整系数，使中英文等宽。
+;;; 2. 将光标移动到 `cfs--custom-set-fonts-scales' 列表中各个数字上：
+;;;    1. C-c C-c 查看光标处scale值的对齐效果。
+;;;    2. C-<up> 增大光标处 scale 的值，同时显示对齐效果。
+;;;    3. C-<down> 减小光标处 scale 的值, 同时显示对齐效果。")
+
 (defun cfs--get-current-profile ()
   (let ((directory-name
          (expand-file-name
@@ -226,13 +241,9 @@
         (variable-fonts-scales "cfs--custom-set-fonts-scales"))
     (with-temp-buffer
       (erase-buffer)
-      (insert
-       (concat ";;; 设置默认字体列表，按`C-c C-c'测试字体显示效果。\n"
-               ";;; 另外，你可以使用命令: `describe-char' 来了解光标处字符使用什么字体。\n"
-               ";;; 也可以运行`(print (font-family-list))'来获得当前可用的字体的名称列表"))
+      (insert cfs--profile-comment-1)
       (cfs--dump-variable variable-fonts-names  fonts-names)
-      (insert (format "\n;;; 为每个字号%s设置中文调整系数，使中英文等宽度。"
-                      cfs--fontsizes-steps))
+      (insert cfs--profile-comment-2)
       (cfs--dump-variable variable-fonts-scales fonts-scales)
       (write-file (cfs--get-current-profile)))))
 
@@ -466,11 +477,6 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
         (insert (format "# 英文字体大小设置为: %s ; " size)))
       (when scale
         (insert (format "中文字体调整系数(scale)设置为: %s 。\n" scale)))
-      (when info
-        (insert
-         (concat
-          "# 将光标移动到`cfs--custom-set-fonts-scales‘中各个数字上，"
-          "C-<up> 增大 scale 的值，C-<down> 减小 scale 的值。")))
       (insert
        (replace-regexp-in-string
         "\\^"  "\\\\"
