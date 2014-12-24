@@ -3,8 +3,8 @@
 *Author:* Feng Shu <tumashu@gmail.com><br>
 *Version:* 0.0.1<br>
 
-`chinese-fonts-setup` 是一个emacs中文字体配置工具。可以比较方便的
-的实现中文字体和英文字体等宽（也就是大家常说的中英文对齐）。
+`chinese-fonts-setup` 是一个emacs中文字体配置工具。可以比较方便地
+实现中文字体和英文字体等宽（也就是大家常说的中英文对齐）。
 
 这个package特别适用于需要处理中英文混合表格的中文org-mode用户。
 
@@ -19,12 +19,16 @@
 ### 安装 ###
 将这个文件放到任意一个emacs搜索目录之下，然后在~/.emacs中添加：
 
-        (require 'chinese-fonts-setup)
+```lisp
+(require 'chinese-fonts-setup)
+```
 
 另外, 也可以使用 `package-install` 安装，首先添加 melpa 源：
 
-        (add-to-list 'package-archives
-            '("melpa" . "http://melpa.org/packages/") t)
+```lisp
+(add-to-list 'package-archives
+    '("melpa" . "http://melpa.org/packages/") t)
+```
 
 然后运行命令：
 
@@ -41,8 +45,10 @@ chinese-fonts-setup 使用profile的概念，来实现特定的环境使用特�
 chinese-fonts-setup 默认使用三个profile: profile1, profile2 和 profile3,
 如果想使用其他有意义的名称，可以使用下面类似的方式配置:
 
-         (setq cfs-profiles
-               '("program" "org-mode" "read-book"))
+```lisp
+(setq cfs-profiles
+    '("program" "org-mode" "read-book"))
+```
 
 profile文件保存在`cfs-profiles-directory`对应的目录中。如果文件不存在，
 chinese-fonts-setup 在切换 profile 时通过自带的falback信息创建一个。
@@ -77,8 +83,10 @@ chinese-fonts-setup 在切换 profile 时通过自带的falback信息创建一�
 大多数英文等宽字体包含的斜体不能将(9 10.5 11.5 12.5 14 16 18 20 22)这几个字号完全覆盖。
 如果想使用斜体和粗斜体，请使用下面的设置：
 
-          (setq cfs-ignore-italic nil)
-          (setq cfs-ignore-bold-italic nil)
+```lisp
+(setq cfs-ignore-italic nil)
+    (setq cfs-ignore-bold-italic nil)
+```
 
 与此同时，你要使用一个包含粗体和粗斜体的英文等宽字体。
 
