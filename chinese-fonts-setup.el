@@ -118,9 +118,8 @@
 ;; 2. http://zhuoqiang.me/torture-emacs.html
 
 ;;; Code:
+(require 'cl)
 (require 'ido)
-(eval-when-compile
-  (require 'cl))
 
 (defcustom cfs-profiles '("profile1" "profile2" "profile3")
   "Lists chinese-fonts-setup profiles"
