@@ -267,13 +267,16 @@
   "Get previously saved fonts names and scales from current profile"
   (interactive)
   (let ((file (cfs--get-current-profile)))
-    (when (file-readable-p file)
-      (load-file file))
-    (list (if (boundp 'cfs--custom-set-fonts-names)
-              cfs--custom-set-fonts-names
-            cfs--fontnames-fallback)
-          (if (boundp 'cfs--custom-set-fonts-scales)
-              cfs--custom-set-fonts-scales
+    (if (file-readable-p file)
+        (progn (load-file file)
+               (list
+                (if (boundp 'cfs--custom-set-fonts-names)
+                    cfs--custom-set-fonts-names
+                  cfs--fontnames-fallback)
+                (if (boundp 'cfs--custom-set-fonts-scales)
+                    cfs--custom-set-fonts-scales
+                  cfs--fontscales-fallback)))
+      (list cfs--fontnames-fallback
             cfs--fontscales-fallback))))
 
 (defun cfs--font-exists-p (font)
