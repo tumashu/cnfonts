@@ -417,15 +417,6 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
          (ido-completing-read "Set chinese-fonts-setup profile to:" cfs-profiles)))
     (cfs--select-profile profile)))
 
-(defun cfs-regenerate-profile ()
-  (interactive)
-  (let ((profile-name
-         (ido-completing-read "Regenerate profile: " cfs-profiles)))
-    (if (yes-or-no-p (format "Regenerate (%s)? " profile-name))
-        (cfs--save-profile cfs--fontnames-fallback
-                           cfs--fontscales-fallback profile-name)
-      (message "Ignore regenerate profile!"))))
-
 (defun cfs-next-profile (&optional step)
   (interactive)
   (let ((profiles cfs-profiles)
@@ -450,6 +441,15 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
     (find-file file)
     (cfs-profile-edit-mode 1)
     (goto-char (point-min))))
+
+(defun cfs-regenerate-profile ()
+  (interactive)
+  (let ((profile-name
+         (ido-completing-read "Regenerate profile: " cfs-profiles)))
+    (if (yes-or-no-p (format "Regenerate (%s)? " profile-name))
+        (cfs--save-profile cfs--fontnames-fallback
+                           cfs--fontscales-fallback profile-name)
+      (message "Ignore regenerate profile!"))))
 
 (defun cfs-test-fontscale-at-point ()
   "Test scale list at point, which is usd to write font scale list"
@@ -514,7 +514,7 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
       (when (and size scale)
         (cfs--set-font size scale)))))
 
-;;;###autoload(require 'chinese-fonts-setup)
+;;;###autoload (require 'chinese-fonts-setup)
 (provide 'chinese-fonts-setup)
 
 ;; Local Variables:
