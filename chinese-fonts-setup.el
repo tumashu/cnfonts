@@ -202,13 +202,18 @@
 ;;;    2. C-<up> 增大光标处 scale 的值，同时显示对齐效果。
 ;;;    3. C-<down> 减小光标处 scale 的值, 同时显示对齐效果。")
 
-(defun cfs--get-current-profile ()
+(defun cfs--get-profile (profile-name)
   (let ((directory-name
          (expand-file-name
           (file-name-as-directory cfs-profiles-directory))))
     (make-directory directory-name t)
     (concat directory-name
-            cfs--current-profile-name ".el")))
+            (replace-regexp-in-string
+             "/" "-"
+             profile-name) ".el")))
+
+(defun cfs--get-current-profile ()
+  (cfs--get-profile cfs--current-profile-name))
 
 (defun cfs--dump-variable (variable-name value)
   "Insert a \"(setq VARIABLE value)\" in the current buffer."
@@ -239,7 +244,7 @@
   (let ((index (position profile-name cfs-profiles :test #'string=)))
     (nth index cfs--profiles-fontsizes)))
 
-(defun cfs--save-profile (fonts-names fonts-scales)
+(defun cfs--save-profile (fonts-names fonts-scales &optional profile-name)
   "Save fonts names and scales to current profile"
   (let ((variable-fonts-names "cfs--custom-set-fonts-names")
         (variable-fonts-scales "cfs--custom-set-fonts-scales"))
@@ -251,7 +256,8 @@
       (cfs--dump-variable variable-fonts-names  fonts-names)
       (insert cfs--profile-comment-2)
       (cfs--dump-variable variable-fonts-scales fonts-scales)
-      (write-file (cfs--get-current-profile)))))
+      (write-file (cfs--get-profile
+                   (or profile-name cfs--current-profile-name))))))
 
 (defun cfs--read-profile ()
   "Get previously saved fonts names and scales from current profile"
@@ -403,6 +409,15 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
   (let ((profile
          (ido-completing-read "Set chinese-fonts-setup profile to:" cfs-profiles)))
     (cfs--select-profile profile)))
+
+(defun cfs-regenerate-profile ()
+  (interactive)
+  (let ((profile-name
+         (ido-completing-read "Regenerate profile: " cfs-profiles)))
+    (if (yes-or-no-p (format "Regenerate (%s)? " profile-name))
+        (cfs--save-profile cfs--fontnames-fallback
+                           cfs--fontscales-fallback profile-name)
+      (message "Ignore regenerate profile!"))))
 
 (defun cfs-next-profile (&optional step)
   (interactive)
