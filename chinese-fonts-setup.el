@@ -107,7 +107,7 @@
 ;;
 ;; ```lisp
 ;; (setq cfs-ignore-italic nil)
-;;     (setq cfs-ignore-bold-italic nil)
+;; (setq cfs-ignore-bold-italic nil)
 ;; ```
 ;;
 ;; 与此同时，你要使用一个包含粗体和粗斜体的英文等宽字体。
