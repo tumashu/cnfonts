@@ -50,8 +50,12 @@ chinese-fonts-setup 默认使用三个profile: profile1, profile2 和 profile3,
     '("program" "org-mode" "read-book"))
 ```
 
-profile文件保存在`cfs-profiles-directory`对应的目录中。如果文件不存在，
-chinese-fonts-setup 在切换 profile 时通过自带的falback信息创建一个。
+所有的profile文件都保存在`cfs-profiles-directory`对应的目录中。
+如果profile文件不存在，`chinese-fonts-setup` 将使用其自带的fallback
+信息来配置字体。
+
+在运行profile编辑命令`cfs-edit-profile`的时候，缺失的falback文件
+将会自动创建，其原始内容为软件包自带的fallback信息。
 
 切换 profile 的命令有：
 
