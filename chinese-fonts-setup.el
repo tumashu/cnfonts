@@ -245,7 +245,9 @@
         (variable-fonts-scales "cfs--custom-set-fonts-scales"))
     (with-temp-buffer
       (erase-buffer)
-      (insert cfs--profile-comment-1)
+      (insert (replace-regexp-in-string
+               "^ *\n" ""
+               cfs--profile-comment-1))
       (cfs--dump-variable variable-fonts-names  fonts-names)
       (insert cfs--profile-comment-2)
       (cfs--dump-variable variable-fonts-scales fonts-scales)
