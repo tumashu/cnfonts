@@ -308,9 +308,9 @@
         (mapcar (lambda (x)
                   (cons x (or fontscale 1.25)))
                 (nth 1 (car (cfs--read-profile)))))
-  (cfs--set-font-internal fontsize))
+  (cfs--set-font-internal fontsize fontscale))
 
-(defun cfs--set-font-internal (fontsize)
+(defun cfs--set-font-internal (fontsize fontscale)
   "english-fontsize could be set to \":pixelsize=18\" or a integer.
 If set/leave chinese-fontsize to nil, it will follow english-fontsize"
   (let* ((valid-fonts (cfs--get-valid-fonts))
