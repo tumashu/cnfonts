@@ -182,13 +182,11 @@
     ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB" "PMingLiU-ExtB" "MingLiU_HKSCS-ExtB")))
 
 (defconst cfs--test-string "
-;; 请看下面中文和英文能否对齐.
-;; +----------------------------------+
-;; |  天生我材必有用，千金散尽还复来。|  (^_/)
-;; |  abcdefghigklmnopqrstuvwxyz,.?!  | (='.'=)
-;; | *abcdefghigklmnopqrstuvwxyz,.?!* | (0)_(0)
-;; | /abcdefghigklmnopqrstuvwxyz,.?!/ |
-;; +----------------------------------+
+| 正常字体    | 粗体        | 粗斜体        |
+|-------------+-------------+---------------|
+| 堂堂正正    | *五大三粗*  | /东倒西歪/    |
+| I'm normal. | *I'm bold!* | /I'm italic?/ |
+;; 请看上面表格线能否对齐。
 ")
 
 (defconst cfs--profile-comment-1 "
@@ -205,6 +203,8 @@
 ;;;    1. C-c C-c 查看光标处scale值的对齐效果。
 ;;;    2. C-<up> 增大光标处 scale 的值，同时显示对齐效果。
 ;;;    3. C-<down> 减小光标处 scale 的值, 同时显示对齐效果。")
+
+(defvar cfs--minibuffer-echo-string nil)
 
 (defun cfs--get-profile (profile-name)
   (let ((directory-name
@@ -350,7 +350,11 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
     (set-fontset-font t 'symbol chinese-main-font nil 'prepend)
 
     ;; Set font of chars which is not covered above.
-    (set-fontset-font t nil chinese-extra-font nil 'prepend)))
+    (set-fontset-font t nil chinese-extra-font nil 'prepend)
+
+    (setq cfs--minibuffer-echo-string
+          (format "英文字体: %s, 中文字体: %s, 字号: %.1f, scale系数：%.2f"
+                  (nth 0 valid-fonts) (nth 1 valid-fonts) fontsize fontscale))))
 
 (defun cfs--step-fontsize (step)
   (let* ((profile-name cfs--current-profile-name)
@@ -364,7 +368,7 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
     (when next-size
       (cfs--set-font next-size (cfs--get-scale next-size))
       (cfs--save-current-profile-fontsize profile-name next-size)
-      (message "Your font size is set to %.1f" next-size))))
+      (message cfs--minibuffer-echo-string))))
 
 (defun cfs-set-font-with-saved-size ()
   (let* ((profile-name cfs--current-profile-name)
@@ -470,7 +474,7 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
           (cfs--set-font size scale)
           (cfs--show-font-effect size scale))
       (cfs--set-font 14 1.25)
-      (cfs--show-font-effect 14 1.25 t))))
+      (cfs--show-font-effect 14 1.25))))
 
 (defun cfs-change-fontscale-at-point (step)
   (interactive)
@@ -492,7 +496,7 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
   (interactive)
   (cfs-change-fontscale-at-point -0.01))
 
-(defun cfs--show-font-effect (&optional size scale info)
+(defun cfs--show-font-effect (&optional size scale)
   "show font and its size in a new buffer"
   (interactive)
   (let ((buffer-name "*Show-font-effect*"))
@@ -501,18 +505,10 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
       (when (featurep 'org)
         (org-mode))
       (setq truncate-lines 1)
-      (when size
-        (insert (format "# 英文字体大小设置为: %s ; " size)))
-      (when scale
-        (insert (format "中文字体调整系数(scale)设置为: %s 。\n" scale)))
-      (insert
-       (replace-regexp-in-string
-        "\\^"  "\\\\"
-        (replace-regexp-in-string
-         "@@"  "   "
-         cfs--test-string)))
-      (when (and size scale)
-        (cfs--set-font size scale)))))
+      (insert (replace-regexp-in-string "^ *\n" "" cfs--test-string)))
+    (when (and size scale)
+      (cfs--set-font size scale))
+    (message cfs--minibuffer-echo-string)))
 
 ;;;###autoload (require 'chinese-fonts-setup)
 (provide 'chinese-fonts-setup)
