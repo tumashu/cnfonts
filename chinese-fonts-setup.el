@@ -186,7 +186,8 @@
 |-------------+-------------+---------------|
 | 堂堂正正    | *五大三粗*  | /东倒西歪/    |
 | I'm normal. | *I'm bold!* | /I'm italic?/ |
-;; 请看上面表格线能否对齐。
+;; 请看上面表格线能否对齐, 如果没有对齐，请调整profile文件
+;; 中变量 `cfs--custom-set-fonts-scales' 列表各个数字的大小。
 ")
 
 (defconst cfs--profile-comment-1 "
