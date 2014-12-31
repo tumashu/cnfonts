@@ -34,7 +34,7 @@
 
      M-x package-install RET chinese-fonts-setup RET
 
-然后在 emacs 配置文件中添加如下代码。
+最后在 emacs 配置文件中添加如下代码。
 
 ```lisp
 (require 'chinese-fonts-setup)
