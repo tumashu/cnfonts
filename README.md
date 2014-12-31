@@ -34,6 +34,11 @@
 
      M-x package-install RET chinese-fonts-setup RET
 
+然后在 emacs 配置文件中添加如下代码。
+
+```lisp
+(require 'chinese-fonts-setup)
+```
 ### 配置 ###
 chinese-fonts-setup 使用profile的概念，来实现特定的环境使用特定的
 字体配置，比如：在编程时使用 “Consolas + 微米黑”，在阅读文章时使用
