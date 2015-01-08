@@ -244,7 +244,7 @@
          (profiles-fontsizes cfs--profiles-fontsizes)
          (length1 (length profiles-names))
          (length2 (length profiles-fontsizes))
-         (index (position profile-name cfs-profiles :test #'string=)))
+         (index (cl-position profile-name cfs-profiles :test #'string=)))
     (if (= length1 length2)
         (setf (nth index profiles-fontsizes) size)
       (setq profiles-fontsizes
@@ -254,7 +254,7 @@
     (customize-save-variable 'cfs--profiles-fontsizes profiles-fontsizes)))
 
 (defun cfs--read-current-profile-fontsize (profile-name)
-  (let ((index (position profile-name cfs-profiles :test #'string=)))
+  (let ((index (cl-position profile-name cfs-profiles :test #'string=)))
     (nth index cfs--profiles-fontsizes)))
 
 (defun cfs--save-profile (fonts-names fonts-scales &optional profile-name)
@@ -305,7 +305,7 @@
 
 (defun cfs--get-scale (&optional size)
   (let* ((scale-list (car (cdr (cfs--read-profile))))
-         (index (or (position size cfs--fontsizes-steps) 1)))
+         (index (or (cl-position size cfs--fontsizes-steps) 1)))
     (unless (file-exists-p (cfs--get-current-profile))
       (message "如果中英文不能对齐，请运行`cfs-edit-profile'编辑当前profile。"))
     (or (nth index scale-list) 1)))
