@@ -4,6 +4,7 @@
 
 ;; Author: Feng Shu <tumashu@gmail.com>
 ;; URL: https://github.com/tumashu/chinese-fonts-setup
+;; Package-Requires: ((cl-lib "0.5"))
 ;; Version: 0.0.1
 
 ;; This file is not part of GNU Emacs.
@@ -131,7 +132,7 @@
 ;; 2. http://zhuoqiang.me/torture-emacs.html
 
 ;;; Code:
-(require 'cl)
+(require 'cl-lib)
 (require 'ido)
 
 (defcustom cfs-profiles '("profile1" "profile2" "profile3")
@@ -293,7 +294,7 @@
 
 (defun cfs--get-valid-fonts ()
   (mapcar (lambda (x)
-            (find-if #'cfs--font-exists-p x))
+            (cl-find-if #'cfs--font-exists-p x))
           (car (cfs--read-profile))))
 
 (defun cfs--make-font-string (fontname fontsize)
