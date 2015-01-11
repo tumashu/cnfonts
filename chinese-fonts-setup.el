@@ -86,9 +86,9 @@
 ;;
 ;; 1.  C-c C-c     `cfs-test-fontscale-at-point'
 ;;                  察看字体显示效果
-;; 2.  C-<up>      `cfs-increment-fontscale-at-point'
+;; 2.  C-up        `cfs-increment-fontscale-at-point'
 ;;                  增大光标下的scale数字，同时显示增加后的字体对齐效果
-;; 3.  C-<down>    `cfs-decrement-fontscale-at-point'
+;; 3.  C-down      `cfs-decrement-fontscale-at-point'
 ;;                  减小光标下的scale数字，同时显示减小后的字体对齐效果
 ;;
 ;; 注意配置完成后，可能需要重启 Emacs。(参考： http://debbugs.gnu.org/db/17/1785.html)
