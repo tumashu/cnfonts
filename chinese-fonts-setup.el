@@ -41,28 +41,14 @@
 ;;     https://github.com/tumashu/chinese-fonts-setup
 ;;
 ;; ### 安装 ###
-;; 将这个文件放到任意一个emacs搜索目录之下，然后在~/.emacs中添加：
+;; 1. 配置melpa源，参考：http://melpa.org/#/getting-started
+;; 2. M-x package-install RET chinese-fonts-setup RET
+;; 3. 在emacs配置文件中（比如: ~/.emacs）添加如下代码：
 ;;
 ;; ```lisp
 ;; (require 'chinese-fonts-setup)
 ;; ```
 ;;
-;; 另外, 也可以使用 `package-install' 安装，首先添加 melpa 源：
-;;
-;; ```lisp
-;; (add-to-list 'package-archives
-;;     '("melpa" . "http://melpa.org/packages/") t)
-;; ```
-;;
-;; 然后运行命令：
-;;
-;;      M-x package-install RET chinese-fonts-setup RET
-;;
-;; 最后在 emacs 配置文件中添加如下代码。
-;;
-;; ```lisp
-;; (require 'chinese-fonts-setup)
-;; ```
 ;; ### 配置 ###
 ;; chinese-fonts-setup 使用profile的概念，来实现特定的环境使用特定的
 ;; 字体配置，比如：在编程时使用 “Consolas + 微米黑”，在阅读文章时使用
