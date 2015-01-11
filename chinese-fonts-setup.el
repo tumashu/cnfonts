@@ -6,6 +6,7 @@
 ;; URL: https://github.com/tumashu/chinese-fonts-setup
 ;; Package-Requires: ((cl-lib "0.5"))
 ;; Version: 0.0.1
+;; Keywords: convenience, Chinese, font
 
 ;; This file is not part of GNU Emacs.
 
