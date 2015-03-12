@@ -107,8 +107,8 @@
 ;; 如果想使用斜体和粗斜体，请使用下面的设置：
 ;;
 ;; ```lisp
-;; (setq cfs-ignore-italic nil)
-;; (setq cfs-ignore-bold-italic nil)
+;; (setq cfs-enable-italic t)
+;; (setq cfs-enable-bold-italic t)
 ;; ```
 ;;
 ;; 与此同时，你要使用一个包含粗体和粗斜体的英文等宽字体。
@@ -132,24 +132,26 @@
   :group 'chinese-fonts-setup
   :type 'directory)
 
-(defcustom cfs-ignore-italic t
-  "使用正常代替斜体。"
+(defcustom cfs-enable-bold t
+  "Enable 英文粗体字体。"
   :group 'chinese-fonts-setup
   :type 'boolean)
 
-(defcustom cfs-ignore-bold-italic t
-  "使用粗体代替粗斜体。"
+(defcustom cfs-enable-italic t
+  "Enable 英文斜体字体。"
+  :group 'chinese-fonts-setup
+  :type 'boolean)
+
+(defcustom cfs-enable-bold-italic t
+  "Enable 英文粗斜体字体。"
   :group 'chinese-fonts-setup
   :type 'boolean)
 
 (defvar cfs--current-profile-name (car cfs-profiles)
   "Current profile name used by chinese-fonts-setup")
 
-(defconst cfs--english-fontsize-fallback 12.5)
-
 (defvar cfs--profiles-english-fontsizes
-  (mapcar (lambda (x)
-            cfs--english-fontsize-fallback) cfs-profiles)
+  (mapcar (lambda (x) 12.5) cfs-profiles)
   "fontsizes list of all profiles.")
 
 (defconst cfs--english-fontsizes-steps-fallback
@@ -188,10 +190,7 @@
 ;;; 第三个列表的字体用于显示不常用汉字，每一个字体列表中，*第一个* *系统存在* 的字体将被使用。
 ;;; 1. 设置默认字体列表，按`C-c C-c'测试字体显示效果。
 ;;; 2. 你可以使用命令: `describe-char' 来了解光标处字符使用什么字体。
-;;;    也可以运行`(print (font-family-list))'来获得当前可用的字体的名称列表。
-;;; 3. 在windows操作系统下，chinese-fonts-setup 无法识别许多中文字体，已知可以
-;;;    识别的中文字体有：华文仿宋 华文中宋 华文细黑 微软雅黑 文泉驿正黑。
-;;;    而windows自带的方正系列以及Sim系列的中文字体都无法识别，原因未知。")
+;;;    也可以运行`(print (font-family-list))'来获得当前可用的字体的名称列表。")
 
 (defconst cfs--profile-comment-2 "
 ;;; 1. 为每个英文字体字号 (9 10.5 11.5 12.5 14 16 18 20 22) 设置对应的中文字体字号，使中英文等宽。
@@ -226,7 +225,7 @@
              (insert (format "\n        %S" e)))
            (insert "\n       ))\n"))))
 
-(defun cfs--save-current-profile-english-fontsize (profile-name size)
+(defun cfs--save-english-fontsize (profile-name size)
   (let* ((profiles-names cfs-profiles)
          (profiles-english-fontsizes cfs--profiles-english-fontsizes)
          (length1 (length profiles-names))
@@ -235,12 +234,11 @@
     (if (= length1 length2)
         (setf (nth index profiles-english-fontsizes) size)
       (setq profiles-english-fontsizes
-            (mapcar (lambda (x)
-                      cfs--english-fontsize-fallback) profiles-names)))
+            (mapcar (lambda (x) 12.5) profiles-names)))
     (setq cfs--profiles-english-fontsizes profiles-english-fontsizes)
     (customize-save-variable 'cfs--profiles-english-fontsizes profiles-english-fontsizes)))
 
-(defun cfs--read-current-profile-english-fontsize (profile-name)
+(defun cfs--read-english-fontsize (profile-name)
   (let ((index (cl-position profile-name cfs-profiles :test #'string=)))
     (nth index cfs--profiles-english-fontsizes)))
 
@@ -284,11 +282,17 @@
             (cl-find-if #'cfs--font-exists-p x))
           (car (cfs--read-profile))))
 
-(defun cfs--make-font-string (fontname fontsize)
+(defun cfs--make-font-string (fontname fontsize &optional type)
   (if (and (stringp fontsize)
            (equal ":" (string (elt fontsize 0))))
       (format "%s%s" fontname fontsize)
-    (format "%s-%s" fontname fontsize)))
+    (cond
+     ((eq type 'bold) (format "%s-%s:weight=bold:slant=normal" fontname fontsize))
+     ((eq type 'italic) (format "%s-%s::weight=normal:slant=italic" fontname fontsize))
+     ((eq type 'bold-italic) (format "%s-%s:weight=bold:slant=italic" fontname fontsize))
+     (t (format "%s-%s:weight=normal:slant=normal" fontname fontsize)))))
+
+;; (cfs--get-fontset "courier" 10 'italic)
 
 (defun cfs--get-chinese-fontsize (&optional size)
   (let* ((chinese-fontsizes-steps (car (cdr (cfs--read-profile))))
@@ -297,51 +301,64 @@
       (message "如果中英文不能对齐，请运行`cfs-edit-profile'编辑当前profile。"))
     (or (nth index chinese-fontsizes-steps) 1)))
 
+(defun cfs--get-fontset (fontname fontsize &optional type)
+  "返回 fontname 对应的 fontset"
+  (car (x-list-fonts (cfs--make-font-string fontname fontsize type)
+                     nil nil 1)))
+
 (defun cfs--set-font (english-fontsize chinese-fontsize)
   "english-fontsize could be set to \":pixelsize=18\" or a integer.
 If set/leave chinese-fontsize to nil, it will follow english-fontsize"
   (let* ((valid-fonts (cfs--get-valid-fonts))
-         (english-main-font
-          (cfs--make-font-string (nth 0 valid-fonts) english-fontsize))
-         (english-bold-font
-          (font-spec :slant 'normal :weight 'bold
-                     :size english-fontsize
-                     :family (nth 0 valid-fonts)))
-         (english-italic-font
-          (font-spec :slant 'italic :weight 'normal
-                     :size english-fontsize
-                     :family (nth 0 valid-fonts)))
-         (english-bold-italic-font
-          (font-spec :slant 'italic :weight 'bold
-                     :size english-fontsize
-                     :family (nth 0 valid-fonts)))
-         (chinese-main-font
-          (font-spec :family (nth 1 valid-fonts)
-                     :size chinese-fontsize))
-         (chinese-extra-font
-          (font-spec :family (nth 2 valid-fonts)
-                     :size chinese-fontsize)))
-    (set-face-attribute 'default nil :font english-main-font)
-    (set-face-font 'italic
-                   (if cfs-ignore-italic
-                       english-main-font
-                     english-italic-font))
-    (set-face-font 'bold-italic
-                   (if cfs-ignore-bold-italic
-                       english-bold-font
-                     english-bold-italic-font))
+         (english-main-fontset
+          (cfs--get-fontset (nth 0 valid-fonts) english-fontsize))
+
+         (english-bold-fontset
+          (cfs--get-fontset (nth 0 valid-fonts) english-fontsize 'bold))
+
+         (english-italic-fontset
+          (cfs--get-fontset (nth 0 valid-fonts) english-fontsize 'italic))
+
+         (english-bold-italic-fontset
+          (cfs--get-fontset (nth 0 valid-fonts) english-fontsize 'bold-italic))
+
+         (chinese-main-fontset
+          (cfs--get-fontset (nth 1 valid-fonts) chinese-fontsize))
+
+         (chinese-extra-fontset
+          (cfs--get-fontset (nth 2 valid-fonts) chinese-fontsize)))
+
+    (set-face-attribute 'default nil :font english-main-fontset)
+
+    (if (and english-bold-fontset
+             cfs-enable-bold)
+        (set-face-font 'bold english-bold-fontset)
+      (set-face-font 'bold english-main-fontset))
+
+    (if (and english-italic-fontset
+             cfs-enable-italic)
+        (set-face-font 'italic english-italic-fontset)
+      (set-face-font 'italic english-main-fontset))
+
+    (if (and english-bold-italic-fontset
+             cfs-enable-bold-italic)
+        (set-face-font 'bold-italic english-bold-italic-fontset)
+      (if (and english-bold-fontset
+               cfs-enable-bold)
+          (set-face-font 'bold-italic english-bold-fontset)
+        (set-face-font 'bold-italic english-main-fontset)))
 
     ;; Set Chinese font and don't not use 'unicode charset,
     ;; it will cause the english font setting invalid.
     (dolist (charset '(kana han cjk-misc bopomofo gb18030))
-      (set-fontset-font t charset chinese-main-font))
+      (set-fontset-font t charset chinese-main-fontset))
 
     ;; Set symbol fonts
-    (set-fontset-font t 'symbol english-main-font)
-    (set-fontset-font t 'symbol chinese-main-font nil 'prepend)
+    (set-fontset-font t 'symbol english-main-fontset)
+    (set-fontset-font t 'symbol chinese-main-fontset nil 'prepend)
 
     ;; Set font of chars which is not covered above.
-    (set-fontset-font t nil chinese-extra-font nil 'prepend)
+    (set-fontset-font t nil chinese-extra-fontset nil 'prepend)
 
     (setq cfs--minibuffer-echo-string
           (format "英文字体: %s, 字号: %.1f, 中文字体: %s, 字号：%.2f"
@@ -350,20 +367,20 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
 (defun cfs--step-fontsize (step)
   (let* ((profile-name cfs--current-profile-name)
          (steps cfs--english-fontsizes-steps-fallback)
-         (current-english-size (cfs--read-current-profile-english-fontsize profile-name))
-         next-english-size)
+         (current-english-fontsize (cfs--read-english-fontsize profile-name))
+         next-english-fontsize)
     (when (< step 0)
       (setq steps (reverse cfs--english-fontsizes-steps-fallback)))
-    (setq next-english-size
-          (cadr (member current-english-size steps)))
-    (when next-english-size
-      (cfs--set-font next-english-size (cfs--get-chinese-fontsize next-english-size))
-      (cfs--save-current-profile-english-fontsize profile-name next-english-size)
+    (setq next-english-fontsize
+          (cadr (member current-english-fontsize steps)))
+    (when next-english-fontsize
+      (cfs--set-font next-english-fontsize (cfs--get-chinese-fontsize next-english-fontsize))
+      (cfs--save-english-fontsize profile-name next-english-fontsize)
       (message cfs--minibuffer-echo-string))))
 
 (defun cfs-set-font-with-saved-size ()
   (let* ((profile-name cfs--current-profile-name)
-         (english-fontsize (cfs--read-current-profile-english-fontsize profile-name))
+         (english-fontsize (cfs--read-english-fontsize profile-name))
          (chinese-fontsize (cfs--get-chinese-fontsize english-fontsize)))
     (when (display-graphic-p)
       (cfs--set-font english-fontsize chinese-fontsize))))
