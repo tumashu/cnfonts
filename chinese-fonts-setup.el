@@ -456,7 +456,7 @@
 (defun cfs-test-chinese-fontsize-at-point ()
   "Test chinese fontsizes list at point, which is usd to write chinese fontsizes list"
   (interactive)
-  (let (chinese-fontsize chinese-fontsize index)
+  (let (chinese-fontsize english-fontsize index)
     (setq chinese-fontsize (sexp-at-point))
     (if (and chinese-fontsize (numberp chinese-fontsize))
         (progn
