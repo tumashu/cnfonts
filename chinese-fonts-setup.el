@@ -298,39 +298,38 @@
                      nil nil 1)))
 
 (defun cfs--set-font (english-fontsize chinese-fontsize)
-  "english-fontsize could be set to \":pixelsize=18\" or a integer.
-If set/leave chinese-fontsize to nil, it will follow english-fontsize"
+  "核心函数，用于设置字体，英文字体大小设置为 `english-fontsize' ，中文字体大小
+设置为 `chinese-fontsize' 。"
   (let* ((valid-fonts (cfs--get-valid-fonts))
          (english-main-fontset
           (cfs--get-fontset (nth 0 valid-fonts) english-fontsize))
-
          (english-bold-fontset
           (cfs--get-fontset (nth 0 valid-fonts) english-fontsize 'bold))
-
          (english-italic-fontset
           (cfs--get-fontset (nth 0 valid-fonts) english-fontsize 'italic))
-
          (english-bold-italic-fontset
           (cfs--get-fontset (nth 0 valid-fonts) english-fontsize 'bold-italic))
-
          (chinese-main-fontset
           (cfs--get-fontset (nth 1 valid-fonts) chinese-fontsize))
-
          (chinese-extra-fontset
           (cfs--get-fontset (nth 2 valid-fonts) chinese-fontsize)))
 
-    (set-face-attribute 'default nil :font english-main-fontset)
-
+    ;; 设置英文字体。
+    (set-face-attribute 'default nil
+                        :font english-main-fontset)
+    ;; 设置英文粗体。
     (if (and english-bold-fontset
              cfs-enable-bold)
         (set-face-font 'bold english-bold-fontset)
       (set-face-font 'bold english-main-fontset))
 
+    ;; 设置英文斜体。
     (if (and english-italic-fontset
              cfs-enable-italic)
         (set-face-font 'italic english-italic-fontset)
       (set-face-font 'italic english-main-fontset))
 
+    ;; 设置英文粗斜体。
     (if (and english-bold-italic-fontset
              cfs-enable-bold-italic)
         (set-face-font 'bold-italic english-bold-italic-fontset)
@@ -339,16 +338,16 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
           (set-face-font 'bold-italic english-bold-fontset)
         (set-face-font 'bold-italic english-main-fontset)))
 
-    ;; Set Chinese font and don't not use 'unicode charset,
-    ;; it will cause the english font setting invalid.
+    ;; 设置中文字体，注意，不要使用 'unicode charset,
+    ;; 否则上面的英文字体设置将会失效。
     (dolist (charset '(kana han cjk-misc bopomofo gb18030))
       (set-fontset-font t charset chinese-main-fontset))
 
-    ;; Set symbol fonts
+    ;; 设置 symbol 字体。
     (set-fontset-font t 'symbol english-main-fontset)
     (set-fontset-font t 'symbol chinese-main-fontset nil 'prepend)
 
-    ;; Set font of chars which is not covered above.
+    ;; 设置 fallback 字体，用于显示不常用的字符。
     (set-fontset-font t nil chinese-extra-fontset nil 'prepend)
 
     (setq cfs--minibuffer-echo-string
