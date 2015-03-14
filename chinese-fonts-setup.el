@@ -65,8 +65,8 @@
 ;;     '("program" "org-mode" "read-book"))
 ;; ```
 ;;
-;; 所有的profile文件都保存在`cfs-profiles-directory'对应的目录中。
-;; 如果profile文件不存在，`chinese-fonts-setup' 将使用其自带的fallback
+;; 所有的profile文件都保存在 `cfs-profiles-directory' 对应的目录中。
+;; 如果profile文件不存在， `chinese-fonts-setup' 将使用其自带的fallback
 ;; 信息来配置字体。
 ;;
 ;; 在运行profile编辑命令`cfs-edit-profile'的时候，缺失的falback文件
@@ -91,7 +91,7 @@
 ;; 3.  C-down      `cfs-decrement-chinese-fontsize-at-point'
 ;;                  减小光标下的中文字号，同时显示减小后的字体对齐效果
 ;;
-;; 注意配置完成后，可能需要重启 Emacs。(参考： http://debbugs.gnu.org/db/17/1785.html)
+;; 配置完成后，有可能需要重启 Emacs。(参考： http://debbugs.gnu.org/db/17/1785.html)
 ;;
 ;; ### 调整字体大小 ###
 ;; `chinese-fonts-setup' 使用下述两个命令调整字体大小:
@@ -104,7 +104,7 @@
 ;; ### Tips ###
 ;;
 ;; 1. 使用命令: `describe-char' 可以了解光标处字符使用什么字体。
-;; 2. 运行`(print (font-family-list))' 可以获得当前可用的字体的名称列表。
+;; 2. 运行 `(print (font-family-list))' 可以获得当前可用的字体的名称列表。
 ;;
 ;; ### 参考文章 ###
 ;;
