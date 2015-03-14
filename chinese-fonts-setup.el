@@ -163,7 +163,7 @@
   '(9 10.5 11.5 12.5 14 16 18 20 22))
 
 (defconst cfs--chinese-fontsizes-steps-fallback
-  '(9 10.5 11.5 12.5 14 16 18 20 22))
+  '(9 10.5 12.0 13.5 15.0 16.5 18 21.0 22.5))
 
 (defconst cfs--fontnames-fallback
   '(("PragmataPro" "Monaco" "Consolas" "Menlof" "DejaVu Sans Mono"
