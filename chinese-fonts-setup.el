@@ -132,7 +132,7 @@
   :group 'chinese-fonts-setup
   :type 'list)
 
-(defcustom cfs-profiles-directory "~/.emacs.d/cfs-profiles.d/"
+(defcustom cfs-profiles-directory (locate-user-emacs-file "chinese-fonts-setup/")
   "*Directory variable from which all other chinese-fonts-setup profiles are derived."
   :group 'chinese-fonts-setup
   :type 'directory)
