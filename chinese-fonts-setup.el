@@ -364,7 +364,7 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
     (set-fontset-font t nil chinese-extra-fontset nil 'prepend)
 
     (setq cfs--minibuffer-echo-string
-          (format "英文字体: %s, 字号: %.1f, 中文字体: %s, 字号：%.2f"
+          (format "英文字体: %s %.1f，中文字体: %s %.1f"
                   (nth 0 valid-fonts) english-fontsize (nth 1 valid-fonts) chinese-fontsize))))
 
 (defun cfs--step-fontsize (step)
