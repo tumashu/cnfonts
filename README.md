@@ -1,6 +1,6 @@
 # chinese-fonts-setup - A fonts config tool enforcing double-width Chinese character display
 
-*Author:* Feng Shu <tumashu@gmail.com><br>
+*Author:* Feng Shu <tumashu@163.com><br>
 *Version:* 0.5<br>
 
 `chinese-fonts-setup` 是一个emacs中文字体配置工具。可以比较方便地

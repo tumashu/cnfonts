@@ -1,8 +1,8 @@
 ;;; chinese-fonts-setup.el --- A fonts config tool enforcing double-width Chinese character display
 
-;; Copyright (c) 2011-2014, Feng Shu
+;; Copyright (c) 2011-2015, Feng Shu
 
-;; Author: Feng Shu <tumashu@gmail.com>
+;; Author: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/chinese-fonts-setup
 ;; Package-Requires: ((cl-lib "0.5"))
 ;; Version: 0.5
