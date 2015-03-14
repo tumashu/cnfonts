@@ -96,8 +96,8 @@
 ;; ### 调整字体大小 ###
 ;; `chinese-fonts-setup' 使用下述两个命令调整字体大小:
 ;;
-;; 1.  `cfs-increase-english-fontsize' 增大字体大小
-;; 2.  `cfs-decrease-english-fontsize' 减小字体大小
+;; 1.  `cfs-increase-fontsize' 增大字体大小
+;; 2.  `cfs-decrease-fontsize' 减小字体大小
 ;;
 ;; 在调整字体大小的同时，字号信息也通过customize-save-variable函数保存到~/.emacs中了。
 ;;
@@ -397,11 +397,11 @@ If set/leave chinese-fontsize to nil, it will follow english-fontsize"
   (add-hook 'window-setup-hook
             'cfs-set-font-with-saved-size))
 
-(defun cfs-decrease-english-fontsize ()
+(defun cfs-decrease-fontsize ()
   (interactive)
   (cfs--step-fontsize -1))
 
-(defun cfs-increase-english-fontsize ()
+(defun cfs-increase-fontsize ()
   (interactive)
   (cfs--step-fontsize 1))
 
