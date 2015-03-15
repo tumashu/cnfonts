@@ -1,7 +1,7 @@
 # chinese-fonts-setup - A fonts config tool enforcing double-width Chinese character display
 
 *Author:* Feng Shu <tumashu@163.com><br>
-*Version:* 0.5<br>
+*Version:* 0.6<br>
 
 `chinese-fonts-setup` 是一个emacs中文字体配置工具。可以比较方便地
 实现中文字体和英文字体等宽（也就是大家常说的中英文对齐）。
@@ -60,11 +60,11 @@ chinese-fonts-setup 默认使用三个profile: profile1, profile2 和 profile3,
 如果当前的profile不适合时，可以通过`cfs-edit-profile`来编辑当前
 的profile文件。chinese-fonts-setup自带一个profile-edit编辑模式。
 
-1.  C-c C-c     `cfs-test-chinese-fontsize-at-point`
+1.  C-c C-c     `cfs-test-fontsizes-at-point`
                  察看字体显示效果
-2.  C-up        `cfs-increment-chinese-fontsize-at-point`
+2.  C-up        `cfs-increment-fontsize-at-point`
                  增大光标下的中文字号，同时显示增加后的字体对齐效果
-3.  C-down      `cfs-decrement-chinese-fontsize-at-point`
+3.  C-down      `cfs-decrement-fontsize-at-point`
                  减小光标下的中文字号，同时显示减小后的字体对齐效果
 
 配置完成后，有可能需要重启 Emacs。(参考： http://debbugs.gnu.org/db/17/1785.html)
