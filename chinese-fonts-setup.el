@@ -147,7 +147,7 @@
   "Current profile name used by chinese-fonts-setup")
 
 (defvar cfs--fontsize-steps
-  (mapcar (lambda (x) 4) cfs-profiles)
+  (mapcar #'(lambda (x) 4) cfs-profiles)
   "用来保存每一个 profile 使用 `cfs--fontsizes-fallback' 中第几个字号组合。")
 
 (defconst cfs--fontsizes-fallback
@@ -227,8 +227,8 @@
         (t (insert (format "\n(setq %s\n      '(" variable-name))
            (dolist (e value)
              (insert (concat "\n        ("
-                             (mapconcat '(lambda (x)
-                                           (format "%-4S" x)) e  " ") ")")))
+                             (mapconcat #'(lambda (x)
+                                            (format "%-4S" x)) e  " ") ")")))
            (insert "\n       ))\n"))))
 
 (defun cfs--save-fontsize-step (profile-name step)
@@ -240,7 +240,7 @@
     (if (= length1 length2)
         (setf (nth index profiles-fontsize-steps) step)
       (setq profiles-fontsize-steps
-            (mapcar (lambda (x) 4) profiles-names)))
+            (mapcar #'(lambda (x) 4) profiles-names)))
     (setq cfs--fontsize-steps profiles-fontsize-steps)
     (customize-save-variable 'cfs--fontsize-steps profiles-fontsize-steps)))
 
@@ -284,8 +284,8 @@
       nil t))
 
 (defun cfs--get-valid-fonts ()
-  (mapcar (lambda (x)
-            (cl-find-if #'cfs--font-exists-p x))
+  (mapcar #'(lambda (x)
+              (cl-find-if #'cfs--font-exists-p x))
           (car (cfs--read-profile))))
 
 (defun cfs--make-font-string (fontname fontsize &optional type)
@@ -426,9 +426,9 @@
 ;; emacs启动的时候激活chinese-fonts-setup。
 (if (and (fboundp 'daemonp) (daemonp))
     (add-hook 'after-make-frame-functions
-              (lambda (frame)
-                (with-selected-frame frame
-                  (cfs-set-font-with-saved-step))))
+              #'(lambda (frame)
+                  (with-selected-frame frame
+                    (cfs-set-font-with-saved-step))))
   (add-hook 'window-setup-hook
             'cfs-set-font-with-saved-step))
 
