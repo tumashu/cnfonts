@@ -128,6 +128,11 @@
   :group 'chinese-fonts-setup
   :type 'directory)
 
+(defcustom cfs-keep-frame-size t
+  "在调整字体的时候，是否保持当前 frame 大小不变。"
+  :group 'chinese-fonts-setup
+  :type 'boolean)
+
 (defcustom cfs-enable-bold t
   "Enable 英文粗体字体。"
   :group 'chinese-fonts-setup
@@ -318,7 +323,29 @@
       font-xlfd)))
 
 (defun cfs--set-font (fontsizes-list)
-  "核心函数，用于设置字体"
+  "调整当前 frame 使用的字体，当全局变量 `cfs-keep-frame-size'
+设置为 t 时，调整字体时保持当前 frame 大小不变。"
+  (let ((frame (selected-frame))
+        height width)
+    (when (display-multi-font-p frame)
+      (when cfs-keep-frame-size
+        (setq height (* (frame-parameter frame 'height)
+                        (frame-char-height frame))
+              width  (* (frame-parameter frame 'width)
+                        (frame-char-width frame))))
+      (cfs--set-font-1 fontsizes-list)
+      (when cfs-keep-frame-size
+        (modify-frame-parameters
+         frame
+         (list (cons 'height (round height (frame-char-height frame)))
+               (cons 'width  (round width  (frame-char-width frame)))))))))
+
+(defun cfs--set-font-1 (fontsizes-list)
+  "核心函数，用于设置字体，参数 `fontsizes-list' 是一个列表，其结构类似：
+
+    (英文字体字号 中文字体字号 EXT-B字体字号 英文symbol字体字号 中文symbol字体字号)
+
+其中，英文字体字号和中文字体字号两个元素时必须的，后面其它元素是可选的。"
   (let* ((valid-fonts (cfs--get-valid-fonts))
 
          (english-main-fontsize (nth 0 fontsizes-list))
