@@ -61,11 +61,11 @@ chinese-fonts-setup 默认使用三个profile: profile1, profile2 和 profile3,
 的profile文件。chinese-fonts-setup自带一个profile-edit编辑模式。
 
 1.  C-c C-c     `cfs-test-fontsizes-at-point`
-                 察看字体显示效果
+                 查看字体显示效果
 2.  C-up        `cfs-increment-fontsize-at-point`
-                 增大光标下的中文字号，同时显示增加后的字体对齐效果
+                 增大光标下字号的大小，同时显示对齐效果
 3.  C-down      `cfs-decrement-fontsize-at-point`
-                 减小光标下的中文字号，同时显示减小后的字体对齐效果
+                 减小光标下字号的大小，同时显示对齐效果
 
 配置完成后，有可能需要重启 Emacs。(参考： http://debbugs.gnu.org/db/17/1785.html)
 
