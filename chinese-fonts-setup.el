@@ -197,9 +197,12 @@
 (defvar cfs--minibuffer-echo-string nil)
 
 (defun cfs--get-profile (profile-name)
-  (let ((directory-name
-         (expand-file-name
-          (file-name-as-directory cfs-profiles-directory))))
+  (let* ((cfs-profile-version "v3")
+         (directory-name
+          (expand-file-name
+           (file-name-as-directory
+            (concat (file-name-as-directory cfs-profiles-directory)
+                    cfs-profile-version)))))
     (make-directory directory-name t)
     (concat directory-name
             (replace-regexp-in-string
