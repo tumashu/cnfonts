@@ -116,6 +116,7 @@
 ;;; Code:
 (require 'cl-lib)
 (require 'ido)
+(require 'thingatpt)
 
 (defcustom cfs-profiles '("profile1" "profile2" "profile3")
   "Lists chinese-fonts-setup profiles"
