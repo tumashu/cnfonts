@@ -133,6 +133,14 @@
   :group 'chinese-fonts-setup
   :type 'boolean)
 
+(defcustom cfs-use-face-font-rescale (eq system-type 'gnu/linux)
+  "是否通过设定 `face-font-rescale-alist' 来达到中英文对齐。
+
+在 window 平台下，将这个变量设置为 t 会导致 chinese-fonts-setup
+字体对齐预览功能失效，在 linux 平台下可以正常使用。"
+  :group 'chinese-fonts-setup
+  :type 'boolean)
+
 (defcustom cfs-enable-bold t
   "Enable 英文粗体字体。"
   :group 'chinese-fonts-setup
@@ -297,11 +305,17 @@
   (if (and (stringp fontsize)
            (equal ":" (string (elt fontsize 0))))
       (format "%s%s" fontname fontsize)
-    (cond
-     ((eq type 'bold) (format "%s-%s:weight=bold:slant=normal" fontname fontsize))
-     ((eq type 'italic) (format "%s-%s::weight=normal:slant=italic" fontname fontsize))
-     ((eq type 'bold-italic) (format "%s-%s:weight=bold:slant=italic" fontname fontsize))
-     (t (format "%s-%s:weight=normal:slant=normal" fontname fontsize)))))
+    (if fontsize
+        (cond
+         ((eq type 'bold) (format "%s-%s:weight=bold:slant=normal" fontname fontsize))
+         ((eq type 'italic) (format "%s-%s:weight=normal:slant=italic" fontname fontsize))
+         ((eq type 'bold-italic) (format "%s-%s:weight=bold:slant=italic" fontname fontsize))
+         (t (format "%s-%s:weight=normal:slant=normal" fontname fontsize)))
+      (cond
+       ((eq type 'bold) (format "%s:weight=bold:slant=normal" fontname))
+       ((eq type 'italic) (format "%s:weight=normal:slant=italic" fontname))
+       ((eq type 'bold-italic) (format "%s:weight=bold:slant=italic" fontname))
+       (t (format "%s:weight=normal:slant=normal" fontname))))))
 
 ;; (cfs--get-fontset "courier" 10 'italic)
 
@@ -327,6 +341,14 @@
 设置为 t 时，调整字体时保持当前 frame 大小不变。"
   (let ((frame (selected-frame))
         height width)
+
+    (when cfs-use-face-font-rescale
+      (cfs--set-face-font-rescale fontsizes-list)
+      ;; 通过设定 `face-font-rescale-alist' 来实现中英文对齐时，
+      ;; 只设定英文字体字号，中文等字体字号不设定。
+      (setq fontsizes-list
+            (list (car fontsizes-list))))
+
     (when (display-multi-font-p frame)
       (when cfs-keep-frame-size
         (setq height (* (frame-parameter frame 'height)
@@ -340,12 +362,20 @@
          (list (cons 'height (round height (frame-char-height frame)))
                (cons 'width  (round width  (frame-char-width frame)))))))))
 
+(defun cfs--set-face-font-rescale (fontsizes-list)
+  "设定 `face-font-rescale-alist' 系数。"
+  (setq face-font-rescale-alist
+        (cl-loop for font in (cfs--get-valid-fonts)
+                 for size in fontsizes-list
+                 collect (cons font (/ (float size)
+                                       (car fontsizes-list))))))
+
 (defun cfs--set-font-1 (fontsizes-list)
   "核心函数，用于设置字体，参数 `fontsizes-list' 是一个列表，其结构类似：
 
     (英文字体字号 中文字体字号 EXT-B字体字号 英文symbol字体字号 中文symbol字体字号)
 
-其中，英文字体字号和中文字体字号两个元素时必须的，后面其它元素是可选的。"
+其中，英文字体字号必须设定，其余字体字号可以设定，也可以省略。"
   (let* ((valid-fonts (cfs--get-valid-fonts))
 
          (english-main-fontsize (nth 0 fontsizes-list))
@@ -429,9 +459,8 @@
       (set-fontset-font t nil chinese-extra-fontset nil 'prepend))
 
     (setq cfs--minibuffer-echo-string
-          (format "英文字体: %s %.1f，中文字体: %s %.1f"
-                  (nth 0 valid-fonts) english-main-fontsize
-                  (nth 1 valid-fonts) chinese-main-fontsize))))
+          (format "英文字体: %s %.1f，中文字体: %s"
+                  (nth 0 valid-fonts) english-main-fontsize (nth 1 valid-fonts)))))
 
 (defun cfs--step-fontsize (num)
   (let* ((profile-name cfs--current-profile-name)
