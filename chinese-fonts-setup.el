@@ -306,8 +306,10 @@ The below is an example which is used to set symbol fonts:
             cfs--fontsizes-fallback))))
 
 (defun cfs--font-exists-p (font)
-  (if (null (x-list-fonts font))
-      nil t))
+  (and (x-list-fonts font)
+       ;; 字体名称中包含“-”时，不能生成合法的XLFD字符串，
+       ;; 细节见 emacs bug#17457.
+       (not (string-match-p "-" font))))
 
 (defun cfs--get-valid-fonts ()
   (mapcar #'(lambda (x)
