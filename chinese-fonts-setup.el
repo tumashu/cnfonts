@@ -156,6 +156,19 @@
   :group 'chinese-fonts-setup
   :type 'boolean)
 
+(defcustom cfs-set-font-finish-hook nil
+  "A hook, by which user can set additional fonts.
+The below is an example which is used to set symbol fonts:
+
+(defun cfs-set-symbol-fonts (fontsizes-list)
+  (set-fontset-font t 'symbol \"Inconsolata\" nil 'append)
+  (set-fontset-font t 'symbol \"Symbola\" nil 'append)
+  (set-fontset-font t 'unicode \"Segoe UI Emoji\" nil 'append)
+  (set-fontset-font t 'unicode \"STIX\" nil 'append))
+(add-hook 'cfs-set-font-finish-hook 'cfs-set-symbol-fonts)"
+  :group 'chinese-fonts-setup
+  :type 'hook)
+
 (defvar cfs--current-profile-name (car cfs-profiles)
   "Current profile name used by chinese-fonts-setup")
 
@@ -356,6 +369,7 @@
               width  (* (frame-parameter frame 'width)
                         (frame-char-width frame))))
       (cfs--set-font-1 fontsizes-list)
+      (run-hook-with-args 'cfs-set-font-finish-hook fontsizes-list)
       (when cfs-keep-frame-size
         (modify-frame-parameters
          frame
@@ -451,8 +465,8 @@
     (when english-main-fontset
       (set-fontset-font t 'symbol english-symbol-fontset))
 
-    (when chinese-main-fontset
-      (set-fontset-font t 'symbol chinese-symbol-fontset nil 'append))
+    ;; (when chinese-main-fontset
+    ;;   (set-fontset-font t 'symbol chinese-symbol-fontset nil 'append))
 
     ;; 设置 fallback 字体，用于显示不常用的字符。
     (when chinese-extra-fontset
