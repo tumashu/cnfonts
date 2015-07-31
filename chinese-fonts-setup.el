@@ -452,7 +452,7 @@
       (set-fontset-font t 'symbol english-symbol-fontset))
 
     (when chinese-main-fontset
-      (set-fontset-font t 'symbol chinese-symbol-fontset nil 'prepend))
+      (set-fontset-font t 'symbol chinese-symbol-fontset nil 'append))
 
     ;; 设置 fallback 字体，用于显示不常用的字符。
     (when chinese-extra-fontset
