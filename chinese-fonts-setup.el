@@ -578,11 +578,14 @@ The below is an example which is used to set symbol fonts:
 (defun cfs-test-fontsize-at-point ()
   "Test fontsizes list at point, which is usd to edit fontsizes list"
   (interactive)
-  (let* ((fontsizes-list (form-at-point 'list)))
-    (if (numberp (car fontsizes-list))
+  (let ((fontsizes-list (list-at-point)))
+    (if (and (listp fontsizes-list)
+             (numberp (car fontsizes-list)))
         (progn
           (cfs--set-font fontsizes-list)
           (cfs--show-font-effect fontsizes-list))
+      ;; 如果当前 point 不在 profile 文件中的 `cfs--custom-set-fontsizes‘ 中
+      ;; 使用一组预定义字体大小来查看字体效果。
       (cfs--set-font '(14 15 15))
       (cfs--show-font-effect '(14 15 15)))))
 
