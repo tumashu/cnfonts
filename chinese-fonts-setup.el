@@ -192,7 +192,7 @@ The below is an example which is used to set symbol fonts:
   '(("Monaco" "Consolas" "DejaVu Sans Mono" "Droid Sans Mono" "PragmataPro"
      "Courier" "Courier New" "Liberation Mono" "Ubuntu Mono" "Droid Sans Mono Pro"
      "Inconsolata" "Source Code Pro" "Lucida Console" "Envy Code R" "Andale Mono"
-     "Lucida Sans Typewriter" "monoOne" "Lucida Typewriter" "Panic Sans"
+     "Lucida Sans Typewriter" "monoOne" "Lucida Typewriter" "Panic Sans" "Hack"
      "Bitstream Vera Sans Mono" "HyperFont" "PT Mono" "Ti92Pluspc" "Excalibur Monospace"
      "Menlof" "Cousine" "Fira Mono" "Lekton" "M+ 1mn" "BPmono" "Free Mono"
      "Anonymous Pro" "ProFont" "ProFontWindows" "Latin Modern Mono" "Code 2002"
