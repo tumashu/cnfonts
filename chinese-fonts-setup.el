@@ -461,18 +461,18 @@ The below is an example which is used to set symbol fonts:
     ;; 否则上面的英文字体设置将会失效。
     (when chinese-main-fontset
       (dolist (charset '(kana han cjk-misc bopomofo gb18030))
-        (set-fontset-font t charset chinese-main-fontset)))
+        (set-fontset-font "fontset-default" charset chinese-main-fontset)))
 
     ;; 设置 symbol 字体。
     (when english-main-fontset
-      (set-fontset-font t 'symbol english-symbol-fontset))
+      (set-fontset-font "fontset-default" 'symbol english-symbol-fontset))
 
     ;; (when chinese-main-fontset
     ;;   (set-fontset-font t 'symbol chinese-symbol-fontset nil 'append))
 
     ;; 设置 fallback 字体，用于显示不常用的字符。
     (when chinese-extra-fontset
-      (set-fontset-font t nil chinese-extra-fontset nil 'prepend))
+      (set-fontset-font "fontset-default" nil chinese-extra-fontset nil 'prepend))
 
     (setq cfs--minibuffer-echo-string
           (format "英文字体: %s %.1f，中文字体: %s, EXTB字体：%s"
