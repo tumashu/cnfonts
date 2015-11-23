@@ -104,8 +104,10 @@
 ;; ### Tips ###
 ;;
 ;; 1. 使用命令: `describe-char' 可以了解光标处字符使用什么字体。
-;; 2. 运行 `(print (font-family-list))' 可以获得当前可用的字体的名称列表。
-;; 3. Windows 用户 (特别是 Windows XP 用户) 可以安装 MacType 软件来优化
+;; 2. 在 scratch 中写一行 elisp 代码： (cl-prettyprint (font-family-list)),
+;;    执行后，就会在 scratch 中插入当前可用字体的名称列表，这是一个很有用的技巧。
+;; 3. 命令：`cfs-insert-fontname', 可以让用户选择一个可用字体插入到当前光标处。
+;; 4. Windows 用户 (特别是 Windows XP 用户) 可以安装 MacType 软件来优化
 ;;    字体显示效果，推荐使用。
 ;;
 ;; ### 参考文章 ###
@@ -218,8 +220,9 @@ The below is an example which is used to set symbol fonts:
 
 (defconst cfs--profile-comment-1 "
 ;;; `cfs--custom-set-fontsnames' 列表有3个子列表，第1个为英文字体列表，第2个为中文字体列表，
-;;; 第3个列表中的字体用于显示不常用汉字，每一个字体列表中，*第一个* *系统存在* 的字体将被使用。
-;;; 将光标移动到上述列表中，按 `C-c C-c' 可以测试字体显示效果。")
+;;; 第3个列表中的字体用于显示不常用汉字，每一个字体列表中，*第一个* *有效并可用* 的字体将被使用。
+;;; 将光标移动到上述列表中，按 `C-c C-c' 可以测试字体显示效果。另外，用户可以通过命令
+;;; `cfs-insert-fontname’ 来选择一个 *可用* 字体，然后在当前光标处插入其字体名称。")
 
 (defconst cfs--profile-comment-2 "
 ;;; `cfs--custom-set-fontsizes' 中，所有元素的结构都类似：(英文字号 中文字号 EXT-B字体字号)
@@ -623,6 +626,17 @@ The below is an example which is used to set symbol fonts:
                (nth 1 fontsizes-list))
       (cfs--set-font fontsizes-list))
     (message cfs--minibuffer-echo-string)))
+
+(defun cfs-insert-fontname ()
+  "Select a valid font name, and insert at point."
+  (interactive)
+  (let* ((fonts (font-family-list))
+         (choose (completing-read
+                  "Which fontname do you want to insert? "
+                  fonts)))
+    (when choose
+      (insert (format "\"%s\"" choose)))))
+
 
 (provide 'chinese-fonts-setup)
 

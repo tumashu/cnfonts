@@ -80,8 +80,10 @@ chinese-fonts-setup 默认使用三个profile: profile1, profile2 和 profile3,
 ### Tips ###
 
 1. 使用命令: `describe-char` 可以了解光标处字符使用什么字体。
-2. 运行 `(print (font-family-list))` 可以获得当前可用的字体的名称列表。
-3. Windows 用户 (特别是 Windows XP 用户) 可以安装 MacType 软件来优化
+2. 在 scratch 中写一行 elisp 代码： (cl-prettyprint (font-family-list)),
+   执行后，就会在 scratch 中插入当前可用字体的名称列表，这是一个很有用的技巧。
+3. 命令：`cfs-insert-fontname`, 可以让用户选择一个可用字体插入到当前光标处。
+4. Windows 用户 (特别是 Windows XP 用户) 可以安装 MacType 软件来优化
    字体显示效果，推荐使用。
 
 ### 参考文章 ###
