@@ -67,13 +67,13 @@ chinese-fonts-setup 默认使用三个profile: profile1, profile2 和 profile3,
 
 <tbody>
 <tr>
-<td class="org-left">\`cfs-switch-profile'</td>
+<td class="org-left">cfs-switch-profile</td>
 <td class="org-left">使用ido切换profile</td>
 </tr>
 
 
 <tr>
-<td class="org-left">\`cfs-next-profile'</td>
+<td class="org-left">cfs-next-profile</td>
 <td class="org-left">直接切换到下一个profile</td>
 </tr>
 </tbody>
@@ -102,21 +102,21 @@ chinese-fonts-setup 默认使用三个profile: profile1, profile2 和 profile3,
 <tbody>
 <tr>
 <td class="org-left">C-c C-c</td>
-<td class="org-left">\`cfs-test-fontsizes-at-point'</td>
+<td class="org-left">cfs-test-fontsizes-at-point</td>
 <td class="org-left">查看字体显示效果</td>
 </tr>
 
 
 <tr>
 <td class="org-left">C-up</td>
-<td class="org-left">\`cfs-increment-fontsize-at-point'</td>
+<td class="org-left">cfs-increment-fontsize-at-point</td>
 <td class="org-left">增大光标下字号的大小，同时显示对齐效果</td>
 </tr>
 
 
 <tr>
 <td class="org-left">C-down</td>
-<td class="org-left">\`cfs-decrement-fontsize-at-point'</td>
+<td class="org-left">cfs-decrement-fontsize-at-point</td>
 <td class="org-left">减小光标下字号的大小，同时显示对齐效果</td>
 </tr>
 </tbody>
@@ -145,13 +145,13 @@ chinese-fonts-setup 默认使用三个profile: profile1, profile2 和 profile3,
 
 <tbody>
 <tr>
-<td class="org-left">\`cfs-increase-fontsize'</td>
+<td class="org-left">cfs-increase-fontsize</td>
 <td class="org-left">增大字体大小</td>
 </tr>
 
 
 <tr>
-<td class="org-left">\`cfs-decrease-fontsize'</td>
+<td class="org-left">cfs-decrease-fontsize</td>
 <td class="org-left">减小字体大小</td>
 </tr>
 </tbody>

@@ -81,19 +81,19 @@
 
 ;; 切换 profile 的命令有：
 
-;; | Command              | Help                    |
-;; |----------------------+-------------------------|
-;; | `cfs-switch-profile' | 使用ido切换profile      |
-;; | `cfs-next-profile'   | 直接切换到下一个profile |
+;; | Command            | Help                    |
+;; |--------------------+-------------------------|
+;; | cfs-switch-profile | 使用ido切换profile      |
+;; | cfs-next-profile   | 直接切换到下一个profile |
 
 ;; 如果当前的profile不适合时，可以通过`cfs-edit-profile'来编辑当前
 ;; 的profile文件。chinese-fonts-setup自带一个profile-edit编辑模式。
 
-;; | Key     | Command                           | Help                                   |
-;; |---------+-----------------------------------+----------------------------------------|
-;; | C-c C-c | `cfs-test-fontsizes-at-point'     | 查看字体显示效果                       |
-;; | C-up    | `cfs-increment-fontsize-at-point' | 增大光标下字号的大小，同时显示对齐效果 |
-;; | C-down  | `cfs-decrement-fontsize-at-point' | 减小光标下字号的大小，同时显示对齐效果 |
+;; | Key     | Command                         | Help                                   |
+;; |---------+---------------------------------+----------------------------------------|
+;; | C-c C-c | cfs-test-fontsizes-at-point     | 查看字体显示效果                       |
+;; | C-up    | cfs-increment-fontsize-at-point | 增大光标下字号的大小，同时显示对齐效果 |
+;; | C-down  | cfs-decrement-fontsize-at-point | 减小光标下字号的大小，同时显示对齐效果 |
 
 
 ;; 配置完成后，有可能需要重启 Emacs。(参考： http://debbugs.gnu.org/db/17/1785.html)
@@ -101,10 +101,10 @@
 ;; ** 调整字体大小
 ;; `chinese-fonts-setup' 使用下述两个命令调整字体大小:
 
-;; | Command                 | Help         |
-;; |-------------------------+--------------|
-;; | `cfs-increase-fontsize' | 增大字体大小 |
-;; | `cfs-decrease-fontsize' | 减小字体大小 |
+;; | Command               | Help         |
+;; |-----------------------+--------------|
+;; | cfs-increase-fontsize | 增大字体大小 |
+;; | cfs-decrease-fontsize | 减小字体大小 |
 
 ;; 在调整字体大小的同时，字号信息也通过customize-save-variable函数保存到~/.emacs中了。
 
