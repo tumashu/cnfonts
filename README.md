@@ -1,4 +1,4 @@
-- [Chinese-fonts-setup README](#chinese-fonts-setup-readme)
+- [Chinese-fonts-setup 简要说明](#chinese-fonts-setup-简要说明)
   - [过程展示](#过程展示)
   - [下载](#下载)
   - [安装](#安装)
@@ -7,7 +7,7 @@
   - [Tips](#tips)
   - [参考文章](#参考文章)
 
-# Chinese-fonts-setup README<a id="orgheadline8"></a>
+# Chinese-fonts-setup 简要说明<a id="orgheadline8"></a>
 
 \`chinese-fonts-setup' 是一个emacs中文字体配置工具。可以比较方便地实现中文字体和英文字体等宽（也就是大家常说的中英文对齐）。
 

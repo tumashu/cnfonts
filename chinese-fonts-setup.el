@@ -28,19 +28,17 @@
 
 ;;; Commentary:
 
-;; * Chinese-fonts-setup README                                         :README:
+;; * Chinese-fonts-setup 简要说明                                       :README:
 ;; `chinese-fonts-setup' 是一个emacs中文字体配置工具。可以比较方便地
 ;; 实现中文字体和英文字体等宽（也就是大家常说的中英文对齐）。
 
 ;; 这个package特别适用于需要处理中英文混合表格的中文org-mode用户。
 
 ;; ** 过程展示
-
-;;     http://www.tudou.com/programs/view/v7Kr0_a9INw/
+;; http://www.tudou.com/programs/view/v7Kr0_a9INw/
 
 ;; ** 下载
-
-;;     https://github.com/tumashu/chinese-fonts-setup
+;; https://github.com/tumashu/chinese-fonts-setup
 
 ;; ** 安装
 ;; 1. 配置melpa源，参考：http://melpa.org/#/getting-started
@@ -50,7 +48,6 @@
 ;; #+BEGIN_EXAMPLE
 ;; (require 'chinese-fonts-setup)
 ;; #+END_EXAMPLE
-
 
 ;; ** 配置
 ;; chinese-fonts-setup 使用profile的概念，来实现特定的环境使用特定的
@@ -95,7 +92,6 @@
 ;; | C-up    | cfs-increment-fontsize-at-point | 增大光标下字号的大小，同时显示对齐效果 |
 ;; | C-down  | cfs-decrement-fontsize-at-point | 减小光标下字号的大小，同时显示对齐效果 |
 
-
 ;; 配置完成后，有可能需要重启 Emacs。(参考： http://debbugs.gnu.org/db/17/1785.html)
 
 ;; ** 调整字体大小
@@ -120,7 +116,6 @@
 ;; ** 参考文章
 ;; 1. http://baohaojun.github.io/perfect-emacs-chinese-font.html
 ;; 2. http://zhuoqiang.me/torture-emacs.html
-
 
 ;;; Code:
 
