@@ -166,7 +166,7 @@ chinese-fonts-setup 默认使用三个profile: profile1, profile2 和 profile3,
     执行后，就会在 scratch 中插入当前可用字体的名称列表，这是一个很有用的技巧。
 3.  命令：\`cfs-insert-fontname', 可以让用户选择一个可用字体插入到当前光标处。
 4.  Windows 用户 (特别是 Windows XP 用户) 可以安装 MacType 软件来优化字体显示效果，推荐使用。
-5.  Mac用户在配置profile文件时如果遇到'C-c C-c'刷新缓慢和第三行Ext-B文字无法显示的问题，下载并安装ext-b字体即可解决。[wikipedia]: https://cdo.wikipedia.org/wiki/Wikipedia:Unicode%E6%93%B4%E5%B1%95%E6%BC%A2%E5%AD%97 有Ext-B字符列表。默认Ext-B字体HanaMinB下载地址是 [fonts.jp/hanazono]: https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/
+5.  Mac用户在配置profile文件时如果遇到'C-c C-c'刷新缓慢和第三行Ext-B文字无法显示的问题，下载并安装ext-b字体即可解决。[wikipedia](https://cdo.wikipedia.org/wiki/Wikipedia:Unicode%E6%93%B4%E5%B1%95%E6%BC%A2%E5%AD%97) 有Ext-B字符列表。默认Ext-B字体HanaMinB下载地址是 [fonts.jp/hanazono](https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/)
 
 ## 参考文章<a id="orgheadline7"></a>
 
