@@ -180,6 +180,11 @@ The below is an example which is used to set symbol fonts:
   :group 'chinese-fonts-setup
   :type 'hook)
 
+(defcustom cfs-enable-antialias t
+  "Set it to nil to disable antialias."
+  :type 'boolean
+  :group 'chinese-fonts-setup)
+
 (defvar cfs--current-profile-name (car cfs-profiles)
   "Current profile name used by chinese-fonts-setup")
 
@@ -406,6 +411,8 @@ The below is an example which is used to set symbol fonts:
 其中，英文字体字号必须设定，其余字体字号可以设定，也可以省略。"
   (let* ((valid-fonts (cfs--get-valid-fonts))
 
+         (english-main-font (nth 0 valid-fonts))
+
          (english-main-fontsize (nth 0 fontsizes-list))
          (chinese-main-fontsize (nth 1 fontsizes-list))
          (chinese-extra-fontsize (nth 2 fontsizes-list))
@@ -414,21 +421,21 @@ The below is an example which is used to set symbol fonts:
          (chinese-symbol-fontsize (nth 4 fontsizes-list))
 
          (english-main-fontset
-          (cfs--get-fontset (nth 0 valid-fonts)
+          (cfs--get-fontset english-main-font
                             english-main-fontsize))
          (english-bold-fontset
-          (cfs--get-fontset (nth 0 valid-fonts)
+          (cfs--get-fontset english-main-font
                             english-main-fontsize 'bold))
          (english-italic-fontset
-          (cfs--get-fontset (nth 0 valid-fonts)
+          (cfs--get-fontset english-main-font
                             english-main-fontsize 'italic))
 
          (english-bold-italic-fontset
-          (cfs--get-fontset (nth 0 valid-fonts)
+          (cfs--get-fontset english-main-font
                             english-main-fontsize 'bold-italic))
 
          (english-symbol-fontset
-          (cfs--get-fontset (nth 0 valid-fonts)
+          (cfs--get-fontset english-main-font
                             (or english-symbol-fontsize
                                 english-main-fontsize)))
          (chinese-main-fontset
@@ -446,8 +453,11 @@ The below is an example which is used to set symbol fonts:
 
     (when english-main-fontset
       ;; 设置英文字体。
-      (set-face-attribute 'default nil
-                          :font english-main-fontset)
+      (let ((spec (font-spec :family english-main-font
+                             :size english-main-fontsize
+                             :antialias cfs-enable-antialias)))
+        (set-frame-font spec nil t))
+
       ;; 设置英文粗体。
       (if (and english-bold-fontset
                cfs-enable-bold)
@@ -488,7 +498,7 @@ The below is an example which is used to set symbol fonts:
 
     (setq cfs--minibuffer-echo-string
           (format "英文字体: %s %.1f，中文字体: %s, EXTB字体：%s"
-                  (nth 0 valid-fonts) english-main-fontsize
+                  english-main-font english-main-fontsize
                   (nth 1 valid-fonts)
                   (nth 2 valid-fonts)))))
 
