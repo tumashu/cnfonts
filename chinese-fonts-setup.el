@@ -180,7 +180,7 @@ The below is an example which is used to set symbol fonts:
   :group 'chinese-fonts-setup
   :type 'hook)
 
-(defvar cfs--current-profile-name (car cfs-profiles)
+(defvar cfs--current-profile-name nil
   "Current profile name used by chinese-fonts-setup")
 
 (defvar cfs--fontsize-steps
@@ -280,6 +280,7 @@ The below is an example which is used to set symbol fonts:
       (setq profiles-fontsize-steps
             (mapcar #'(lambda (x) 4) profiles-names)))
     (setq cfs--fontsize-steps profiles-fontsize-steps)
+    (customize-save-variable 'cfs--current-profile-name profile-name)
     (customize-save-variable 'cfs--fontsize-steps profiles-fontsize-steps)))
 
 (defun cfs--read-fontsize-step (profile-name)
@@ -514,9 +515,14 @@ The below is an example which is used to set symbol fonts:
     (add-hook 'after-make-frame-functions
               #'(lambda (frame)
                   (with-selected-frame frame
+                    (unless (member cfs--current-profile-name cfs-profiles)
+                      (setq cfs--current-profile-name (car cfs-profiles)))
                     (cfs-set-font-with-saved-step))))
   (add-hook 'window-setup-hook
-            'cfs-set-font-with-saved-step))
+            #'(lambda ()
+                (unless (member cfs--current-profile-name cfs-profiles)
+                  (setq cfs--current-profile-name (car cfs-profiles)))
+                (cfs-set-font-with-saved-step))))
 
 (defun cfs-decrease-fontsize ()
   (interactive)
