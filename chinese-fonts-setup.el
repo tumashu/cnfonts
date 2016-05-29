@@ -50,9 +50,9 @@
 ;; #+END_EXAMPLE
 
 ;; ** 配置
-;; chinese-fonts-setup 使用profile的概念，来实现特定的环境使用特定的
+;; chinese-fonts-setup 使用 profile 的概念，来实现特定的环境使用特定的
 ;; 字体配置，比如：在编程时使用 “Consolas + 微米黑”，在阅读文章时使用
-;; “PragmataPro + 黑体”。
+;; “PragmataPro + 黑体”。(默认 profile 数量不能超过 20 个)
 
 ;; 每一个profile都是一个emacs-lisp文件。其中包括了英文字体设置，中文字体设置
 ;; 以及中文字体大小。
@@ -183,8 +183,7 @@ The below is an example which is used to set symbol fonts:
 (defvar cfs--current-profile-name nil
   "Current profile name used by chinese-fonts-setup")
 
-(defvar cfs--fontsize-steps
-  (mapcar #'(lambda (x) 4) cfs-profiles)
+(defvar cfs--fontsize-steps '(4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4)
   "用来保存每一个 profile 使用 `cfs--fontsizes-fallback' 中第几个字号组合。")
 
 (defconst cfs--fontsizes-fallback
@@ -272,13 +271,8 @@ The below is an example which is used to set symbol fonts:
 (defun cfs--save-fontsize-step (profile-name step)
   (let* ((profiles-names cfs-profiles)
          (profiles-fontsize-steps cfs--fontsize-steps)
-         (length1 (length profiles-names))
-         (length2 (length profiles-fontsize-steps))
          (index (cl-position profile-name cfs-profiles :test #'string=)))
-    (if (= length1 length2)
-        (setf (nth index profiles-fontsize-steps) step)
-      (setq profiles-fontsize-steps
-            (mapcar #'(lambda (x) 4) profiles-names)))
+    (setf (nth index profiles-fontsize-steps) step)
     (setq cfs--fontsize-steps profiles-fontsize-steps)
     (customize-save-variable 'cfs--current-profile-name profile-name)
     (customize-save-variable 'cfs--fontsize-steps profiles-fontsize-steps)))
@@ -504,6 +498,9 @@ The below is an example which is used to set symbol fonts:
     (message cfs--minibuffer-echo-string)))
 
 (defun cfs-set-font-with-saved-step ()
+  (when (< (length cfs--fontsize-steps) 20)
+    (setq cfs--fontsize-steps
+          '(4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4)))
   (let* ((profile-name cfs--current-profile-name)
          (current-step (cfs--read-fontsize-step profile-name))
          (fontsizes-list (cfs--get-fontsizes current-step)))
