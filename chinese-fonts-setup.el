@@ -180,10 +180,10 @@ The below is an example which is used to set symbol fonts:
   :group 'chinese-fonts-setup
   :type 'hook)
 
-(defvar cfs--current-profile-name nil
+(defvar cfs--current-profile nil
   "Current profile name used by chinese-fonts-setup")
 
-(defvar cfs--fontsize-steps '(4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4)
+(defvar cfs--profiles-steps nil
   "用来保存每一个 profile 使用 `cfs--fontsizes-fallback' 中第几个字号组合。")
 
 (defconst cfs--fontsizes-fallback
@@ -253,7 +253,7 @@ The below is an example which is used to set symbol fonts:
              profile-name) ".el")))
 
 (defun cfs--get-current-profile ()
-  (cfs--get-profile cfs--current-profile-name))
+  (cfs--get-profile cfs--current-profile))
 
 (defun cfs--dump-variable (variable-name value)
   "Insert a \"(setq VARIABLE value)\" in the current buffer."
@@ -268,18 +268,15 @@ The below is an example which is used to set symbol fonts:
                                             (format "%-4S" x)) e  " ") ")")))
            (insert "\n       ))\n"))))
 
-(defun cfs--save-fontsize-step (profile-name step)
-  (let* ((profiles-names cfs-profiles)
-         (profiles-fontsize-steps cfs--fontsize-steps)
-         (index (cl-position profile-name cfs-profiles :test #'string=)))
-    (setf (nth index profiles-fontsize-steps) step)
-    (setq cfs--fontsize-steps profiles-fontsize-steps)
-    (customize-save-variable 'cfs--current-profile-name profile-name)
-    (customize-save-variable 'cfs--fontsize-steps profiles-fontsize-steps)))
+(defun cfs--save-profile-step (profile-name step)
+  (if (assoc profile-name cfs--profiles-steps)
+      (setf (cdr (assoc profile-name cfs--profiles-steps)) step)
+    (push `(,profile-name . ,step) cfs--profiles-steps))
+  (customize-save-variable 'cfs--current-profile profile-name)
+  (customize-save-variable 'cfs--profiles-steps cfs--profiles-steps))
 
-(defun cfs--read-fontsize-step (profile-name)
-  (let ((index (cl-position profile-name cfs-profiles :test #'string=)))
-    (nth index cfs--fontsize-steps)))
+(defun cfs--get-profile-step (profile-name)
+  (or (cdr (assoc profile-name cfs--profiles-steps)) 4))
 
 (defun cfs--save-profile (fontnames fontsizes &optional profile-name)
   "Save `fontnames' and `fontsizes' to current profile"
@@ -294,7 +291,7 @@ The below is an example which is used to set symbol fonts:
       (insert cfs--profile-comment-2)
       (cfs--dump-variable variable-fontsizes fontsizes)
       (write-file (cfs--get-profile
-                   (or profile-name cfs--current-profile-name))))))
+                   (or profile-name cfs--current-profile))))))
 
 (defun cfs--read-profile ()
   "Get previously saved fontnames and fontsizes from current profile"
@@ -488,22 +485,19 @@ The below is an example which is used to set symbol fonts:
                   (nth 2 valid-fonts)))))
 
 (defun cfs--step-fontsize (num)
-  (let* ((profile-name cfs--current-profile-name)
-         (current-step
-          (max 1 (min (+ num (cfs--read-fontsize-step profile-name))
+  (let* ((profile-name cfs--current-profile)
+         (profile-step
+          (max 1 (min (+ num (cfs--get-profile-step profile-name))
                       (length cfs--fontsizes-fallback))))
-         (fontsizes-list (cfs--get-fontsizes current-step)))
+         (fontsizes-list (cfs--get-fontsizes profile-step)))
     (cfs--set-font fontsizes-list)
-    (cfs--save-fontsize-step profile-name current-step)
+    (cfs--save-profile-step profile-name profile-step)
     (message cfs--minibuffer-echo-string)))
 
 (defun cfs-set-font-with-saved-step ()
-  (when (< (length cfs--fontsize-steps) 20)
-    (setq cfs--fontsize-steps
-          '(4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4)))
-  (let* ((profile-name cfs--current-profile-name)
-         (current-step (cfs--read-fontsize-step profile-name))
-         (fontsizes-list (cfs--get-fontsizes current-step)))
+  (let* ((profile-name cfs--current-profile)
+         (profile-step (cfs--get-profile-step profile-name))
+         (fontsizes-list (cfs--get-fontsizes profile-step)))
     (when (display-graphic-p)
       (cfs--set-font fontsizes-list))))
 
@@ -512,13 +506,13 @@ The below is an example which is used to set symbol fonts:
     (add-hook 'after-make-frame-functions
               #'(lambda (frame)
                   (with-selected-frame frame
-                    (unless (member cfs--current-profile-name cfs-profiles)
-                      (setq cfs--current-profile-name (car cfs-profiles)))
+                    (unless (member cfs--current-profile cfs-profiles)
+                      (setq cfs--current-profile (car cfs-profiles)))
                     (cfs-set-font-with-saved-step))))
   (add-hook 'window-setup-hook
             #'(lambda ()
-                (unless (member cfs--current-profile-name cfs-profiles)
-                  (setq cfs--current-profile-name (car cfs-profiles)))
+                (unless (member cfs--current-profile cfs-profiles)
+                  (setq cfs--current-profile (car cfs-profiles)))
                 (cfs-set-font-with-saved-step))))
 
 (defun cfs-decrease-fontsize ()
@@ -545,8 +539,8 @@ The below is an example which is used to set symbol fonts:
 
 (defun cfs--select-profile (profile-name)
   (if (member profile-name cfs-profiles)
-      (progn (setq cfs--current-profile-name profile-name)
-             (customize-save-variable 'cfs--current-profile-name profile-name)
+      (progn (setq cfs--current-profile profile-name)
+             (customize-save-variable 'cfs--current-profile profile-name)
              (cfs-set-font-with-saved-step))
     (message "%s doesn't exist." profile-name)))
 
@@ -559,14 +553,14 @@ The below is an example which is used to set symbol fonts:
 (defun cfs-next-profile (&optional step)
   (interactive)
   (let ((profiles cfs-profiles)
-        (current-profile cfs--current-profile-name)
+        (current-profile cfs--current-profile)
         next-profile)
     (setq next-profile
           (or (cadr (member current-profile profiles))
               (car profiles)))
     (when next-profile
-      (setq cfs--current-profile-name next-profile)
-      (customize-save-variable 'cfs--current-profile-name next-profile))
+      (setq cfs--current-profile next-profile)
+      (customize-save-variable 'cfs--current-profile next-profile))
     (when (display-graphic-p)
       (cfs-set-font-with-saved-step))
     (message "Current chinese-fonts-setup profile is set to: \"%s\"" next-profile)))
