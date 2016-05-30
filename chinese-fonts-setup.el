@@ -238,6 +238,10 @@ The below is an example which is used to set symbol fonts:
 ;;; 按 C-<up> 增大光标处字号，按 C-<down> 减小光标处字号。")
 
 (defvar cfs--minibuffer-echo-string nil)
+(defvar cfs--custom-set-fontnames nil
+  "Variable, which only used in profile file.")
+(defvar cfs--custom-set-fontsizes nil
+  "Variable, which only used in profile file.")
 
 (defun cfs--get-profile (profile-name)
   (let* ((cfs-profile-version "v3") ;; 升级 profile 格式时改变版本号
