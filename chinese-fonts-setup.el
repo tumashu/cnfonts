@@ -52,7 +52,7 @@
 ;; ** 配置
 ;; chinese-fonts-setup 使用 profile 的概念，来实现特定的环境使用特定的
 ;; 字体配置，比如：在编程时使用 “Consolas + 微米黑”，在阅读文章时使用
-;; “PragmataPro + 黑体”。(默认 profile 数量不能超过 20 个)
+;; “PragmataPro + 黑体”。
 
 ;; 每一个profile都是一个emacs-lisp文件。其中包括了英文字体设置，中文字体设置
 ;; 以及中文字体大小。
