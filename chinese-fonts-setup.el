@@ -310,7 +310,8 @@ The below is an example which is used to set symbol fonts:
             cfs--fontsizes-fallback))))
 
 (defun cfs--font-exists-p (font)
-  (and (x-list-fonts font)
+  (and (or (x-list-fonts font)
+           (x-list-fonts (string-as-unibyte font)))
        ;; 字体名称中包含“-”时，不能生成合法的XLFD字符串，
        ;; 细节见 emacs bug#17457.
        (not (string-match-p "-" font))))
@@ -346,8 +347,10 @@ The below is an example which is used to set symbol fonts:
 
 (defun cfs--get-fontset (fontname fontsize &optional type)
   "返回 fontname 对应的 fontset"
-  (let ((font-xlfd (car (x-list-fonts (cfs--make-font-string fontname fontsize type)
-                                      nil nil 1))))
+  (let* ((font-string (cfs--make-font-string fontname fontsize type))
+         (font-xlfd
+          (car (or (x-list-fonts font-string nil nil 1)
+                   (x-list-fonts (string-as-unibyte font-string) nil nil 1)))))
     (when (and font-xlfd
                ;; 当字体名称中包含 "-" 时，`x-list-fonts'
                ;; 返回无效的 XLFD 字符串，具体细节请参考 emacs bug#17457 。
