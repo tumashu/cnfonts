@@ -482,10 +482,11 @@ The below is an example which is used to set symbol fonts:
       (set-fontset-font "fontset-default" nil chinese-extra-fontset nil 'prepend))
 
     (setq cfs--minibuffer-echo-string
-          (format "英文字体: %s %.1f，中文字体: %s, EXTB字体：%s"
+          (format "[%s]: 英文字体: %s %.1f，中文字体: %s, EXTB字体：%s"
+                  cfs--current-profile
                   (nth 0 valid-fonts) english-main-fontsize
-                  (nth 1 valid-fonts)
-                  (nth 2 valid-fonts)))))
+                  (or (nth 1 valid-fonts) "无")
+                  (or (nth 2 valid-fonts) "无")))))
 
 (defun cfs--step-fontsize (num)
   (let* ((profile-name cfs--current-profile)
