@@ -640,7 +640,8 @@ The below is an example which is used to set symbol fonts:
 (defun cfs-insert-fontname ()
   "Select a valid font name, and insert at point."
   (interactive)
-  (let* ((fonts (font-family-list))
+  (let* ((fonts (mapcar #'string-as-multibyte
+                        (font-family-list)))
          (choose (completing-read
                   "Which fontname do you want to insert? "
                   fonts)))
