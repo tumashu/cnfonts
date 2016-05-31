@@ -114,7 +114,7 @@
 
 ;; | Command            | Help                    |
 ;; |--------------------+-------------------------|
-;; | cfs-switch-profile | 使用ido切换profile      |
+;; | cfs-switch-profile | 选择并切换 profile      |
 ;; | cfs-next-profile   | 直接切换到下一个profile |
 
 ;; 如果用户觉得 *当前使用* 的 profile 不符合个人使用习惯，可以使用 `cfs-edit-profile'
@@ -171,7 +171,6 @@
 ;; * 代码                                                                 :code:
 ;; #+BEGIN_SRC emacs-lisp
 (require 'cl-lib)
-(require 'ido)
 (require 'thingatpt)
 
 (defcustom cfs-profiles '("profile1" "profile2" "profile3")
@@ -599,8 +598,7 @@ The below is an example which is used to set symbol fonts:
 
 (defun cfs-switch-profile ()
   (interactive)
-  (let ((profile
-         (ido-completing-read "Set chinese-fonts-setup profile to:" cfs-profiles)))
+  (let ((profile (completing-read "Set chinese-fonts-setup profile to:" cfs-profiles)))
     (cfs--select-profile profile)))
 
 (defun cfs-next-profile (&optional step)
@@ -630,8 +628,7 @@ The below is an example which is used to set symbol fonts:
 
 (defun cfs-regenerate-profile ()
   (interactive)
-  (let ((profile-name
-         (ido-completing-read "Regenerate profile: " cfs-profiles)))
+  (let ((profile-name (completing-read "Regenerate profile: " cfs-profiles)))
     (if (yes-or-no-p (format "Regenerate (%s)? " profile-name))
         (cfs--save-profile cfs--fontnames-fallback
                            cfs--fontsizes-fallback profile-name)

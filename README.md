@@ -103,7 +103,7 @@ Chinese-fonts-setup 默认使用三个 profile: profile1, profile2 和 profile3,
 <tbody>
 <tr>
 <td class="org-left">cfs-switch-profile</td>
-<td class="org-left">使用ido切换profile</td>
+<td class="org-left">选择并切换 profile</td>
 </tr>
 
 
