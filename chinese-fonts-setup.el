@@ -695,8 +695,13 @@ The below is an example which is used to set symbol fonts:
   (let* ((fonts (mapcar #'string-as-multibyte
                         (font-family-list)))
          (choose (completing-read
-                  "Which fontname do you want to insert? "
-                  fonts)))
+                  "Which font name do you want to insert? "
+                  (if (yes-or-no-p "Only show font names with Chinese? ")
+                      (cl-remove-if
+                       #'(lambda (x)
+                           (not (string-match-p "\\cc" x)))
+                         fonts)
+                    fonts))))
     (when choose
       (insert (format "\"%s\"" choose)))))
 
