@@ -239,7 +239,12 @@ The below is an example which is used to set symbol fonts:
     (16   20.0 20.0)
     (18   21.0 21.0)
     (20   24.0 24.0)
-    (22   26.0 26.0))
+    (22   24.0 24.0)
+    (24   27.0 27.0)
+    (26   28.5 28.5)
+    (28   30.0 30.0)
+    (30   33.0 33.0)
+    (32   36.0 36.0))
   "一个列表，每一个元素都有类似结构：(英文字号 中文字号 EXT-B字体字号)")
 
 (defconst cfs--fontnames-fallback
@@ -656,7 +661,7 @@ The below is an example which is used to set symbol fonts:
   (replace-match
    (format "%.5s"
            (number-to-string
-            (min 30 (max 5 (+ step (string-to-number (match-string 0))))))))
+            (min 50 (max 5 (+ step (string-to-number (match-string 0))))))))
   (backward-char 1)
   (cfs-test-fontsize-at-point))
 
