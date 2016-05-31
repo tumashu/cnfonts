@@ -271,9 +271,9 @@ The below is an example which is used to set symbol fonts:
 | 堂堂正正    | *五大三粗*  | /东倒西歪/    |
 | I'm normal. | *I'm bold!* | /I'm italic?/ |
 | 𠄀𠄁𠄂𠄃    | *𠄄𠄅𠄆𠄇*  | /𠄈𠄉𠄊𠄋/    |
-;; 请看上面表格线能否对齐, 如果没有对齐，请调整profile文件
-;; 中变量 `cfs--custom-set-fontsizes' 列表各个数字的大小。
-")
+
+请看上面表格线能否对齐, 如果没有对齐，请调整 profile 文件
+中变量 `cfs--custom-set-fontsizes' 列表各个数字的大小。")
 
 (defconst cfs--profile-comment-1 "
 ;;; `cfs--custom-set-fontsnames' 列表有3个子列表，第1个为英文字体列表，第2个为中文字体列表，
@@ -682,7 +682,8 @@ The below is an example which is used to set symbol fonts:
       (when (featurep 'org)
         (org-mode))
       (setq truncate-lines 1)
-      (insert (replace-regexp-in-string "^ *\n" "" cfs--test-string)))
+      (setq cursor-type nil)
+      (insert cfs--test-string))
     (when (and (nth 0 fontsizes-list)
                (nth 1 fontsizes-list))
       (cfs--set-font fontsizes-list))
