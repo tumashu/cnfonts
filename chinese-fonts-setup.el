@@ -692,15 +692,16 @@ The below is an example which is used to set symbol fonts:
 (defun cfs-insert-fontname ()
   "Select a valid font name, and insert at point."
   (interactive)
-  (let* ((fonts (mapcar #'string-as-multibyte
-                        (font-family-list)))
+  (let* ((fonts (delete-dups
+                 (mapcar #'string-as-multibyte
+                         (font-family-list))))
          (choose (completing-read
                   "Which font name do you want to insert? "
                   (if (yes-or-no-p "Only show font names with Chinese? ")
                       (cl-remove-if
                        #'(lambda (x)
                            (not (string-match-p "\\cc" x)))
-                         fonts)
+                       fonts)
                     fonts))))
     (when choose
       (insert (format "\"%s\"" choose)))))
