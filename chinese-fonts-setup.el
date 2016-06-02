@@ -351,7 +351,8 @@ The below is an example which is used to set symbol fonts:
   (interactive)
   (let ((file (cfs--get-current-profile)))
     (if (file-readable-p file)
-        (progn (load-file file)
+        (progn (load (expand-file-name file) nil t)
+               (message "Load chinese-fonts-setup profile: %S." cfs--current-profile)
                (list
                 (if (boundp 'cfs--custom-set-fontnames)
                     cfs--custom-set-fontnames
