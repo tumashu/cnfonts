@@ -161,6 +161,8 @@
 ;;    是 ext-b 字体缺失引起的，建议安装 ext-b 字体试试。
 ;;    1. Ext-B字符列表: https://cdo.wikipedia.org/wiki/Wikipedia:Unicode%E6%93%B4%E5%B1%95%E6%BC%A2%E5%AD%97
 ;;    2. HanaMinB 下载地址: https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/
+;; 6. Monaco 字体默认不包含粗体和斜体，需要粗体或斜体的用户，可以使用 vjpr 同学
+;;    维护的字体： [[https://github.com/vjpr/monaco-bold][monaco-bold]]
 
 ;; ** 参考文章
 ;; 1. http://baohaojun.github.io/perfect-emacs-chinese-font.html
@@ -248,7 +250,7 @@ The below is an example which is used to set symbol fonts:
   "一个列表，每一个元素都有类似结构：(英文字号 中文字号 EXT-B字体字号)")
 
 (defconst cfs--fontnames-fallback
-  '(("Monaco" "Consolas" "DejaVu Sans Mono" "Droid Sans Mono" "PragmataPro"
+  '(("Monacob" "Monaco" "Consolas" "DejaVu Sans Mono" "Droid Sans Mono" "PragmataPro"
      "Courier" "Courier New" "Liberation Mono" "Ubuntu Mono" "Droid Sans Mono Pro"
      "Inconsolata" "Source Code Pro" "Lucida Console" "Envy Code R" "Andale Mono"
      "Lucida Sans Typewriter" "monoOne" "Lucida Typewriter" "Panic Sans" "Hack"
