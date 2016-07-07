@@ -459,6 +459,10 @@ The below is an example which is used to set symbol fonts:
 其中，英文字体字号必须设定，其余字体字号可以设定，也可以省略。"
   (let* ((valid-fonts (cfs--get-valid-fonts))
 
+         (english-main-fontname (nth 0 valid-fonts))
+         (chinese-main-fontname (nth 1 valid-fonts))
+         (chinese-extra-fontname (nth 2 valid-fonts))
+
          (english-main-fontsize (nth 0 fontsizes-list))
          (chinese-main-fontsize (nth 1 fontsizes-list))
          (chinese-extra-fontsize (nth 2 fontsizes-list))
@@ -467,33 +471,33 @@ The below is an example which is used to set symbol fonts:
          (chinese-symbol-fontsize (nth 4 fontsizes-list))
 
          (english-main-fontset
-          (cfs--get-fontset (nth 0 valid-fonts)
+          (cfs--get-fontset english-main-fontname
                             english-main-fontsize))
          (english-bold-fontset
-          (cfs--get-fontset (nth 0 valid-fonts)
+          (cfs--get-fontset english-main-fontname
                             english-main-fontsize 'bold))
          (english-italic-fontset
-          (cfs--get-fontset (nth 0 valid-fonts)
+          (cfs--get-fontset english-main-fontname
                             english-main-fontsize 'italic))
 
          (english-bold-italic-fontset
-          (cfs--get-fontset (nth 0 valid-fonts)
+          (cfs--get-fontset english-main-fontname
                             english-main-fontsize 'bold-italic))
 
          (english-symbol-fontset
-          (cfs--get-fontset (nth 0 valid-fonts)
+          (cfs--get-fontset english-main-fontname
                             (or english-symbol-fontsize
                                 english-main-fontsize)))
          (chinese-main-fontset
-          (cfs--get-fontset (nth 1 valid-fonts)
+          (cfs--get-fontset chinese-main-fontname
                             chinese-main-fontsize))
 
          (chinese-symbol-fontset
-          (cfs--get-fontset (nth 1 valid-fonts)
+          (cfs--get-fontset chinese-main-fontname
                             (or chinese-symbol-fontsize
                                 chinese-main-fontsize)))
          (chinese-extra-fontset
-          (cfs--get-fontset (nth 2 valid-fonts)
+          (cfs--get-fontset chinese-extra-fontname
                             (or chinese-extra-fontsize
                                 chinese-main-fontsize))))
 
@@ -539,7 +543,7 @@ The below is an example which is used to set symbol fonts:
     (setq cfs--minibuffer-echo-string
           (format "[%s]: 英文字体: %s %.1f，中文字体: %s, EXTB字体：%s"
                   cfs--current-profile
-                  (nth 0 valid-fonts) english-main-fontsize
+                  english-main-fontname english-main-fontsize
                   (or (nth 1 valid-fonts) "无")
                   (or (nth 2 valid-fonts) "无")))))
 
