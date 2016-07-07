@@ -287,8 +287,10 @@ The below is an example which is used to set symbol fonts:
 ;;; 按 C-<up> 增大光标处字号，按 C-<down> 减小光标处字号。")
 
 (defvar cfs--minibuffer-echo-string nil)
+
 (defvar cfs--custom-set-fontnames nil
   "Variable, which only used in profile file.")
+
 (defvar cfs--custom-set-fontsizes nil
   "Variable, which only used in profile file.")
 
@@ -308,18 +310,18 @@ The below is an example which is used to set symbol fonts:
 (defun cfs--get-current-profile ()
   (cfs--get-profile cfs--current-profile))
 
-(defun cfs--dump-variable (variable-name value)
+(defun cfs--dump-variable (variable value)
   "Insert a \"(setq VARIABLE value)\" in the current buffer."
   (cond ((atom value)
-         (insert (format "\n(setq %s %S)\n" variable-name value)))
+         (insert (format "\n(setq %S %S)\n" variable value)))
         ((atom (car value))
-         (insert (format "\n(setq %s\n       '%S)\n" variable-name value)))
-        (t (insert (format "\n(setq %s\n      '(" variable-name))
+         (insert (format "\n(setq %S\n      '%S)\n" variable value)))
+        (t (insert (format "\n(setq %S\n      '(" variable))
            (dolist (e value)
              (insert (concat "\n        ("
                              (mapconcat #'(lambda (x)
                                             (format "%-4S" x)) e  " ") ")")))
-           (insert "\n       ))\n"))))
+           (insert "\n        ))\n"))))
 
 (defun cfs--save-profile-step (profile-name step)
   (if (assoc profile-name cfs--profiles-steps)
@@ -333,18 +335,16 @@ The below is an example which is used to set symbol fonts:
 
 (defun cfs--save-profile (fontnames fontsizes &optional profile-name)
   "Save `fontnames' and `fontsizes' to current profile"
-  (let ((variable-fontnames "cfs--custom-set-fontnames")
-        (variable-fontsizes "cfs--custom-set-fontsizes"))
-    (with-temp-buffer
-      (erase-buffer)
-      (insert (replace-regexp-in-string
-               "^ *\n" ""
-               cfs--profile-comment-1))
-      (cfs--dump-variable variable-fontnames fontnames)
-      (insert cfs--profile-comment-2)
-      (cfs--dump-variable variable-fontsizes fontsizes)
-      (write-file (cfs--get-profile
-                   (or profile-name cfs--current-profile))))))
+  (with-temp-buffer
+    (erase-buffer)
+    (insert (replace-regexp-in-string
+             "^ *\n" ""
+             cfs--profile-comment-1))
+    (cfs--dump-variable 'cfs--custom-set-fontnames fontnames)
+    (insert cfs--profile-comment-2)
+    (cfs--dump-variable 'cfs--custom-set-fontsizes fontsizes)
+    (write-file (cfs--get-profile
+                 (or profile-name cfs--current-profile)))))
 
 (defun cfs--read-profile ()
   "Get previously saved fontnames and fontsizes from current profile"
@@ -354,7 +354,7 @@ The below is an example which is used to set symbol fonts:
         (progn (when (load (expand-file-name file) nil t)
                  (message "Chinese-fonts-setup: load %S successfully." cfs--current-profile))
                (list
-                (if (boundp 'cfs--custom-set-fontnames)
+                (if cfs--custom-set-fontnames
                     `((,@(nth 0 cfs--custom-set-fontnames)
                        ,@(nth 0 cfs--fontnames-fallback))
                       (,@(nth 1 cfs--custom-set-fontnames)
@@ -362,9 +362,8 @@ The below is an example which is used to set symbol fonts:
                       (,@(nth 2 cfs--custom-set-fontnames)
                        ,@(nth 2 cfs--fontnames-fallback)))
                   cfs--fontnames-fallback)
-                (if (boundp 'cfs--custom-set-fontsizes)
-                    cfs--custom-set-fontsizes
-                  cfs--fontsizes-fallback)))
+                (or cfs--custom-set-fontsizes
+                    cfs--fontsizes-fallback)))
       (list cfs--fontnames-fallback
             cfs--fontsizes-fallback))))
 
