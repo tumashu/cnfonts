@@ -188,6 +188,21 @@
   :group 'chinese-fonts-setup
   :type 'boolean)
 
+(defcustom cfs-disable-bold nil
+  "是否禁用英文粗体。"
+  :group 'chinese-fonts-setup
+  :type 'boolean)
+
+(defcustom cfs-disable-italic nil
+  "是否禁用英文斜体。"
+  :group 'chinese-fonts-setup
+  :type 'boolean)
+
+(defcustom cfs-disable-bold-italic nil
+  "是否禁用英文粗斜体。"
+  :group 'chinese-fonts-setup
+  :type 'boolean)
+
 (defcustom cfs-use-face-font-rescale (eq system-type 'gnu/linux)
   "是否通过设定 `face-font-rescale-alist' 来达到中英文对齐。
 
@@ -483,16 +498,22 @@ The below is an example which is used to set symbol fonts:
       (set-face-attribute
        'default nil :font english-main-fontset)
       ;; 设置英文粗体。
-      (when english-bold-fontset
-        (set-face-font 'bold english-bold-fontset))
+      (if cfs-disable-bold
+          (set-face-font 'bold english-main-fontset)
+        (when english-bold-fontset
+          (set-face-font 'bold english-bold-fontset)))
 
       ;; 设置英文斜体。
-      (when english-italic-fontset
-        (set-face-font 'italic english-italic-fontset))
+      (if cfs-disable-italic
+          (set-face-font 'italic english-main-fontset)
+        (when english-italic-fontset
+          (set-face-font 'italic english-italic-fontset)))
 
       ;; 设置英文粗斜体。
-      (when english-bold-italic-fontset
-        (set-face-font 'bold-italic english-bold-italic-fontset)))
+      (if cfs-disable-bold-italic
+          (set-face-font 'bold-italic english-main-fontset)
+        (when english-bold-italic-fontset
+          (set-face-font 'bold-italic english-bold-italic-fontset))))
 
     ;; 设置中文字体，注意，不要使用 'unicode charset,
     ;; 否则上面的英文字体设置将会失效。
