@@ -355,7 +355,12 @@ The below is an example which is used to set symbol fonts:
                  (message "Chinese-fonts-setup: load %S successfully." cfs--current-profile))
                (list
                 (if (boundp 'cfs--custom-set-fontnames)
-                    cfs--custom-set-fontnames
+                    `((,@(nth 0 cfs--custom-set-fontnames)
+                       ,@(nth 0 cfs--fontnames-fallback))
+                      (,@(nth 1 cfs--custom-set-fontnames)
+                       ,@(nth 1 cfs--fontnames-fallback))
+                      (,@(nth 2 cfs--custom-set-fontnames)
+                       ,@(nth 2 cfs--fontnames-fallback)))
                   cfs--fontnames-fallback)
                 (if (boundp 'cfs--custom-set-fontsizes)
                     cfs--custom-set-fontsizes
