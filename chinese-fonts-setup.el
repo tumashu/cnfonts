@@ -196,21 +196,6 @@
   :group 'chinese-fonts-setup
   :type 'boolean)
 
-(defcustom cfs-enable-bold t
-  "Enable 英文粗体字体。"
-  :group 'chinese-fonts-setup
-  :type 'boolean)
-
-(defcustom cfs-enable-italic t
-  "Enable 英文斜体字体。"
-  :group 'chinese-fonts-setup
-  :type 'boolean)
-
-(defcustom cfs-enable-bold-italic t
-  "Enable 英文粗斜体字体。"
-  :group 'chinese-fonts-setup
-  :type 'boolean)
-
 (defcustom cfs-set-font-finish-hook nil
   "A hook, by which user can set additional fonts.
 The below is an example which is used to set symbol fonts:
@@ -495,18 +480,18 @@ The below is an example which is used to set symbol fonts:
 
     (when english-main-fontset
       ;; 设置英文字体。
-      (set-face-attribute 'default nil
-                          :font english-main-fontset)
+      (set-face-attribute
+       'default nil :font english-main-fontset)
       ;; 设置英文粗体。
-      (when (and english-bold-fontset cfs-enable-bold)
+      (when english-bold-fontset
         (set-face-font 'bold english-bold-fontset))
 
       ;; 设置英文斜体。
-      (when (and english-italic-fontset cfs-enable-italic)
+      (when english-italic-fontset
         (set-face-font 'italic english-italic-fontset))
 
       ;; 设置英文粗斜体。
-      (when (and english-bold-italic-fontset cfs-enable-bold-italic)
+      (when english-bold-italic-fontset
         (set-face-font 'bold-italic english-bold-italic-fontset)))
 
     ;; 设置中文字体，注意，不要使用 'unicode charset,
