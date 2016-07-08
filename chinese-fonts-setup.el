@@ -457,13 +457,11 @@ The below is an example which is used to set symbol fonts:
                      :size english-main-fontsize
                      :weight 'normal
                      :slant 'italic))
-
          (english-bold-italic-fontspec
           (font-spec :family english-main-fontname
                      :size english-main-fontsize
                      :weight 'bold
                      :slant 'italic))
-
          (english-symbol-fontspec
           (font-spec :family english-main-fontname
                      :size (or english-symbol-fontsize
@@ -475,7 +473,6 @@ The below is an example which is used to set symbol fonts:
                      :size chinese-main-fontsize
                      :weight 'normal
                      :slant 'normal))
-
          (chinese-symbol-fontspec
           (font-spec :family chinese-main-fontname
                      :size (or chinese-symbol-fontsize
