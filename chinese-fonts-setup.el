@@ -266,11 +266,11 @@ The below is an example which is used to set symbol fonts:
     ("HanaMinB")))
 
 (defconst cfs--test-string "
-| 正常字体    | 粗体        | 粗斜体        |
-|-------------+-------------+---------------|
-| 堂堂正正    | *五大三粗*  | /东倒西歪/    |
-| I'm normal. | *I'm bold!* | /I'm italic?/ |
-| 𠄀𠄁𠄂𠄃    | *𠄄𠄅𠄆𠄇*  | /𠄈𠄉𠄊𠄋/    |
+|--------------------------------------------------|
+| 白日依山盡，黃河入海流，欲窮千里目，更上一層樓。 |
+| The secret of success is constancy of purpose!!  |
+| 𠄀𠄁𠄂𠄃𠄄，𠄅𠄆𠄇𠄈𠄉，𠄀𠄁𠄂𠄃𠄄，𠄅𠄆𠄇𠄈𠄉。 |
+|--------------------------------------------------|
 
 请看上面表格线能否对齐, 如果没有对齐，请调整 profile 文件
 中变量 `cfs--custom-set-fontsizes' 列表各个数字的大小。")
@@ -493,20 +493,23 @@ The below is an example which is used to set symbol fonts:
       ;; 设置英文粗体。
       (if cfs-disable-bold
           (set-face-font 'bold english-main-fontspec)
-        (when (cfs--fontspec-valid-p english-bold-fontspec)
-          (set-face-font 'bold english-bold-fontspec)))
+        (if (cfs--fontspec-valid-p english-bold-fontspec)
+            (set-face-font 'bold english-bold-fontspec)
+          (message "Chinese-fonts-setup: 字体 %S 对应的粗体没有找到，不作处理！" english-main-fontname)))
 
       ;; 设置英文斜体。
       (if cfs-disable-italic
           (set-face-font 'italic english-main-fontspec)
-        (when (cfs--fontspec-valid-p english-italic-fontspec)
-          (set-face-font 'italic english-italic-fontspec)))
+        (if (cfs--fontspec-valid-p english-italic-fontspec)
+            (set-face-font 'italic english-italic-fontspec)
+          (message "Chinese-fonts-setup: 字体 %S 对应的斜体没有找到，不作处理！" english-main-fontname)))
 
       ;; 设置英文粗斜体。
       (if cfs-disable-bold-italic
           (set-face-font 'bold-italic english-main-fontspec)
-        (when (cfs--fontspec-valid-p english-bold-italic-fontspec)
-          (set-face-font 'bold-italic english-bold-italic-fontspec))))
+        (if (cfs--fontspec-valid-p english-bold-italic-fontspec)
+            (set-face-font 'bold-italic english-bold-italic-fontspec)
+          (message "Chinese-fonts-setup: 字体 %S 对应的粗斜体没有找到，不作处理！" english-main-fontname))))
 
     ;; 设置中文字体，注意，不要使用 'unicode charset,
     ;; 否则上面的英文字体设置将会失效。
