@@ -266,9 +266,9 @@ The below is an example which is used to set symbol fonts:
     ("HanaMinB")))
 
 (defconst cfs--test-string "
-| 请看这个表格能否对齐, 如果对不齐，请调整 |
-| `cfs--custom-set-fontsizes' 列表中的数字 |
-| 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉 |
+| 如果此表格无法对齐，请调整下面变量中的数字 |
+|        `cfs--custom-set-fontsizes'         |
+| 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄇 |
 ")
 
 (defconst cfs--profile-comment-1 "
