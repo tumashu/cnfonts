@@ -248,7 +248,7 @@ The below is an example which is used to set symbol fonts:
   "一个列表，每一个元素都有类似结构：(英文字号 中文字号 EXT-B字体字号)")
 
 (defconst cfs--fontnames-fallback
-  '(("Monaco" "Consolas" "DejaVu Sans Mono" "Droid Sans Mono" "PragmataPr"
+  '(("Monaco" "Consolas" "DejaVu Sans Mono" "Droid Sans Mono" "PragmataPro"
      "Courier" "Courier New" "Ubuntu Mono" "Liberation Mono" "MonacoB" "MonacoB2"
      "MonacoBSemi" "Droid Sans Mono Pro" "Inconsolata" "Source Code Pro" "Lucida Console"
      "Envy Code R" "Andale Mono" "Lucida Sans Typewriter" "monoOne" "Lucida Typewriter"
