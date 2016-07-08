@@ -266,14 +266,10 @@ The below is an example which is used to set symbol fonts:
     ("HanaMinB")))
 
 (defconst cfs--test-string "
-|--------------------------------------------------|
-| 白日依山盡，黃河入海流，欲窮千里目，更上一層樓。 |
-| The secret of success is constancy of purpose!!  |
-| 𠄀𠄁𠄂𠄃𠄄，𠄅𠄆𠄇𠄈𠄉，𠄀𠄁𠄂𠄃𠄄，𠄅𠄆𠄇𠄈𠄉。 |
-|--------------------------------------------------|
-
-请看上面表格线能否对齐, 如果没有对齐，请调整 profile 文件
-中变量 `cfs--custom-set-fontsizes' 列表各个数字的大小。")
+| 请看这个表格能否对齐, 如果对不齐，请调整 |
+| `cfs--custom-set-fontsizes' 列表中的数字 |
+| 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉 |
+")
 
 (defconst cfs--profile-comment-1 "
 ;;; `cfs--custom-set-fontsnames' 列表有3个子列表，第1个为英文字体列表，第2个为中文字体列表，
@@ -676,7 +672,11 @@ The below is an example which is used to set symbol fonts:
       (setq truncate-lines 1)
       (setq cursor-type nil)
       (insert cfs--test-string)
-      (goto-char (point-min)))
+      (goto-char (point-min))
+      ;; Remove blank line at the beginning of buffer
+      (delete-region (point)
+                     (progn (forward-line 1)
+                            (point))))
     (display-buffer buffer)
     (when (and (nth 0 fontsizes-list)
                (nth 1 fontsizes-list))
