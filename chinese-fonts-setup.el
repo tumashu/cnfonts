@@ -673,11 +673,10 @@ The below is an example which is used to set symbol fonts:
   (let ((buffer (get-buffer-create "*Show-font-effect*")))
     (with-current-buffer buffer
       (erase-buffer)
-      (when (featurep 'org)
-        (org-mode))
       (setq truncate-lines 1)
       (setq cursor-type nil)
-      (insert cfs--test-string))
+      (insert cfs--test-string)
+      (goto-char (point-min)))
     (display-buffer buffer)
     (when (and (nth 0 fontsizes-list)
                (nth 1 fontsizes-list))
