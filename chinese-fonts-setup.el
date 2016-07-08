@@ -423,6 +423,10 @@ The below is an example which is used to set symbol fonts:
 (defun cfs--fontspec-valid-p (fontspec)
   (and fontspec (list-fonts fontspec)))
 
+(defun cfs--float (num)
+  (when (numberp num)
+    (float num)))
+
 (defun cfs--set-font-1 (fontsizes-list)
   "核心函数，用于设置字体，参数 `fontsizes-list' 是一个列表，其结构类似：
 
@@ -435,12 +439,12 @@ The below is an example which is used to set symbol fonts:
          (chinese-main-fontname (nth 1 valid-fonts))
          (chinese-extra-fontname (nth 2 valid-fonts))
 
-         (english-main-fontsize (* 1.0 (nth 0 fontsizes-list)))
-         (chinese-main-fontsize (* 1.0 (nth 1 fontsizes-list)))
-         (chinese-extra-fontsize (* 1.0 (nth 2 fontsizes-list)))
+         (english-main-fontsize (cfs--float (nth 0 fontsizes-list)))
+         (chinese-main-fontsize (cfs--float (nth 1 fontsizes-list)))
+         (chinese-extra-fontsize (cfs--float (nth 2 fontsizes-list)))
 
-         (english-symbol-fontsize (* 1.0 (nth 0 fontsizes-list)))
-         (chinese-symbol-fontsize (* 1.0 (nth 1 fontsizes-list)))
+         (english-symbol-fontsize (cfs--float (nth 0 fontsizes-list)))
+         (chinese-symbol-fontsize (cfs--float (nth 1 fontsizes-list)))
 
          (english-main-fontspec
           (font-spec :family english-main-fontname
