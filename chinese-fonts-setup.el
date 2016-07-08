@@ -295,7 +295,7 @@ The below is an example which is used to set symbol fonts:
 设置这个变量没有任何用处！")
 
 (defun cfs--get-profile (profile-name)
-  (let* ((cfs-profile-version "v3") ;; 升级 profile 格式时改变版本号
+  (let* ((cfs-profile-version "v4") ;; 升级 profile 格式时改变版本号
          (directory-name
           (expand-file-name
            (file-name-as-directory
