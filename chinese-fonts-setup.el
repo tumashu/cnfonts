@@ -285,10 +285,14 @@ The below is an example which is used to set symbol fonts:
 (defvar cfs--minibuffer-echo-string nil)
 
 (defvar cfs--custom-set-fontnames nil
-  "Variable, which only used in profile file.")
+  "这个变量是一个 *专用* 变量，只用与 chinese-fonts-setup 的 profile 文件，
+这些 profile 文件保存在 `cfs-profiles-directory' 对应的目录中。在其它地方
+设置这个变量没有任何用处！")
 
 (defvar cfs--custom-set-fontsizes nil
-  "Variable, which only used in profile file.")
+  "这个变量是一个 *专用* 变量，只用与 chinese-fonts-setup 的 profile 文件，
+这些 profile 文件保存在 `cfs-profiles-directory' 对应的目录中。在其它地方
+设置这个变量没有任何用处！")
 
 (defun cfs--get-profile (profile-name)
   (let* ((cfs-profile-version "v3") ;; 升级 profile 格式时改变版本号
