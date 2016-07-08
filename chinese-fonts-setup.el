@@ -670,14 +670,15 @@ The below is an example which is used to set symbol fonts:
 (defun cfs--show-font-effect (&optional fontsizes-list)
   "show font and its size in a new buffer"
   (interactive)
-  (let ((buffer-name "*Show-font-effect*"))
-    (with-output-to-temp-buffer buffer-name
-      (set-buffer buffer-name)
+  (let ((buffer (get-buffer-create "*Show-font-effect*")))
+    (with-current-buffer buffer
+      (erase-buffer)
       (when (featurep 'org)
         (org-mode))
       (setq truncate-lines 1)
       (setq cursor-type nil)
       (insert cfs--test-string))
+    (display-buffer buffer)
     (when (and (nth 0 fontsizes-list)
                (nth 1 fontsizes-list))
       (cfs--set-font fontsizes-list))
