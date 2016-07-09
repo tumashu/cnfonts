@@ -232,23 +232,23 @@ The below is an example which is used to set symbol fonts:
 
 (defconst cfs--fontsizes-fallback
   '((9    10.5 10.5)
-    (10   12.5 12.5)
-    (11.5 14.0 14.0)
+    (10   12.0 12.0)
+    (11.5 13.5 13.5)
     (12.5 15.0 15.0)
     (14   16.5 16.5)
-    (16   20.0 20.0)
+    (16   19.5 19.5)
     (18   21.0 21.0)
     (20   24.0 24.0)
-    (22   24.0 24.0)
-    (24   27.0 27.0)
-    (26   28.5 28.5)
-    (28   30.0 30.0)
-    (30   33.0 33.0)
-    (32   36.0 36.0))
+    (22   25.5 25.5)
+    (24   28.5 28.5)
+    (26   31.5 31.5)
+    (28   33.0 33.0)
+    (30   36.0 36.0)
+    (32   39.0 39.0))
   "一个列表，每一个元素都有类似结构：(英文字号 中文字号 EXT-B字体字号)")
 
 (defconst cfs--fontnames-fallback
-  '(("Monaco" "Consolas" "DejaVu Sans Mono" "Droid Sans Mono" "PragmataPr"
+  '(("Monaco" "Consolas" "DejaVu Sans Mono" "Droid Sans Mono" "PragmataPro"
      "Courier" "Courier New" "Ubuntu Mono" "Liberation Mono" "MonacoB" "MonacoB2"
      "MonacoBSemi" "Droid Sans Mono Pro" "Inconsolata" "Source Code Pro" "Lucida Console"
      "Envy Code R" "Andale Mono" "Lucida Sans Typewriter" "monoOne" "Lucida Typewriter"
@@ -266,14 +266,10 @@ The below is an example which is used to set symbol fonts:
     ("HanaMinB")))
 
 (defconst cfs--test-string "
-| 正常字体    | 粗体        | 粗斜体        |
-|-------------+-------------+---------------|
-| 堂堂正正    | *五大三粗*  | /东倒西歪/    |
-| I'm normal. | *I'm bold!* | /I'm italic?/ |
-| 𠄀𠄁𠄂𠄃    | *𠄄𠄅𠄆𠄇*  | /𠄈𠄉𠄊𠄋/    |
-
-请看上面表格线能否对齐, 如果没有对齐，请调整 profile 文件
-中变量 `cfs--custom-set-fontsizes' 列表各个数字的大小。")
+| 如果此表格无法对齐，请调整下面变量中的数字 |
+|        `cfs--custom-set-fontsizes'         |
+| 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄇 |
+")
 
 (defconst cfs--profile-comment-1 "
 ;;; `cfs--custom-set-fontsnames' 列表有3个子列表，第1个为英文字体列表，第2个为中文字体列表，
@@ -289,13 +285,17 @@ The below is an example which is used to set symbol fonts:
 (defvar cfs--minibuffer-echo-string nil)
 
 (defvar cfs--custom-set-fontnames nil
-  "Variable, which only used in profile file.")
+  "这个变量是一个 *专用* 变量，只用与 chinese-fonts-setup 的 profile 文件，
+这些 profile 文件保存在 `cfs-profiles-directory' 对应的目录中。在其它地方
+设置这个变量没有任何用处！")
 
 (defvar cfs--custom-set-fontsizes nil
-  "Variable, which only used in profile file.")
+  "这个变量是一个 *专用* 变量，只用与 chinese-fonts-setup 的 profile 文件，
+这些 profile 文件保存在 `cfs-profiles-directory' 对应的目录中。在其它地方
+设置这个变量没有任何用处！")
 
 (defun cfs--get-profile (profile-name)
-  (let* ((cfs-profile-version "v3") ;; 升级 profile 格式时改变版本号
+  (let* ((cfs-profile-version "v4") ;; 升级 profile 格式时改变版本号
          (directory-name
           (expand-file-name
            (file-name-as-directory
@@ -368,32 +368,14 @@ The below is an example which is used to set symbol fonts:
             cfs--fontsizes-fallback))))
 
 (defun cfs--font-exists-p (font)
-  (and (or (x-list-fonts font)
-           (x-list-fonts (string-as-unibyte font)))
-       ;; 字体名称中包含“-”时，不能生成合法的XLFD字符串，
-       ;; 细节见 emacs bug#17457.
-       (not (string-match-p "-" font))))
+  (let ((all-fonts (font-family-list)))
+    (or (member font all-fonts)
+        (member (string-as-unibyte font) all-fonts))))
 
 (defun cfs--get-valid-fonts ()
   (mapcar #'(lambda (x)
               (cl-find-if #'cfs--font-exists-p x))
           (car (cfs--read-profile))))
-
-(defun cfs--make-font-string (fontname fontsize &optional type)
-  (if (and (stringp fontsize)
-           (equal ":" (string (elt fontsize 0))))
-      (format "%s%s" fontname fontsize)
-    (if fontsize
-        (cond
-         ((eq type 'bold) (format "%s-%s:weight=bold:slant=normal" fontname fontsize))
-         ((eq type 'italic) (format "%s-%s:weight=normal:slant=italic" fontname fontsize))
-         ((eq type 'bold-italic) (format "%s-%s:weight=bold:slant=italic" fontname fontsize))
-         (t (format "%s-%s:weight=normal:slant=normal" fontname fontsize)))
-      (cond
-       ((eq type 'bold) (format "%s:weight=bold:slant=normal" fontname))
-       ((eq type 'italic) (format "%s:weight=normal:slant=italic" fontname))
-       ((eq type 'bold-italic) (format "%s:weight=bold:slant=italic" fontname))
-       (t (format "%s:weight=normal:slant=normal" fontname))))))
 
 ;; (cfs--get-fontset "courier" 10 'italic)
 
@@ -402,19 +384,6 @@ The below is an example which is used to set symbol fonts:
     (unless (file-exists-p (cfs--get-current-profile))
       (message "如果中英文不能对齐，请运行`cfs-edit-profile'编辑当前profile。"))
     (or (nth (- step 1) fontsizes-list) 12.5)))
-
-(defun cfs--get-fontset (fontname fontsize &optional type)
-  "返回 fontname 对应的 fontset"
-  (let* ((font-string (cfs--make-font-string fontname fontsize type))
-         (font-xlfd
-          (car (or (x-list-fonts font-string nil nil 1)
-                   (x-list-fonts (string-as-unibyte font-string) nil nil 1)))))
-    (when (and font-xlfd
-               ;; 当字体名称中包含 "-" 时，`x-list-fonts'
-               ;; 返回无效的 XLFD 字符串，具体细节请参考 emacs bug#17457 。
-               ;; 忽略无效 XLFD 字符串。
-               (x-decompose-font-name font-xlfd))
-      font-xlfd)))
 
 (defun cfs--set-font (fontsizes-list)
   "调整当前 frame 使用的字体，当全局变量 `cfs-keep-frame-size'
@@ -451,6 +420,13 @@ The below is an example which is used to set symbol fonts:
                  collect (cons font (/ (float size)
                                        (car fontsizes-list))))))
 
+(defun cfs--fontspec-valid-p (fontspec)
+  (and fontspec (list-fonts fontspec)))
+
+(defun cfs--float (num)
+  (when (numberp num)
+    (float num)))
+
 (defun cfs--set-font-1 (fontsizes-list)
   "核心函数，用于设置字体，参数 `fontsizes-list' 是一个列表，其结构类似：
 
@@ -463,82 +439,98 @@ The below is an example which is used to set symbol fonts:
          (chinese-main-fontname (nth 1 valid-fonts))
          (chinese-extra-fontname (nth 2 valid-fonts))
 
-         (english-main-fontsize (nth 0 fontsizes-list))
-         (chinese-main-fontsize (nth 1 fontsizes-list))
-         (chinese-extra-fontsize (nth 2 fontsizes-list))
+         (english-main-fontsize (cfs--float (nth 0 fontsizes-list)))
+         (chinese-main-fontsize (cfs--float (nth 1 fontsizes-list)))
+         (chinese-extra-fontsize (cfs--float (nth 2 fontsizes-list)))
 
-         (english-symbol-fontsize (nth 3 fontsizes-list))
-         (chinese-symbol-fontsize (nth 4 fontsizes-list))
+         (english-symbol-fontsize (cfs--float (nth 0 fontsizes-list)))
+         (chinese-symbol-fontsize (cfs--float (nth 1 fontsizes-list)))
 
-         (english-main-fontset
-          (cfs--get-fontset english-main-fontname
-                            english-main-fontsize))
-         (english-bold-fontset
-          (cfs--get-fontset english-main-fontname
-                            english-main-fontsize 'bold))
-         (english-italic-fontset
-          (cfs--get-fontset english-main-fontname
-                            english-main-fontsize 'italic))
+         (english-main-fontspec
+          (font-spec :family english-main-fontname
+                     :size english-main-fontsize
+                     :weight 'normal
+                     :slant 'normal))
+         (english-bold-fontspec
+          (font-spec :family english-main-fontname
+                     :size english-main-fontsize
+                     :weight 'bold
+                     :slant 'normal))
+         (english-italic-fontspec
+          (font-spec :family  english-main-fontname
+                     :size english-main-fontsize
+                     :weight 'normal
+                     :slant 'italic))
+         (english-bold-italic-fontspec
+          (font-spec :family english-main-fontname
+                     :size english-main-fontsize
+                     :weight 'bold
+                     :slant 'italic))
+         (english-symbol-fontspec
+          (font-spec :family english-main-fontname
+                     :size (or english-symbol-fontsize
+                               english-main-fontsize)
+                     :weight 'normal
+                     :slant 'normal))
+         (chinese-main-fontspec
+          (font-spec :family chinese-main-fontname
+                     :size chinese-main-fontsize
+                     :weight 'normal
+                     :slant 'normal))
+         (chinese-symbol-fontspec
+          (font-spec :family chinese-main-fontname
+                     :size (or chinese-symbol-fontsize
+                               chinese-main-fontsize)
+                     :weight 'normal
+                     :slant 'normal))
+         (chinese-extra-fontspec
+          (font-spec :family chinese-extra-fontname
+                     :size (or chinese-extra-fontsize
+                               chinese-main-fontsize)
+                     :weight 'normal
+                     :slant 'normal)))
 
-         (english-bold-italic-fontset
-          (cfs--get-fontset english-main-fontname
-                            english-main-fontsize 'bold-italic))
-
-         (english-symbol-fontset
-          (cfs--get-fontset english-main-fontname
-                            (or english-symbol-fontsize
-                                english-main-fontsize)))
-         (chinese-main-fontset
-          (cfs--get-fontset chinese-main-fontname
-                            chinese-main-fontsize))
-
-         (chinese-symbol-fontset
-          (cfs--get-fontset chinese-main-fontname
-                            (or chinese-symbol-fontsize
-                                chinese-main-fontsize)))
-         (chinese-extra-fontset
-          (cfs--get-fontset chinese-extra-fontname
-                            (or chinese-extra-fontsize
-                                chinese-main-fontsize))))
-
-    (when english-main-fontset
+    (when (cfs--fontspec-valid-p english-main-fontspec)
       ;; 设置英文字体。
       (set-face-attribute
-       'default nil :font english-main-fontset)
+       'default nil :font english-main-fontspec)
       ;; 设置英文粗体。
       (if cfs-disable-bold
-          (set-face-font 'bold english-main-fontset)
-        (when english-bold-fontset
-          (set-face-font 'bold english-bold-fontset)))
+          (set-face-font 'bold english-main-fontspec)
+        (if (cfs--fontspec-valid-p english-bold-fontspec)
+            (set-face-font 'bold english-bold-fontspec)
+          (message "Chinese-fonts-setup: 字体 %S 对应的粗体没有找到，不作处理！" english-main-fontname)))
 
       ;; 设置英文斜体。
       (if cfs-disable-italic
-          (set-face-font 'italic english-main-fontset)
-        (when english-italic-fontset
-          (set-face-font 'italic english-italic-fontset)))
+          (set-face-font 'italic english-main-fontspec)
+        (if (cfs--fontspec-valid-p english-italic-fontspec)
+            (set-face-font 'italic english-italic-fontspec)
+          (message "Chinese-fonts-setup: 字体 %S 对应的斜体没有找到，不作处理！" english-main-fontname)))
 
       ;; 设置英文粗斜体。
       (if cfs-disable-bold-italic
-          (set-face-font 'bold-italic english-main-fontset)
-        (when english-bold-italic-fontset
-          (set-face-font 'bold-italic english-bold-italic-fontset))))
+          (set-face-font 'bold-italic english-main-fontspec)
+        (if (cfs--fontspec-valid-p english-bold-italic-fontspec)
+            (set-face-font 'bold-italic english-bold-italic-fontspec)
+          (message "Chinese-fonts-setup: 字体 %S 对应的粗斜体没有找到，不作处理！" english-main-fontname))))
 
     ;; 设置中文字体，注意，不要使用 'unicode charset,
     ;; 否则上面的英文字体设置将会失效。
-    (when chinese-main-fontset
+    (when (cfs--fontspec-valid-p chinese-main-fontspec)
       (dolist (charset '(kana han cjk-misc bopomofo gb18030))
-        (set-fontset-font "fontset-default" charset chinese-main-fontset)))
+        (set-fontset-font "fontset-default" charset chinese-main-fontspec)))
 
     ;; 设置 symbol 字体。
-    (when english-main-fontset
-      (set-fontset-font "fontset-default" 'symbol english-symbol-fontset))
+    (when (cfs--fontspec-valid-p english-main-fontspec)
+      (set-fontset-font "fontset-default" 'symbol english-symbol-fontspec))
 
-    ;; (when chinese-main-fontset
-    ;;   (set-fontset-font t 'symbol chinese-symbol-fontset nil 'append))
+    ;; (when (cfs--fontspec-valid-p chinese-main-fontset)
+    ;;   (set-fontset-font t 'symbol chinese-symbol-fontspec nil 'append))
 
     ;; 设置 fallback 字体，用于显示不常用的字符。
-    (when chinese-extra-fontset
-      (set-fontset-font "fontset-default" nil chinese-extra-fontset nil 'prepend))
+    (when (cfs--fontspec-valid-p chinese-extra-fontspec)
+      (set-fontset-font "fontset-default" nil chinese-extra-fontspec nil 'prepend))
 
     (setq cfs--minibuffer-echo-string
           (format "[%s]: 英文字体: %s %.1f，中文字体: %s, EXTB字体：%s"
@@ -685,11 +677,14 @@ The below is an example which is used to set symbol fonts:
   (let ((buffer (get-buffer-create "*Show-font-effect*")))
     (with-current-buffer buffer
       (erase-buffer)
-      (when (featurep 'org)
-        (org-mode))
       (setq truncate-lines 1)
       (setq cursor-type nil)
-      (insert cfs--test-string))
+      (insert cfs--test-string)
+      (goto-char (point-min))
+      ;; Remove blank line at the beginning of buffer
+      (delete-region (point)
+                     (progn (forward-line 1)
+                            (point))))
     (display-buffer buffer)
     (when (and (nth 0 fontsizes-list)
                (nth 1 fontsizes-list))
