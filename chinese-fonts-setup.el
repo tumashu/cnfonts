@@ -370,12 +370,29 @@ The below is an example which is used to set symbol fonts:
 (defun cfs--font-exists-p (font)
   (let ((all-fonts (font-family-list)))
     (or (member font all-fonts)
-        (member (string-as-unibyte font) all-fonts))))
+        (member (encode-coding-string font 'gbk) all-fonts)
+        (member (encode-coding-string font 'utf-8) all-fonts))))
 
-(defun cfs--get-valid-fonts ()
+(defun cfs--get-valid-fonts (&optional prefer-shortname)
   (mapcar #'(lambda (x)
-              (cl-find-if #'cfs--font-exists-p x))
+              (let ((font (cl-find-if #'cfs--font-exists-p x)))
+                (if prefer-shortname
+                    font
+                  (or (cfs--get-xlfd font) font))))
           (car (cfs--read-profile))))
+
+(defun cfs--get-xlfd (fontname)
+  "返回 fontname 对应的 fontset"
+  (let* ((font-xlfd
+          (car (or (x-list-fonts fontname nil nil 1)
+                   (x-list-fonts (encode-coding-string fontname 'gbk) nil nil 1)
+                   (x-list-fonts (encode-coding-string fontname 'utf-8) nil nil 1)))))
+    (when (and font-xlfd
+               ;; 当字体名称中包含 "-" 时，`x-list-fonts'
+               ;; 返回无效的 XLFD 字符串，具体细节请参考 emacs bug#17457 。
+               ;; 忽略无效 XLFD 字符串。
+               (x-decompose-font-name font-xlfd))
+      font-xlfd)))
 
 ;; (cfs--get-fontset "courier" 10 'italic)
 
@@ -434,6 +451,7 @@ The below is an example which is used to set symbol fonts:
 
 其中，英文字体字号必须设定，其余字体字号可以设定，也可以省略。"
   (let* ((valid-fonts (cfs--get-valid-fonts))
+         (valid-fontnames (cfs--get-valid-fonts t))
 
          (english-main-fontname (nth 0 valid-fonts))
          (chinese-main-fontname (nth 1 valid-fonts))
@@ -447,44 +465,44 @@ The below is an example which is used to set symbol fonts:
          (chinese-symbol-fontsize (cfs--float (nth 1 fontsizes-list)))
 
          (english-main-fontspec
-          (font-spec :family english-main-fontname
+          (font-spec :name english-main-fontname
                      :size english-main-fontsize
                      :weight 'normal
                      :slant 'normal))
          (english-bold-fontspec
-          (font-spec :family english-main-fontname
+          (font-spec :name english-main-fontname
                      :size english-main-fontsize
                      :weight 'bold
                      :slant 'normal))
          (english-italic-fontspec
-          (font-spec :family  english-main-fontname
+          (font-spec :name  english-main-fontname
                      :size english-main-fontsize
                      :weight 'normal
                      :slant 'italic))
          (english-bold-italic-fontspec
-          (font-spec :family english-main-fontname
+          (font-spec :name english-main-fontname
                      :size english-main-fontsize
                      :weight 'bold
                      :slant 'italic))
          (english-symbol-fontspec
-          (font-spec :family english-main-fontname
+          (font-spec :name english-main-fontname
                      :size (or english-symbol-fontsize
                                english-main-fontsize)
                      :weight 'normal
                      :slant 'normal))
          (chinese-main-fontspec
-          (font-spec :family chinese-main-fontname
+          (font-spec :name chinese-main-fontname
                      :size chinese-main-fontsize
                      :weight 'normal
                      :slant 'normal))
          (chinese-symbol-fontspec
-          (font-spec :family chinese-main-fontname
+          (font-spec :name chinese-main-fontname
                      :size (or chinese-symbol-fontsize
                                chinese-main-fontsize)
                      :weight 'normal
                      :slant 'normal))
          (chinese-extra-fontspec
-          (font-spec :family chinese-extra-fontname
+          (font-spec :name chinese-extra-fontname
                      :size (or chinese-extra-fontsize
                                chinese-main-fontsize)
                      :weight 'normal
@@ -533,11 +551,11 @@ The below is an example which is used to set symbol fonts:
       (set-fontset-font "fontset-default" nil chinese-extra-fontspec nil 'prepend))
 
     (setq cfs--minibuffer-echo-string
-          (format "[%s]: 英文字体: %s %.1f，中文字体: %s, EXTB字体：%s"
+          (format "[%s]: 英文字体: %s-%.1f，中文字体: %s, EXTB字体：%s"
                   cfs--current-profile
-                  english-main-fontname english-main-fontsize
-                  (or (nth 1 valid-fonts) "无")
-                  (or (nth 2 valid-fonts) "无")))))
+                  (or (nth 0 valid-fontnames) "无") english-main-fontsize
+                  (or (nth 1 valid-fontnames) "无")
+                  (or (nth 2 valid-fontnames) "无")))))
 
 (defun cfs--step-fontsize (num)
   (let* ((profile-name cfs--current-profile)
@@ -694,17 +712,24 @@ The below is an example which is used to set symbol fonts:
 (defun cfs-insert-fontname ()
   "Select a valid font name, and insert at point."
   (interactive)
-  (let* ((fonts (delete-dups
-                 (mapcar #'string-as-multibyte
-                         (font-family-list))))
-         (choose (completing-read
+  (let ((all-fonts (font-family-list))
+         fonts choose)
+    (dolist (font all-fonts)
+      (push (substring-no-properties
+             (decode-coding-string font 'gbk))
+            fonts)
+      (push (substring-no-properties
+             (decode-coding-string font 'utf-8))
+            fonts))
+    (setq fonts (delete-dups fonts))
+    (setq choose (completing-read
                   "Which font name do you want to insert? "
                   (if (yes-or-no-p "Only show font names with Chinese? ")
                       (cl-remove-if
                        #'(lambda (x)
                            (not (string-match-p "\\cc" x)))
                        fonts)
-                    fonts))))
+                    fonts)))
     (when choose
       (insert (format "\"%s\"" choose)))))
 
