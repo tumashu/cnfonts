@@ -376,23 +376,25 @@ The below is an example which is used to set symbol fonts:
 (defun cfs--get-valid-fonts (&optional prefer-shortname)
   (mapcar #'(lambda (x)
               (let ((font (cl-find-if #'cfs--font-exists-p x)))
-                (if prefer-shortname
-                    font
-                  (or (cfs--get-xlfd font) font))))
+                (when font
+                  (if prefer-shortname
+                      font
+                    (or (cfs--get-xlfd font) font)))))
           (car (cfs--read-profile))))
 
 (defun cfs--get-xlfd (fontname)
   "返回 fontname 对应的 fontset"
-  (let* ((font-xlfd
-          (car (or (x-list-fonts fontname nil nil 1)
-                   (x-list-fonts (encode-coding-string fontname 'gbk) nil nil 1)
-                   (x-list-fonts (encode-coding-string fontname 'utf-8) nil nil 1)))))
-    (when (and font-xlfd
-               ;; 当字体名称中包含 "-" 时，`x-list-fonts'
-               ;; 返回无效的 XLFD 字符串，具体细节请参考 emacs bug#17457 。
-               ;; 忽略无效 XLFD 字符串。
-               (x-decompose-font-name font-xlfd))
-      font-xlfd)))
+  (when fontname
+    (let* ((font-xlfd
+            (car (or (x-list-fonts fontname nil nil 1)
+                     (x-list-fonts (encode-coding-string fontname 'gbk) nil nil 1)
+                     (x-list-fonts (encode-coding-string fontname 'utf-8) nil nil 1)))))
+      (when (and font-xlfd
+                 ;; 当字体名称中包含 "-" 时，`x-list-fonts'
+                 ;; 返回无效的 XLFD 字符串，具体细节请参考 emacs bug#17457 。
+                 ;; 忽略无效 XLFD 字符串。
+                 (x-decompose-font-name font-xlfd))
+        font-xlfd))))
 
 ;; (cfs--get-fontset "courier" 10 'italic)
 
