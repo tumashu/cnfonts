@@ -368,10 +368,11 @@ The below is an example which is used to set symbol fonts:
             cfs--fontsizes-fallback))))
 
 (defun cfs--font-exists-p (font)
-  (let ((all-fonts (font-family-list)))
-    (or (member font all-fonts)
-        (member (encode-coding-string font 'gbk) all-fonts)
-        (member (encode-coding-string font 'utf-8) all-fonts))))
+  (or (cfs--get-xlfd font)
+      (let ((all-fonts (font-family-list)))
+        (or (member font all-fonts)
+            (member (encode-coding-string font 'gbk) all-fonts)
+            (member (encode-coding-string font 'utf-8) all-fonts)))))
 
 (defun cfs--get-valid-fonts (&optional prefer-shortname)
   (mapcar #'(lambda (x)
