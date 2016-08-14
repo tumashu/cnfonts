@@ -172,6 +172,7 @@
 ;; #+BEGIN_SRC emacs-lisp
 (require 'cl-lib)
 (require 'thingatpt)
+(require 'cfs-ui)
 
 (defcustom cfs-profiles '("profile1" "profile2" "profile3")
   "Lists chinese-fonts-setup profiles"
@@ -654,9 +655,11 @@ The below is an example which is used to set symbol fonts:
     (unless (file-readable-p file)
       (cfs--save-profile cfs--fontnames-fallback
                          cfs--fontsizes-fallback))
-    (find-file file)
-    (cfs-profile-edit-mode 1)
-    (goto-char (point-min))))
+    (if (yes-or-no-p "使用图形化工具来调整 profile 文件吗？")
+        (cfs-ui)
+      (find-file file)
+      (cfs-profile-edit-mode 1)
+      (goto-char (point-min)))))
 
 (defun cfs-regenerate-profile ()
   (interactive)
