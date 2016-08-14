@@ -468,48 +468,56 @@ The below is an example which is used to set symbol fonts:
          (chinese-symbol-fontsize (cfs--float (nth 1 fontsizes-list)))
 
          (english-main-fontspec
-          (font-spec :name english-main-fontname
-                     :size english-main-fontsize
-                     :weight 'normal
-                     :slant 'normal))
+          (when english-main-fontname
+            (font-spec :name english-main-fontname
+                       :size english-main-fontsize
+                       :weight 'normal
+                       :slant 'normal)))
          (english-bold-fontspec
-          (font-spec :name english-main-fontname
-                     :size english-main-fontsize
-                     :weight 'bold
-                     :slant 'normal))
+          (when english-main-fontname
+            (font-spec :name english-main-fontname
+                       :size english-main-fontsize
+                       :weight 'bold
+                       :slant 'normal)))
          (english-italic-fontspec
-          (font-spec :name  english-main-fontname
-                     :size english-main-fontsize
-                     :weight 'normal
-                     :slant 'italic))
+          (when english-main-fontname
+            (font-spec :name  english-main-fontname
+                       :size english-main-fontsize
+                       :weight 'normal
+                       :slant 'italic)))
          (english-bold-italic-fontspec
-          (font-spec :name english-main-fontname
-                     :size english-main-fontsize
-                     :weight 'bold
-                     :slant 'italic))
+          (when english-main-fontname
+            (font-spec :name english-main-fontname
+                       :size english-main-fontsize
+                       :weight 'bold
+                       :slant 'italic)))
          (english-symbol-fontspec
-          (font-spec :name english-main-fontname
-                     :size (or english-symbol-fontsize
-                               english-main-fontsize)
-                     :weight 'normal
-                     :slant 'normal))
+          (when english-main-fontname
+            (font-spec :name english-main-fontname
+                       :size (or english-symbol-fontsize
+                                 english-main-fontsize)
+                       :weight 'normal
+                       :slant 'normal)))
          (chinese-main-fontspec
-          (font-spec :name chinese-main-fontname
-                     :size chinese-main-fontsize
-                     :weight 'normal
-                     :slant 'normal))
+          (when chinese-main-fontname
+            (font-spec :name chinese-main-fontname
+                       :size chinese-main-fontsize
+                       :weight 'normal
+                       :slant 'normal)))
          (chinese-symbol-fontspec
-          (font-spec :name chinese-main-fontname
-                     :size (or chinese-symbol-fontsize
-                               chinese-main-fontsize)
-                     :weight 'normal
-                     :slant 'normal))
+          (when chinese-main-fontname
+            (font-spec :name chinese-main-fontname
+                       :size (or chinese-symbol-fontsize
+                                 chinese-main-fontsize)
+                       :weight 'normal
+                       :slant 'normal)))
          (chinese-extra-fontspec
-          (font-spec :name chinese-extra-fontname
-                     :size (or chinese-extra-fontsize
-                               chinese-main-fontsize)
-                     :weight 'normal
-                     :slant 'normal)))
+          (when chinese-extra-fontname
+            (font-spec :name chinese-extra-fontname
+                       :size (or chinese-extra-fontsize
+                                 chinese-main-fontsize)
+                       :weight 'normal
+                       :slant 'normal))))
 
     (when (cfs--fontspec-valid-p english-main-fontspec)
       ;; 设置英文字体。
