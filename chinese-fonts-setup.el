@@ -435,7 +435,7 @@ The below is an example which is used to set symbol fonts:
 (defun cfs--set-face-font-rescale (fontsizes-list)
   "设定 `face-font-rescale-alist' 系数。"
   (setq face-font-rescale-alist
-        (cl-loop for font in (cfs--get-valid-fonts)
+        (cl-loop for font in (cfs--get-valid-fonts t)
                  for size in fontsizes-list
                  collect (cons font (/ (float size)
                                        (car fontsizes-list))))))
