@@ -162,11 +162,14 @@
 
 ;; ** Tips
 
-;; 1. 使用命令: `describe-char' 可以了解光标处字符使用什么字体。
-;; 2. 在 scratch 中写一行 elisp 代码： (cl-prettyprint (font-family-list)),
+;; 1. 如果用户需要在自己的 emacs 配置中管理一些个人字体，可以使用
+;;    变量 `cfs-personal-fontnames' , 其结构与 `cfs--fontnames-fallback'
+;;    一样。
+;; 2. 使用命令: `describe-char' 可以了解光标处字符使用什么字体。
+;; 3. 在 scratch 中写一行 elisp 代码： (cl-prettyprint (font-family-list)),
 ;;    执行后，就会在 scratch 中插入当前可用字体的名称列表，这是一个很有用的技巧。
-;; 3. 命令：`cfs-insert-fontname', 可以让用户选择一个可用字体插入到当前光标处。
-;; 4. Windows 用户 (特别是 Windows XP 用户) 可以安装 MacType 软件来优化
+;; 4. 命令：`cfs-insert-fontname', 可以让用户选择一个可用字体插入到当前光标处。
+;; 5. Windows 用户 (特别是 Windows XP 用户) 可以安装 MacType 软件来优化
 ;;    字体显示效果，推荐使用。
 ;; 5. Mac 用户配置 profile 文件的时候，偶尔会遇到 'C-c C-c' 刷新缓慢的问题，这可能
 ;;    是 ext-b 字体缺失引起的，建议安装 ext-b 字体试试。
@@ -258,6 +261,10 @@ The below is an example which is used to set symbol fonts:
     (30   36.0 36.0)
     (32   39.0 39.0))
   "一个列表，每一个元素都有类似结构：(英文字号 中文字号 EXT-B字体字号)")
+
+(defcustom cfs-personal-fontnames nil
+  "用户自己维护的字体列表，其结构与 `cfs--fontnames-fallback' 一致。"
+  :group 'chinese-fonts-setup)
 
 (defconst cfs--fontnames-fallback
   '(("Monaco" "Consolas" "DejaVu Sans Mono" "Droid Sans Mono" "PragmataPro"
@@ -367,17 +374,21 @@ The below is an example which is used to set symbol fonts:
                  (message "Chinese-fonts-setup: load %S successfully." cfs--current-profile))
                (list
                 (if cfs--custom-set-fontnames
-                    `((,@(nth 0 cfs--custom-set-fontnames)
-                       ,@(nth 0 cfs--fontnames-fallback))
-                      (,@(nth 1 cfs--custom-set-fontnames)
-                       ,@(nth 1 cfs--fontnames-fallback))
-                      (,@(nth 2 cfs--custom-set-fontnames)
-                       ,@(nth 2 cfs--fontnames-fallback)))
-                  cfs--fontnames-fallback)
+                    (cfs--merge-fontname-list cfs--custom-set-fontnames
+                                              cfs-personal-fontnames
+                                              cfs--fontnames-fallback)
+                  (cfs--merge-fontname-list cfs-personal-fontnames
+                                            cfs--fontnames-fallback))
                 (or cfs--custom-set-fontsizes
                     cfs--fontsizes-fallback)))
       (list cfs--fontnames-fallback
             cfs--fontsizes-fallback))))
+
+(defun cfs--merge-fontname-list (list1 list2 &optional list3)
+  (mapcar #'delete-dups
+          `((,@(nth 0 list1) ,@(nth 0 list2) ,@(nth 0 list3))
+            (,@(nth 1 list1) ,@(nth 1 list2) ,@(nth 1 list3))
+            (,@(nth 2 list1) ,@(nth 2 list2) ,@(nth 2 list3)))))
 
 (defun cfs--font-exists-p (font)
   (or (cfs--get-xlfd font)
