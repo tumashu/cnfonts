@@ -70,6 +70,17 @@
 ;; 来维护多套字体配置，从而实现特定的环境使用特定的字体配置，
 ;; 比如：在编程时使用 “Consolas + 微米黑”，在阅读文章时使用 “PragmataPro + 黑体”，等等。
 
+;; 调整 profile 最简单的方式是使用 chinese-fonts-setup 自带的 profile 调整工具，用户只
+;; 需要在运行 `cfs-edit-profile' 时，选择 “使用图形化工具来调整 profile 文件” 就可以了，
+;; 其界面类似：
+
+;; [[./snapshots/cfs-ui-1.png]]
+;; [[./snapshots/cfs-ui-2.png]]
+;; [[./snapshots/cfs-ui-3.png]]
+;; [[./snapshots/cfs-ui-4.png]]
+
+;; 除了用上述图形化工具，用户也可以选择直接编辑 profile 文件，两种方式的效果是一样的。
+
 ;; 在 `cfs-profiles-directory' 目录中, 每一个 profile 都对应一个 emacs-lisp 文件,
 ;; 这些文件包含了英文字体设置，中文字体设置以及中文字体大小，其内容类似：
 
