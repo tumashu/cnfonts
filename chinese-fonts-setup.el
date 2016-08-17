@@ -71,7 +71,7 @@
 ;; 比如：在编程时使用 “Consolas + 微米黑”，在阅读文章时使用 “PragmataPro + 黑体”，等等。
 
 ;; 调整 profile 最简单的方式是使用 chinese-fonts-setup 自带的 profile 调整工具，用户只
-;; 需要在运行 `cfs-edit-profile' 时，选择 “使用图形化工具来调整 profile 文件” 就可以了，
+;; 需要在运行 `cfs-edit-profile' 时，选择 “使用图形化工具来调整当前 profile 文件” 就可以了，
 ;; 其界面类似：
 
 ;; [[./snapshots/cfs-ui-1.png]]
@@ -677,7 +677,7 @@ The below is an example which is used to set symbol fonts:
     (unless (file-readable-p file)
       (cfs--save-profile cfs--fontnames-fallback
                          cfs--fontsizes-fallback))
-    (if (yes-or-no-p "使用图形化工具来调整 profile 文件吗？")
+    (if (yes-or-no-p "使用图形化工具来调整当前 profile 文件吗？")
         (cfs-ui)
       (find-file file)
       (cfs-profile-edit-mode 1)
