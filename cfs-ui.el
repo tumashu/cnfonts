@@ -158,9 +158,9 @@
                  :action 'cfs-ui-test-fontsize))
 
 (defun cfs-ui--return-status-string (font)
-  (cond ((not (cfs--get-xlfd font)) "NA")
-        ((member font (nth index cfs-personal-fontnames)) "P")
-        (t "")))
+  (format "%-2s %-2s"
+          (if (cfs--get-xlfd font) "" "NA")
+          (if (member font (nth index cfs-personal-fontnames)) "P" "")))
 
 (defun cfs-ui ()
   (interactive)
@@ -198,10 +198,10 @@
                      (widget-insert "\n"))))
         (widget-insert "\n\n")
         (let ((fonts (delete-dups (nth index fontname-alist))))
-          (widget-insert "状态 字体名称\n")
-          (widget-insert "---- -----------------------------------------------\n")
+          (widget-insert "状态  字体名称\n")
+          (widget-insert "----  -----------------------------------------------\n")
           (dolist (font fonts)
-            (widget-insert (format "%-5s" (cfs-ui--return-status-string font)))
+            (widget-insert (format "%-6s" (cfs-ui--return-status-string font)))
             (setq widget
                   (widget-create 'checkbox
                                  :value (equal font (car (nth index fontname-alist)))
