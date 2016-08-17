@@ -282,7 +282,7 @@ The below is an example which is used to set symbol fonts:
      "STSong" "STZhongsong" "STFangsong" "FZShuTi" "FZYaoti" "STCaiyun" "STHupo" "STLiti"
      "STXingkai" "STXinwei" "方正姚体" "方正舒体" "方正粗圆_GBK" "华文仿宋" "华文中宋"
      "华文彩云" "华文新魏" "华文细黑" "华文行楷")
-    ("HanaMinB")))
+    ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB" "PMingLiU-ExtB" "MingLiU_HKSCS-ExtB")))
 
 (defconst cfs--test-string "
 | 如果此表格无法对齐，请调整下面变量中的数字 |
