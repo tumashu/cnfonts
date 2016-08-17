@@ -32,6 +32,9 @@
 
 ;; * 代码                                                                 :code:
 ;; #+BEGIN_SRC emacs-lisp
+(require 'cl-lib)
+(require 'cus-edit)
+
 (defconst cfs-ui--buffers
   '((0 " *cfs-ui-buffer 1*")
     (1 " *cfs-ui-buffer 2*")
