@@ -608,6 +608,7 @@ The below is an example which is used to set symbol fonts:
     (message cfs--minibuffer-echo-string)))
 
 (defun cfs-set-font-with-saved-step (&optional frame)
+  (interactive)
   (let* ((profile-name (cfs--get-current-profile t))
          (profile-step (cfs--get-profile-step profile-name))
          (fontsizes-list (cfs--get-fontsizes profile-step)))
