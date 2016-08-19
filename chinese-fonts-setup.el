@@ -326,8 +326,14 @@ The below is an example which is used to set symbol fonts:
              "/" "-"
              profile-name) ".el")))
 
-(defun cfs--get-current-profile ()
-  (cfs--get-profile cfs--current-profile))
+(defun cfs--get-current-profile (&optional return-profile-name)
+  (let ((profile-name
+         (if (member cfs--current-profile cfs-profiles)
+             cfs--current-profile
+           (car cfs-profiles))))
+    (if return-profile-name
+        profile-name
+      (cfs--get-profile profile-name))))
 
 (defun cfs--dump-variable (variable value)
   "Insert a \"(setq VARIABLE value)\" in the current buffer."
@@ -363,7 +369,7 @@ The below is an example which is used to set symbol fonts:
     (insert cfs--profile-comment-2)
     (cfs--dump-variable 'cfs--custom-set-fontsizes fontsizes)
     (write-file (cfs--get-profile
-                 (or profile-name cfs--current-profile)))))
+                 (or profile-name (cfs--get-current-profile t))))))
 
 (defun cfs--read-profile ()
   "Get previously saved fontnames and fontsizes from current profile"
@@ -371,7 +377,7 @@ The below is an example which is used to set symbol fonts:
   (let ((file (cfs--get-current-profile)))
     (if (file-readable-p file)
         (progn (when (load (expand-file-name file) nil t)
-                 (message "Chinese-fonts-setup: load %S successfully." cfs--current-profile))
+                 (message "Chinese-fonts-setup: load %S successfully." (cfs--get-current-profile t)))
                (list
                 (if cfs--custom-set-fontnames
                     (cfs--merge-fontname-list cfs--custom-set-fontnames
@@ -586,13 +592,13 @@ The below is an example which is used to set symbol fonts:
 
     (setq cfs--minibuffer-echo-string
           (format "[%s]: 英文字体: %s-%.1f，中文字体: %s, EXTB字体：%s"
-                  cfs--current-profile
+                  (cfs--get-current-profile t)
                   (or (nth 0 valid-fontnames) "无") english-main-fontsize
                   (or (nth 1 valid-fontnames) "无")
                   (or (nth 2 valid-fontnames) "无")))))
 
 (defun cfs--step-fontsize (num)
-  (let* ((profile-name cfs--current-profile)
+  (let* ((profile-name (cfs--get-current-profile t))
          (profile-step
           (max 1 (min (+ num (cfs--get-profile-step profile-name))
                       (length cfs--fontsizes-fallback))))
@@ -601,26 +607,28 @@ The below is an example which is used to set symbol fonts:
     (cfs--save-profile-step profile-name profile-step)
     (message cfs--minibuffer-echo-string)))
 
-(defun cfs-set-font-with-saved-step ()
-  (let* ((profile-name cfs--current-profile)
+(defun cfs-set-font-with-saved-step (&optional frame)
+  (let* ((profile-name (cfs--get-current-profile t))
          (profile-step (cfs--get-profile-step profile-name))
          (fontsizes-list (cfs--get-fontsizes profile-step)))
     (when (display-graphic-p)
-      (cfs--set-font fontsizes-list))))
+      (if frame
+          (with-selected-frame frame
+            (cfs--set-font fontsizes-list))
+        (cfs--set-font fontsizes-list)))))
 
-;; emacs启动的时候激活chinese-fonts-setup。
-(if (and (fboundp 'daemonp) (daemonp))
-    (add-hook 'after-make-frame-functions
-              #'(lambda (frame)
-                  (with-selected-frame frame
-                    (unless (member cfs--current-profile cfs-profiles)
-                      (setq cfs--current-profile (car cfs-profiles)))
-                    (cfs-set-font-with-saved-step))))
-  (add-hook 'window-setup-hook
-            #'(lambda ()
-                (unless (member cfs--current-profile cfs-profiles)
-                  (setq cfs--current-profile (car cfs-profiles)))
-                (cfs-set-font-with-saved-step))))
+(defun chinese-fonts-setup-enable ()
+  "运行这个函数，可以让 emacs 启动的时候就激活 chinese-fonts-setup."
+  (interactive)
+  (if (and (fboundp 'daemonp) (daemonp))
+      (add-hook 'after-make-frame-functions #'cfs-set-font-with-saved-step)
+    (add-hook 'window-setup-hook #'cfs-set-font-with-saved-step)))
+
+(defun chinese-fonts-setup-disable ()
+  "清除与 chinese-fonts-setup 相关的 hook 设定。"
+  (interactive)
+  (remove-hook 'after-make-frame-functions #'cfs-set-font-with-saved-step)
+  (remove-hook 'window-setup-hook #'cfs-set-font-with-saved-step))
 
 (defun cfs-decrease-fontsize ()
   (interactive)
@@ -659,7 +667,7 @@ The below is an example which is used to set symbol fonts:
 (defun cfs-next-profile (&optional step)
   (interactive)
   (let ((profiles cfs-profiles)
-        (current-profile cfs--current-profile)
+        (current-profile (cfs--get-current-profile t))
         next-profile)
     (setq next-profile
           (or (cadr (member current-profile profiles))
@@ -769,6 +777,8 @@ The below is an example which is used to set symbol fonts:
     (when choose
       (insert (format "\"%s\"" choose)))))
 
+;; Enable chinese-fonts-setup when launch emacs
+(chinese-fonts-setup-enable)
 ;; #+END_SRC
 
 ;; * Footer

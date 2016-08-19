@@ -47,6 +47,14 @@
 
 (defvar cfs-ui--fontname-widgets nil)
 (defvar cfs-ui--fontsize-widgets nil)
+(defvar cfs-personal-fontnames nil) ;Deal with compile warn.
+
+(declare-function cfs--get-xlfd "chinese-fonts-setup" (fontname))
+(declare-function cfs--read-profile "chinese-fonts-setup" ())
+(declare-function cfs--font-exists-p "chinese-fonts-setup" (font))
+(declare-function cfs--save-profile "chinese-fonts-setup" (fontnames fontsizes &optional profile-name))
+(declare-function cfs--set-font "chinese-fonts-setup" (fontsizes-list))
+(declare-function cfs-set-font-with-saved-step "chinese-fonts-setup" (&optional frame))
 
 (defun cfs-ui--switch-buffer (index)
   (switch-to-buffer
@@ -160,7 +168,7 @@
                  :index index
                  :action 'cfs-ui-test-fontsize))
 
-(defun cfs-ui--return-status-string (font)
+(defun cfs-ui--return-status-string (font index)
   (format "%-2s %-2s"
           (if (cfs--get-xlfd font) "" "NA")
           (if (member font (nth index cfs-personal-fontnames)) "P" "")))
@@ -204,7 +212,7 @@
           (widget-insert "状态  字体名称\n")
           (widget-insert "----  -----------------------------------------------\n")
           (dolist (font fonts)
-            (widget-insert (format "%-6s" (cfs-ui--return-status-string font)))
+            (widget-insert (format "%-6s" (cfs-ui--return-status-string font index)))
             (setq widget
                   (widget-create 'checkbox
                                  :value (equal font (car (nth index fontname-alist)))
