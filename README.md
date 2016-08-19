@@ -226,6 +226,13 @@ Chinese-fonts-setup 默认使用三个 profile: profile1, profile2 和 profile3,
 6.  Mac 用户配置 profile 文件的时候，偶尔会遇到 'C-c C-c' 刷新缓慢的问题，这可能是 ext-b 字体缺失引起的，建议安装 ext-b 字体试试。
     1.  Ext-B字符列表: <https://cdo.wikipedia.org/wiki/Wikipedia:Unicode%E6%93%B4%E5%B1%95%E6%BC%A2%E5%AD%97>
     2.  HanaMinB 下载地址: <https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/>
+7.  chinese-fonts-setup 默认会随着 emacs 启动，出现问题时，用户可以检查下面两个 hook 的取值：
+
+    1.  \`after-make-frame-functions'
+    2.  \`window-setup-hook'
+
+    如果两个 hook **都不包含** \`cfs-set-font-with-saved-step', 说明有其它 emacs 包覆盖了 chinese-fonts-setup 的设置，另外，用户也可以手动运行 \`cfs-set-font-with-saved-step'
+    这个命令来测试字体效果。
 
 ## 参考文章<a id="orgheadline9"></a>
 
