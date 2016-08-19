@@ -426,7 +426,7 @@ The below is an example which is used to set symbol fonts:
                     (or (cfs--get-xlfd font) font)))))
           (car (cfs--read-profile))))
 
-(defun cfs--get-xlfd (fontname)
+(defun cfs--get-xlfd (fontname &optional uncheck)
   "返回 fontname 对应的 fontset"
   (when fontname
     (let* ((font-xlfd (car (x-list-fonts fontname nil nil 1))))
@@ -434,7 +434,7 @@ The below is an example which is used to set symbol fonts:
                  ;; 当字体名称中包含 "-" 时，`x-list-fonts'
                  ;; 返回无效的 XLFD 字符串，具体细节请参考 emacs bug#17457 。
                  ;; 忽略无效 XLFD 字符串。
-                 (x-decompose-font-name font-xlfd))
+                 (or uncheck (x-decompose-font-name font-xlfd)))
         font-xlfd))))
 
 ;; (cfs--get-fontset "courier" 10 'italic)

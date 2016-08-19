@@ -49,7 +49,7 @@
 (defvar cfs-ui--fontsize-widgets nil)
 (defvar cfs-personal-fontnames nil) ;Deal with compile warn.
 
-(declare-function cfs--get-xlfd "chinese-fonts-setup" (fontname))
+(declare-function cfs--get-xlfd "chinese-fonts-setup" (fontname &optional uncheck))
 (declare-function cfs--read-profile "chinese-fonts-setup" ())
 (declare-function cfs--font-exists-p "chinese-fonts-setup" (font))
 (declare-function cfs--save-profile "chinese-fonts-setup" (fontnames fontsizes &optional profile-name))
@@ -170,7 +170,7 @@
 
 (defun cfs-ui--return-status-string (font index)
   (format "%-2s %-2s"
-          (if (cfs--get-xlfd font) "" "NA")
+          (if (cfs--get-xlfd font t) "" "NA")
           (if (member font (nth index cfs-personal-fontnames)) "P" "")))
 
 (defun cfs-ui ()
