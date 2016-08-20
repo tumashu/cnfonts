@@ -224,9 +224,9 @@
         (let ((fonts (delete-dups
                       `(,@(nth index fontname-alist)
                         ,@(when (= index 1)
-                            (delq nil (mapcar #'(lambda (font)
-                                                  (string-match-p "\\cc" font))
-                                              (font-family-list))))))))
+                            (cl-remove-if #'(lambda (font)
+                                              (not (string-match-p "\\cc" font)))
+                                          (font-family-list)))))))
           (cfs-ui--create-warning-board)
           (widget-insert "状态  字体名称\n")
           (widget-insert "----  -----------------------------------------------\n")
