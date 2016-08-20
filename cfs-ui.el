@@ -47,7 +47,7 @@
 
 (defvar cfs-ui--fontname-widgets nil)
 (defvar cfs-ui--fontsize-widgets nil)
-(defvar cfs-personal-fontnames nil) ;Deal with compile warn.
+(defvar cfs-personal-fontnames) ;Deal with compile warn.
 
 (declare-function cfs--get-xlfd "chinese-fonts-setup" (fontname &optional uncheck))
 (declare-function cfs--read-profile "chinese-fonts-setup" ())
