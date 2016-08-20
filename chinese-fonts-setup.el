@@ -59,9 +59,11 @@
 ;; 1. 配置melpa源，参考：http://melpa.org/#/getting-started
 ;; 2. M-x package-install RET chinese-fonts-setup RET
 ;; 3. 在emacs配置文件中（比如: ~/.emacs）添加如下代码：
+
 ;;    #+BEGIN_EXAMPLE
 ;;    (require 'chinese-fonts-setup)
-;;    (chinese-fonts-setup-enable)
+;;    ;; 让 chinese-fonts-setup 随着 emacs 自动生效。
+;;    ;; (chinese-fonts-setup-enable)
 ;;    #+END_EXAMPLE
 
 
@@ -161,6 +163,16 @@
 
 ;; [[./snapshots/cfs-increase-and-decrease-fontsize.gif]]
 
+;; *** 让 chinese-fonts-setup 随着 emacs 自动启动
+;; `chinese-fonts-setup-enable' 命令可以让 chinese-fonts-setup 随着 emacs 自动启动，
+;; 这个命令将 `cfs-set-font-with-saved-step' 添加到下面两个 hook:
+
+;; 1. `after-make-frame-functions'
+;; 2. `window-setup-hook'
+
+;; 用户也可以手动运行 `cfs-set-font-with-saved-step' 来让 chinese-fonts-setup 生效。
+
+
 ;; ** Tips
 
 ;; 1. 如果用户需要在自己的 emacs 配置中管理一些个人字体，可以使用
@@ -176,15 +188,6 @@
 ;;    是 ext-b 字体缺失引起的，建议安装 ext-b 字体试试。
 ;;    1. Ext-B字符列表: https://cdo.wikipedia.org/wiki/Wikipedia:Unicode%E6%93%B4%E5%B1%95%E6%BC%A2%E5%AD%97
 ;;    2. HanaMinB 下载地址: https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/
-;; 6. chinese-fonts-setup 默认会随着 emacs 启动，出现问题时，用户可以检查下面两个 hook 的取值：
-
-;;    1. `after-make-frame-functions'
-;;    2. `window-setup-hook'
-
-;;    如果两个 hook *都不包含* `cfs-set-font-with-saved-step', 说明有其它 emacs 包
-;;    覆盖了 chinese-fonts-setup 的设置，另外，用户也可以手动运行 `cfs-set-font-with-saved-step'
-;;    这个命令来测试字体效果。
-
 
 ;; ** 参考文章
 ;; 1. http://baohaojun.github.io/perfect-emacs-chinese-font.html
