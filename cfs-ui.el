@@ -228,7 +228,7 @@
             (widget-create-child-and-convert widget 'push-button
                                              :button-face-get 'ignore
                                              :mouse-face-get 'ignore
-                                             :value (format " %-40s" font)
+                                             :value (format " %s" font)
                                              :action 'widget-parent-action)
             (widget-insert "\n" )))))
     (goto-char (point-min))
