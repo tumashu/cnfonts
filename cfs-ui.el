@@ -208,7 +208,12 @@
                        (cfs-ui--create-fontsize-test-buttons (car fontsize-list) i))
                      (widget-insert "\n"))))
         (widget-insert "\n\n")
-        (let ((fonts (delete-dups (nth index fontname-alist))))
+        (let ((fonts (delete-dups
+                      `(,@(nth index fontname-alist)
+                        ,@(when (= index 1)
+                            (delq nil (mapcar #'(lambda (font)
+                                                  (string-match-p "\\cc" font))
+                                              (font-family-list))))))))
           (widget-insert "状态  字体名称\n")
           (widget-insert "----  -----------------------------------------------\n")
           (dolist (font fonts)
