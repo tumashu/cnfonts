@@ -39,7 +39,8 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
 2.  M-x package-install RET chinese-fonts-setup RET
 3.  在emacs配置文件中（比如: ~/.emacs）添加如下代码：
 
-    (require 'chinese-fonts-setup)
+        (require 'chinese-fonts-setup)
+        (chinese-fonts-setup-enable)
 
 ## 配置使用<a id="orgheadline7"></a>
 

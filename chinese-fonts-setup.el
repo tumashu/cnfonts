@@ -59,10 +59,11 @@
 ;; 1. 配置melpa源，参考：http://melpa.org/#/getting-started
 ;; 2. M-x package-install RET chinese-fonts-setup RET
 ;; 3. 在emacs配置文件中（比如: ~/.emacs）添加如下代码：
+;;    #+BEGIN_EXAMPLE
+;;    (require 'chinese-fonts-setup)
+;;    (chinese-fonts-setup-enable)
+;;    #+END_EXAMPLE
 
-;; #+BEGIN_EXAMPLE
-;; (require 'chinese-fonts-setup)
-;; #+END_EXAMPLE
 
 ;; ** 配置使用
 ;; *** 编辑使用 profile
@@ -789,8 +790,6 @@ The below is an example which is used to set symbol fonts:
     (when choose
       (insert (format "\"%s\"" choose)))))
 
-;; Enable chinese-fonts-setup when launch emacs
-(chinese-fonts-setup-enable)
 ;; #+END_SRC
 
 ;; * Footer
