@@ -50,6 +50,7 @@
 (defvar cfs-personal-fontnames) ;Deal with compile warn.
 
 (declare-function cfs--get-xlfd "chinese-fonts-setup" (fontname &optional uncheck))
+(declare-function cfs--get-valid-fonts "chinese-fonts-setup" (&optional prefer-shortname))
 (declare-function cfs--read-profile "chinese-fonts-setup" ())
 (declare-function cfs--font-exists-p "chinese-fonts-setup" (font))
 (declare-function cfs--save-profile "chinese-fonts-setup" (fontnames fontsizes &optional profile-name))
@@ -135,6 +136,18 @@
 | 英文字号  中文字号调整    EXTB字号调整    测试   |
 +--------------------------------------------------+"))
 
+(defun cfs-ui--create-warning-board ()
+  (when (and (nth 2 (cfs--get-valid-fonts))
+             (eq system-type 'darwin))
+    (widget-insert "
++----------------------------------------------------------------------------------+
+| 注意：由于某些未知原因，未安装 EXT-B 字体的苹果系统，chinese-fonts-setup 会导致  |
+| emacs 卡顿甚至崩溃，建议安装 HanaMinB 字体来解决这个问题，这个字体的下载地址：   |
+| https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/    |
++----------------------------------------------------------------------------------+
+
+")))
+
 (defun cfs-ui--create-fontsize-operate-buttons (fontsize key index)
   (let (widget1 widget2 widget3)
     (widget-insert " ")
@@ -214,6 +227,7 @@
                             (delq nil (mapcar #'(lambda (font)
                                                   (string-match-p "\\cc" font))
                                               (font-family-list))))))))
+          (cfs-ui--create-warning-board)
           (widget-insert "状态  字体名称\n")
           (widget-insert "----  -----------------------------------------------\n")
           (dolist (font fonts)
