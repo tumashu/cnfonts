@@ -793,6 +793,7 @@ The below is an example which is used to set symbol fonts:
     (when choose
       (insert (format "\"%s\"" choose)))))
 
+(message "如果需要 emacs 启动时激活 chinese-fonts-setup，请在 emacs 配置文件中添加： (chinese-fonts-setup-enable)")
 ;; #+END_SRC
 
 ;; * Footer
