@@ -64,8 +64,9 @@
 ;;    (require 'chinese-fonts-setup)
 ;;    ;; 让 chinese-fonts-setup 随着 emacs 自动生效。
 ;;    ;; (chinese-fonts-setup-enable)
+;;    ;; 让 spacemacs mode-line 中的 Unicode 图标正确显示。
+;;    ;; (cfs-set-spacemacs-fallback-fonts)
 ;;    #+END_EXAMPLE
-
 
 ;; ** 配置使用
 ;; *** 编辑使用 profile
@@ -773,7 +774,7 @@ The below is an example which is used to set symbol fonts:
   "Select a valid font name, and insert at point."
   (interactive)
   (let ((all-fonts (font-family-list))
-         fonts choose)
+        fonts choose)
     (dolist (font all-fonts)
       (push (substring-no-properties
              (decode-coding-string font 'gbk))
@@ -792,6 +793,54 @@ The below is an example which is used to set symbol fonts:
                     fonts)))
     (when choose
       (insert (format "\"%s\"" choose)))))
+
+;; Steal code from `spacemacs/set-default-font'
+(defun cfs--set-spacemacs-fallback-fonts (fontsizes-list)
+  (when (featurep 'spacemacs)
+    (pcase system-type
+      (`gnu/linux
+       (setq fallback-font-name "NanumGothic")
+       (setq fallback-font-name2 "NanumGothic"))
+      (`darwin
+       (setq fallback-font-name "Arial Unicode MS")
+       (setq fallback-font-name2 "Arial Unicode MS"))
+      (`windows-nt
+       (setq fallback-font-name "MS Gothic")
+       (setq fallback-font-name2 "Lucida Sans Unicode"))
+      (`cygwin
+       (setq fallback-font-name "MS Gothic")
+       (setq fallback-font-name2 "Lucida Sans Unicode"))
+      (other
+       (setq fallback-font-name nil)
+       (setq fallback-font-name2 nil)))
+    (when (and fallback-font-name fallback-font-name2)
+      (let ((fallback-spec (apply 'font-spec
+                                  :name fallback-font-name
+                                  :size (car fontsizes-list)))
+            (fallback-spec2 (apply 'font-spec
+                                   :name fallback-font-name2
+                                   :size (car fontsizes-list))))
+        ;; window numbers
+        (set-fontset-font "fontset-default"
+                          '(#x2776 . #x2793) fallback-spec nil 'prepend)
+        ;; mode-line circled letters
+        (set-fontset-font "fontset-default"
+                          '(#x24b6 . #x24fe) fallback-spec nil 'prepend)
+        ;; mode-line additional characters
+        (set-fontset-font "fontset-default"
+                          '(#x2295 . #x22a1) fallback-spec nil 'prepend)
+        ;; new version lighter
+        (set-fontset-font "fontset-default"
+                          '(#x2190 . #x2200) fallback-spec2 nil 'prepend)))))
+
+(defun cfs-set-spacemacs-fallback-fonts ()
+  "Spacemace 的 mode-line 上面有一些 Unicode 字符，这些字符需要专门的字体来显示，
+spacemacs 将这些字体的名字内置在 `spacemacs/set-default-font' 的代码中。
+运行这个函数后，chinese-fonts-setup 将使用同样的字体来显示这些 Unicode 字符。"
+  (interactive)
+  (add-hook 'cfs-set-font-finish-hook
+            #'cfs--set-spacemacs-fallback-fonts)
+  (message "chinese-fonts-setup: 激活 spacemacs fallback 字体，用于显示 mode-line 中的漂亮图标。"))
 
 (message "如果需要 emacs 启动时激活 chinese-fonts-setup，请在 emacs 配置文件中添加： (chinese-fonts-setup-enable)")
 ;; #+END_SRC

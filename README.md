@@ -43,6 +43,8 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
         (require 'chinese-fonts-setup)
         ;; 让 chinese-fonts-setup 随着 emacs 自动生效。
         ;; (chinese-fonts-setup-enable)
+        ;; 让 spacemacs mode-line 中的 Unicode 图标正确显示。
+        ;; (cfs-set-spacemacs-fallback-fonts)
 
 ## 配置使用<a id="orgheadline8"></a>
 
@@ -75,7 +77,7 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
 
     ;;; `cfs--custom-set-fontsizes' 中，所有元素的结构都类似：(英文字号 中文字号 EXT-B字体字号)
     ;;; 将光标移动到各个数字上，按 C-c C-c 查看光标处字号的对齐效果。
-    ;;; 按 C-<up>增大光标处字号，按 C-<down>减小光标处字号。
+    ;;; 按 C-<up> 增大光标处字号，按 C-<down> 减小光标处字号。
     (setq cfs--custom-set-fontsizes
           '(
             (9    9.0 11.0)
