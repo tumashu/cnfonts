@@ -153,13 +153,18 @@
     (widget-insert " ")
     (setq widget1 (widget-create 'push-button
                                  :value (format "%-4s" fontsize)
+                                 :key key
+                                 :index index
+                                 :flag t
                                  :button-face-get 'ignore
-                                 :mouse-face-get 'ignore))
+                                 :mouse-face-get 'ignore
+                                 :action 'cfs-ui-test-fontsize))
     (widget-insert " ")
     (setq widget2 (widget-create 'push-button
                                  :tag "[-]"
                                  :key key
                                  :index index
+                                 :flag t
                                  :button-face-get 'ignore
                                  :mouse-face-get 'ignore
                                  :action 'cfs-ui-decrease-fontsize))
@@ -167,10 +172,12 @@
                                  :tag "[+]"
                                  :key key
                                  :index index
+                                 :flag t
                                  :button-face-get 'ignore
                                  :mouse-face-get 'ignore
                                  :action 'cfs-ui-increase-fontsize))
     (widget-insert " ")
+    (push (cons widget1 widget1) cfs-ui--fontsize-widgets)
     (push (cons widget2 widget1) cfs-ui--fontsize-widgets)
     (push (cons widget3 widget1) cfs-ui--fontsize-widgets)))
 
@@ -269,29 +276,36 @@
         (cfs--save-profile fontname-alist fontsize-alist)
         (cfs-set-font-with-saved-step)))))
 
-(defun cfs-ui-operate-fontsize (widget &optional event n)
-  (let ((key (widget-get widget :key))
-        (index (widget-get widget :index))
-        (widget-show-fontsize (cdr (assoc widget cfs-ui--fontsize-widgets)))
-        (fontname-alist (car (cfs--read-profile)))
-        (fontsize-alist (car (cdr (cfs--read-profile)))))
-    (when (numberp n)
-      (cl-incf (nth index (assoc key fontsize-alist)) n)
-      ;; 更新加号按钮和减号按钮前面的数字标签
-      (widget-value-set
-       widget-show-fontsize
-       (format "%-4s" (nth index (assoc key fontsize-alist)))))
-    (let ((fontsizes-list (assoc key fontsize-alist)))
-      (cfs--save-profile fontname-alist fontsize-alist)
-      (cfs--set-font fontsizes-list))))
+(defun cfs-ui-operate-fontsize (&optional widget event n)
+  (let* ((widget (or widget (widget-at)))
+         (key (widget-get widget :key))
+         (index (widget-get widget :index))
+         (flag (widget-get widget :flag))
+         (widget-show-fontsize (cdr (assoc widget cfs-ui--fontsize-widgets)))
+         (fontname-alist (car (cfs--read-profile)))
+         (fontsize-alist (car (cdr (cfs--read-profile)))))
+    (if (not flag)
+        (message "当前光标所在位置不对，请将光标移动到 ‘中文字号’ 或者 ‘EXT-B字体字号’ 对应的数字上。")
+      (when (numberp n)
+        (cl-incf (nth index (assoc key fontsize-alist)) n)
+        ;; 更新加号按钮和减号按钮前面的数字标签
+        (widget-value-set
+         widget-show-fontsize
+         (format "%-4s" (nth index (assoc key fontsize-alist)))))
+      (let ((fontsizes-list (assoc key fontsize-alist)))
+        (cfs--save-profile fontname-alist fontsize-alist)
+        (cfs--set-font fontsizes-list)))))
 
-(defun cfs-ui-test-fontsize (widget &optional event)
+(defun cfs-ui-test-fontsize (&optional widget event)
+  (interactive)
   (cfs-ui-operate-fontsize widget event))
 
-(defun cfs-ui-increase-fontsize (widget &optional event)
+(defun cfs-ui-increase-fontsize (&optional widget event)
+  (interactive)
   (cfs-ui-operate-fontsize widget event 0.5))
 
-(defun cfs-ui-decrease-fontsize (widget &optional event)
+(defun cfs-ui-decrease-fontsize (&optional widget event)
+  (interactive)
   (cfs-ui-operate-fontsize widget event -0.5))
 
 (defvar cfs-ui-mode-map
@@ -299,8 +313,15 @@
     (set-keymap-parent map (make-composed-keymap widget-keymap
                                                  special-mode-map))
     (suppress-keymap map)
-    (define-key map "n" 'widget-forward)
-    (define-key map "p" 'widget-backward)
+    (define-key map "n" 'next-line)
+    (define-key map "p" 'previous-line)
+    (define-key map "=" 'cfs-ui-increase-fontsize)
+    (define-key map "-" 'cfs-ui-decrease-fontsize)
+    (define-key map (kbd "C-c C-c") 'cfs-ui-test-fontsize)
+    (define-key map (kbd "C-<up>") 'cfs-ui-increase-fontsize)
+    (define-key map (kbd "C-<down>") 'cfs-ui-decrease-fontsize)
+    (define-key map (kbd "C-<right>") 'cfs-ui-increase-fontsize)
+    (define-key map (kbd "C-<left>") 'cfs-ui-decrease-fontsize)
     map)
   "Keymap for `cfs-ui-mode'.")
 
