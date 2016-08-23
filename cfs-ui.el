@@ -75,33 +75,61 @@
 (declare-function cfs--set-font "chinese-fonts-setup" (fontsizes-list))
 (declare-function cfs-set-font-with-saved-step "chinese-fonts-setup" (&optional frame))
 
-(defun cfs-ui--switch-buffer (page-name)
+(defun cfs-ui--switch-to-page (page-name)
   (switch-to-buffer (format " *%S*" page-name)))
+
+(defun cfs-ui-switch-to-page:english-fonts-page (&optional widget event)
+  (interactive)
+  (cfs-ui--switch-to-page 'english-fonts-page))
+
+(defun cfs-ui-switch-to-page:chinese-fonts-page (&optional widget event)
+  (interactive)
+  (cfs-ui--switch-to-page 'chinese-fonts-page))
+
+(defun cfs-ui-switch-to-page:extb-fonts-page (&optional widget event)
+  (interactive)
+  (cfs-ui--switch-to-page 'extb-fonts-page))
+
+(defun cfs-ui-switch-to-page:fontsize-page-1 (&optional widget event)
+  (interactive)
+  (cfs-ui--switch-to-page 'fontsize-page-1))
+
+(defun cfs-ui-switch-to-page:fontsize-page-2 (&optional widget event)
+  (interactive)
+  (cfs-ui--switch-to-page 'fontsize-page-2))
+
+(defun cfs-ui-switch-to-page:fontsize-page-3 (&optional widget event)
+  (interactive)
+  (cfs-ui--switch-to-page 'fontsize-page-3))
+
+(defun cfs-ui-switch-to-page:fontsize-page-4 (&optional widget event)
+  (interactive)
+  (cfs-ui--switch-to-page 'fontsize-page-4))
+
+(defun cfs-ui-switch-to-page:fontsize-page-5 (&optional widget event)
+  (interactive)
+  (cfs-ui--switch-to-page 'fontsize-page-5))
+
+(defun cfs-ui-switch-to-page:help-page (&optional widget event)
+  (interactive)
+  (cfs-ui--switch-to-page 'help-page))
 
 (defun cfs-ui--create-main-navigation ()
   (widget-create 'push-button
                  :tag " 英文 "
-                 :action '(lambda (widget &optional event)
-                            (interactive)
-                            (cfs-ui--switch-buffer 'english-fonts-page)))
+                 :action 'cfs-ui-switch-to-page:english-fonts-page)
   (widget-insert " ")
   (widget-create 'push-button
                  :tag " 中文 "
-                 :action '(lambda (widget &optional event)
-                            (interactive)
-                            (cfs-ui--switch-buffer 'chinese-fonts-page)))
+                 :action 'cfs-ui-switch-to-page:chinese-fonts-page)
   (widget-insert " ")
   (widget-create 'push-button
                  :tag " EXT-B "
-                 :action '(lambda (widget &optional event)
-                            (interactive)
-                            (cfs-ui--switch-buffer 'extb-fonts-page)))
+                 :action 'cfs-ui-switch-to-page:extb-fonts-page)
   (widget-insert " ")
   (widget-create 'push-button
                  :tag " 字号 "
-                 :action '(lambda (widget &optional event)
-                            (interactive)
-                            (cfs-ui--switch-buffer 'fontsize-page-1)))
+                 :action 'cfs-ui-switch-to-page:fontsize-page-1)
   (widget-insert " ")
   (widget-create 'push-button
                  :tag " ---- ")
@@ -113,9 +141,7 @@
   (widget-insert " ")
   (widget-create 'push-button
                  :tag " 帮助 "
-                 :action '(lambda (widget &optional event)
-                            (interactive)
-                            (cfs-ui--switch-buffer 'help-page))))
+                 :action 'cfs-ui-switch-to-page:help-page))
 
 (defun cfs-ui--create-fontsize-navigation ()
   (widget-insert "+--------------------------------------------------+\n")
@@ -124,41 +150,31 @@
                  :tag "[09--18]"
                  :button-face-get 'ignore
                  :mouse-face-get 'ignore
-                 :action '(lambda (widget &optional event)
-                            (interactive)
-                            (cfs-ui--switch-buffer 'fontsize-page-1)))
+                 :action 'cfs-ui-switch-to-page:fontsize-page-1)
   (widget-insert "  ")
   (widget-create 'push-button
                  :tag "[20--24]"
                  :button-face-get 'ignore
                  :mouse-face-get 'ignore
-                 :action '(lambda (widget &optional event)
-                            (interactive)
-                            (cfs-ui--switch-buffer 'fontsize-page-2)))
+                 :action 'cfs-ui-switch-to-page:fontsize-page-2)
   (widget-insert "  ")
   (widget-create 'push-button
                  :tag "[26--28]"
                  :button-face-get 'ignore
                  :mouse-face-get 'ignore
-                 :action '(lambda (widget &optional event)
-                            (interactive)
-                            (cfs-ui--switch-buffer 'fontsize-page-3)))
+                 :action 'cfs-ui-switch-to-page:fontsize-page-3)
   (widget-insert "  ")
   (widget-create 'push-button
                  :tag "[  30  ]"
                  :button-face-get 'ignore
                  :mouse-face-get 'ignore
-                 :action '(lambda (widget &optional event)
-                            (interactive)
-                            (cfs-ui--switch-buffer 'fontsize-page-4)))
+                 :action 'cfs-ui-switch-to-page:fontsize-page-4)
   (widget-insert "  ")
-  (widget-create 'link
+  (widget-create 'push-button
                  :tag "[  32  ]"
                  :button-face-get 'ignore
                  :mouse-face-get 'ignore
-                 :action '(lambda (widget &optional event)
-                            (interactive)
-                            (cfs-ui--switch-buffer 'fontsize-page-5)))
+                 :action 'cfs-ui-switch-to-page:fontsize-page-5)
   (widget-insert " |")
   (widget-insert "
 | 如果此表格无法对齐，请按下面的加号减号按钮来调整 |
@@ -238,7 +254,7 @@
       (funcall page-builder page-info))
     (goto-char (point-min))
     (widget-setup))
-  (cfs-ui--switch-buffer 'english-fonts-page))
+  (cfs-ui-switch-to-page:english-fonts-page))
 
 (defun cfs-ui--create-fontsize-page (page-info)
   (let ((page-name (car page-info))
@@ -302,38 +318,37 @@
   (widget-insert "\n")
   (cfs-ui--create-main-navigation)
   (widget-insert "\n")
-  (widget-insert "
+  (widget-insert
+   (substitute-command-keys "
 ** 标签切换快捷键
 
- 按键      功能
- --------  --------------------
- h         切换到 '帮助' 标签
- c         切换到 '中文' 标签
- e         切换到 ’英文' 标签
- x         切换到 'EXTB' 标签
- 1         切换到 [09--18] 标签
- 2         切换到 [20--24] 标签
- 3         切换到 [26--28] 标签
- 4         切换到 [  30  ] 标签
- 5         切换到 [  32  ] 标签
+ 功能                  按键
+ --------------------  --------
+ 切换到 '帮助' 标签    \\[cfs-ui-switch-to-page:help-page]
+ 切换到 '中文' 标签    \\[cfs-ui-switch-to-page:chinese-fonts-page]
+ 切换到 ’英文' 标签    \\[cfs-ui-switch-to-page:english-fonts-page]
+ 切换到 'EXTB' 标签    \\[cfs-ui-switch-to-page:extb-fonts-page]
+ 切换到 [09--18] 标签  \\[cfs-ui-switch-to-page:fontsize-page-1]
+ 切换到 [20--24] 标签  \\[cfs-ui-switch-to-page:fontsize-page-2]
+ 切换到 [26--28] 标签  \\[cfs-ui-switch-to-page:fontsize-page-3]
+ 切换到 [  30  ] 标签  \\[cfs-ui-switch-to-page:fontsize-page-4]
+ 切换到 [  32  ] 标签  \\[cfs-ui-switch-to-page:fontsize-page-5]
 
 ** 字体选择快捷键
 
- 按键      功能
- --------  --------------------
- <return>  选择/不选择当前字体
+ 功能                  按键
+ --------------------  --------
+ 选择/不选择当前字体   \\[widget-button-press]
 
 
 ** 字号调整快捷键
 
- 按键       功能
- ---------  -------------------
- C-<up>     增大光标处的字号
- C-<down>   减小光标处的字号
- C-<right>  增大光标处的字号
- C-<left>   减小光标处的字号
- C-c C-c    测试字体显示效果
-")
+ 功能                 按键
+ -------------------  --------
+ 增大光标处的字号     \\[cfs-ui-increase-fontsize]
+ 减小光标处的字号     \\[cfs-ui-decrease-fontsize]
+ 测试字体显示效果     \\[cfs-ui-test-fontsize]
+"))
   (widget-insert "\n")
   (widget-insert "\n" ))
 
@@ -396,46 +411,19 @@
     (suppress-keymap map)
     (define-key map "n" 'next-line)
     (define-key map "p" 'previous-line)
-    (define-key map "=" 'cfs-ui-increase-fontsize)
-    (define-key map "-" 'cfs-ui-decrease-fontsize)
     (define-key map (kbd "C-c C-c") 'cfs-ui-test-fontsize)
     (define-key map (kbd "C-<up>") 'cfs-ui-increase-fontsize)
     (define-key map (kbd "C-<down>") 'cfs-ui-decrease-fontsize)
-    (define-key map (kbd "C-<right>") 'cfs-ui-increase-fontsize)
-    (define-key map (kbd "C-<left>") 'cfs-ui-decrease-fontsize)
-    (define-key map "h" #'(lambda ()
-                            (interactive)
-                            (cfs-ui--switch-buffer 'help-page)))
-    (define-key map "e" #'(lambda ()
-                            (interactive)
-                            (cfs-ui--switch-buffer 'english-fonts-page)))
-    (define-key map "c" #'(lambda ()
-                            (interactive)
-                            (cfs-ui--switch-buffer 'chinese-fonts-page)))
-    (define-key map "x" #'(lambda ()
-                            (interactive)
-                            (cfs-ui--switch-buffer 'extb-fonts-page)))
-    (define-key map "s" #'(lambda ()
-                            (interactive)
-                            (cfs-ui--switch-buffer 'fontsize-page-1)))
-    (define-key map "s" #'(lambda ()
-                            (interactive)
-                            (cfs-ui--switch-buffer 'fontsize-page-1)))
-    (define-key map "1" #'(lambda ()
-                            (interactive)
-                            (cfs-ui--switch-buffer 'fontsize-page-1)))
-    (define-key map "2" #'(lambda ()
-                            (interactive)
-                            (cfs-ui--switch-buffer 'fontsize-page-2)))
-    (define-key map "3" #'(lambda ()
-                            (interactive)
-                            (cfs-ui--switch-buffer 'fontsize-page-3)))
-    (define-key map "4" #'(lambda ()
-                            (interactive)
-                            (cfs-ui--switch-buffer 'fontsize-page-4)))
-    (define-key map "5" #'(lambda ()
-                            (interactive)
-                            (cfs-ui--switch-buffer 'fontsize-page-5)))
+    (define-key map "h" 'cfs-ui-switch-to-page:help-page)
+    (define-key map "e" 'cfs-ui-switch-to-page:english-fonts-page)
+    (define-key map "c" 'cfs-ui-switch-to-page:chinese-fonts-page)
+    (define-key map "x" 'cfs-ui-switch-to-page:extb-fonts-page)
+    (define-key map "s" 'cfs-ui-switch-to-page:fontsize-page-1)
+    (define-key map "1" 'cfs-ui-switch-to-page:fontsize-page-1)
+    (define-key map "2" 'cfs-ui-switch-to-page:fontsize-page-2)
+    (define-key map "3" 'cfs-ui-switch-to-page:fontsize-page-3)
+    (define-key map "4" 'cfs-ui-switch-to-page:fontsize-page-4)
+    (define-key map "5" 'cfs-ui-switch-to-page:fontsize-page-5)
     map)
   "Keymap for `cfs-ui-mode'.")
 
