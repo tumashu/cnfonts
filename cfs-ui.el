@@ -81,7 +81,7 @@
                               (cfs-ui--switch-buffer 2)))
     (widget-insert "   ")
     (widget-create 'push-button
-                   :tag " 等宽对齐 "
+                   :tag " 字号设置 "
                    :action '(lambda (widget &optional event)
                               (interactive)
                               (cfs-ui--switch-buffer 3))))
