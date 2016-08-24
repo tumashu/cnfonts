@@ -63,8 +63,7 @@
     (help-page
      :page-builder cfs-ui--create-help-page)))
 
-(defvar cfs-ui--fontname-widgets nil)
-(defvar cfs-ui--fontsize-widgets nil)
+(defvar cfs-ui--widgets-alist nil)
 (defvar cfs-personal-fontnames) ;Deal with compile warn.
 
 (declare-function cfs--get-xlfd "chinese-fonts-setup" (fontname &optional uncheck))
@@ -224,9 +223,9 @@
                                  :mouse-face-get 'ignore
                                  :action 'cfs-ui-increase-fontsize))
     (widget-insert " ")
-    (push (cons widget1 widget1) cfs-ui--fontsize-widgets)
-    (push (cons widget2 widget1) cfs-ui--fontsize-widgets)
-    (push (cons widget3 widget1) cfs-ui--fontsize-widgets)))
+    (push (cons widget1 widget1) cfs-ui--widgets-alist)
+    (push (cons widget2 widget1) cfs-ui--widgets-alist)
+    (push (cons widget3 widget1) cfs-ui--widgets-alist)))
 
 (defun cfs-ui--create-fontsize-test-buttons (key index)
   (widget-create 'push-button
@@ -247,8 +246,7 @@
     (let ((inhibit-read-only t))
       (erase-buffer))
     (cfs-ui-mode)
-    (set (make-local-variable 'cfs-ui--fontname-widgets) nil)
-    (set (make-local-variable 'cfs-ui--fontsize-widgets) nil)
+    (set (make-local-variable 'cfs-ui--widgets-alist) nil)
     (setq truncate-lines t)
     (let ((page-builder (plist-get (cdr page-info) :page-builder)))
       (funcall page-builder page-info))
@@ -285,7 +283,7 @@
   (let ((page-name (car page-info))
         (index (plist-get (cdr page-info) :index))
         (fontname-alist (car (cfs--read-profile)))
-        widget)
+        widget1 widget2 widget3)
     (widget-insert "\n")
     (cfs-ui--create-main-navigation)
     (widget-insert "\n\n")
@@ -299,19 +297,29 @@
       (widget-insert "状态  字体名称\n")
       (widget-insert "----  -----------------------------------------------\n")
       (dolist (font fonts)
-        (widget-insert (format "%-6s" (cfs-ui--return-status-string font index)))
-        (setq widget
+        (setq widget1
+              (widget-create 'push-button
+                             :font-name font
+                             :index index
+                             :button-face-get 'ignore
+                             :mouse-face-get 'ignore
+                             :value (format "%-6s" (cfs-ui--return-status-string font index))))
+        (setq widget2
               (widget-create 'checkbox
                              :value (equal font (car (nth index fontname-alist)))
                              :font-name font
+                             :flag t
                              :index index
-                             :action 'cfs-ui-checkbox-toggle))
-        (push (cons font widget) cfs-ui--fontname-widgets)
-        (widget-create-child-and-convert widget 'push-button
-                                         :button-face-get 'ignore
-                                         :mouse-face-get 'ignore
-                                         :value (format " %s" font)
-                                         :action 'widget-parent-action)
+                             :action 'cfs-ui-toggle-select-font))
+        (setq widget3
+              (widget-create 'push-button
+                             :button-face-get 'ignore
+                             :mouse-face-get 'ignore
+                             :value (format " %-50s" font)
+                             :action 'cfs-ui-toggle-select-font))
+        (push (cons widget1 widget2) cfs-ui--widgets-alist)
+        (push (cons widget2 widget2) cfs-ui--widgets-alist)
+        (push (cons widget3 widget2) cfs-ui--widgets-alist)
         (widget-insert "\n" )))))
 
 (defun cfs-ui--create-help-page (page-info)
@@ -338,7 +346,7 @@
 
  功能                  按键
  --------------------  --------
- 选择/不选择当前字体   \\[widget-button-press]
+ 选择/不选择当前字体   \\[cfs-ui-toggle-select-font]
 
 
 ** 字号调整快捷键
@@ -352,32 +360,39 @@
   (widget-insert "\n")
   (widget-insert "\n" ))
 
-(defun cfs-ui-checkbox-toggle (widget &optional event)
-  (let ((this-font (widget-get widget :font-name))
-        (index (widget-get widget :index))
-        (fontname-alist (car (cfs--read-profile)))
-        (fontsize-alist (car (cdr (cfs--read-profile))))
-        fonts-list)
-    (widget-toggle-action widget event)
-    (dolist (font cfs-ui--fontname-widgets)
-      (unless (eq (car font) this-font)
-        (widget-value-set (cdr font) nil)
-        (widget-apply (cdr font) :notify (cdr font) event)))
-    (if (not (cfs--font-exists-p this-font))
-        (message "Chinese-fonts-setup UI: 系统没有安装字体: %S ." this-font)
-      (when (widget-value widget)
-        (setf (nth index fontname-alist)
-              (delete-dups
-               `(,this-font ,@(nth index fontname-alist))))
-        (cfs--save-profile fontname-alist fontsize-alist)
-        (cfs-set-font-with-saved-step)))))
+(defun cfs-ui-toggle-select-font (&optional widget event)
+  (interactive)
+  (let* ((widget (or widget (widget-at)))
+         (widget1 (cdr (assoc widget cfs-ui--widgets-alist)))
+         (widgets (mapcar #'cdr cfs-ui--widgets-alist))
+         (font (widget-get widget1 :font-name))
+         (index (widget-get widget1 :index))
+         (flag (widget-get widget1 :flag))
+         (fontname-alist (car (cfs--read-profile)))
+         (fontsize-alist (car (cdr (cfs--read-profile))))
+         fonts-list)
+    (if (not flag)
+        (message "当前光标所在位置不对，请将光标移动到字体所在的行上面。")
+      (widget-toggle-action widget1 event)
+      (dolist (w widgets)
+        (unless (equal (widget-get w :font-name) font)
+          (widget-value-set w nil)
+          (widget-apply w :notify w event)))
+      (if (not (cfs--font-exists-p font))
+          (message "Chinese-fonts-setup UI: 系统没有安装字体: %S ." font)
+        (when (widget-value widget1)
+          (setf (nth index fontname-alist)
+                (delete-dups
+                 `(,font ,@(nth index fontname-alist))))
+          (cfs--save-profile fontname-alist fontsize-alist)
+          (cfs-set-font-with-saved-step))))))
 
 (defun cfs-ui-operate-fontsize (&optional widget event n)
   (let* ((widget (or widget (widget-at)))
          (key (widget-get widget :key))
          (index (widget-get widget :index))
          (flag (widget-get widget :flag))
-         (widget-show-fontsize (cdr (assoc widget cfs-ui--fontsize-widgets)))
+         (widget-show-fontsize (cdr (assoc widget cfs-ui--widgets-alist)))
          (fontname-alist (car (cfs--read-profile)))
          (fontsize-alist (car (cdr (cfs--read-profile)))))
     (if (not flag)
@@ -411,6 +426,7 @@
     (suppress-keymap map)
     (define-key map "n" 'next-line)
     (define-key map "p" 'previous-line)
+    (define-key map " " 'cfs-ui-toggle-select-font)
     (define-key map (kbd "C-c C-c") 'cfs-ui-test-fontsize)
     (define-key map (kbd "C-<up>") 'cfs-ui-increase-fontsize)
     (define-key map (kbd "C-<down>") 'cfs-ui-decrease-fontsize)
