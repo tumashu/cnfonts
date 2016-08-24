@@ -228,11 +228,13 @@
     (push (cons widget3 widget1) cfs-ui--widgets-alist)))
 
 (defun cfs-ui--create-fontsize-test-buttons (key index)
-  (widget-create 'push-button
-                 :tag " 测试 "
-                 :key key
-                 :index index
-                 :action 'cfs-ui-test-fontsize))
+  (let ((widget (widget-create 'push-button
+                               :tag " 测试 "
+                               :key key
+                               :index index
+                               :flag t
+                               :action 'cfs-ui-test-fontsize)))
+    (push (cons widget widget) cfs-ui--widgets-alist)))
 
 (defun cfs-ui--return-status-string (font index)
   (format "%-2s %-2s"
