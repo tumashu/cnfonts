@@ -796,42 +796,43 @@ The below is an example which is used to set symbol fonts:
 
 ;; Steal code from `spacemacs/set-default-font'
 (defun cfs--set-spacemacs-fallback-fonts (fontsizes-list)
-  (when (featurep 'spacemacs)
-    (pcase system-type
-      (`gnu/linux
-       (setq fallback-font-name "NanumGothic")
-       (setq fallback-font-name2 "NanumGothic"))
-      (`darwin
-       (setq fallback-font-name "Arial Unicode MS")
-       (setq fallback-font-name2 "Arial Unicode MS"))
-      (`windows-nt
-       (setq fallback-font-name "MS Gothic")
-       (setq fallback-font-name2 "Lucida Sans Unicode"))
-      (`cygwin
-       (setq fallback-font-name "MS Gothic")
-       (setq fallback-font-name2 "Lucida Sans Unicode"))
-      (other
-       (setq fallback-font-name nil)
-       (setq fallback-font-name2 nil)))
-    (when (and fallback-font-name fallback-font-name2)
-      (let ((fallback-spec (apply 'font-spec
-                                  :name fallback-font-name
-                                  :size (car fontsizes-list)))
-            (fallback-spec2 (apply 'font-spec
-                                   :name fallback-font-name2
-                                   :size (car fontsizes-list))))
-        ;; window numbers
-        (set-fontset-font "fontset-default"
-                          '(#x2776 . #x2793) fallback-spec nil 'prepend)
-        ;; mode-line circled letters
-        (set-fontset-font "fontset-default"
-                          '(#x24b6 . #x24fe) fallback-spec nil 'prepend)
-        ;; mode-line additional characters
-        (set-fontset-font "fontset-default"
-                          '(#x2295 . #x22a1) fallback-spec nil 'prepend)
-        ;; new version lighter
-        (set-fontset-font "fontset-default"
-                          '(#x2190 . #x2200) fallback-spec2 nil 'prepend)))))
+  (let (fallback-font-name fallback-font-name2)
+    (when (featurep 'spacemacs)
+      (pcase system-type
+        (`gnu/linux
+         (setq fallback-font-name "NanumGothic")
+         (setq fallback-font-name2 "NanumGothic"))
+        (`darwin
+         (setq fallback-font-name "Arial Unicode MS")
+         (setq fallback-font-name2 "Arial Unicode MS"))
+        (`windows-nt
+         (setq fallback-font-name "MS Gothic")
+         (setq fallback-font-name2 "Lucida Sans Unicode"))
+        (`cygwin
+         (setq fallback-font-name "MS Gothic")
+         (setq fallback-font-name2 "Lucida Sans Unicode"))
+        (other
+         (setq fallback-font-name nil)
+         (setq fallback-font-name2 nil)))
+      (when (and fallback-font-name fallback-font-name2)
+        (let ((fallback-spec (apply 'font-spec
+                                    :name fallback-font-name
+                                    :size (car fontsizes-list)))
+              (fallback-spec2 (apply 'font-spec
+                                     :name fallback-font-name2
+                                     :size (car fontsizes-list))))
+          ;; window numbers
+          (set-fontset-font "fontset-default"
+                            '(#x2776 . #x2793) fallback-spec nil 'prepend)
+          ;; mode-line circled letters
+          (set-fontset-font "fontset-default"
+                            '(#x24b6 . #x24fe) fallback-spec nil 'prepend)
+          ;; mode-line additional characters
+          (set-fontset-font "fontset-default"
+                            '(#x2295 . #x22a1) fallback-spec nil 'prepend)
+          ;; new version lighter
+          (set-fontset-font "fontset-default"
+                            '(#x2190 . #x2200) fallback-spec2 nil 'prepend))))))
 
 (defun cfs-set-spacemacs-fallback-fonts ()
   "Spacemace 的 mode-line 上面有一些 Unicode 字符，这些字符需要专门的字体来显示，
