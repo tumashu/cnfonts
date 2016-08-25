@@ -290,12 +290,7 @@
     (widget-insert "\n")
     (cfs-ui--create-main-navigation)
     (widget-insert "\n\n")
-    (let ((fonts (delete-dups
-                  `(,@(nth index fontname-alist)
-                    ,@(when (equal page-name 'chinese-fonts-page)
-                        (cl-remove-if #'(lambda (font)
-                                          (not (string-match-p "\\cc" font)))
-                                      (font-family-list)))))))
+    (let ((fonts (nth index fontname-alist)))
       (cfs-ui--create-warning-board)
       (widget-insert "状态  字体名称\n")
       (widget-insert "----  -----------------------------------------------\n")
