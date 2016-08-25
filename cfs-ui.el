@@ -355,17 +355,17 @@
 
 ** 字号调整快捷键
 
- 功能                 按键
- -------------------  --------
- 增大光标处的字号     \\[cfs-ui-increase-fontsize]
- 减小光标处的字号     \\[cfs-ui-decrease-fontsize]
- 测试字体显示效果     \\[cfs-ui-test-fontsize]
+ 功能                  按键
+ --------------------  --------
+ 增大光标处的字号      \\[cfs-ui-increase-fontsize]
+ 减小光标处的字号      \\[cfs-ui-decrease-fontsize]
+ 测试字体显示效果      \\[cfs-ui-test-fontsize]
 
 ** 其它快捷键
 
- 功能                 按键
- -------------------  --------
- 重启UI               \\[cfs-ui-restart]
+ 功能                  按键
+ --------------------  --------
+ 重启UI                \\[cfs-ui-restart]
 "))
   (widget-create 'push-button
                  :tag "\n"
