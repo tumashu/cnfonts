@@ -327,7 +327,11 @@
         (widget-insert "\n" )))))
 
 (defun cfs-ui--create-help-page (page-info)
-  (widget-insert "\n")
+  (widget-create 'push-button
+                 :tag "\n"
+                 :tab-stop-point t
+                 :button-face-get 'ignore
+                 :mouse-face-get 'ignore)
   (cfs-ui--create-main-navigation)
   (widget-insert "\n")
   (widget-insert
@@ -361,7 +365,11 @@
  减小光标处的字号     \\[cfs-ui-decrease-fontsize]
  测试字体显示效果     \\[cfs-ui-test-fontsize]
 "))
-  (widget-insert "\n")
+  (widget-create 'push-button
+                 :tag "\n"
+                 :tab-stop-point t
+                 :button-face-get 'ignore
+                 :mouse-face-get 'ignore)
   (widget-insert "\n" ))
 
 (defun cfs-ui-toggle-select-font (&optional widget event)
