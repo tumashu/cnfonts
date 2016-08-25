@@ -292,7 +292,8 @@
     (widget-insert "\n\n")
     (let ((fonts (nth index fontname-alist)))
       (cfs-ui--create-warning-board)
-      (widget-insert "状态  字体名称\n")
+      (widget-insert (format "状态  字体名称                   %20s\n"
+                             (format "( %s )" cfs--current-profile)))
       (widget-insert "----  -----------------------------------------------\n")
       (dolist (font fonts)
         (setq widget1
