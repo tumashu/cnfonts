@@ -364,6 +364,12 @@
  增大光标处的字号     \\[cfs-ui-increase-fontsize]
  减小光标处的字号     \\[cfs-ui-decrease-fontsize]
  测试字体显示效果     \\[cfs-ui-test-fontsize]
+
+** 其它快捷键
+
+ 功能                 按键
+ -------------------  --------
+ 重启UI               \\[cfs-ui-restart]
 "))
   (widget-create 'push-button
                  :tag "\n"
@@ -446,6 +452,12 @@
   (interactive)
   (cfs-ui-forward t))
 
+(defun cfs-ui-restart ()
+  (interactive)
+  (let ((buffer-name (buffer-name)))
+    (cfs-ui)
+    (switch-to-buffer buffer-name)))
+
 (defvar cfs-ui-mode-map
   (let ((map (make-keymap)))
     (set-keymap-parent map (make-composed-keymap widget-keymap
@@ -453,6 +465,7 @@
     (suppress-keymap map)
     (define-key map "n" 'next-line)
     (define-key map "p" 'previous-line)
+    (define-key map "R" 'cfs-ui-restart)
     (define-key map " " 'cfs-ui-toggle-select-font)
     (define-key map "\t" 'cfs-ui-forward)
     (define-key map "\e\t" 'cfs-ui-backward)
