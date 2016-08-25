@@ -202,6 +202,7 @@
                                  :key key
                                  :index index
                                  :flag t
+                                 :tab-stop-point t
                                  :button-face-get 'ignore
                                  :mouse-face-get 'ignore
                                  :action 'cfs-ui-test-fontsize))
@@ -311,6 +312,7 @@
                              :value (equal font (car (nth index fontname-alist)))
                              :font-name font
                              :flag t
+                             :tab-stop-point t
                              :index index
                              :action 'cfs-ui-toggle-select-font))
         (setq widget3
@@ -421,6 +423,21 @@
   (interactive)
   (cfs-ui-operate-fontsize widget event -0.5))
 
+(defun cfs-ui-forward (&optional backward)
+  (interactive)
+  (run-hooks 'widget-forward-hook)
+  (let ((step (if backward -1 1))
+        (forward t))
+    (widget-move step)
+    (while forward
+      (if (widget-get (widget-at) :tab-stop-point)
+          (setq forward nil)
+        (widget-move step)))))
+
+(defun cfs-ui-backward ()
+  (interactive)
+  (cfs-ui-forward t))
+
 (defvar cfs-ui-mode-map
   (let ((map (make-keymap)))
     (set-keymap-parent map (make-composed-keymap widget-keymap
@@ -429,6 +446,11 @@
     (define-key map "n" 'next-line)
     (define-key map "p" 'previous-line)
     (define-key map " " 'cfs-ui-toggle-select-font)
+    (define-key map "\t" 'cfs-ui-forward)
+    (define-key map "\e\t" 'cfs-ui-backward)
+    (define-key map [backtab] 'cfs-ui-backward)
+    (define-key map "=" 'cfs-ui-increase-fontsize)
+    (define-key map "-" 'cfs-ui-decrease-fontsize)
     (define-key map (kbd "C-c C-c") 'cfs-ui-test-fontsize)
     (define-key map (kbd "C-<up>") 'cfs-ui-increase-fontsize)
     (define-key map (kbd "C-<down>") 'cfs-ui-decrease-fontsize)
