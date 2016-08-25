@@ -70,55 +70,13 @@
 ;;    #+END_EXAMPLE
 
 ;; ** 配置使用
-;; *** profile 简介
-;; 一个 profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概念，
+;; *** profile 的概念
+;; profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概念，
 ;; 来维护多套字体配置，从而实现特定的环境使用特定的字体配置，
 ;; 比如：在编程时使用 “Consolas + 微米黑”，在阅读文章时使用 “PragmataPro + 黑体”，等等。
 
 ;; 每一个 profile 都对应一个 emacs-lisp 文件, 保存在 `cfs-profiles-directory' 目录中,
-;; 这些文件包含了英文字体设置，中文字体设置以及中文字体大小。
-
-;; Chinese-fonts-setup 默认使用三个 profile: profile1, profile2 和 profile3,
-;; 如果想使用其它有意义的名称，可以设置:
-
-;; #+BEGIN_EXAMPLE
-;; (setq cfs-profiles
-;;     '("program" "org-mode" "read-book"))
-;; #+END_EXAMPLE
-
-;; 切换 profile 的命令：
-
-;; | Command            | Help                    |
-;; |--------------------+-------------------------|
-;; | cfs-switch-profile | 选择并切换 profile      |
-;; | cfs-next-profile   | 直接切换到下一个profile |
-
-;; *** 使用 cfs-edit-profile 命令调整 profile
-;; 如果 *当前使用* 的字体不符合使用习惯，用户可以运行 `cfs-edit-profile' 命令来调整 *当前* profile,
-;; 这个命令会弹出一个图形化界面，类似：
-
-;; [[./snapshots/cfs-ui-1.png]]
-;; [[./snapshots/cfs-ui-2.png]]
-;; [[./snapshots/cfs-ui-3.png]]
-;; [[./snapshots/cfs-ui-4.png]]
-
-;; *** 使用 cfs-edit-profile-without-ui 命令编辑 profile
-;; 有经验的用户可以使用 `cfs-edit-profile-without-ui' 命令，直接编辑当前 profile 文件，
-;; 编辑的过程中，用户可以使用下面三个命令 *快速* 的测试编辑效果：
-
-;; | Key     | Command                         | Help                                   |
-;; |---------+---------------------------------+----------------------------------------|
-;; | C-c C-c | cfs-test-fontsizes-at-point     | 查看字体显示效果                       |
-;; | C-up    | cfs-increment-fontsize-at-point | 增大光标下字号的大小，同时显示对齐效果 |
-;; | C-down  | cfs-decrement-fontsize-at-point | 减小光标下字号的大小，同时显示对齐效果 |
-
-;; 配置完成后，有可能需要重启 Emacs。(参考： http://debbugs.gnu.org/db/17/1785.html)
-
-;; [[./snapshots/cfs-edit-fontnames.gif]]
-
-;; [[./snapshots/cfs-edit-fontsizes.gif]]
-
-;; 附：一个 profile 文件的例子：
+;; 这些文件包含了英文字体设置，中文字体设置以及中文字体大小，类似：
 
 ;; #+BEGIN_EXAMPLE
 ;;; `cfs--custom-set-fontsnames' 列表有3个子列表，第1个为英文字体列表，第2个为中文字体列表，
@@ -153,6 +111,49 @@
 ;;         (32   33.0 33.0)
 ;;         ))
 ;; #+END_EXAMPLE
+
+;; *** profile 命名与切换
+;; Chinese-fonts-setup 默认使用三个 profile: profile1, profile2 和 profile3,
+;; 如果想使用其它有意义的名称，可以设置:
+
+;; #+BEGIN_EXAMPLE
+;; (setq cfs-profiles
+;;     '("program" "org-mode" "read-book"))
+;; #+END_EXAMPLE
+
+;; chinese-fonts-setup 使用下面两个命令来切换 profile ：
+
+;; | Command            | Help                    |
+;; |--------------------+-------------------------|
+;; | cfs-switch-profile | 选择并切换 profile      |
+;; | cfs-next-profile   | 直接切换到下一个profile |
+
+;; *** 使用 cfs-edit-profile 命令调整 profile
+;; 如果 *当前使用* 的字体不符合使用习惯，用户可以运行 `cfs-edit-profile' 命令来调整 *当前* profile,
+;; 这个命令会弹出一个图形化界面，类似：
+
+;; [[./snapshots/cfs-ui-1.png]]
+;; [[./snapshots/cfs-ui-2.png]]
+;; [[./snapshots/cfs-ui-3.png]]
+;; [[./snapshots/cfs-ui-4.png]]
+
+;; *** 使用 cfs-edit-profile-without-ui 命令编辑 profile
+;; 除了使用 `cfs-edit-profile' , 有经验的用户也可以使用 `cfs-edit-profile-without-ui' 命令，
+;; 直接编辑当前 profile 文件，两个命令的效果是一样的。
+
+;; 在编辑的过程中，用户可以使用下面三个命令 *快速* 的测试编辑效果：
+
+;; | Key     | Command                         | Help                                   |
+;; |---------+---------------------------------+----------------------------------------|
+;; | C-c C-c | cfs-test-fontsizes-at-point     | 查看字体显示效果                       |
+;; | C-up    | cfs-increment-fontsize-at-point | 增大光标下字号的大小，同时显示对齐效果 |
+;; | C-down  | cfs-decrement-fontsize-at-point | 减小光标下字号的大小，同时显示对齐效果 |
+
+;; 配置完成后，有可能需要重启 Emacs。(参考： http://debbugs.gnu.org/db/17/1785.html)
+
+;; [[./snapshots/cfs-edit-fontnames.gif]]
+
+;; [[./snapshots/cfs-edit-fontsizes.gif]]
 
 ;; *** 使用 cfs-regenerate-profile 重置 profile
 ;; `cfs-regenerate-profile' 命令会使用 chinese-fonts-setup 自带的 fallback 信息，
