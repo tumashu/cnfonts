@@ -4,13 +4,16 @@
   - [使用特点](#使用特点)
   - [下载安装](#下载安装)
   - [配置使用](#配置使用)
-    - [编辑调整 profile](#编辑调整-profile)
+    - [profile 简介](#profile-简介)
+    - [使用 cfs-edit-profile 命令调整 profile](#使用-cfs-edit-profile-命令调整-profile)
+    - [使用 cfs-edit-profile-without-ui 命令编辑 profile](#使用-cfs-edit-profile-without-ui-命令编辑-profile)
+    - [使用 cfs-regenerate-profile 重置 profile](#使用-cfs-regenerate-profile-重置-profile)
     - [调整字体大小](#调整字体大小)
     - [让 chinese-fonts-setup 随着 emacs 自动启动](#让-chinese-fonts-setup-随着-emacs-自动启动)
   - [Tips](#tips)
   - [参考文章](#参考文章)
 
-# Chinese-fonts-setup README<a id="orgheadline11"></a>
+# Chinese-fonts-setup README<a id="orgheadline14"></a>
 
 ## 简介<a id="orgheadline1"></a>
 
@@ -46,9 +49,9 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
         ;; 让 spacemacs mode-line 中的 Unicode 图标正确显示。
         ;; (cfs-set-spacemacs-fallback-fonts)
 
-## 配置使用<a id="orgheadline8"></a>
+## 配置使用<a id="orgheadline11"></a>
 
-### 编辑调整 profile<a id="orgheadline5"></a>
+### profile 简介<a id="orgheadline5"></a>
 
 一个 profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概念，来维护多套字体配置，从而实现特定的环境使用特定的字体配置，比如：在编程时使用 “Consolas + 微米黑”，在阅读文章时使用 “PragmataPro + 黑体”，等等。
 
@@ -92,19 +95,19 @@ Chinese-fonts-setup 默认使用三个 profile: profile1, profile2 和 profile3,
 </tbody>
 </table>
 
-如果 **当前使用** 的字体不符合个人使用习惯，用户可以使用 \`cfs-edit-profile' 或者
-\`cfs-edit-profile-without-ui' 两个命令来调整或编辑当前 profile 文件（如果 profile 文件不存在，
-chinese-fonts-setup 会在编辑之前自动新建一个, **不需要用户手动创建 profile 文件** ），
-\`cfs-regenerate-profile' 用于 **重置** profile, 请紧慎使用！
+### 使用 cfs-edit-profile 命令调整 profile<a id="orgheadline6"></a>
 
-\`cfs-edit-profile' 是一个简单的图形化工具，其界面类似：
+如果 **当前使用** 的字体不符合使用习惯，用户可以运行 \`cfs-edit-profile' 命令来调整 **当前** profile,
+这个命令会弹出一个图形化界面，类似：
 
 ![img](./snapshots/cfs-ui-1.png)
 ![img](./snapshots/cfs-ui-2.png)
 ![img](./snapshots/cfs-ui-3.png)
 ![img](./snapshots/cfs-ui-4.png)
 
-\`cfs-edit-profile-without-ui' 适合有经验的用户使用，这个命令会打开当前 profile 文件，并激活内置的 profile 编辑模式，在编辑的过程中，用户可以使用下面三个命令 **快速** 的测试编辑效果：
+### 使用 cfs-edit-profile-without-ui 命令编辑 profile<a id="orgheadline7"></a>
+
+有经验的用户可以使用 \`cfs-edit-profile-without-ui' 命令，直接编辑当前 profile 文件，编辑的过程中，用户可以使用下面三个命令 **快速** 的测试编辑效果：
 
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -187,7 +190,11 @@ chinese-fonts-setup 会在编辑之前自动新建一个, **不需要用户手�
             (32   33.0 33.0)
             ))
 
-### 调整字体大小<a id="orgheadline6"></a>
+### 使用 cfs-regenerate-profile 重置 profile<a id="orgheadline8"></a>
+
+\`cfs-regenerate-profile' 命令会使用 chinese-fonts-setup 自带的 fallback 信息，覆盖需要 **重置** 的 profile, 这个 profile 原来的内容将丢失，请紧慎使用！
+
+### 调整字体大小<a id="orgheadline9"></a>
 
 \`chinese-fonts-setup' 使用下述两个命令调整字体大小:
 
@@ -224,7 +231,7 @@ chinese-fonts-setup 会在编辑之前自动新建一个, **不需要用户手�
 
 ![img](./snapshots/cfs-increase-and-decrease-fontsize.gif)
 
-### 让 chinese-fonts-setup 随着 emacs 自动启动<a id="orgheadline7"></a>
+### 让 chinese-fonts-setup 随着 emacs 自动启动<a id="orgheadline10"></a>
 
 \`chinese-fonts-setup-enable' 命令可以让 chinese-fonts-setup 随着 emacs 自动启动，这个命令将 \`cfs-set-font-with-saved-step' 添加到下面两个 hook:
 
@@ -233,7 +240,7 @@ chinese-fonts-setup 会在编辑之前自动新建一个, **不需要用户手�
 
 用户也可以手动运行 \`cfs-set-font-with-saved-step' 来让 chinese-fonts-setup 生效。
 
-## Tips<a id="orgheadline9"></a>
+## Tips<a id="orgheadline12"></a>
 
 1.  如果用户需要在自己的 emacs 配置中管理一些个人字体，可以使用变量 \`cfs-personal-fontnames' , 其结构与 \`cfs&#x2013;fontnames-fallback'
     一样。
@@ -246,7 +253,7 @@ chinese-fonts-setup 会在编辑之前自动新建一个, **不需要用户手�
     1.  Ext-B字符列表: <https://cdo.wikipedia.org/wiki/Wikipedia:Unicode%E6%93%B4%E5%B1%95%E6%BC%A2%E5%AD%97>
     2.  HanaMinB 下载地址: <https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/>
 
-## 参考文章<a id="orgheadline10"></a>
+## 参考文章<a id="orgheadline13"></a>
 
 1.  <http://baohaojun.github.io/perfect-emacs-chinese-font.html>
 2.  <http://zhuoqiang.me/torture-emacs.html>

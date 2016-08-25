@@ -70,7 +70,7 @@
 ;;    #+END_EXAMPLE
 
 ;; ** 配置使用
-;; *** 编辑调整 profile
+;; *** profile 简介
 ;; 一个 profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概念，
 ;; 来维护多套字体配置，从而实现特定的环境使用特定的字体配置，
 ;; 比如：在编程时使用 “Consolas + 微米黑”，在阅读文章时使用 “PragmataPro + 黑体”，等等。
@@ -93,20 +93,18 @@
 ;; | cfs-switch-profile | 选择并切换 profile      |
 ;; | cfs-next-profile   | 直接切换到下一个profile |
 
-;; 如果 *当前使用* 的字体不符合个人使用习惯，用户可以使用 `cfs-edit-profile' 或者
-;; `cfs-edit-profile-without-ui' 两个命令来调整或编辑当前 profile 文件（如果 profile 文件不存在，
-;; chinese-fonts-setup 会在编辑之前自动新建一个, *不需要用户手动创建 profile 文件* ），
-;; `cfs-regenerate-profile' 用于 *重置* profile, 请紧慎使用！
-
-;; `cfs-edit-profile' 是一个简单的图形化工具，其界面类似：
+;; *** 使用 cfs-edit-profile 命令调整 profile
+;; 如果 *当前使用* 的字体不符合使用习惯，用户可以运行 `cfs-edit-profile' 命令来调整 *当前* profile,
+;; 这个命令会弹出一个图形化界面，类似：
 
 ;; [[./snapshots/cfs-ui-1.png]]
 ;; [[./snapshots/cfs-ui-2.png]]
 ;; [[./snapshots/cfs-ui-3.png]]
 ;; [[./snapshots/cfs-ui-4.png]]
 
-;; `cfs-edit-profile-without-ui' 适合有经验的用户使用，这个命令会打开当前 profile 文件，
-;; 并激活内置的 profile 编辑模式，在编辑的过程中，用户可以使用下面三个命令 *快速* 的测试编辑效果：
+;; *** 使用 cfs-edit-profile-without-ui 命令编辑 profile
+;; 有经验的用户可以使用 `cfs-edit-profile-without-ui' 命令，直接编辑当前 profile 文件，
+;; 编辑的过程中，用户可以使用下面三个命令 *快速* 的测试编辑效果：
 
 ;; | Key     | Command                         | Help                                   |
 ;; |---------+---------------------------------+----------------------------------------|
@@ -155,6 +153,10 @@
 ;;         (32   33.0 33.0)
 ;;         ))
 ;; #+END_EXAMPLE
+
+;; *** 使用 cfs-regenerate-profile 重置 profile
+;; `cfs-regenerate-profile' 命令会使用 chinese-fonts-setup 自带的 fallback 信息，
+;; 覆盖需要 *重置* 的 profile, 这个 profile 原来的内容将丢失，请紧慎使用！
 
 ;; *** 调整字体大小
 ;; `chinese-fonts-setup' 使用下述两个命令调整字体大小:
