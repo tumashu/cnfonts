@@ -52,14 +52,15 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
 
 一个 profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概念，来维护多套字体配置，从而实现特定的环境使用特定的字体配置，比如：在编程时使用 “Consolas + 微米黑”，在阅读文章时使用 “PragmataPro + 黑体”，等等。
 
-调整 profile 最简单的方式是使用 chinese-fonts-setup 自带的 profile 调整工具，用户只需要在运行 \`cfs-edit-profile' 时，选择 “使用图形化工具来调整当前 profile 文件” 就可以了，其界面类似：
+调整 profile 最简单的方式是使用 chinese-fonts-setup 自带的 profile 调整工具: \`cfs-edit-profile'
+其界面类似：
 
 ![img](./snapshots/cfs-ui-1.png)
 ![img](./snapshots/cfs-ui-2.png)
 ![img](./snapshots/cfs-ui-3.png)
 ![img](./snapshots/cfs-ui-4.png)
 
-除了用上述图形化工具，用户也可以选择直接编辑 profile 文件，两种方式的效果是一样的。
+除了使用图形工具 \`cfs-edit-profile' ，用户也可以使用 \`cfs-edit-profile-without-ui' 直接编辑 profile 文件，两种方式的效果是一样的。
 
 在 \`cfs-profiles-directory' 目录中, 每一个 profile 都对应一个 emacs-lisp 文件,
 这些文件包含了英文字体设置，中文字体设置以及中文字体大小，其内容类似：
@@ -77,7 +78,7 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
 
     ;;; `cfs--custom-set-fontsizes' 中，所有元素的结构都类似：(英文字号 中文字号 EXT-B字体字号)
     ;;; 将光标移动到各个数字上，按 C-c C-c 查看光标处字号的对齐效果。
-    ;;; 按 C-<up> 增大光标处字号，按 C-<down> 减小光标处字号。
+    ;;; 按 C-<up>增大光标处字号，按 C-<down>减小光标处字号。
     (setq cfs--custom-set-fontsizes
           '(
             (9    9.0 11.0)
