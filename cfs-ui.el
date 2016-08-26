@@ -349,10 +349,10 @@
 
  功能                  按键
  --------------------  --------
- 切换到 '帮助' 标签    \\[cfs-ui-switch-to-page:help-page]
- 切换到 '中文' 标签    \\[cfs-ui-switch-to-page:chinese-fonts-page]
- 切换到 ’英文' 标签    \\[cfs-ui-switch-to-page:english-fonts-page]
- 切换到 'EXTB' 标签    \\[cfs-ui-switch-to-page:extb-fonts-page]
+ 切换到 [ 帮助 ] 标签  \\[cfs-ui-switch-to-page:help-page]
+ 切换到 [ 中文 ] 标签  \\[cfs-ui-switch-to-page:chinese-fonts-page]
+ 切换到 [ 英文 ] 标签  \\[cfs-ui-switch-to-page:english-fonts-page]
+ 切换到 [ EXTB ] 标签  \\[cfs-ui-switch-to-page:extb-fonts-page]
  切换到 [09--18] 标签  \\[cfs-ui-switch-to-page:fontsize-page-1]
  切换到 [20--24] 标签  \\[cfs-ui-switch-to-page:fontsize-page-2]
  切换到 [26--28] 标签  \\[cfs-ui-switch-to-page:fontsize-page-3]
