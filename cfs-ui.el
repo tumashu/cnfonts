@@ -72,6 +72,7 @@
 (declare-function cfs--font-exists-p "chinese-fonts-setup" (font))
 (declare-function cfs--save-profile "chinese-fonts-setup" (fontnames fontsizes &optional profile-name))
 (declare-function cfs--set-font "chinese-fonts-setup" (fontsizes-list))
+(declare-function cfs--get-current-profile "chinese-fonts-setup" (&optional return-profile-name))
 (declare-function cfs-set-font-with-saved-step "chinese-fonts-setup" (&optional frame))
 
 (defun cfs-ui--switch-to-page (page-name)
@@ -293,7 +294,7 @@
     (let ((fonts (nth index fontname-alist)))
       (cfs-ui--create-warning-board)
       (widget-insert (format "状态  字体名称                   %20s\n"
-                             (format "( %s )" cfs--current-profile)))
+                             (format "( %s )" (cfs--get-current-profile t))))
       (widget-insert "----  -----------------------------------------------\n")
       (dolist (font fonts)
         (setq widget1
