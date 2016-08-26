@@ -395,7 +395,22 @@
                  :mouse-face-get 'ignore)
   (cfs-ui--create-main-navigation)
   (widget-insert "\n\n")
-  (widget-insert "TODO ...\n")
+  (widget-insert
+   (with-temp-buffer
+     (insert-file-contents (locate-library "chinese-fonts-setup"))
+     (let (begin end)
+       (goto-char (point-min))
+       (when (re-search-forward "^;;; Commentary:$" nil t)
+         (setq begin (line-beginning-position 2))
+         (when (re-search-forward "^;;; Code:$")
+           (setq end (line-beginning-position))))
+       (if (and begin end)
+           (replace-regexp-in-string
+            ":README:" ""
+            (replace-regexp-in-string
+             "^;; " ""
+             (buffer-substring-no-properties begin end)))
+         ""))))
   (widget-create 'push-button
                  :tag "\n"
                  :tab-stop-point t
