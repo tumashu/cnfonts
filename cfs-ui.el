@@ -481,7 +481,7 @@
           (cfs--save-profile fontname-alist fontsize-alist)
           (cfs-set-font-with-saved-step))))))
 
-(defun cfs-ui-operate-fontsize (&optional widget event n)
+(defun cfs-ui--operate-fontsize (&optional widget event n)
   (let* ((widget (or widget (widget-at)))
          (key (widget-get widget :key))
          (index (widget-get widget :index))
@@ -508,15 +508,15 @@
 
 (defun cfs-ui-test-fontsize (&optional widget event)
   (interactive)
-  (cfs-ui-operate-fontsize widget event))
+  (cfs-ui--operate-fontsize widget event))
 
 (defun cfs-ui-increase-fontsize (&optional widget event)
   (interactive)
-  (cfs-ui-operate-fontsize widget event 0.5))
+  (cfs-ui--operate-fontsize widget event 0.5))
 
 (defun cfs-ui-decrease-fontsize (&optional widget event)
   (interactive)
-  (cfs-ui-operate-fontsize widget event -0.5))
+  (cfs-ui--operate-fontsize widget event -0.5))
 
 (defun cfs-ui-forward (&optional backward)
   (interactive)
