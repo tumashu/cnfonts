@@ -62,6 +62,8 @@
      :page-builder cfs-ui--create-fontsize-page)
     (help-page
      :page-builder cfs-ui--create-help-page)
+    (key-page
+     :page-builder cfs-ui--create-key-page)
     (other-features-page
      :page-builder cfs-ui--create-other-features-page)))
 
@@ -116,6 +118,10 @@
   (interactive)
   (cfs-ui--switch-to-page 'help-page))
 
+(defun cfs-ui-switch-to-page:key-page (&optional widget event)
+  (interactive)
+  (cfs-ui--switch-to-page 'key-page))
+
 (defun cfs-ui-switch-to-page:other-features-page (&optional widget event)
   (interactive)
   (cfs-ui--switch-to-page 'other-features-page))
@@ -138,13 +144,12 @@
                  :action 'cfs-ui-switch-to-page:fontsize-page-1)
   (widget-insert " ")
   (widget-create 'push-button
-                 :tag " ---- ")
-
-  (widget-insert " ")
-  (widget-create 'push-button
                  :tag " 其它 "
                  :action 'cfs-ui-switch-to-page:other-features-page)
-
+  (widget-insert " ")
+  (widget-create 'push-button
+                 :tag " 快捷键 "
+                 :action 'cfs-ui-switch-to-page:key-page)
   (widget-insert " ")
   (widget-create 'push-button
                  :tag " 帮助 "
@@ -330,7 +335,7 @@
         (push (cons widget3 widget2) cfs-ui--widgets-alist)
         (widget-insert "\n" )))))
 
-(defun cfs-ui--create-help-page (page-info)
+(defun cfs-ui--create-key-page (page-info)
   (widget-create 'push-button
                  :tag "\n"
                  :tab-stop-point t
@@ -381,6 +386,21 @@
                  :button-face-get 'ignore
                  :mouse-face-get 'ignore)
   (widget-insert "\n" ))
+
+(defun cfs-ui--create-help-page (page-info)
+  (widget-create 'push-button
+                 :tag "\n"
+                 :tab-stop-point t
+                 :button-face-get 'ignore
+                 :mouse-face-get 'ignore)
+  (cfs-ui--create-main-navigation)
+  (widget-insert "\n\n")
+  (widget-insert "TODO ...\n")
+  (widget-create 'push-button
+                 :tag "\n"
+                 :tab-stop-point t
+                 :button-face-get 'ignore
+                 :mouse-face-get 'ignore))
 
 (defun cfs-ui--create-other-features-page (page-info)
   (widget-create 'push-button
@@ -504,6 +524,7 @@
     (define-key map "4" 'cfs-ui-switch-to-page:fontsize-page-4)
     (define-key map "5" 'cfs-ui-switch-to-page:fontsize-page-5)
     (define-key map "h" 'cfs-ui-switch-to-page:help-page)
+    (define-key map "k" 'cfs-ui-switch-to-page:key-page)
     (define-key map "o" 'cfs-ui-switch-to-page:other-features-page)
     map)
   "Keymap for `cfs-ui-mode'.")
