@@ -68,6 +68,7 @@
      :page-builder cfs-ui--create-other-features-page)))
 
 (defvar cfs-ui--widgets-alist nil)
+(defvar cfs-ui--current-page nil)
 (defvar cfs-personal-fontnames) ;Deal with compile warn.
 
 (declare-function cfs--get-xlfd "chinese-fonts-setup" (fontname &optional uncheck))
@@ -278,6 +279,7 @@
       (erase-buffer))
     (cfs-ui-mode)
     (set (make-local-variable 'cfs-ui--widgets-alist) nil)
+    (set (make-local-variable 'cfs-ui--current-page) (car page-info))
     (setq truncate-lines t)
     (let ((page-builder (plist-get (cdr page-info) :page-builder)))
       (funcall page-builder page-info))
@@ -533,9 +535,11 @@
 
 (defun cfs-ui-restart ()
   (interactive)
-  (let ((buffer-name (buffer-name)))
+  (let ((current-page cfs-ui--current-page)
+        (point (point)))
     (cfs-ui)
-    (switch-to-buffer buffer-name)))
+    (cfs-ui--switch-to-page current-page)
+    (goto-char point)))
 
 (defvar cfs-ui-mode-map
   (let ((map (make-keymap)))
