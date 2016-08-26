@@ -61,7 +61,9 @@
      :fontsizes (32)
      :page-builder cfs-ui--create-fontsize-page)
     (help-page
-     :page-builder cfs-ui--create-help-page)))
+     :page-builder cfs-ui--create-help-page)
+    (other-features-page
+     :page-builder cfs-ui--create-other-features-page)))
 
 (defvar cfs-ui--widgets-alist nil)
 (defvar cfs-personal-fontnames) ;Deal with compile warn.
@@ -114,6 +116,10 @@
   (interactive)
   (cfs-ui--switch-to-page 'help-page))
 
+(defun cfs-ui-switch-to-page:other-features-page (&optional widget event)
+  (interactive)
+  (cfs-ui--switch-to-page 'other-features-page))
+
 (defun cfs-ui--create-main-navigation ()
   (widget-create 'push-button
                  :tag " 英文 "
@@ -136,7 +142,8 @@
 
   (widget-insert " ")
   (widget-create 'push-button
-                 :tag " ---- ")
+                 :tag " 其它 "
+                 :action 'cfs-ui-switch-to-page:other-features-page)
 
   (widget-insert " ")
   (widget-create 'push-button
@@ -375,6 +382,21 @@
                  :mouse-face-get 'ignore)
   (widget-insert "\n" ))
 
+(defun cfs-ui--create-other-features-page (page-info)
+  (widget-create 'push-button
+                 :tag "\n"
+                 :tab-stop-point t
+                 :button-face-get 'ignore
+                 :mouse-face-get 'ignore)
+  (cfs-ui--create-main-navigation)
+  (widget-insert "\n\n")
+  (widget-insert "TODO ...\n")
+  (widget-create 'push-button
+                 :tag "\n"
+                 :tab-stop-point t
+                 :button-face-get 'ignore
+                 :mouse-face-get 'ignore))
+
 (defun cfs-ui-toggle-select-font (&optional widget event)
   (interactive)
   (let* ((widget (or widget (widget-at)))
@@ -472,7 +494,6 @@
     (define-key map (kbd "C-c C-c") 'cfs-ui-test-fontsize)
     (define-key map (kbd "C-<up>") 'cfs-ui-increase-fontsize)
     (define-key map (kbd "C-<down>") 'cfs-ui-decrease-fontsize)
-    (define-key map "h" 'cfs-ui-switch-to-page:help-page)
     (define-key map "e" 'cfs-ui-switch-to-page:english-fonts-page)
     (define-key map "c" 'cfs-ui-switch-to-page:chinese-fonts-page)
     (define-key map "x" 'cfs-ui-switch-to-page:extb-fonts-page)
@@ -482,6 +503,8 @@
     (define-key map "3" 'cfs-ui-switch-to-page:fontsize-page-3)
     (define-key map "4" 'cfs-ui-switch-to-page:fontsize-page-4)
     (define-key map "5" 'cfs-ui-switch-to-page:fontsize-page-5)
+    (define-key map "h" 'cfs-ui-switch-to-page:help-page)
+    (define-key map "o" 'cfs-ui-switch-to-page:other-features-page)
     map)
   "Keymap for `cfs-ui-mode'.")
 
