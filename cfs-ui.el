@@ -192,7 +192,7 @@
 | 如果此表格无法对齐，请按下面的加号减号按钮来调整 |
 | abcdefjhijklmnoprqstuvwxwyABCDEFJHIJkLMNOPQRSTUV |
 | 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄄𠄅𠄆𠄇𠄇 |
-| 英文字号  中文字号调整    EXTB字号调整    测试   |
+| 英文字号   中文字号调整    EXTB字号调整    测试  |
 +--------------------------------------------------+"))
 
 (defun cfs-ui--create-warning-board ()
@@ -208,38 +208,52 @@
 ")))
 
 (defun cfs-ui--create-fontsize-operate-buttons (fontsize key index)
-  (let (widget1 widget2 widget3)
-    (widget-insert " ")
-    (setq widget1 (widget-create 'push-button
-                                 :value (format "%-4s" fontsize)
-                                 :key key
-                                 :index index
+  (let (widget1 widget2 widget3 widget4 widget5)
+    (if (= index 0)
+        (progn (setq widget1 (widget-create 'push-button
+                                            :value (format "  %-6s" fontsize)
+                                            :flag t
+                                            :key key
+                                            :button-face-get 'ignore
+                                            :mouse-face-get 'ignore
+                                            :action 'cfs-ui-test-fontsize))
+               (push (cons widget1 widget1) cfs-ui--widgets-alist))
+      (setq widget2 (widget-create 'push-button
+                                   :value (format "%-5s" fontsize)
+                                   :key key
+                                   :index index
+                                   :flag t
+                                   :tab-stop-point t
+                                   :button-face-get 'ignore
+                                   :mouse-face-get 'ignore
+                                   :action 'cfs-ui-test-fontsize))
+      (setq widget3 (widget-create 'push-button
+                                   :tag "[-]"
+                                   :key key
+                                   :index index
+                                   :flag t
+                                   :button-face-get 'ignore
+                                   :mouse-face-get 'ignore
+                                   :action 'cfs-ui-decrease-fontsize))
+      (setq widget4 (widget-create 'push-button
+                                   :tag "[+]"
+                                   :key key
+                                   :index index
+                                   :flag t
+                                   :button-face-get 'ignore
+                                   :mouse-face-get 'ignore
+                                   :action 'cfs-ui-increase-fontsize))
+      (push (cons widget2 widget2) cfs-ui--widgets-alist)
+      (push (cons widget3 widget2) cfs-ui--widgets-alist)
+      (push (cons widget4 widget2) cfs-ui--widgets-alist))
+    (setq widget5 (widget-create 'push-button
+                                 :value "     "
                                  :flag t
-                                 :tab-stop-point t
+                                 :key key
                                  :button-face-get 'ignore
                                  :mouse-face-get 'ignore
                                  :action 'cfs-ui-test-fontsize))
-    (widget-insert " ")
-    (setq widget2 (widget-create 'push-button
-                                 :tag "[-]"
-                                 :key key
-                                 :index index
-                                 :flag t
-                                 :button-face-get 'ignore
-                                 :mouse-face-get 'ignore
-                                 :action 'cfs-ui-decrease-fontsize))
-    (setq widget3 (widget-create 'push-button
-                                 :tag "[+]"
-                                 :key key
-                                 :index index
-                                 :flag t
-                                 :button-face-get 'ignore
-                                 :mouse-face-get 'ignore
-                                 :action 'cfs-ui-increase-fontsize))
-    (widget-insert " ")
-    (push (cons widget1 widget1) cfs-ui--widgets-alist)
-    (push (cons widget2 widget1) cfs-ui--widgets-alist)
-    (push (cons widget3 widget1) cfs-ui--widgets-alist)))
+    (push (cons widget5 widget5) cfs-ui--widgets-alist)))
 
 (defun cfs-ui--create-fontsize-test-buttons (key index)
   (let ((widget (widget-create 'push-button
@@ -284,14 +298,9 @@
       (when (member (car fontsize-list) page-fontsizes)
         (let ((i 0))
           (dolist (fontsize fontsize-list)
-            (if (= i 0)
-                (widget-insert (format "  %-6s" fontsize))
-              (cfs-ui--create-fontsize-operate-buttons
-               (number-to-string fontsize)
-               (car fontsize-list) i))
-            (setq i (+ i 1))
-            (widget-insert "   "))
-          (widget-insert " ")
+            (cfs-ui--create-fontsize-operate-buttons
+             (number-to-string fontsize) (car fontsize-list) i)
+            (setq i (+ i 1)))
           (cfs-ui--create-fontsize-test-buttons (car fontsize-list) i))
         (widget-insert "\n")))))
 
@@ -404,8 +413,8 @@
         (goto-char (point-min))
         (when (re-search-forward "^;;; Commentary:$" nil t)
           (setq begin (line-beginning-position 2))
-           (when (re-search-forward "^;;; Code:$")
-             (setq end (line-beginning-position))))
+          (when (re-search-forward "^;;; Code:$")
+            (setq end (line-beginning-position))))
         (when (and begin end)
           (setq string (replace-regexp-in-string
                         ":README:" ""
@@ -471,15 +480,16 @@
          (fontsize-alist (car (cdr (cfs--read-profile)))))
     (if (not flag)
         (message "当前光标所在位置不对，请将光标移动到 ‘中文字号’ 或者 ‘EXT-B字体字号’ 对应的数字上。")
-      (when (numberp n)
+      (when (and index key (numberp n))
         (cl-incf (nth index (assoc key fontsize-alist)) n)
         ;; 更新加号按钮和减号按钮前面的数字标签
         (widget-value-set
          widget-show-fontsize
-         (format "%-4s" (nth index (assoc key fontsize-alist)))))
-      (let ((fontsizes-list (assoc key fontsize-alist)))
-        (cfs--save-profile fontname-alist fontsize-alist)
-        (cfs--set-font fontsizes-list)))))
+         (format "%-5s" (nth index (assoc key fontsize-alist)))))
+      (when key
+        (let ((fontsizes-list (assoc key fontsize-alist)))
+          (cfs--save-profile fontname-alist fontsize-alist)
+          (cfs--set-font fontsizes-list))))))
 
 (defun cfs-ui-test-fontsize (&optional widget event)
   (interactive)
