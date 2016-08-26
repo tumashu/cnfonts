@@ -76,6 +76,7 @@
 (declare-function cfs--font-exists-p "chinese-fonts-setup" (font))
 (declare-function cfs--save-profile "chinese-fonts-setup" (fontnames fontsizes &optional profile-name))
 (declare-function cfs--set-font "chinese-fonts-setup" (fontsizes-list))
+(declare-function cfs--step-fontsize "chinese-fonts-setup" (num))
 (declare-function cfs--get-current-profile "chinese-fonts-setup" (&optional return-profile-name))
 (declare-function cfs-set-font-with-saved-step "chinese-fonts-setup" (&optional frame))
 
@@ -302,7 +303,14 @@
              (number-to-string fontsize) (car fontsize-list) i)
             (setq i (+ i 1)))
           (cfs-ui--create-fontsize-test-buttons (car fontsize-list) i))
-        (widget-insert "\n")))))
+        (widget-insert "\n")))
+    (widget-insert "\n")
+    (widget-create 'push-button
+                   :tag "[ 恢复到正常 ]                        [ 恢复到正常 ]"
+                   :tab-stop-point t
+                   :button-face-get 'ignore
+                   :mouse-face-get 'ignore
+                   :action 'cfs-ui-reset-fontsize)))
 
 (defun cfs-ui--create-fonts-page (page-info)
   (let ((page-name (car page-info))
@@ -382,6 +390,7 @@
  增大光标处的字号      \\[cfs-ui-increase-fontsize]
  减小光标处的字号      \\[cfs-ui-decrease-fontsize]
  测试字体显示效果      \\[cfs-ui-test-fontsize]
+ 清除字号测试效果      \\[cfs-ui-reset-fontsize]
 
 ** 其它快捷键
 
@@ -491,6 +500,10 @@
           (cfs--save-profile fontname-alist fontsize-alist)
           (cfs--set-font fontsizes-list))))))
 
+(defun cfs-ui-reset-fontsize (&optional widget event)
+  (interactive)
+  (cfs--step-fontsize 0))
+
 (defun cfs-ui-test-fontsize (&optional widget event)
   (interactive)
   (cfs-ui-operate-fontsize widget event))
@@ -539,6 +552,7 @@
     (define-key map "=" 'cfs-ui-increase-fontsize)
     (define-key map "-" 'cfs-ui-decrease-fontsize)
     (define-key map (kbd "C-c C-c") 'cfs-ui-test-fontsize)
+    (define-key map (kbd "C-c C-r") 'cfs-ui-reset-fontsize)
     (define-key map (kbd "C-<up>") 'cfs-ui-increase-fontsize)
     (define-key map (kbd "C-<down>") 'cfs-ui-decrease-fontsize)
     (define-key map "e" 'cfs-ui-switch-to-page:english-fonts-page)
