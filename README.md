@@ -56,8 +56,8 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
 
 profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概念，来维护多套字体配置，从而实现特定的环境使用特定的字体配置，比如：在编程时使用 “Consolas + 微米黑”，在阅读文章时使用 “PragmataPro + 黑体”，等等。
 
-每一个 profile 都对应一个 emacs-lisp 文件, 保存在 \`cfs-profiles-directory' 目录中,
-这些文件包含了英文字体设置，中文字体设置以及中文字体大小，类似：
+每一个 profile 都对应一个 emacs-lisp 文件, 保存在 \`cfs-profiles-directory'
+目录中, 这些文件包含了英文字体设置，中文字体设置以及中文字体大小，类似：
 
     ;;; `cfs--custom-set-fontsnames' 列表有3个子列表，第1个为英文字体列表，第2个为中文字体列表，
     ;;; 第3个列表中的字体用于显示不常用汉字，每一个字体列表中，*第一个* *有效并可用* 的字体将被使用。
@@ -93,8 +93,8 @@ profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概�
 
 ### profile 命名与切换<a id="orgheadline6"></a>
 
-Chinese-fonts-setup 默认使用三个 profile: profile1, profile2 和 profile3,
-如果想使用其它有意义的名称，可以设置:
+Chinese-fonts-setup 默认使用三个 profile: profile1, profile2 和
+profile3,如果想使用其它有意义的名称，可以设置:
 
     (setq cfs-profiles
         '("program" "org-mode" "read-book"))
@@ -132,8 +132,8 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 
 ### 使用 cfs-edit-profile 命令调整 profile<a id="orgheadline7"></a>
 
-如果 **当前使用** 的字体不符合使用习惯，用户可以运行 \`cfs-edit-profile' 命令来调整 **当前** profile,
-这个命令会弹出一个图形化界面，类似：
+如果 **当前使用** 的字体不符合使用习惯，用户可以运行 \`cfs-edit-profile'
+命令来调整 **当前** profile,这个命令会弹出一个图形化界面，类似：
 
 ![img](./snapshots/cfs-ui-1.png)
 ![img](./snapshots/cfs-ui-2.png)
@@ -142,7 +142,8 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 
 ### 使用 cfs-edit-profile-without-ui 命令编辑 profile<a id="orgheadline8"></a>
 
-除了使用 \`cfs-edit-profile' , 有经验的用户也可以使用 \`cfs-edit-profile-without-ui' 命令，直接编辑当前 profile 文件，两个命令的效果是一样的。
+除了使用 \`cfs-edit-profile' , 有经验的用户也可以使用
+\`cfs-edit-profile-without-ui' 命令，直接编辑当前 profile 文件，两个命令的效果是一样的。
 
 在编辑的过程中，用户可以使用下面三个命令 **快速** 的测试编辑效果：
 
@@ -187,7 +188,7 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 </tbody>
 </table>
 
-配置完成后，有可能需要重启 Emacs。(参考：<http://debbugs.gnu.org/db/17/1785.html>)
+配置完成后，有可能需要重启 Emacs, 参考：<http://debbugs.gnu.org/db/17/1785.html>
 
 ![img](./snapshots/cfs-edit-fontnames.gif)
 
@@ -195,7 +196,8 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 
 ### 使用 cfs-regenerate-profile 重置 profile<a id="orgheadline9"></a>
 
-\`cfs-regenerate-profile' 命令会使用 chinese-fonts-setup 自带的 fallback 信息，覆盖需要 **重置** 的 profile, 这个 profile 原来的内容将丢失，请紧慎使用！
+\`cfs-regenerate-profile' 命令会使用 chinese-fonts-setup 自带的
+fallback 信息，覆盖需要 **重置** 的 profile, 这个 profile 原来的内容将丢失，请紧慎使用！
 
 ### 调整字体大小<a id="orgheadline10"></a>
 
@@ -236,19 +238,24 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 
 ### 让 chinese-fonts-setup 随着 emacs 自动启动<a id="orgheadline11"></a>
 
-\`chinese-fonts-setup-enable' 命令可以让 chinese-fonts-setup 随着 emacs 自动启动，这个命令将 \`cfs-set-font-with-saved-step' 添加到下面两个 hook:
+\`chinese-fonts-setup-enable' 命令可以让 chinese-fonts-setup 随着
+emacs 自动启动，这个命令将 \`cfs-set-font-with-saved-step' 添加到下面两个 hook:
 
 1.  \`after-make-frame-functions'
 2.  \`window-setup-hook'
 
-用户也可以手动运行 \`cfs-set-font-with-saved-step' 来让 chinese-fonts-setup 生效。
+用户也可以手动运行 \`cfs-set-font-with-saved-step' 来让
+chinese-fonts-setup 生效。
 
 ## Tips<a id="orgheadline13"></a>
 
-1.  如果用户需要在自己的 emacs 配置中管理一些个人字体，可以使用变量 \`cfs-personal-fontnames' , 其结构与 \`cfs&#x2013;fontnames-fallback'
-    一样。
+1.  如果用户需要在自己的 emacs 配置中管理一些个人字体，可以使用变量
+    \`cfs-personal-fontnames' , 其结构与 \`cfs&#x2013;fontnames-fallback'一样。
 2.  使用命令: \`describe-char' 可以了解光标处字符使用什么字体。
-3.  在 scratch 中写一行 elisp 代码： (cl-prettyprint (font-family-list)),
+3.  在 scratch 中写一行 elisp 代码：
+
+        (cl-prettyprint (font-family-list))
+
     执行后，就会在 scratch 中插入当前可用字体的名称列表，这是一个很有用的技巧。
 4.  命令：\`cfs-insert-fontname', 可以让用户选择一个可用字体插入到当前光标处。
 5.  Windows 用户 (特别是 Windows XP 用户) 可以安装 MacType 软件来优化字体显示效果，推荐使用。

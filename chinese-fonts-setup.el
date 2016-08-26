@@ -31,14 +31,14 @@
 ;; * Chinese-fonts-setup README                                         :README:
 
 ;; ** 简介
-;; Chinese-fonts-setup 是一个 emacs 中英文字体配置工具。可以比较方便地
-;; 实现中文字体和英文字体等宽（也就是大家常说的中英文对齐）。
+;; Chinese-fonts-setup 是一个 emacs 中英文字体配置工具。可以比较方便地实
+;; 现中文字体和英文字体等宽（也就是大家常说的中英文对齐）。
 
 ;; 注： 这个 package 特别适用于需要处理中英文混合表格的中文 org-mode 用户。
 
 ;; ** 基本原理
-;; Chinese-fonts-setup 的核心很简单，就是让中文字体和英文字体使用不同的字号，
-;; 从而实现中英文对齐，它和下面的样例代码原理是一样的：
+;; Chinese-fonts-setup 的核心很简单，就是让中文字体和英文字体使用不同的字
+;; 号，从而实现中英文对齐，它和下面的样例代码原理是一样的：
 
 ;; #+BEGIN_EXAMPLE
 ;; (set-frame-font "-unknown-PragmataPro-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1")
@@ -48,13 +48,15 @@
 ;; #+END_EXAMPLE
 
 ;; ** 使用特点
-;; Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字号的工作更加简便快捷，
-;; 它有几个优点：
+;; Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字号的工作更
+;; 加简便快捷，它有几个优点：
 
-;; 1. 安装即用：Chinese-fonts-setup 内置字体 fallback 功能，只需安装，就能够配置中文字体和英文字体，
-;;    让中文可以 *正确* 显示（但未必完美），不会因为 emacs 配置中指定的字体不存在而报错。
-;; 2. 设置方便：Chinese-fonts-setup 自带一个 profile 文件调整工具，这个工具有直观的图形界面，可以
-;;    让用户设置字体名称和字体大小，分分钟实现中文字体和英文字体的等宽对齐。
+;; 1. 安装即用：Chinese-fonts-setup 内置字体 fallback 功能，只需安装，就能
+;;    够配置中文字体和英文字体，让中文可以 *正确* 显示（但未必完美），不会
+;;    因为 emacs 配置中指定的字体不存在而报错。
+;; 2. 设置方便：Chinese-fonts-setup 自带一个 profile 文件调整工具，这个工具
+;;    有直观的图形界面，可以让用户设置字体名称和字体大小，分分钟实现中文字
+;;    体和英文字体的等宽对齐。
 
 ;; ** 下载安装
 ;; 1. 配置melpa源，参考：http://melpa.org/#/getting-started
@@ -72,11 +74,13 @@
 ;; ** 配置使用
 ;; *** profile 的概念
 ;; profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概念，
-;; 来维护多套字体配置，从而实现特定的环境使用特定的字体配置，
-;; 比如：在编程时使用 “Consolas + 微米黑”，在阅读文章时使用 “PragmataPro + 黑体”，等等。
+;; 来维护多套字体配置，从而实现特定的环境使用特定的字体配置，比如：在编程
+;; 时使用 “Consolas + 微米黑”，在阅读文章时使用 “PragmataPro + 黑体”，
+;; 等等。
 
-;; 每一个 profile 都对应一个 emacs-lisp 文件, 保存在 `cfs-profiles-directory' 目录中,
-;; 这些文件包含了英文字体设置，中文字体设置以及中文字体大小，类似：
+;; 每一个 profile 都对应一个 emacs-lisp 文件, 保存在 `cfs-profiles-directory'
+;; 目录中, 这些文件包含了英文字体设置，中文字体设置以及中文字体大小，
+;; 类似：
 
 ;; #+BEGIN_EXAMPLE
 ;;; `cfs--custom-set-fontsnames' 列表有3个子列表，第1个为英文字体列表，第2个为中文字体列表，
@@ -113,8 +117,8 @@
 ;; #+END_EXAMPLE
 
 ;; *** profile 命名与切换
-;; Chinese-fonts-setup 默认使用三个 profile: profile1, profile2 和 profile3,
-;; 如果想使用其它有意义的名称，可以设置:
+;; Chinese-fonts-setup 默认使用三个 profile: profile1, profile2 和
+;; profile3,如果想使用其它有意义的名称，可以设置:
 
 ;; #+BEGIN_EXAMPLE
 ;; (setq cfs-profiles
@@ -129,8 +133,8 @@
 ;; | cfs-next-profile   | 直接切换到下一个profile |
 
 ;; *** 使用 cfs-edit-profile 命令调整 profile
-;; 如果 *当前使用* 的字体不符合使用习惯，用户可以运行 `cfs-edit-profile' 命令来调整 *当前* profile,
-;; 这个命令会弹出一个图形化界面，类似：
+;; 如果 *当前使用* 的字体不符合使用习惯，用户可以运行 `cfs-edit-profile'
+;; 命令来调整 *当前* profile,这个命令会弹出一个图形化界面，类似：
 
 ;; [[./snapshots/cfs-ui-1.png]]
 ;; [[./snapshots/cfs-ui-2.png]]
@@ -138,8 +142,9 @@
 ;; [[./snapshots/cfs-ui-4.png]]
 
 ;; *** 使用 cfs-edit-profile-without-ui 命令编辑 profile
-;; 除了使用 `cfs-edit-profile' , 有经验的用户也可以使用 `cfs-edit-profile-without-ui' 命令，
-;; 直接编辑当前 profile 文件，两个命令的效果是一样的。
+;; 除了使用 `cfs-edit-profile' , 有经验的用户也可以使用
+;; `cfs-edit-profile-without-ui' 命令，直接编辑当前 profile 文件，
+;; 两个命令的效果是一样的。
 
 ;; 在编辑的过程中，用户可以使用下面三个命令 *快速* 的测试编辑效果：
 
@@ -149,15 +154,16 @@
 ;; | C-up    | cfs-increment-fontsize-at-point | 增大光标下字号的大小，同时显示对齐效果 |
 ;; | C-down  | cfs-decrement-fontsize-at-point | 减小光标下字号的大小，同时显示对齐效果 |
 
-;; 配置完成后，有可能需要重启 Emacs。(参考： http://debbugs.gnu.org/db/17/1785.html)
+;; 配置完成后，有可能需要重启 Emacs, 参考：http://debbugs.gnu.org/db/17/1785.html
 
 ;; [[./snapshots/cfs-edit-fontnames.gif]]
 
 ;; [[./snapshots/cfs-edit-fontsizes.gif]]
 
 ;; *** 使用 cfs-regenerate-profile 重置 profile
-;; `cfs-regenerate-profile' 命令会使用 chinese-fonts-setup 自带的 fallback 信息，
-;; 覆盖需要 *重置* 的 profile, 这个 profile 原来的内容将丢失，请紧慎使用！
+;; `cfs-regenerate-profile' 命令会使用 chinese-fonts-setup 自带的
+;; fallback 信息，覆盖需要 *重置* 的 profile, 这个 profile 原来的
+;; 内容将丢失，请紧慎使用！
 
 ;; *** 调整字体大小
 ;; `chinese-fonts-setup' 使用下述两个命令调整字体大小:
@@ -172,28 +178,34 @@
 ;; [[./snapshots/cfs-increase-and-decrease-fontsize.gif]]
 
 ;; *** 让 chinese-fonts-setup 随着 emacs 自动启动
-;; `chinese-fonts-setup-enable' 命令可以让 chinese-fonts-setup 随着 emacs 自动启动，
-;; 这个命令将 `cfs-set-font-with-saved-step' 添加到下面两个 hook:
+;; `chinese-fonts-setup-enable' 命令可以让 chinese-fonts-setup 随着
+;; emacs 自动启动，这个命令将 `cfs-set-font-with-saved-step' 添加到
+;; 下面两个 hook:
 
 ;; 1. `after-make-frame-functions'
 ;; 2. `window-setup-hook'
 
-;; 用户也可以手动运行 `cfs-set-font-with-saved-step' 来让 chinese-fonts-setup 生效。
+;; 用户也可以手动运行 `cfs-set-font-with-saved-step' 来让
+;; chinese-fonts-setup 生效。
 
 
 ;; ** Tips
 
-;; 1. 如果用户需要在自己的 emacs 配置中管理一些个人字体，可以使用
-;;    变量 `cfs-personal-fontnames' , 其结构与 `cfs--fontnames-fallback'
-;;    一样。
+;; 1. 如果用户需要在自己的 emacs 配置中管理一些个人字体，可以使用变量
+;;    `cfs-personal-fontnames' , 其结构与 `cfs--fontnames-fallback'一样。
 ;; 2. 使用命令: `describe-char' 可以了解光标处字符使用什么字体。
-;; 3. 在 scratch 中写一行 elisp 代码： (cl-prettyprint (font-family-list)),
-;;    执行后，就会在 scratch 中插入当前可用字体的名称列表，这是一个很有用的技巧。
-;; 4. 命令：`cfs-insert-fontname', 可以让用户选择一个可用字体插入到当前光标处。
-;; 5. Windows 用户 (特别是 Windows XP 用户) 可以安装 MacType 软件来优化
-;;    字体显示效果，推荐使用。
-;; 6. Mac 用户配置 profile 文件的时候，偶尔会遇到 'C-c C-c' 刷新缓慢的问题，这可能
-;;    是 ext-b 字体缺失引起的，建议安装 ext-b 字体试试。
+;; 3. 在 scratch 中写一行 elisp 代码：
+;;    #+BEGIN_EXAMPLE
+;;    (cl-prettyprint (font-family-list))
+;;    #+END_EXAMPLE
+;;    执行后，就会在 scratch 中插入当前可用字体的名称列表，这是一个很有用
+;;    的技巧。
+;; 4. 命令：`cfs-insert-fontname', 可以让用户选择一个可用字体插入到当前光
+;;    标处。
+;; 5. Windows 用户 (特别是 Windows XP 用户) 可以安装 MacType 软件来优化字
+;;    体显示效果，推荐使用。
+;; 6. Mac 用户配置 profile 文件的时候，偶尔会遇到 'C-c C-c' 刷新缓慢的问
+;;    题，这可能是 ext-b 字体缺失引起的，建议安装 ext-b 字体试试。
 ;;    1. Ext-B字符列表: https://cdo.wikipedia.org/wiki/Wikipedia:Unicode%E6%93%B4%E5%B1%95%E6%BC%A2%E5%AD%97
 ;;    2. HanaMinB 下载地址: https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/
 
