@@ -38,14 +38,18 @@
 (defconst cfs-ui--pages
   '((english-fonts-page
      :index 0
+     :main-page t
      :page-builder cfs-ui--create-fonts-page)
     (chinese-fonts-page
      :index 1
+     :main-page t
      :page-builder cfs-ui--create-fonts-page)
     (extb-fonts-page
      :index 2
+     :main-page t
      :page-builder cfs-ui--create-fonts-page)
     (fontsize-page-1
+     :main-page t
      :fontsizes (9 10 11.5 12.5 14 16 18)
      :page-builder cfs-ui--create-fontsize-page)
     (fontsize-page-2
@@ -60,12 +64,12 @@
     (fontsize-page-5
      :fontsizes (32)
      :page-builder cfs-ui--create-fontsize-page)
-    (help-page
-     :page-builder cfs-ui--create-help-page)
+    (other-features-page
+     :page-builder cfs-ui--create-other-features-page)
     (key-page
      :page-builder cfs-ui--create-key-page)
-    (other-features-page
-     :page-builder cfs-ui--create-other-features-page)))
+    (help-page
+     :page-builder cfs-ui--create-help-page)))
 
 (defvar cfs-ui--widgets-alist nil)
 (defvar cfs-ui--current-page nil)
@@ -368,6 +372,10 @@
 
  功能                  按键
  --------------------  --------
+ 切换到下一个主标签    \\[cfs-ui-next-main-page]
+ 切换到上一个主标签    \\[cfs-ui-previous-main-page]
+ 切换到下一个标签      \\[cfs-ui-next-page]
+ 切换到上一个标签      \\[cfs-ui-previous-page]
  切换到 [ 帮助 ] 标签  \\[cfs-ui-switch-to-page:help-page]
  切换到 [ 中文 ] 标签  \\[cfs-ui-switch-to-page:chinese-fonts-page]
  切换到 [ 英文 ] 标签  \\[cfs-ui-switch-to-page:english-fonts-page]
@@ -533,6 +541,43 @@
   (interactive)
   (cfs-ui-forward t))
 
+(defun cfs-ui--operate-page (step &optional operate-all-page)
+  (let* ((pages (remove nil
+                        (mapcar #'(lambda (x)
+                                    (when (or operate-all-page
+                                       (plist-get (cdr x) :main-page))
+                                      (car x)))
+                                cfs-ui--pages)))
+         (pos-max (- (length pages) 1))
+         (cur-page-pos
+          (cl-position cfs-ui--current-page pages))
+         (next-page-pos
+          (if (> step 0)
+              (if (> (+ step cur-page-pos) pos-max)
+                  0
+                (+ step cur-page-pos))
+            (if (< (+ step cur-page-pos) 0)
+                pos-max
+              (+ step cur-page-pos))))
+         (next-page (nth next-page-pos pages)))
+    (cfs-ui--switch-to-page next-page)))
+
+(defun cfs-ui-next-main-page ()
+  (interactive)
+  (cfs-ui--operate-page 1))
+
+(defun cfs-ui-previous-main-page ()
+  (interactive)
+  (cfs-ui--operate-page -1))
+
+(defun cfs-ui-next-page ()
+  (interactive)
+  (cfs-ui--operate-page 1 t))
+
+(defun cfs-ui-previous-page ()
+  (interactive)
+  (cfs-ui--operate-page -1 t))
+
 (defun cfs-ui-restart ()
   (interactive)
   (let ((current-page cfs-ui--current-page)
@@ -548,6 +593,10 @@
     (suppress-keymap map)
     (define-key map "n" 'next-line)
     (define-key map "p" 'previous-line)
+    (define-key map "f" 'cfs-ui-next-main-page)
+    (define-key map "b" 'cfs-ui-previous-main-page)
+    (define-key map "F" 'cfs-ui-next-page)
+    (define-key map "B" 'cfs-ui-previous-page)
     (define-key map "R" 'cfs-ui-restart)
     (define-key map " " 'cfs-ui-toggle-select-font)
     (define-key map "\t" 'cfs-ui-forward)
