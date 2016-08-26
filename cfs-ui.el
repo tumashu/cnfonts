@@ -552,13 +552,15 @@
          (cur-page-pos
           (cl-position cfs-ui--current-page pages))
          (next-page-pos
-          (if (> step 0)
-              (if (> (+ step cur-page-pos) pos-max)
-                  0
-                (+ step cur-page-pos))
-            (if (< (+ step cur-page-pos) 0)
-                pos-max
-              (+ step cur-page-pos))))
+          (if cur-page-pos
+              (if (> step 0)
+                  (if (> (+ step cur-page-pos) pos-max)
+                      0
+                    (+ step cur-page-pos))
+                (if (< (+ step cur-page-pos) 0)
+                    pos-max
+                  (+ step cur-page-pos)))
+            0))
          (next-page (nth next-page-pos pages)))
     (cfs-ui--switch-to-page next-page)))
 
