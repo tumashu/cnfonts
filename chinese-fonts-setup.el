@@ -674,6 +674,10 @@ The below is an example which is used to set symbol fonts:
   (interactive)
   (cfs--step-fontsize 1))
 
+(defun cfs-keep-fontsize ()
+  (interactive)
+  (cfs--step-fontsize 0))
+
 (defvar cfs-profile-edit-mode-map
   (let ((keymap (make-sparse-keymap)))
     (define-key keymap "\C-c\C-c" 'cfs-test-fontsize-at-point)
