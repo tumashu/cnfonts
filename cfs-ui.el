@@ -418,43 +418,45 @@
    (substitute-command-keys "
 ** 标签切换快捷键
 
- 功能                  按键
- --------------------  --------
- 切换到下一个主标签    \\[cfs-ui-next-main-page]
- 切换到上一个主标签    \\[cfs-ui-previous-main-page]
- 切换到下一个标签      \\[cfs-ui-next-page]
- 切换到上一个标签      \\[cfs-ui-previous-page]
- 切换到 [ 帮助 ] 标签  \\[cfs-ui-switch-to-page:help-page]
- 切换到 [ 中文 ] 标签  \\[cfs-ui-switch-to-page:chinese-fonts-page]
- 切换到 [ 英文 ] 标签  \\[cfs-ui-switch-to-page:english-fonts-page]
- 切换到 [ EXTB ] 标签  \\[cfs-ui-switch-to-page:extb-fonts-page]
- 切换到 [09--18] 标签  \\[cfs-ui-switch-to-page:fontsize-page-1]
- 切换到 [20--24] 标签  \\[cfs-ui-switch-to-page:fontsize-page-2]
- 切换到 [26--28] 标签  \\[cfs-ui-switch-to-page:fontsize-page-3]
- 切换到 [  30  ] 标签  \\[cfs-ui-switch-to-page:fontsize-page-4]
- 切换到 [  32  ] 标签  \\[cfs-ui-switch-to-page:fontsize-page-5]
+ 功能                    按键
+ ----------------------  --------
+ 切换到下一个主标签      \\[cfs-ui-next-main-page]
+ 切换到上一个主标签      \\[cfs-ui-previous-main-page]
+ 切换到下一个标签        \\[cfs-ui-next-page]
+ 切换到上一个标签        \\[cfs-ui-previous-page]
+ 切换到 [ 英文 ] 标签    \\[cfs-ui-switch-to-page:english-fonts-page]
+ 切换到 [ 中文 ] 标签    \\[cfs-ui-switch-to-page:chinese-fonts-page]
+ 切换到 [ EXTB ] 标签    \\[cfs-ui-switch-to-page:extb-fonts-page]
+ 切换到 [09--18] 标签    \\[cfs-ui-switch-to-page:fontsize-page-1]
+ 切换到 [20--24] 标签    \\[cfs-ui-switch-to-page:fontsize-page-2]
+ 切换到 [26--28] 标签    \\[cfs-ui-switch-to-page:fontsize-page-3]
+ 切换到 [  30  ] 标签    \\[cfs-ui-switch-to-page:fontsize-page-4]
+ 切换到 [  32  ] 标签    \\[cfs-ui-switch-to-page:fontsize-page-5]
+ 切换到 [ 其他 ] 标签    \\[cfs-ui-switch-to-page:other-features-page]
+ 切换到 [ 快捷键 ] 标签  \\[cfs-ui-switch-to-page:key-page]
+ 切换到 [ 帮助 ] 标签    \\[cfs-ui-switch-to-page:help-page]
 
 ** 字体选择快捷键
 
- 功能                  按键
- --------------------  --------
- 选择/不选择当前字体   \\[cfs-ui-toggle-select-font]
+ 功能                    按键
+ ----------------------  --------
+ 选择/不选择当前字体     \\[cfs-ui-toggle-select-font]
 
 
 ** 字号调整快捷键
 
- 功能                  按键
- --------------------  --------
- 增大光标处的字号      \\[cfs-ui-increase-fontsize]
- 减小光标处的字号      \\[cfs-ui-decrease-fontsize]
- 测试字体显示效果      \\[cfs-ui-test-fontsize]
- 清除字号测试效果      \\[cfs-ui-reset-fontsize]
+ 功能                    按键
+ ----------------------  --------
+ 增大光标处的字号        \\[cfs-ui-increase-fontsize]
+ 减小光标处的字号        \\[cfs-ui-decrease-fontsize]
+ 测试字体显示效果        \\[cfs-ui-test-fontsize]
+ 清除字号测试效果        \\[cfs-ui-reset-fontsize]
 
 ** 其它快捷键
 
- 功能                  按键
- --------------------  --------
- 重启UI                \\[cfs-ui-restart]
+ 功能                    按键
+ ----------------------  --------
+ 重启UI                  \\[cfs-ui-restart]
 "))
   (widget-create 'push-button
                  :tag "\n"
