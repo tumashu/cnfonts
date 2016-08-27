@@ -198,7 +198,7 @@
         cfs-ui--widgets:main-navigation))
 
 (defun cfs-ui--create-fontsize-navigation ()
-  (widget-insert "+--------------------------------------------------+\n")
+  (widget-insert "+----------------------------------------------------+\n")
   (widget-insert "| ")
   (push (widget-create 'push-button
                        :value "[ 09-18 ]"
@@ -207,7 +207,7 @@
                        :mouse-face-get 'ignore
                        :action 'cfs-ui-switch-to-page:fontsize-page-1)
         cfs-ui--widgets:fontsize-navigation)
-  (widget-insert " ")
+  (widget-insert "  ")
   (push (widget-create 'push-button
                        :value "[ 20-24 ]"
                        :page-name 'fontsize-page-2
@@ -215,7 +215,7 @@
                        :mouse-face-get 'ignore
                        :action 'cfs-ui-switch-to-page:fontsize-page-2)
         cfs-ui--widgets:fontsize-navigation)
-  (widget-insert " ")
+  (widget-insert "  ")
   (push (widget-create 'push-button
                        :value "[ 26-28 ]"
                        :page-name 'fontsize-page-3
@@ -223,7 +223,7 @@
                        :mouse-face-get 'ignore
                        :action 'cfs-ui-switch-to-page:fontsize-page-3)
         cfs-ui--widgets:fontsize-navigation)
-  (widget-insert " ")
+  (widget-insert "  ")
   (push (widget-create 'push-button
                        :value "[ -30- ]"
                        :page-name 'fontsize-page-4
@@ -231,7 +231,7 @@
                        :mouse-face-get 'ignore
                        :action 'cfs-ui-switch-to-page:fontsize-page-4)
         cfs-ui--widgets:fontsize-navigation)
-  (widget-insert "  ")
+  (widget-insert " ")
   (push (widget-create 'push-button
                        :value "[ -32- ]"
                        :page-name 'fontsize-page-5
@@ -241,11 +241,11 @@
         cfs-ui--widgets:fontsize-navigation)
   (widget-insert " |")
   (widget-insert "
-| 如果此表格无法对齐，请按下面的加号减号按钮来调整 |
-| abcdefjhijklmnoprqstuvwxwyABCDEFJHIJkLMNOPQRSTUV |
-| 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄄𠄅𠄆𠄇𠄇 |
-| 英文字号   中文字号调整    EXT-B字号调整   测试  |
-+--------------------------------------------------+"))
+| 如果此表格无法对齐，请按下面的加号或减号按钮来调整 |
+| abcdefjhijklmnoprqstuvwxwyABCDEFJHIJkLMNOPQRSTUVXW |
+| 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄄𠄅𠄆𠄇𠄇𠄆 |
+| 英文字号   中文字号调整    EXT-B字号调整     测试  |
++----------------------------------------------------+"))
 
 (defun cfs-ui--create-warning-board ()
   (when (and (nth 2 (cfs--get-valid-fonts))
@@ -308,13 +308,21 @@
     (push (cons widget5 widget5) cfs-ui--widgets-alist)))
 
 (defun cfs-ui--create-fontsize-test-buttons (key index)
-  (let ((widget (widget-create 'push-button
-                               :tag " 测试 "
-                               :key key
-                               :index index
-                               :flag t
-                               :action 'cfs-ui-test-fontsize)))
-    (push (cons widget widget) cfs-ui--widgets-alist)))
+  (let (widget1 widget2)
+    (setq widget1 (widget-create 'push-button
+                                 :value "  "
+                                 :flag t
+                                 :key key
+                                 :button-face-get 'ignore
+                                 :mouse-face-get 'ignore
+                                 :action 'cfs-ui-test-fontsize))
+    (setq widget2 (widget-create 'push-button
+                                 :tag " 测试 "
+                                 :key key
+                                 :flag t
+                                 :action 'cfs-ui-test-fontsize))
+    (push (cons widget1 widget1) cfs-ui--widgets-alist)
+    (push (cons widget2 widget2) cfs-ui--widgets-alist)))
 
 (defun cfs-ui--return-status-string (font index)
   (format "%-2s %-2s"
