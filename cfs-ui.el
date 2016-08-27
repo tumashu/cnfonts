@@ -244,7 +244,7 @@
 | 如果此表格无法对齐，请按下面的加号减号按钮来调整 |
 | abcdefjhijklmnoprqstuvwxwyABCDEFJHIJkLMNOPQRSTUV |
 | 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄄𠄅𠄆𠄇𠄇 |
-| 英文字号   中文字号调整    EXTB字号调整    测试  |
+| 英文字号   中文字号调整    EXT-B字号调整   测试  |
 +--------------------------------------------------+"))
 
 (defun cfs-ui--create-warning-board ()
@@ -426,7 +426,7 @@
  切换到上一个标签        \\[cfs-ui-previous-page]
  切换到 [ 英文 ] 标签    \\[cfs-ui-switch-to-page:english-fonts-page]
  切换到 [ 中文 ] 标签    \\[cfs-ui-switch-to-page:chinese-fonts-page]
- 切换到 [ EXTB ] 标签    \\[cfs-ui-switch-to-page:extb-fonts-page]
+ 切换到 [ EXT-B ] 标签   \\[cfs-ui-switch-to-page:extb-fonts-page]
  切换到 [09--18] 标签    \\[cfs-ui-switch-to-page:fontsize-page-1]
  切换到 [20--24] 标签    \\[cfs-ui-switch-to-page:fontsize-page-2]
  切换到 [26--28] 标签    \\[cfs-ui-switch-to-page:fontsize-page-3]
