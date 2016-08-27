@@ -118,7 +118,7 @@
 
 ;; *** profile 命名与切换
 ;; Chinese-fonts-setup 默认使用三个 profile: profile1, profile2 和
-;; profile3,如果想使用其它有意义的名称，可以设置:
+;; profile3, 如果想使用其它有意义的名称，可以设置:
 
 ;; #+BEGIN_EXAMPLE
 ;; (setq cfs-profiles

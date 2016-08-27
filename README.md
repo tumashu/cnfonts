@@ -94,7 +94,7 @@ profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概�
 ### profile 命名与切换<a id="orgheadline6"></a>
 
 Chinese-fonts-setup 默认使用三个 profile: profile1, profile2 和
-profile3,如果想使用其它有意义的名称，可以设置:
+profile3, 如果想使用其它有意义的名称，可以设置:
 
     (setq cfs-profiles
         '("program" "org-mode" "read-book"))
