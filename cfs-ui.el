@@ -367,8 +367,9 @@
           (cfs-ui--create-fontsize-test-buttons (car fontsize-list) i))
         (widget-insert "\n")))
     (widget-insert "\n")
+    (widget-insert (format "%-42s" (format "( %s )" (cfs--get-current-profile t))))
     (widget-create 'push-button
-                   :tag "[ 恢复到正常 ]                        [ 恢复到正常 ]"
+                   :tag "[ 完成调整 ]"
                    :tab-stop-point t
                    :button-face-get 'ignore
                    :mouse-face-get 'ignore
@@ -458,7 +459,7 @@
  增大光标处的字号        \\[cfs-ui-increase-fontsize]
  减小光标处的字号        \\[cfs-ui-decrease-fontsize]
  测试字体显示效果        \\[cfs-ui-test-fontsize]
- 清除字号测试效果        \\[cfs-ui-reset-fontsize]
+ 完成调整                \\[cfs-ui-reset-fontsize]
 
 ** 其它快捷键
 
