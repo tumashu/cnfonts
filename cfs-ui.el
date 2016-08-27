@@ -248,7 +248,7 @@
 +----------------------------------------------------+"))
 
 (defun cfs-ui--create-warning-board ()
-  (when (and (nth 2 (cfs--get-valid-fonts))
+  (when (and (not (nth 2 (cfs--get-valid-fonts)))
              (eq system-type 'darwin))
     (widget-insert "
 +----------------------------------------------------------------------------------+
@@ -256,7 +256,6 @@
 | emacs 卡顿甚至崩溃，建议安装 HanaMinB 字体来解决这个问题，这个字体的下载地址：   |
 | https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/    |
 +----------------------------------------------------------------------------------+
-
 ")))
 
 (defun cfs-ui--create-fontsize-operate-buttons (fontsize key index)
@@ -382,9 +381,10 @@
         widget1 widget2 widget3)
     (widget-insert "\n")
     (cfs-ui--create-main-navigation)
-    (widget-insert "\n\n")
+    (widget-insert "\n")
+    (cfs-ui--create-warning-board)
+    (widget-insert "\n")
     (let ((fonts (nth index fontname-alist)))
-      (cfs-ui--create-warning-board)
       (widget-insert (format "状态  字体名称                   %20s\n"
                              (format "( %s )" (cfs--get-current-profile t))))
       (widget-insert "----  -----------------------------------------------\n")
