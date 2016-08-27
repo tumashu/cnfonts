@@ -73,6 +73,8 @@
 
 (defvar cfs-ui--widgets-alist nil)
 (defvar cfs-ui--current-page nil)
+(defvar cfs-ui--widgets:main-navigation nil)
+(defvar cfs-ui--widgets:fontsize-navigation nil)
 (defvar cfs-personal-fontnames) ;Deal with compile warn.
 
 (declare-function cfs--get-xlfd "chinese-fonts-setup" (fontname &optional uncheck))
@@ -86,7 +88,25 @@
 (declare-function cfs-set-font-with-saved-step "chinese-fonts-setup" (&optional frame))
 
 (defun cfs-ui--switch-to-page (page-name)
-  (switch-to-buffer (format " *%S*" page-name)))
+  (switch-to-buffer (format " *%S*" page-name))
+  (dolist (widget cfs-ui--widgets:main-navigation)
+    (let ((orig-value (widget-value widget))
+          (widget-page (widget-get widget :page-name)))
+      (if (if (listp widget-page)
+              (memq cfs-ui--current-page widget-page)
+            (eq cfs-ui--current-page widget-page))
+          (widget-value-set
+           widget (replace-regexp-in-string " " "*" orig-value))
+        (widget-value-set
+         widget (replace-regexp-in-string "*" " " orig-value)))))
+  (dolist (widget cfs-ui--widgets:fontsize-navigation)
+    (let ((orig-value (widget-value widget))
+          (widget-page (widget-get widget :page-name)))
+      (if (eq cfs-ui--current-page widget-page)
+          (widget-value-set
+           widget (replace-regexp-in-string " " "*" orig-value))
+        (widget-value-set
+         widget (replace-regexp-in-string "*" " " orig-value))))))
 
 (defun cfs-ui-switch-to-page:english-fonts-page (&optional widget event)
   (interactive)
@@ -133,66 +153,92 @@
   (cfs-ui--switch-to-page 'other-features-page))
 
 (defun cfs-ui--create-main-navigation ()
-  (widget-create 'push-button
-                 :tag " 英文 "
-                 :action 'cfs-ui-switch-to-page:english-fonts-page)
+  (push (widget-create 'push-button
+                       :value " 英文 "
+                       :page-name 'english-fonts-page
+                       :action 'cfs-ui-switch-to-page:english-fonts-page)
+        cfs-ui--widgets:main-navigation)
   (widget-insert " ")
-  (widget-create 'push-button
-                 :tag " 中文 "
-                 :action 'cfs-ui-switch-to-page:chinese-fonts-page)
+  (push (widget-create 'push-button
+                       :value " 中文 "
+                       :page-name 'chinese-fonts-page
+                       :action 'cfs-ui-switch-to-page:chinese-fonts-page)
+        cfs-ui--widgets:main-navigation)
   (widget-insert " ")
-  (widget-create 'push-button
-                 :tag " EXT-B "
-                 :action 'cfs-ui-switch-to-page:extb-fonts-page)
+  (push (widget-create 'push-button
+                       :value " EXT-B "
+                       :page-name 'extb-fonts-page
+                       :action 'cfs-ui-switch-to-page:extb-fonts-page)
+        cfs-ui--widgets:main-navigation)
   (widget-insert " ")
-  (widget-create 'push-button
-                 :tag " 字号 "
-                 :action 'cfs-ui-switch-to-page:fontsize-page-1)
+  (push (widget-create 'push-button
+                       :value " 字号 "
+                       :page-name
+                       '(fontsize-page-1 fontsize-page-2 fontsize-page-3
+                                         fontsize-page-4 fontsize-page-5)
+                       :action 'cfs-ui-switch-to-page:fontsize-page-1)
+        cfs-ui--widgets:main-navigation)
   (widget-insert " ")
-  (widget-create 'push-button
-                 :tag " 其它 "
-                 :action 'cfs-ui-switch-to-page:other-features-page)
+  (push (widget-create 'push-button
+                       :value " 其它 "
+                       :page-name 'other-features-page
+                       :action 'cfs-ui-switch-to-page:other-features-page)
+        cfs-ui--widgets:main-navigation)
   (widget-insert " ")
-  (widget-create 'push-button
-                 :tag " 快捷键 "
-                 :action 'cfs-ui-switch-to-page:key-page)
+  (push (widget-create 'push-button
+                       :value " 快捷键 "
+                       :page-name 'key-page
+                       :action 'cfs-ui-switch-to-page:key-page)
+        cfs-ui--widgets:main-navigation)
   (widget-insert " ")
-  (widget-create 'push-button
-                 :tag " 帮助 "
-                 :action 'cfs-ui-switch-to-page:help-page))
+  (push (widget-create 'push-button
+                       :value " 帮助 "
+                       :page-name 'help-page
+                       :action 'cfs-ui-switch-to-page:help-page)
+        cfs-ui--widgets:main-navigation))
 
 (defun cfs-ui--create-fontsize-navigation ()
   (widget-insert "+--------------------------------------------------+\n")
   (widget-insert "| ")
-  (widget-create 'push-button
-                 :tag "[09--18]"
-                 :button-face-get 'ignore
-                 :mouse-face-get 'ignore
-                 :action 'cfs-ui-switch-to-page:fontsize-page-1)
+  (push (widget-create 'push-button
+                       :value "[ 09-18 ]"
+                       :page-name 'fontsize-page-1
+                       :button-face-get 'ignore
+                       :mouse-face-get 'ignore
+                       :action 'cfs-ui-switch-to-page:fontsize-page-1)
+        cfs-ui--widgets:fontsize-navigation)
+  (widget-insert " ")
+  (push (widget-create 'push-button
+                       :value "[ 20-24 ]"
+                       :page-name 'fontsize-page-2
+                       :button-face-get 'ignore
+                       :mouse-face-get 'ignore
+                       :action 'cfs-ui-switch-to-page:fontsize-page-2)
+        cfs-ui--widgets:fontsize-navigation)
+  (widget-insert " ")
+  (push (widget-create 'push-button
+                       :value "[ 26-28 ]"
+                       :page-name 'fontsize-page-3
+                       :button-face-get 'ignore
+                       :mouse-face-get 'ignore
+                       :action 'cfs-ui-switch-to-page:fontsize-page-3)
+        cfs-ui--widgets:fontsize-navigation)
+  (widget-insert " ")
+  (push (widget-create 'push-button
+                       :value "[ -30- ]"
+                       :page-name 'fontsize-page-4
+                       :button-face-get 'ignore
+                       :mouse-face-get 'ignore
+                       :action 'cfs-ui-switch-to-page:fontsize-page-4)
+        cfs-ui--widgets:fontsize-navigation)
   (widget-insert "  ")
-  (widget-create 'push-button
-                 :tag "[20--24]"
-                 :button-face-get 'ignore
-                 :mouse-face-get 'ignore
-                 :action 'cfs-ui-switch-to-page:fontsize-page-2)
-  (widget-insert "  ")
-  (widget-create 'push-button
-                 :tag "[26--28]"
-                 :button-face-get 'ignore
-                 :mouse-face-get 'ignore
-                 :action 'cfs-ui-switch-to-page:fontsize-page-3)
-  (widget-insert "  ")
-  (widget-create 'push-button
-                 :tag "[  30  ]"
-                 :button-face-get 'ignore
-                 :mouse-face-get 'ignore
-                 :action 'cfs-ui-switch-to-page:fontsize-page-4)
-  (widget-insert "  ")
-  (widget-create 'push-button
-                 :tag "[  32  ]"
-                 :button-face-get 'ignore
-                 :mouse-face-get 'ignore
-                 :action 'cfs-ui-switch-to-page:fontsize-page-5)
+  (push (widget-create 'push-button
+                       :value "[ -32- ]"
+                       :page-name 'fontsize-page-5
+                       :button-face-get 'ignore
+                       :mouse-face-get 'ignore
+                       :action 'cfs-ui-switch-to-page:fontsize-page-5)
+        cfs-ui--widgets:fontsize-navigation)
   (widget-insert " |")
   (widget-insert "
 | 如果此表格无法对齐，请按下面的加号减号按钮来调整 |
@@ -284,6 +330,8 @@
     (cfs-ui-mode)
     (set (make-local-variable 'cfs-ui--widgets-alist) nil)
     (set (make-local-variable 'cfs-ui--current-page) (car page-info))
+    (set (make-local-variable 'cfs-ui--widgets:main-navigation) nil)
+    (set (make-local-variable 'cfs-ui--widgets:fontsize-navigation) nil)
     (setq truncate-lines t)
     (let ((page-builder (plist-get (cdr page-info) :page-builder)))
       (funcall page-builder page-info))
