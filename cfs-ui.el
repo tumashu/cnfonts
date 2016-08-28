@@ -430,7 +430,10 @@
         (push (cons widget1 widget2) cfs-ui--widgets-alist)
         (push (cons widget2 widget2) cfs-ui--widgets-alist)
         (push (cons widget3 widget2) cfs-ui--widgets-alist)
-        (widget-insert "\n" )))))
+        (widget-insert "\n" ))
+      (widget-insert "
+注: \"P\"  表示当前字体包含在 `cfs-personal-fontnames' 中
+    \"NA\" 表示系统没有安装当前字体\n"))))
 
 (defun cfs-ui--create-key-page (page-info)
   (widget-create 'push-button
