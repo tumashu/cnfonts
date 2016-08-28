@@ -224,6 +224,7 @@
 ;; * 代码                                                                 :code:
 ;; #+BEGIN_SRC emacs-lisp
 (require 'cl-lib)
+(require 'format-spec)
 (require 'thingatpt)
 (require 'cfs-ui)
 
