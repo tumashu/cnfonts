@@ -11,10 +11,11 @@
     - [使用 cfs-regenerate-profile 重置 profile](#使用-cfs-regenerate-profile-重置-profile)
     - [调整字体大小](#调整字体大小)
     - [让 chinese-fonts-setup 随着 emacs 自动启动](#让-chinese-fonts-setup-随着-emacs-自动启动)
+    - [使用 chinese-fonts-setup 生成 elisp 字体配置片断](#使用-chinese-fonts-setup-生成-elisp-字体配置片断)
   - [Tips](#tips)
   - [参考文章](#参考文章)
 
-# Chinese-fonts-setup README<a id="orgheadline15"></a>
+# Chinese-fonts-setup README<a id="orgheadline16"></a>
 
 ## 简介<a id="orgheadline1"></a>
 
@@ -50,7 +51,7 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
         ;; 让 spacemacs mode-line 中的 Unicode 图标正确显示。
         ;; (cfs-set-spacemacs-fallback-fonts)
 
-## 配置使用<a id="orgheadline12"></a>
+## 配置使用<a id="orgheadline13"></a>
 
 ### profile 的概念<a id="orgheadline5"></a>
 
@@ -247,7 +248,13 @@ emacs 自动启动，这个命令将 \`cfs-set-font-with-saved-step' 添加到�
 用户也可以手动运行 \`cfs-set-font-with-saved-step' 来让
 chinese-fonts-setup 生效。
 
-## Tips<a id="orgheadline13"></a>
+### 使用 chinese-fonts-setup 生成 elisp 字体配置片断<a id="orgheadline12"></a>
+
+有些用户觉得 chinese-fonts-setup **太过厚重** , 他们喜欢使用简单的方式来配置字体，这些用户可以了解一下 \`cfs-insert-fonts-configure'
+命令，这个命令可以根据 chinese-fonts-setup 的设置自动生成一个
+"字体配置 elisp 片断", 并插入光标处，将这个片断写入 .emacs 文件后，就不需要启动 chinese-fonts-setup 来设置字体了。
+
+## Tips<a id="orgheadline14"></a>
 
 1.  如果用户需要在自己的 emacs 配置中管理一些个人字体，可以使用变量
     \`cfs-personal-fontnames' , 其结构与 \`cfs&#x2013;fontnames-fallback'一样。
@@ -263,7 +270,7 @@ chinese-fonts-setup 生效。
     1.  Ext-B字符列表: <https://cdo.wikipedia.org/wiki/Wikipedia:Unicode%E6%93%B4%E5%B1%95%E6%BC%A2%E5%AD%97>
     2.  HanaMinB 下载地址: <https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/>
 
-## 参考文章<a id="orgheadline14"></a>
+## 参考文章<a id="orgheadline15"></a>
 
 1.  <http://baohaojun.github.io/perfect-emacs-chinese-font.html>
 2.  <http://zhuoqiang.me/torture-emacs.html>

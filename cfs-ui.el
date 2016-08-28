@@ -75,6 +75,7 @@
 (defvar cfs-ui--current-page nil)
 (defvar cfs-ui--widgets:main-navigation nil)
 (defvar cfs-ui--widgets:fontsize-navigation nil)
+(defvar cfs-ui--widgets:elisp-snippet nil)
 (defvar cfs-personal-fontnames) ;Deal with compile warn.
 
 (declare-function cfs--get-xlfd "chinese-fonts-setup" (fontname &optional uncheck))
@@ -86,6 +87,7 @@
 (declare-function cfs--step-fontsize "chinese-fonts-setup" (num))
 (declare-function cfs--get-current-profile "chinese-fonts-setup" (&optional return-profile-name))
 (declare-function cfs-set-font-with-saved-step "chinese-fonts-setup" (&optional frame))
+(declare-function cfs--return-fonts-configure-string "chinese-fonts-setup" ())
 
 (defun cfs-ui--switch-to-page (page-name)
   (switch-to-buffer (format " *%S*" page-name))
@@ -339,6 +341,7 @@
     (set (make-local-variable 'cfs-ui--current-page) (car page-info))
     (set (make-local-variable 'cfs-ui--widgets:main-navigation) nil)
     (set (make-local-variable 'cfs-ui--widgets:fontsize-navigation) nil)
+    (set (make-local-variable 'cfs-ui--widgets:elisp-snippet) nil)
     (setq truncate-lines t)
     (let ((page-builder (plist-get (cdr page-info) :page-builder)))
       (funcall page-builder page-info))
@@ -514,7 +517,33 @@
                  :mouse-face-get 'ignore)
   (cfs-ui--create-main-navigation)
   (widget-insert "\n\n")
-  (widget-insert "TODO ...\n")
+  (widget-insert "------------------------------------------------------\n")
+  (widget-insert "** 根据 cfs 的设置，自动生成一个 elisp 字体配置片断
+
+如果用户觉得 chinese-fonts-setup *太厚重*, 可以将下面
+一段 elisp 粘贴到 ~/.emacs 文件，然后保存，就不需要启
+动 chinese-fonts-setup 来配置字体了。
+
+-------
+")
+  (setq cfs-ui--widgets:elisp-snippet
+        (widget-create 'push-button
+                       :value (cfs--return-fonts-configure-string)
+                       :tab-stop-point t
+                       :button-face-get 'ignore
+                       :mouse-face-get 'ignore))
+  (widget-insert "\n")
+  (widget-create 'push-button
+                 :tag "[ 重新生成 ]"
+                 :tab-stop-point t
+                 :button-face-get 'ignore
+                 :mouse-face-get 'ignore
+                 :action (lambda (widget event)
+                           (widget-value-set
+                            cfs-ui--widgets:elisp-snippet
+                            (cfs--return-fonts-configure-string))))
+  (widget-insert "\n")
+  (widget-insert "------------------------------------------------------\n")
   (widget-create 'push-button
                  :tag "\n"
                  :tab-stop-point t
