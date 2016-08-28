@@ -467,7 +467,9 @@ The below is an example which is used to set symbol fonts:
   (let* ((fontsizes-list (car (cdr (cfs--read-profile)))))
     (unless (file-exists-p (cfs--get-current-profile))
       (message "如果中英文不能对齐，请运行`cfs-edit-profile'编辑当前profile。"))
-    (or (nth (- step 1) fontsizes-list) 12.5)))
+    (if (numberp step)
+        (nth (- step 1) fontsizes-list)
+      12.5)))
 
 (defun cfs--set-font (fontsizes-list)
   "调整当前 frame 使用的字体，当全局变量 `cfs-keep-frame-size'
