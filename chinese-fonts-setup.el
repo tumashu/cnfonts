@@ -380,6 +380,8 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
 这些 profile 文件保存在 `cfs-profiles-directory' 对应的目录中。在其它地方
 设置这个变量没有任何用处！")
 
+(defvar cfs--enabled-p nil)
+
 (defun cfs--get-profile (profile-name)
   (let* ((cfs-profile-version "v4") ;; 升级 profile 格式时改变版本号
          (directory-name
@@ -692,6 +694,7 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
 (defun chinese-fonts-setup-enable ()
   "运行这个函数，可以让 emacs 启动的时候就激活 chinese-fonts-setup."
   (interactive)
+  (setq cfs--enabled-p t)
   (if (and (fboundp 'daemonp) (daemonp))
       (add-hook 'after-make-frame-functions #'cfs-set-font-with-saved-step)
     (add-hook 'window-setup-hook #'cfs-set-font-with-saved-step)))
@@ -699,6 +702,7 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
 (defun chinese-fonts-setup-disable ()
   "清除与 chinese-fonts-setup 相关的 hook 设定。"
   (interactive)
+  (setq cfs--enabled-p nil)
   (remove-hook 'after-make-frame-functions #'cfs-set-font-with-saved-step)
   (remove-hook 'window-setup-hook #'cfs-set-font-with-saved-step))
 

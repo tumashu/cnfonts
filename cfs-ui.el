@@ -76,7 +76,10 @@
 (defvar cfs-ui--widgets:main-navigation nil)
 (defvar cfs-ui--widgets:fontsize-navigation nil)
 (defvar cfs-ui--widgets:elisp-snippet nil)
-(defvar cfs-personal-fontnames) ;Deal with compile warn.
+
+;; Deal with compile warn.
+(defvar cfs-personal-fontnames)
+(defvar cfs--enabled-p)
 
 (declare-function cfs--get-xlfd "chinese-fonts-setup" (fontname &optional uncheck))
 (declare-function cfs--get-valid-fonts "chinese-fonts-setup" (&optional prefer-shortname))
@@ -250,15 +253,26 @@
 +----------------------------------------------------+"))
 
 (defun cfs-ui--create-warning-board ()
-  (when (and (not (nth 2 (cfs--get-valid-fonts)))
-             (eq system-type 'darwin))
+  (cond
+   ((not cfs--enabled-p)
     (widget-insert "
-+----------------------------------------------------------------------------------+
-| 注意：由于某些未知原因，未安装 EXT-B 字体的苹果系统，chinese-fonts-setup 会导致  |
-| emacs 卡顿甚至崩溃，建议安装 HanaMinB 字体来解决这个问题，这个字体的下载地址：   |
-| https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/    |
-+----------------------------------------------------------------------------------+
-")))
++----------------------------------------------------+
+| 注：emacs 启动时，默认不会加载 chinese-fonts-setup,|
+| 其设置也不会生效，用户可以在自己的配置中添加一行   |
+| 代码：(chinese-fonts-setup-enable) 来让其生效。    |
++----------------------------------------------------+
+"))
+   ((and (not (nth 2 (cfs--get-valid-fonts)))
+         (eq system-type 'darwin))
+    (widget-insert "
++----------------------------------------------------+
+| 注：由于某些未知原因，未安装 EXT-B 字体的苹果系统, |
+| chinese-fonts-setup 会导致 emacs 卡顿，偶尔甚至崩  |
+| 溃, 建议安装 HanaMinB 字体来解决这个问题，这个字体 |
+| 的下载地址可以从 [ 帮助 ] 页面中找到，字体安装后， |
+| 这个消息会消失。                                   |
++----------------------------------------------------+
+"))))
 
 (defun cfs-ui--create-fontsize-operate-buttons (fontsize key index)
   (let (widget1 widget2 widget3 widget4 widget5)
