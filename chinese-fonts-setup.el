@@ -334,6 +334,11 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
   "用户自己维护的字体列表，其结构与 `cfs--fontnames-fallback' 一致。"
   :group 'chinese-fonts-setup)
 
+(defcustom cfs-verbose t
+  "设置为 t 时， chinese-fonts-setup 将 message 较多信息。"
+  :group 'chinese-fonts-setup
+  :type 'integer)
+
 (defconst cfs--fontnames-fallback
   '(("Monaco" "Consolas" "DejaVu Sans Mono" "Droid Sans Mono" "PragmataPro"
      "Courier" "Courier New" "Ubuntu Mono" "Liberation Mono" "MonacoB" "MonacoB2"
@@ -382,6 +387,11 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
 设置这个变量没有任何用处！")
 
 (defvar cfs--enabled-p nil)
+
+(defun cfs-message (force-show &rest args)
+  (if (or cfs-verbose force-show)
+      (apply 'message args)
+    (apply 'format args)))
 
 (defun cfs--get-profile (profile-name)
   (let* ((cfs-profile-version "v4") ;; 升级 profile 格式时改变版本号
@@ -447,7 +457,7 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
   (let ((file (cfs--get-current-profile)))
     (if (file-readable-p file)
         (progn (when (load (expand-file-name file) nil t)
-                 (message "Chinese-fonts-setup: load %S successfully." (cfs--get-current-profile t)))
+                 (cfs-message t "Chinese-fonts-setup: load %S successfully." (cfs--get-current-profile t)))
                (list
                 (if cfs--custom-set-fontnames
                     (cfs--merge-fontname-list cfs--custom-set-fontnames
@@ -503,7 +513,7 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
 (defun cfs--get-fontsizes (&optional step)
   (let* ((fontsizes-list (car (cdr (cfs--read-profile)))))
     (unless (file-exists-p (cfs--get-current-profile))
-      (message "如果中英文不能对齐，请运行`cfs-edit-profile'编辑当前profile。"))
+      (cfs-message t "如果中英文不能对齐，请运行`cfs-edit-profile'编辑当前profile。"))
     (if (numberp step)
         (nth (- step 1) fontsizes-list)
       12.5)))
@@ -631,21 +641,21 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
           (set-face-font 'bold english-main-fontspec)
         (if (cfs--fontspec-valid-p english-bold-fontspec)
             (set-face-font 'bold english-bold-fontspec)
-          (message "Chinese-fonts-setup: 字体 %S 对应的粗体没有找到，不作处理！" english-main-fontname)))
+          (cfs-message t "Chinese-fonts-setup: 字体 %S 对应的粗体没有找到，不作处理！" english-main-fontname)))
 
       ;; 设置英文斜体。
       (if cfs-disable-italic
           (set-face-font 'italic english-main-fontspec)
         (if (cfs--fontspec-valid-p english-italic-fontspec)
             (set-face-font 'italic english-italic-fontspec)
-          (message "Chinese-fonts-setup: 字体 %S 对应的斜体没有找到，不作处理！" english-main-fontname)))
+          (cfs-message t "Chinese-fonts-setup: 字体 %S 对应的斜体没有找到，不作处理！" english-main-fontname)))
 
       ;; 设置英文粗斜体。
       (if cfs-disable-bold-italic
           (set-face-font 'bold-italic english-main-fontspec)
         (if (cfs--fontspec-valid-p english-bold-italic-fontspec)
             (set-face-font 'bold-italic english-bold-italic-fontspec)
-          (message "Chinese-fonts-setup: 字体 %S 对应的粗斜体没有找到，不作处理！" english-main-fontname))))
+          (cfs-message t "Chinese-fonts-setup: 字体 %S 对应的粗斜体没有找到，不作处理！" english-main-fontname))))
 
     ;; 设置中文字体，注意，不要使用 'unicode charset,
     ;; 否则上面的英文字体设置将会失效。
@@ -679,7 +689,7 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
          (fontsizes-list (cfs--get-fontsizes profile-step)))
     (cfs--set-font fontsizes-list)
     (cfs--save-profile-step profile-name profile-step)
-    (message cfs--minibuffer-echo-string)))
+    (cfs-message t cfs--minibuffer-echo-string)))
 
 (defun cfs-set-font-with-saved-step (&optional frame)
   (interactive)
@@ -734,7 +744,7 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
       (progn (setq cfs--current-profile profile-name)
              (customize-save-variable 'cfs--current-profile profile-name)
              (cfs-set-font-with-saved-step))
-    (message "%s doesn't exist." profile-name)))
+    (cfs-message t "%s doesn't exist." profile-name)))
 
 (defun cfs-switch-profile ()
   (interactive)
@@ -754,7 +764,7 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
       (customize-save-variable 'cfs--current-profile next-profile))
     (when (display-graphic-p)
       (cfs-set-font-with-saved-step))
-    (message "Current chinese-fonts-setup profile is set to: \"%s\"" next-profile)))
+    (cfs-message t "Current chinese-fonts-setup profile is set to: \"%s\"" next-profile)))
 
 (defun cfs-edit-profile ()
   (interactive)
@@ -780,7 +790,7 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
     (if (yes-or-no-p (format "Regenerate (%s)? " profile-name))
         (cfs--save-profile cfs--fontnames-fallback
                            cfs--fontsizes-fallback profile-name)
-      (message "Ignore regenerate profile!"))))
+      (cfs-message t "Ignore regenerate profile!"))))
 
 (defun cfs-test-fontsize-at-point ()
   "Test fontsizes list at point, which is usd to edit fontsizes list"
@@ -834,7 +844,7 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
     (when (and (nth 0 fontsizes-list)
                (nth 1 fontsizes-list))
       (cfs--set-font fontsizes-list))
-    (message cfs--minibuffer-echo-string)))
+    (cfs-message t cfs--minibuffer-echo-string)))
 
 (defun cfs-insert-fonts-configure ()
   "在光标处，插入一个 elisp 片断，这个 elisp 片断可以用来配置中文和英文字体。"
@@ -928,10 +938,25 @@ spacemacs 将这些字体的名字内置在 `spacemacs/set-default-font' 的代�
   (interactive)
   (add-hook 'cfs-set-font-finish-hook
             #'cfs--set-spacemacs-fallback-fonts)
-  (message "chinese-fonts-setup: 激活 spacemacs fallback 字体，用于显示 mode-line 中的漂亮图标。"))
+  (cfs-message nil "chinese-fonts-setup: 激活 spacemacs fallback 字体，用于显示 mode-line 中的漂亮图标。"))
 
-(message "如果需要 emacs 启动时激活 chinese-fonts-setup，请在 emacs 配置文件中添加： (chinese-fonts-setup-enable) ，
-激活后，可以用 `cfs-edit-profile' 设置字体，用 `cfs-increase-fontsize' 增大字号，用 `cfs-decrease-fontsize' 减小字号。")
+(cfs-message nil "
++----------------------------------------------------------------+
+| 如果需要 emacs 启动时激活 chinese-fonts-setup，请在 emacs 配置 |
+| 文件中添加一行代码：                                           |
+|                                                                |
+|                 (chinese-fonts-setup-enable)                   |
+|                                                                |
+| 常用命令                  功能                                 |
+| ------------------------  -------------                        |
+| `cfs-edit-profile'        调整字体设置                         |
+| `cfs-increase-fontsize'   增大字号                             |
+| `cfs-decrease-fontsize'   减小字号                             |
+|                                                                |
+| 注: (require 'chinese-fonts-setup) 之前，设置 `cfs-verbose'    |
+|     为 `nil', 可以隐藏这个消息。                               |
++----------------------------------------------------------------+
+")
 ;; #+END_SRC
 
 ;; * Footer

@@ -91,6 +91,7 @@
 (declare-function cfs--get-current-profile "chinese-fonts-setup" (&optional return-profile-name))
 (declare-function cfs-set-font-with-saved-step "chinese-fonts-setup" (&optional frame))
 (declare-function cfs--return-fonts-configure-string "chinese-fonts-setup" ())
+(declare-function cfs-message "chinese-fonts-setup" (force-show &rest args))
 
 (defun cfs-ui--switch-to-page (page-name)
   (switch-to-buffer (format " *%S*" page-name))
@@ -579,14 +580,14 @@
          (fontsize-alist (car (cdr (cfs--read-profile))))
          fonts-list)
     (if (not flag)
-        (message "当前光标所在位置不对，请将光标移动到字体所在的行上面。")
+        (cfs-message t "当前光标所在位置不对，请将光标移动到字体所在的行上面。")
       (widget-toggle-action widget1 event)
       (dolist (w widgets)
         (unless (equal (widget-get w :font-name) font)
           (widget-value-set w nil)
           (widget-apply w :notify w event)))
       (if (not (cfs--font-exists-p font))
-          (message "Chinese-fonts-setup UI: 系统没有安装字体: %S ." font)
+          (cfs-message t "Chinese-fonts-setup UI: 系统没有安装字体: %S ." font)
         (when (widget-value widget1)
           (setf (nth index fontname-alist)
                 (delete-dups
@@ -603,7 +604,7 @@
          (fontname-alist (car (cfs--read-profile)))
          (fontsize-alist (car (cdr (cfs--read-profile)))))
     (if (not flag)
-        (message "当前光标所在位置不对，请将光标移动到 ‘中文字号’ 或者 ‘EXT-B字体字号’ 对应的数字上。")
+        (cfs-message t "当前光标所在位置不对，请将光标移动到 ‘中文字号’ 或者 ‘EXT-B字体字号’ 对应的数字上。")
       (when (and index key (numberp n))
         (cl-incf (nth index (assoc key fontsize-alist)) n)
         ;; 更新加号按钮和减号按钮前面的数字标签
