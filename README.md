@@ -261,7 +261,7 @@ Chinese-fonts-setup **仅仅** 设置英文，中文和 EXT-B 字体，不处理
 hook: \`cfs-set-font-finish-hook' , 用户可以用它来处理一些特殊设置，下面的一段代码用来配置 symbol 字体，参数 fontsizes-list 是一个列表，记录了 **当前使用** 的英文字体，中文字体和 EXT-B 字体的字号。
 
     (defun my-set-symbol-fonts (fontsizes-list)
-      (set-fontset-font t 'symbol \"Inconsolata\" nil 'append))
+      (set-fontset-font t 'symbol "Inconsolata" nil 'append))
 
     (add-hook 'cfs-set-font-finish-hook 'my-set-symbol-fonts)
 

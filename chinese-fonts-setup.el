@@ -204,7 +204,7 @@
 
 ;; #+BEGIN_EXAMPLE
 ;; (defun my-set-symbol-fonts (fontsizes-list)
-;;   (set-fontset-font t 'symbol \"Inconsolata\" nil 'append))
+;;   (set-fontset-font t 'symbol "Inconsolata" nil 'append))
 
 ;; (add-hook 'cfs-set-font-finish-hook 'my-set-symbol-fonts)
 ;; #+END_EXAMPLE
