@@ -567,11 +567,15 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
 
 其中，英文字体字号必须设定，其余字体字号可以设定，也可以省略。"
   (let* ((valid-fonts (cfs--get-valid-fonts))
-         (valid-fontnames (cfs--get-valid-fonts t))
+         (valid-short-fontnames (cfs--get-valid-fonts t))
 
          (english-main-fontname (nth 0 valid-fonts))
          (chinese-main-fontname (nth 1 valid-fonts))
          (chinese-extra-fontname (nth 2 valid-fonts))
+
+         (english-main-short-fontname (nth 0 valid-short-fontnames))
+         (chinese-main-short-fontname (nth 1 valid-short-fontnames))
+         (chinese-extra-short-fontname (nth 2 valid-short-fontnames))
 
          (english-main-fontsize (cfs--float (nth 0 fontsizes-list)))
          (chinese-main-fontsize (cfs--float (nth 1 fontsizes-list)))
@@ -641,21 +645,24 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
           (set-face-font 'bold english-main-fontspec)
         (if (cfs--fontspec-valid-p english-bold-fontspec)
             (set-face-font 'bold english-bold-fontspec)
-          (cfs-message t "Chinese-fonts-setup: 字体 %S 对应的粗体没有找到，不作处理！" english-main-fontname)))
+          (cfs-message t "Chinese-fonts-setup: %S 对应的粗体没有找到，不作处理！"
+                       english-main-short-fontname)))
 
       ;; 设置英文斜体。
       (if cfs-disable-italic
           (set-face-font 'italic english-main-fontspec)
         (if (cfs--fontspec-valid-p english-italic-fontspec)
             (set-face-font 'italic english-italic-fontspec)
-          (cfs-message t "Chinese-fonts-setup: 字体 %S 对应的斜体没有找到，不作处理！" english-main-fontname)))
+          (cfs-message t "Chinese-fonts-setup: %S 对应的斜体没有找到，不作处理！"
+                       english-main-short-fontname)))
 
       ;; 设置英文粗斜体。
       (if cfs-disable-bold-italic
           (set-face-font 'bold-italic english-main-fontspec)
         (if (cfs--fontspec-valid-p english-bold-italic-fontspec)
             (set-face-font 'bold-italic english-bold-italic-fontspec)
-          (cfs-message t "Chinese-fonts-setup: 字体 %S 对应的粗斜体没有找到，不作处理！" english-main-fontname))))
+          (cfs-message t "Chinese-fonts-setup: %S 对应的粗斜体没有找到，不作处理！"
+                       english-main-short-fontname))))
 
     ;; 设置中文字体，注意，不要使用 'unicode charset,
     ;; 否则上面的英文字体设置将会失效。
@@ -677,9 +684,10 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
     (setq cfs--minibuffer-echo-string
           (format "[%s]: 英文字体: %s-%.1f，中文字体: %s, EXTB字体：%s"
                   (cfs--get-current-profile t)
-                  (or (nth 0 valid-fontnames) "无") english-main-fontsize
-                  (or (nth 1 valid-fontnames) "无")
-                  (or (nth 2 valid-fontnames) "无")))))
+                  (or english-main-short-fontname "无") english-main-fontsize
+                  (or chinese-main-short-fontname "无")
+                  (or chinese-extra-short-fontname "无")))
+    (message "")))
 
 (defun cfs--step-fontsize (num)
   (let* ((profile-name (cfs--get-current-profile t))
