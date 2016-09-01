@@ -195,6 +195,43 @@
 ;; "字体配置 elisp 片断", 并插入光标处，将这个片断写入 .emacs 文件
 ;; 后，就不需要启动 chinese-fonts-setup 来设置字体了。
 
+;; *** Chinese-fonts-setup 高级功能
+;; Chinese-fonts-setup *仅仅* 设置英文，中文和 EXT-B 字体，不处理
+;; 其它字体，比如：symbol 字体，但 chinese-fonts-setup 提供了一个
+;; hook: `cfs-set-font-finish-hook' , 用户可以用它来处理一些特殊设置，
+;; 下面的一段代码用来配置 symbol 字体，参数 fontsizes-list 是一个列表，
+;; 记录了 *当前使用* 的英文字体，中文字体和 EXT-B 字体的字号。
+
+;; #+BEGIN_EXAMPLE
+;; (defun my-set-symbol-fonts (fontsizes-list)
+;;   (set-fontset-font t 'symbol \"Inconsolata\" nil 'append))
+
+;; (add-hook 'cfs-set-font-finish-hook 'my-set-symbol-fonts)
+;; #+END_EXAMPLE
+
+;; 除了字体设置，这个 hook 还可以实现其它功能，比如：行距随着字号自动调整
+
+;; #+BEGIN_EXAMPLE
+;; (defvar my-line-spacing-alist nil)
+
+;; (setq my-line-spacing-alist
+;;       '((9 . 0.1) (10 . 0.9) (11.5 . 0.2)
+;;         (12.5 . 0.2) (14 . 0.2) (16 . 0.2)
+;;         (18 . 0.2) (20 . 1.0) (22 . 0.2)
+;;         (24 . 0.2) (26 . 0.2) (28 . 0.2)
+;;         (30 . 0.2) (32 . 0.2)))
+
+;; (defun my-line-spacing-setup (fontsizes-list)
+;;   (let ((fontsize (car fontsizes-list))
+;;         (line-spacing-alist (copy-list my-line-spacing-alist)))
+;;     (dolist (list line-spacing-alist)
+;;       (when (= fontsize (car list))
+;;         (setq line-spacing-alist nil)
+;;         (setq-default line-spacing (cdr list))))))
+
+;; (add-hook 'cfs-set-font-finish-hook #'my-line-spacing-setup)
+;; #+END_EXAMPLE
+
 ;; ** Tips
 
 ;; 1. 如果用户需要在自己的 emacs 配置中管理一些个人字体，可以使用变量
