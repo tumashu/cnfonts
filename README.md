@@ -62,9 +62,9 @@ profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概�
 目录中, 这些文件包含了英文字体设置，中文字体设置以及中文字体大小，其结构类似：
 
     (setq cfs--custom-set-fontnames
-          '(("PragmataPro" "Ubuntu Mono" "DejaVu Sans Mono")   ;英文字体
-            ("文泉驿等宽微米黑" "Ubuntu Mono" "隶书" "新宋体") ;中文字体
-            ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB")))        ;EXT-B字体
+          '(("PragmataPro" "Ubuntu Mono" "DejaVu Sans Mono")
+            ("文泉驿等宽微米黑" "Ubuntu Mono" "隶书" "新宋体")
+            ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB")))
 
     (setq cfs--custom-set-fontsizes
           '((9    9.0  9.5 )

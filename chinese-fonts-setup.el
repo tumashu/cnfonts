@@ -84,9 +84,9 @@
 
 ;; #+BEGIN_EXAMPLE
 ;; (setq cfs--custom-set-fontnames
-;;       '(("PragmataPro" "Ubuntu Mono" "DejaVu Sans Mono")   ;英文字体
-;;         ("文泉驿等宽微米黑" "Ubuntu Mono" "隶书" "新宋体") ;中文字体
-;;         ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB")))        ;EXT-B字体
+;;       '(("PragmataPro" "Ubuntu Mono" "DejaVu Sans Mono")
+;;         ("文泉驿等宽微米黑" "Ubuntu Mono" "隶书" "新宋体")
+;;         ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB")))
 
 ;; (setq cfs--custom-set-fontsizes
 ;;       '((9    9.0  9.5 )
