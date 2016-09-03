@@ -202,9 +202,7 @@
 ;; 除了字体设置，这个 hook 还可以实现其它功能，比如：行距随着字号自动调整
 
 ;; #+BEGIN_EXAMPLE
-;; (defvar my-line-spacing-alist nil)
-
-;; (setq my-line-spacing-alist
+;; (defvar my-line-spacing-alist
 ;;       '((9 . 0.1) (10 . 0.9) (11.5 . 0.2)
 ;;         (12.5 . 0.2) (14 . 0.2) (16 . 0.2)
 ;;         (18 . 0.2) (20 . 1.0) (22 . 0.2)
