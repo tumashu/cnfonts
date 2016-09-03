@@ -729,10 +729,11 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
   (let* ((profile-name (cfs--get-current-profile t))
          (profile-step (cfs--get-profile-step profile-name))
          (fontsizes-list (cfs--get-fontsizes profile-step)))
-    (when (display-graphic-p)
-      (if frame
-          (with-selected-frame frame
-            (cfs--set-font fontsizes-list))
+    (if frame
+        (with-selected-frame frame
+          (when (display-graphic-p)
+            (cfs--set-font fontsizes-list)))
+      (when (display-graphic-p)
         (cfs--set-font fontsizes-list)))))
 
 (defun chinese-fonts-setup-enable ()
