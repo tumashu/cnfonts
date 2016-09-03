@@ -80,26 +80,16 @@
 
 ;; 每一个 profile 都对应一个 emacs-lisp 文件, 保存在 `cfs-profiles-directory'
 ;; 目录中, 这些文件包含了英文字体设置，中文字体设置以及中文字体大小，
-;; 类似：
+;; 其结构类似：
 
 ;; #+BEGIN_EXAMPLE
-;;; `cfs--custom-set-fontsnames' 列表有3个子列表，第1个为英文字体列表，第2个为中文字体列表，
-;;; 第3个列表中的字体用于显示不常用汉字，每一个字体列表中，*第一个* *有效并可用* 的字体将被使用。
-;;; 将光标移动到上述列表中，按 `C-c C-c' 可以测试字体显示效果。另外，用户可以通过命令
-;;; `cfs-insert-fontname’ 来选择一个 *可用* 字体，然后在当前光标处插入其字体名称。
 ;; (setq cfs--custom-set-fontnames
-;;       '(
-;;         ("PragmataPro" "Ubuntu Mono" "DejaVu Sans Mono" "Courier" "Courier New" "Free Mono" "Inconsolata" "Droid Sans Mono" "Monaco" "Consolas" "Liberation Mono" "MonacoB" "MonacoB2" "MonacoBSemi" "Droid Sans Mono Pro" "Source Code Pro" "Lucida Console" "Envy Code R" "Andale Mono" "Lucida Sans Typewriter" "monoOne" "Lucida Typewriter" "Panic Sans" "Hack" "Bitstream Vera Sans Mono" "HyperFont" "PT Mono" "Ti92Pluspc" "Excalibur Monospace" "Menlof" "Cousine" "Fira Mono" "Lekton" "M+ 1mn" "BPmono" "Anonymous Pro" "ProFont" "ProFontWindows" "Latin Modern Mono" "Code 2002" "ProggyCleanTT" "ProggyTinyTT")
-;;         ("文泉驿等宽微米黑" "Ubuntu Mono" "隶书" "新宋体" "宋体" "楷体_GB2312" "仿宋_GB2312" "方正姚体" "Noto Sans S Chinese Regular" "微软雅黑" "Microsoft Yahei" "Microsoft_Yahei" "文泉驿等宽正黑" "黑体" "Hiragino Sans GB" "文泉驿正黑" "文泉驿点阵正黑" "SimHei" "SimSun" "NSimSun" "FangSong" "KaiTi" "FangSong_GB2312" "KaiTi_GB2312" "LiSu" "YouYuan" "幼圆" "STXihei" "STKaiti" "STSong" "STZhongsong" "STFangsong" "FZShuTi" "FZYaoti" "STCaiyun" "STHupo" "STLiti" "STXingkai" "STXinwei" "方正舒体" "方正粗圆_GBK" "华文仿宋" "华文中宋" "华文彩云" "华文新魏" "华文细黑" "华文行楷")
-;;         ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB" "PMingLiU-ExtB" "MingLiU_HKSCS-ExtB")
-;;         ))
+;;       '(("PragmataPro" "Ubuntu Mono" "DejaVu Sans Mono")   ;英文字体
+;;         ("文泉驿等宽微米黑" "Ubuntu Mono" "隶书" "新宋体") ;中文字体
+;;         ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB")))        ;EXT-B字体
 
-;;; `cfs--custom-set-fontsizes' 中，所有元素的结构都类似：(英文字号 中文字号 EXT-B字体字号)
-;;; 将光标移动到各个数字上，按 C-c C-c 查看光标处字号的对齐效果。
-;;; 按 C-<up> 增大光标处字号，按 C-<down> 减小光标处字号。
 ;; (setq cfs--custom-set-fontsizes
-;;       '(
-;;         (9    9.0  9.5 )
+;;       '((9    9.0  9.5 )
 ;;         (10   11.0 11.0)
 ;;         (11.5 12.5 12.5)
 ;;         (12.5 13.5 13.5)
@@ -112,8 +102,7 @@
 ;;         (26   27.0 27.0)
 ;;         (28   29.0 29.0)
 ;;         (30   32.0 32.0)
-;;         (32   33.0 33.0)
-;;         ))
+;;         (32   33.0 33.0)))
 ;; #+END_EXAMPLE
 
 ;; *** profile 命名与切换
