@@ -147,6 +147,7 @@
 ;; | C-down  | cfs-decrement-fontsize-at-point | 减小光标下字号的大小，同时显示对齐效果 |
 
 ;; 注1: 不建议 chinese-fonts-setup 新用户使用这种方式
+
 ;; 注2: 配置完成后，有可能需要重启 Emacs, 参考：http://debbugs.gnu.org/db/17/1785.html
 
 ;; *** 使用 cfs-regenerate-profile 重置 profile

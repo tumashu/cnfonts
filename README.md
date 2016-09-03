@@ -182,7 +182,9 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 </tbody>
 </table>
 
-注1: 不建议 chinese-fonts-setup 新用户使用这种方式注2: 配置完成后，有可能需要重启 Emacs, 参考：<http://debbugs.gnu.org/db/17/1785.html>
+注1: 不建议 chinese-fonts-setup 新用户使用这种方式
+
+注2: 配置完成后，有可能需要重启 Emacs, 参考：<http://debbugs.gnu.org/db/17/1785.html>
 
 ### 使用 cfs-regenerate-profile 重置 profile<a id="orgheadline9"></a>
 
