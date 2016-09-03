@@ -141,6 +141,9 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 ![img](./snapshots/cfs-ui-2.png)
 ![img](./snapshots/cfs-ui-3.png)
 ![img](./snapshots/cfs-ui-4.png)
+![img](./snapshots/cfs-ui-5.png)
+![img](./snapshots/cfs-ui-6.png)
+![img](./snapshots/cfs-ui-7.png)
 
 ### 使用 cfs-edit-profile-without-ui 命令编辑 profile<a id="orgheadline8"></a>
 

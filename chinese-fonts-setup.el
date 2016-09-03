@@ -140,6 +140,9 @@
 ;; [[./snapshots/cfs-ui-2.png]]
 ;; [[./snapshots/cfs-ui-3.png]]
 ;; [[./snapshots/cfs-ui-4.png]]
+;; [[./snapshots/cfs-ui-5.png]]
+;; [[./snapshots/cfs-ui-6.png]]
+;; [[./snapshots/cfs-ui-7.png]]
 
 ;; *** 使用 cfs-edit-profile-without-ui 命令编辑 profile
 ;; 除了使用 `cfs-edit-profile' , 有经验的用户也可以使用
