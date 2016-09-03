@@ -973,24 +973,6 @@ spacemacs 将这些字体的名字内置在 `spacemacs/set-default-font' 的代�
   (add-hook 'cfs-set-font-finish-hook
             #'cfs--set-spacemacs-fallback-fonts)
   (cfs-message nil "chinese-fonts-setup: 激活 spacemacs fallback 字体，用于显示 mode-line 中的漂亮图标。"))
-
-(cfs-message nil "
-+----------------------------------------------------------------+
-| 如果需要 emacs 启动时激活 chinese-fonts-setup，请在 emacs 配置 |
-| 文件中添加一行代码：                                           |
-|                                                                |
-|                 (chinese-fonts-setup-enable)                   |
-|                                                                |
-| 常用命令                  功能                                 |
-| ------------------------  -------------                        |
-| `cfs-edit-profile'        调整字体设置                         |
-| `cfs-increase-fontsize'   增大字号                             |
-| `cfs-decrease-fontsize'   减小字号                             |
-|                                                                |
-| 注: (require 'chinese-fonts-setup) 之前，设置 `cfs-verbose'    |
-|     为 `nil', 可以隐藏这个消息。                               |
-+----------------------------------------------------------------+
-")
 ;; #+END_SRC
 
 ;; * Footer

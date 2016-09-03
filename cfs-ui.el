@@ -80,6 +80,7 @@
 ;; Deal with compile warn.
 (defvar cfs-personal-fontnames)
 (defvar cfs--enabled-p)
+(defvar cfs-verbose)
 
 (declare-function cfs--get-xlfd "chinese-fonts-setup" (fontname &optional uncheck))
 (declare-function cfs--get-valid-fonts "chinese-fonts-setup" (&optional prefer-shortname))
@@ -255,12 +256,21 @@
 
 (defun cfs-ui--create-warning-board ()
   (cond
-   ((not cfs--enabled-p)
+   (cfs-verbose
     (widget-insert "
 +----------------------------------------------------+
-| 注：emacs 启动时，默认不会加载 chinese-fonts-setup,|
-| 其设置也不会生效，用户可以在自己的配置中添加一行   |
-| 代码：(chinese-fonts-setup-enable) 来让其生效。    |
+| 如果需要 emacs 启动时激活 chinese-fonts-setup，请  |
+| 在 emacs 配置文件中添加一行代码：                  |
+|                                                    |
+|          (chinese-fonts-setup-enable)              |
+|                                                    |
+| 常用命令                  功能                     |
+| ----------------------    -------------            |
+| cfs-edit-profile          调整字体设置             |
+| cfs-increase-fontsize     增大字号                 |
+| cfs-decrease-fontsize     减小字号                 |
+|                                                    |
+| 注: 设置 cfs-verbose 为 nil , 可以隐藏这个消息。   |
 +----------------------------------------------------+
 "))
    ((and (not (nth 2 (cfs--get-valid-fonts)))
