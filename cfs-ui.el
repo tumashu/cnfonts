@@ -48,22 +48,22 @@
      :index 2
      :main-page t
      :page-builder cfs-ui--create-fonts-page)
-    (fontsize-page-1
+    (align-page-1
      :main-page t
      :fontsizes (9 10 11.5 12.5 14 16 18)
-     :page-builder cfs-ui--create-fontsize-page)
-    (fontsize-page-2
+     :page-builder cfs-ui--create-align-page)
+    (align-page-2
      :fontsizes (20 22 24)
-     :page-builder cfs-ui--create-fontsize-page)
-    (fontsize-page-3
+     :page-builder cfs-ui--create-align-page)
+    (align-page-3
      :fontsizes (26 28)
-     :page-builder cfs-ui--create-fontsize-page)
-    (fontsize-page-4
+     :page-builder cfs-ui--create-align-page)
+    (align-page-4
      :fontsizes (30)
-     :page-builder cfs-ui--create-fontsize-page)
-    (fontsize-page-5
+     :page-builder cfs-ui--create-align-page)
+    (align-page-5
      :fontsizes (32)
-     :page-builder cfs-ui--create-fontsize-page)
+     :page-builder cfs-ui--create-align-page)
     (other-features-page
      :page-builder cfs-ui--create-other-features-page)
     (key-page
@@ -126,25 +126,25 @@
   (interactive)
   (cfs-ui--switch-to-page 'extb-fonts-page))
 
-(defun cfs-ui-switch-to-page:fontsize-page-1 (&optional widget event)
+(defun cfs-ui-switch-to-page:align-page-1 (&optional widget event)
   (interactive)
-  (cfs-ui--switch-to-page 'fontsize-page-1))
+  (cfs-ui--switch-to-page 'align-page-1))
 
-(defun cfs-ui-switch-to-page:fontsize-page-2 (&optional widget event)
+(defun cfs-ui-switch-to-page:align-page-2 (&optional widget event)
   (interactive)
-  (cfs-ui--switch-to-page 'fontsize-page-2))
+  (cfs-ui--switch-to-page 'align-page-2))
 
-(defun cfs-ui-switch-to-page:fontsize-page-3 (&optional widget event)
+(defun cfs-ui-switch-to-page:align-page-3 (&optional widget event)
   (interactive)
-  (cfs-ui--switch-to-page 'fontsize-page-3))
+  (cfs-ui--switch-to-page 'align-page-3))
 
-(defun cfs-ui-switch-to-page:fontsize-page-4 (&optional widget event)
+(defun cfs-ui-switch-to-page:align-page-4 (&optional widget event)
   (interactive)
-  (cfs-ui--switch-to-page 'fontsize-page-4))
+  (cfs-ui--switch-to-page 'align-page-4))
 
-(defun cfs-ui-switch-to-page:fontsize-page-5 (&optional widget event)
+(defun cfs-ui-switch-to-page:align-page-5 (&optional widget event)
   (interactive)
-  (cfs-ui--switch-to-page 'fontsize-page-5))
+  (cfs-ui--switch-to-page 'align-page-5))
 
 (defun cfs-ui-switch-to-page:help-page (&optional widget event)
   (interactive)
@@ -178,11 +178,11 @@
         cfs-ui--widgets:main-navigation)
   (widget-insert " ")
   (push (widget-create 'push-button
-                       :value " 字号 "
+                       :value " 对齐 "
                        :page-name
-                       '(fontsize-page-1 fontsize-page-2 fontsize-page-3
-                                         fontsize-page-4 fontsize-page-5)
-                       :action 'cfs-ui-switch-to-page:fontsize-page-1)
+                       '(align-page-1 align-page-2 align-page-3
+                                      align-page-4 align-page-5)
+                       :action 'cfs-ui-switch-to-page:align-page-1)
         cfs-ui--widgets:main-navigation)
   (widget-insert " ")
   (push (widget-create 'push-button
@@ -208,49 +208,49 @@
   (widget-insert "| ")
   (push (widget-create 'push-button
                        :value "[ 09-18 ]"
-                       :page-name 'fontsize-page-1
+                       :page-name 'align-page-1
                        :button-face-get 'ignore
                        :mouse-face-get 'ignore
-                       :action 'cfs-ui-switch-to-page:fontsize-page-1)
+                       :action 'cfs-ui-switch-to-page:align-page-1)
         cfs-ui--widgets:fontsize-navigation)
   (widget-insert "  ")
   (push (widget-create 'push-button
                        :value "[ 20-24 ]"
-                       :page-name 'fontsize-page-2
+                       :page-name 'align-page-2
                        :button-face-get 'ignore
                        :mouse-face-get 'ignore
-                       :action 'cfs-ui-switch-to-page:fontsize-page-2)
+                       :action 'cfs-ui-switch-to-page:align-page-2)
         cfs-ui--widgets:fontsize-navigation)
   (widget-insert "  ")
   (push (widget-create 'push-button
                        :value "[ 26-28 ]"
-                       :page-name 'fontsize-page-3
+                       :page-name 'align-page-3
                        :button-face-get 'ignore
                        :mouse-face-get 'ignore
-                       :action 'cfs-ui-switch-to-page:fontsize-page-3)
+                       :action 'cfs-ui-switch-to-page:align-page-3)
         cfs-ui--widgets:fontsize-navigation)
   (widget-insert "  ")
   (push (widget-create 'push-button
                        :value "[ -30- ]"
-                       :page-name 'fontsize-page-4
+                       :page-name 'align-page-4
                        :button-face-get 'ignore
                        :mouse-face-get 'ignore
-                       :action 'cfs-ui-switch-to-page:fontsize-page-4)
+                       :action 'cfs-ui-switch-to-page:align-page-4)
         cfs-ui--widgets:fontsize-navigation)
   (widget-insert " ")
   (push (widget-create 'push-button
                        :value "[ -32- ]"
-                       :page-name 'fontsize-page-5
+                       :page-name 'align-page-5
                        :button-face-get 'ignore
                        :mouse-face-get 'ignore
-                       :action 'cfs-ui-switch-to-page:fontsize-page-5)
+                       :action 'cfs-ui-switch-to-page:align-page-5)
         cfs-ui--widgets:fontsize-navigation)
   (widget-insert " |")
   (widget-insert "
-| 如果此表格无法对齐，请按下面的加号或减号按钮来调整 |
+| 中英文等宽对齐设置：按加号或减号按钮直至此表格对齐 |
 | abcdefjhijklmnoprqstuvwxwyABCDEFJHIJkLMNOPQRSTUVXW |
 | 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄄𠄅𠄆𠄇𠄇𠄆 |
-| 英文字号   中文字号调整    EXT-B字号调整     测试  |
+| 英文字号   中文对齐设置    EXT-B 对齐设置    测试  |
 +----------------------------------------------------+"))
 
 (defun cfs-ui--create-warning-board ()
@@ -284,7 +284,7 @@
                                             :key key
                                             :button-face-get 'ignore
                                             :mouse-face-get 'ignore
-                                            :action 'cfs-ui-test-fontsize))
+                                            :action 'cfs-ui-test-align))
                (push (cons widget1 widget1) cfs-ui--widgets-alist))
       (setq widget2 (widget-create 'push-button
                                    :value (format "%-5s" fontsize)
@@ -294,7 +294,7 @@
                                    :tab-stop-point t
                                    :button-face-get 'ignore
                                    :mouse-face-get 'ignore
-                                   :action 'cfs-ui-test-fontsize))
+                                   :action 'cfs-ui-test-align))
       (setq widget3 (widget-create 'push-button
                                    :tag "[-]"
                                    :key key
@@ -302,7 +302,7 @@
                                    :flag t
                                    :button-face-get 'ignore
                                    :mouse-face-get 'ignore
-                                   :action 'cfs-ui-decrease-fontsize))
+                                   :action 'cfs-ui-decrease-fontsize-to-align))
       (setq widget4 (widget-create 'push-button
                                    :tag "[+]"
                                    :key key
@@ -310,7 +310,7 @@
                                    :flag t
                                    :button-face-get 'ignore
                                    :mouse-face-get 'ignore
-                                   :action 'cfs-ui-increase-fontsize))
+                                   :action 'cfs-ui-increase-fontsize-to-align))
       (push (cons widget2 widget2) cfs-ui--widgets-alist)
       (push (cons widget3 widget2) cfs-ui--widgets-alist)
       (push (cons widget4 widget2) cfs-ui--widgets-alist))
@@ -320,7 +320,7 @@
                                  :key key
                                  :button-face-get 'ignore
                                  :mouse-face-get 'ignore
-                                 :action 'cfs-ui-test-fontsize))
+                                 :action 'cfs-ui-test-align))
     (push (cons widget5 widget5) cfs-ui--widgets-alist)))
 
 (defun cfs-ui--create-fontsize-test-buttons (key index)
@@ -331,12 +331,12 @@
                                  :key key
                                  :button-face-get 'ignore
                                  :mouse-face-get 'ignore
-                                 :action 'cfs-ui-test-fontsize))
+                                 :action 'cfs-ui-test-align))
     (setq widget2 (widget-create 'push-button
                                  :tag " 测试 "
                                  :key key
                                  :flag t
-                                 :action 'cfs-ui-test-fontsize))
+                                 :action 'cfs-ui-test-align))
     (push (cons widget1 widget1) cfs-ui--widgets-alist)
     (push (cons widget2 widget2) cfs-ui--widgets-alist)))
 
@@ -364,7 +364,7 @@
     (widget-setup))
   (cfs-ui-switch-to-page:english-fonts-page))
 
-(defun cfs-ui--create-fontsize-page (page-info)
+(defun cfs-ui--create-align-page (page-info)
   (let ((page-name (car page-info))
         (index (plist-get (cdr page-info) :index))
         (fontsize-alist (car (cdr (cfs--read-profile))))
@@ -384,13 +384,13 @@
           (cfs-ui--create-fontsize-test-buttons (car fontsize-list) i))
         (widget-insert "\n")))
     (widget-insert "\n")
-    (widget-insert (format "%-42s" (format "( %s )" (cfs--get-current-profile t))))
+    (widget-insert (format "%-38s" (format "( %s )" (cfs--get-current-profile t))))
     (widget-create 'push-button
-                   :tag "[ 完成调整 ]"
+                   :tag "[ 对齐设置完成 ]"
                    :tab-stop-point t
                    :button-face-get 'ignore
                    :mouse-face-get 'ignore
-                   :action 'cfs-ui-reset-fontsize)))
+                   :action 'cfs-ui-quit-align)))
 
 (defun cfs-ui--create-fonts-page (page-info)
   (let ((page-name (car page-info))
@@ -457,11 +457,11 @@
  切换到 [ 英文 ] 标签    \\[cfs-ui-switch-to-page:english-fonts-page]
  切换到 [ 中文 ] 标签    \\[cfs-ui-switch-to-page:chinese-fonts-page]
  切换到 [ EXT-B ] 标签   \\[cfs-ui-switch-to-page:extb-fonts-page]
- 切换到 [09--18] 标签    \\[cfs-ui-switch-to-page:fontsize-page-1]
- 切换到 [20--24] 标签    \\[cfs-ui-switch-to-page:fontsize-page-2]
- 切换到 [26--28] 标签    \\[cfs-ui-switch-to-page:fontsize-page-3]
- 切换到 [  30  ] 标签    \\[cfs-ui-switch-to-page:fontsize-page-4]
- 切换到 [  32  ] 标签    \\[cfs-ui-switch-to-page:fontsize-page-5]
+ 切换到 [09--18] 标签    \\[cfs-ui-switch-to-page:align-page-1]
+ 切换到 [20--24] 标签    \\[cfs-ui-switch-to-page:align-page-2]
+ 切换到 [26--28] 标签    \\[cfs-ui-switch-to-page:align-page-3]
+ 切换到 [  30  ] 标签    \\[cfs-ui-switch-to-page:align-page-4]
+ 切换到 [  32  ] 标签    \\[cfs-ui-switch-to-page:align-page-5]
  切换到 [ 其他 ] 标签    \\[cfs-ui-switch-to-page:other-features-page]
  切换到 [ 快捷键 ] 标签  \\[cfs-ui-switch-to-page:key-page]
  切换到 [ 帮助 ] 标签    \\[cfs-ui-switch-to-page:help-page]
@@ -473,14 +473,14 @@
  选择/不选择当前字体     \\[cfs-ui-toggle-select-font]
 
 
-** 字号调整快捷键
+** 中英文等宽对齐快捷键
 
  功能                    按键
  ----------------------  --------
- 增大光标处的字号        \\[cfs-ui-increase-fontsize]
- 减小光标处的字号        \\[cfs-ui-decrease-fontsize]
- 测试字体显示效果        \\[cfs-ui-test-fontsize]
- 完成调整                \\[cfs-ui-reset-fontsize]
+ 增大光标处的字号        \\[cfs-ui-increase-fontsize-to-align]
+ 减小光标处的字号        \\[cfs-ui-decrease-fontsize-to-align]
+ 测试字体对齐效果        \\[cfs-ui-test-align]
+ 对齐设置完成            \\[cfs-ui-quit-align]
 
 ** 其它快捷键
 
@@ -595,7 +595,7 @@
           (cfs--save-profile fontname-alist fontsize-alist)
           (cfs-set-font-with-saved-step))))))
 
-(defun cfs-ui--operate-fontsize (&optional widget event n)
+(defun cfs-ui--operate-align (&optional widget event n)
   (let* ((widget (or widget (widget-at)))
          (key (widget-get widget :key))
          (index (widget-get widget :index))
@@ -616,21 +616,21 @@
           (cfs--save-profile fontname-alist fontsize-alist)
           (cfs--set-font fontsizes-list))))))
 
-(defun cfs-ui-reset-fontsize (&optional widget event)
+(defun cfs-ui-quit-align (&optional widget event)
   (interactive)
   (cfs--step-fontsize 0))
 
-(defun cfs-ui-test-fontsize (&optional widget event)
+(defun cfs-ui-test-align (&optional widget event)
   (interactive)
-  (cfs-ui--operate-fontsize widget event))
+  (cfs-ui--operate-align widget event))
 
-(defun cfs-ui-increase-fontsize (&optional widget event)
+(defun cfs-ui-increase-fontsize-to-align (&optional widget event)
   (interactive)
-  (cfs-ui--operate-fontsize widget event 0.5))
+  (cfs-ui--operate-align widget event 0.5))
 
-(defun cfs-ui-decrease-fontsize (&optional widget event)
+(defun cfs-ui-decrease-fontsize-to-align (&optional widget event)
   (interactive)
-  (cfs-ui--operate-fontsize widget event -0.5))
+  (cfs-ui--operate-align widget event -0.5))
 
 (defun cfs-ui-forward (&optional backward)
   (interactive)
@@ -651,7 +651,7 @@
   (let* ((pages (remove nil
                         (mapcar #'(lambda (x)
                                     (when (or operate-all-page
-                                       (plist-get (cdr x) :main-page))
+                                              (plist-get (cdr x) :main-page))
                                       (car x)))
                                 cfs-ui--pages)))
          (pos-max (- (length pages) 1))
@@ -710,21 +710,21 @@
     (define-key map "\t" 'cfs-ui-forward)
     (define-key map "\e\t" 'cfs-ui-backward)
     (define-key map [backtab] 'cfs-ui-backward)
-    (define-key map "=" 'cfs-ui-increase-fontsize)
-    (define-key map "-" 'cfs-ui-decrease-fontsize)
-    (define-key map (kbd "C-c C-c") 'cfs-ui-test-fontsize)
-    (define-key map (kbd "C-c C-r") 'cfs-ui-reset-fontsize)
-    (define-key map (kbd "C-<up>") 'cfs-ui-increase-fontsize)
-    (define-key map (kbd "C-<down>") 'cfs-ui-decrease-fontsize)
+    (define-key map "=" 'cfs-ui-increase-fontsize-to-align)
+    (define-key map "-" 'cfs-ui-decrease-fontsize-to-align)
+    (define-key map (kbd "C-c C-c") 'cfs-ui-test-align)
+    (define-key map (kbd "C-c C-r") 'cfs-ui-quit-align)
+    (define-key map (kbd "C-<up>") 'cfs-ui-increase-fontsize-to-align)
+    (define-key map (kbd "C-<down>") 'cfs-ui-decrease-fontsize-to-align)
     (define-key map "e" 'cfs-ui-switch-to-page:english-fonts-page)
     (define-key map "c" 'cfs-ui-switch-to-page:chinese-fonts-page)
     (define-key map "x" 'cfs-ui-switch-to-page:extb-fonts-page)
-    (define-key map "s" 'cfs-ui-switch-to-page:fontsize-page-1)
-    (define-key map "1" 'cfs-ui-switch-to-page:fontsize-page-1)
-    (define-key map "2" 'cfs-ui-switch-to-page:fontsize-page-2)
-    (define-key map "3" 'cfs-ui-switch-to-page:fontsize-page-3)
-    (define-key map "4" 'cfs-ui-switch-to-page:fontsize-page-4)
-    (define-key map "5" 'cfs-ui-switch-to-page:fontsize-page-5)
+    (define-key map "s" 'cfs-ui-switch-to-page:align-page-1)
+    (define-key map "1" 'cfs-ui-switch-to-page:align-page-1)
+    (define-key map "2" 'cfs-ui-switch-to-page:align-page-2)
+    (define-key map "3" 'cfs-ui-switch-to-page:align-page-3)
+    (define-key map "4" 'cfs-ui-switch-to-page:align-page-4)
+    (define-key map "5" 'cfs-ui-switch-to-page:align-page-5)
     (define-key map "h" 'cfs-ui-switch-to-page:help-page)
     (define-key map "k" 'cfs-ui-switch-to-page:key-page)
     (define-key map "o" 'cfs-ui-switch-to-page:other-features-page)
