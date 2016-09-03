@@ -136,7 +136,7 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 
 ### 使用 cfs-edit-profile-without-ui 命令编辑 profile<a id="orgheadline8"></a>
 
-除了使用 \`cfs-edit-profile' , 有经验的用户也可以使用
+除了使用 \`cfs-edit-profile' , **有经验** 的用户也可以使用
 \`cfs-edit-profile-without-ui' 命令，直接编辑当前 profile 文件，两个命令的效果是一样的。
 
 在编辑的过程中，用户可以使用下面三个命令 **快速** 的测试编辑效果：
@@ -182,11 +182,9 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 </tbody>
 </table>
 
-配置完成后，有可能需要重启 Emacs, 参考：<http://debbugs.gnu.org/db/17/1785.html>
+注：1. 不建议 chinese-fonts-setup 新用户使用这种方式
 
-![img](./snapshots/cfs-edit-fontnames.gif)
-
-![img](./snapshots/cfs-edit-fontsizes.gif)
+1.  配置完成后，有可能需要重启 Emacs, 参考：<http://debbugs.gnu.org/db/17/1785.html>
 
 ### 使用 cfs-regenerate-profile 重置 profile<a id="orgheadline9"></a>
 
