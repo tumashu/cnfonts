@@ -90,9 +90,12 @@
 (declare-function cfs--set-font "chinese-fonts-setup" (fontsizes-list))
 (declare-function cfs--step-fontsize "chinese-fonts-setup" (num))
 (declare-function cfs--get-current-profile "chinese-fonts-setup" (&optional return-profile-name))
+(declare-function cfs--get-current-fontsizes "chinese-fonts-setup" ())
 (declare-function cfs-set-font-with-saved-step "chinese-fonts-setup" (&optional frame))
 (declare-function cfs--return-fonts-configure-string "chinese-fonts-setup" ())
 (declare-function cfs-message "chinese-fonts-setup" (force-show &rest args))
+(declare-function cfs-decrease-fontsize "chinese-fonts-setup" ())
+(declare-function cfs-increase-fontsize "chinese-fonts-setup" ())
 
 (defun cfs-ui--switch-to-page (page-name)
   (switch-to-buffer (format " *%S*" page-name))
@@ -405,16 +408,28 @@
 (defun cfs-ui--create-fonts-page (page-info)
   (let ((page-name (car page-info))
         (index (plist-get (cdr page-info) :index))
-        (fontname-alist (car (cfs--read-profile)))
-        widget1 widget2 widget3)
+        (fontname-alist (car (cfs--read-profile))))
     (widget-insert "\n")
     (cfs-ui--create-main-navigation)
     (widget-insert "\n")
     (cfs-ui--create-warning-board)
     (widget-insert "\n")
-    (let ((fonts (nth index fontname-alist)))
-      (widget-insert (format "状态  字体名称                   %20s\n"
-                             (format "( %s )" (cfs--get-current-profile t))))
+    (let ((fonts (nth index fontname-alist))
+          widget1 widget2 widget3)
+      (widget-insert "状态  当前字体")
+      (widget-create 'push-button
+                     :button-face-get 'ignore
+                     :mouse-face-get 'ignore
+                     :tag "[-]"
+                     :action '(lambda (widget event)
+                                (cfs-decrease-fontsize)))
+      (widget-create 'push-button
+                     :button-face-get 'ignore
+                     :mouse-face-get 'ignore
+                     :tag "[+]"
+                     :action '(lambda (widget event)
+                                (cfs-increase-fontsize)))
+      (widget-insert (format "%33s\n" (format "( %s )" (cfs--get-current-profile t))))
       (widget-insert "----  -----------------------------------------------\n")
       (dolist (font fonts)
         (setq widget1
