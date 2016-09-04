@@ -482,6 +482,7 @@
  切换到 [ 英文 ] 标签    \\[cfs-ui-switch-to-page:english-fonts-page]
  切换到 [ 中文 ] 标签    \\[cfs-ui-switch-to-page:chinese-fonts-page]
  切换到 [ EXT-B ] 标签   \\[cfs-ui-switch-to-page:extb-fonts-page]
+ 切换到 [ 对齐 ] 标签    \\[cfs-ui-switch-to-page:align-page-1]
  切换到 [09--18] 标签    \\[cfs-ui-switch-to-page:align-page-1]
  切换到 [20--24] 标签    \\[cfs-ui-switch-to-page:align-page-2]
  切换到 [26--28] 标签    \\[cfs-ui-switch-to-page:align-page-3]
@@ -744,7 +745,7 @@
     (define-key map "e" 'cfs-ui-switch-to-page:english-fonts-page)
     (define-key map "c" 'cfs-ui-switch-to-page:chinese-fonts-page)
     (define-key map "x" 'cfs-ui-switch-to-page:extb-fonts-page)
-    (define-key map "s" 'cfs-ui-switch-to-page:align-page-1)
+    (define-key map "a" 'cfs-ui-switch-to-page:align-page-1)
     (define-key map "1" 'cfs-ui-switch-to-page:align-page-1)
     (define-key map "2" 'cfs-ui-switch-to-page:align-page-2)
     (define-key map "3" 'cfs-ui-switch-to-page:align-page-3)
