@@ -715,14 +715,16 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
     (message "")))
 
 (defun cfs--step-fontsize (num)
-  (let* ((profile-name (cfs--get-current-profile t))
-         (profile-step
-          (max 1 (min (+ num (cfs--get-profile-step profile-name))
-                      (length cfs--fontsizes-fallback))))
-         (fontsizes-list (cfs--get-fontsizes profile-step)))
-    (cfs--set-font fontsizes-list)
-    (cfs--save-profile-step profile-name profile-step)
-    (cfs-message t cfs--minibuffer-echo-string)))
+  (if (not (display-graphic-p))
+      (cfs-message t "Chinese-fonts-setup 不支持 emacs 终端模式！")
+    (let* ((profile-name (cfs--get-current-profile t))
+           (profile-step
+            (max 1 (min (+ num (cfs--get-profile-step profile-name))
+                        (length cfs--fontsizes-fallback))))
+           (fontsizes-list (cfs--get-fontsizes profile-step)))
+      (cfs--set-font fontsizes-list)
+      (cfs--save-profile-step profile-name profile-step)
+      (cfs-message t cfs--minibuffer-echo-string))))
 
 (defun cfs-set-font-with-saved-step (&optional frame)
   (interactive)
@@ -802,21 +804,25 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
 
 (defun cfs-edit-profile ()
   (interactive)
-  (let ((file (cfs--get-current-profile)))
-    (unless (file-readable-p file)
-      (cfs--save-profile cfs--fontnames-fallback
-                         cfs--fontsizes-fallback))
-    (cfs-ui)))
+  (if (not (display-graphic-p))
+      (cfs-message t "Chinese-fonts-setup 不支持 emacs 终端模式！")
+    (let ((file (cfs--get-current-profile)))
+      (unless (file-readable-p file)
+        (cfs--save-profile cfs--fontnames-fallback
+                           cfs--fontsizes-fallback))
+      (cfs-ui))))
 
 (defun cfs-edit-profile-without-ui ()
   (interactive)
-  (let ((file (cfs--get-current-profile)))
-    (unless (file-readable-p file)
-      (cfs--save-profile cfs--fontnames-fallback
-                         cfs--fontsizes-fallback))
-    (find-file file)
-    (cfs-profile-edit-mode 1)
-    (goto-char (point-min))))
+  (if (not (display-graphic-p))
+      (cfs-message t "Chinese-fonts-setup 不支持 emacs 终端模式！")
+    (let ((file (cfs--get-current-profile)))
+      (unless (file-readable-p file)
+        (cfs--save-profile cfs--fontnames-fallback
+                           cfs--fontsizes-fallback))
+      (find-file file)
+      (cfs-profile-edit-mode 1)
+      (goto-char (point-min)))))
 
 (defun cfs-regenerate-profile ()
   (interactive)
