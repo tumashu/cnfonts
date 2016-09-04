@@ -885,12 +885,16 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
   (interactive)
   (insert (cfs--return-fonts-configure-string)))
 
+(defun cfs--get-current-fontsizes ()
+  "获取当前使用的字号列表。"
+  (cfs--get-fontsizes
+   (cfs--get-profile-step
+    (cfs--get-current-profile t))))
+
 (defun cfs--return-fonts-configure-string ()
   "返回一个 elisp 片断，这个 elisp 片断可以用来配置中文和英文字体。"
   (let* ((fonts (cfs--get-valid-fonts))
-         (fontsizes (cfs--get-fontsizes
-                     (cfs--get-profile-step
-                      (cfs--get-current-profile t))))
+         (fontsizes (cfs--get-current-fontsizes))
          (english-fontname (nth 0 fonts))
          (chinese-fontname (nth 1 fonts))
          (english-fontsize (cfs--float (nth 0 fontsizes)))
