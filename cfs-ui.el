@@ -360,6 +360,11 @@
 
 (defun cfs-ui ()
   (interactive)
+  ;; "cus-edit" 不能很好的在 emacs daemon 下工作，hack!
+  (setq custom-raised-buttons
+        (not (equal (face-valid-attribute-values :box)
+                    '(("unspecified" . unspecified)))))
+  (load-library "cus-edit")
   (dolist (page-info cfs-ui--pages)
     (switch-to-buffer (get-buffer-create (format " *%S*" (car page-info))))
     (let ((inhibit-read-only t))
