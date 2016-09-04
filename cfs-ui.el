@@ -74,7 +74,7 @@
 (defvar cfs-ui--widgets-alist nil)
 (defvar cfs-ui--current-page nil)
 (defvar cfs-ui--widgets:main-navigation nil)
-(defvar cfs-ui--widgets:fontsize-navigation nil)
+(defvar cfs-ui--widgets:align-navigation nil)
 (defvar cfs-ui--widgets:elisp-snippet nil)
 
 ;; Deal with compile warn.
@@ -106,7 +106,7 @@
            widget (replace-regexp-in-string " " "*" orig-value))
         (widget-value-set
          widget (replace-regexp-in-string "*" " " orig-value)))))
-  (dolist (widget cfs-ui--widgets:fontsize-navigation)
+  (dolist (widget cfs-ui--widgets:align-navigation)
     (let ((orig-value (widget-value widget))
           (widget-page (widget-get widget :page-name)))
       (if (eq cfs-ui--current-page widget-page)
@@ -204,7 +204,7 @@
                        :action 'cfs-ui-switch-to-page:help-page)
         cfs-ui--widgets:main-navigation))
 
-(defun cfs-ui--create-fontsize-navigation ()
+(defun cfs-ui--create-align-navigation ()
   (widget-insert "+----------------------------------------------------+\n")
   (widget-insert "| ")
   (push (widget-create 'push-button
@@ -213,7 +213,7 @@
                        :button-face-get 'ignore
                        :mouse-face-get 'ignore
                        :action 'cfs-ui-switch-to-page:align-page-1)
-        cfs-ui--widgets:fontsize-navigation)
+        cfs-ui--widgets:align-navigation)
   (widget-insert "  ")
   (push (widget-create 'push-button
                        :value "[ 20-24 ]"
@@ -221,7 +221,7 @@
                        :button-face-get 'ignore
                        :mouse-face-get 'ignore
                        :action 'cfs-ui-switch-to-page:align-page-2)
-        cfs-ui--widgets:fontsize-navigation)
+        cfs-ui--widgets:align-navigation)
   (widget-insert "  ")
   (push (widget-create 'push-button
                        :value "[ 26-28 ]"
@@ -229,7 +229,7 @@
                        :button-face-get 'ignore
                        :mouse-face-get 'ignore
                        :action 'cfs-ui-switch-to-page:align-page-3)
-        cfs-ui--widgets:fontsize-navigation)
+        cfs-ui--widgets:align-navigation)
   (widget-insert "  ")
   (push (widget-create 'push-button
                        :value "[ -30- ]"
@@ -237,7 +237,7 @@
                        :button-face-get 'ignore
                        :mouse-face-get 'ignore
                        :action 'cfs-ui-switch-to-page:align-page-4)
-        cfs-ui--widgets:fontsize-navigation)
+        cfs-ui--widgets:align-navigation)
   (widget-insert " ")
   (push (widget-create 'push-button
                        :value "[ -32- ]"
@@ -245,7 +245,7 @@
                        :button-face-get 'ignore
                        :mouse-face-get 'ignore
                        :action 'cfs-ui-switch-to-page:align-page-5)
-        cfs-ui--widgets:fontsize-navigation)
+        cfs-ui--widgets:align-navigation)
   (widget-insert " |")
   (widget-insert "
 | 中英文等宽对齐设置：按加号或减号按钮直至此表格对齐 |
@@ -285,7 +285,7 @@
 +----------------------------------------------------+
 "))))
 
-(defun cfs-ui--create-fontsize-operate-buttons (fontsize key index)
+(defun cfs-ui--create-align-operate-buttons (fontsize key index)
   (let (widget1 widget2 widget3 widget4 widget5)
     (if (= index 0)
         (progn (setq widget1 (widget-create 'push-button
@@ -312,7 +312,7 @@
                                    :flag t
                                    :button-face-get 'ignore
                                    :mouse-face-get 'ignore
-                                   :action 'cfs-ui-decrease-fontsize-to-align))
+                                   :action 'cfs-ui-decrease-align))
       (setq widget4 (widget-create 'push-button
                                    :tag "[+]"
                                    :key key
@@ -320,7 +320,7 @@
                                    :flag t
                                    :button-face-get 'ignore
                                    :mouse-face-get 'ignore
-                                   :action 'cfs-ui-increase-fontsize-to-align))
+                                   :action 'cfs-ui-increase-align))
       (push (cons widget2 widget2) cfs-ui--widgets-alist)
       (push (cons widget3 widget2) cfs-ui--widgets-alist)
       (push (cons widget4 widget2) cfs-ui--widgets-alist))
@@ -333,7 +333,7 @@
                                  :action 'cfs-ui-test-align))
     (push (cons widget5 widget5) cfs-ui--widgets-alist)))
 
-(defun cfs-ui--create-fontsize-test-buttons (key index)
+(defun cfs-ui--create-align-test-buttons (key index)
   (let (widget1 widget2)
     (setq widget1 (widget-create 'push-button
                                  :value "  "
@@ -365,7 +365,7 @@
     (set (make-local-variable 'cfs-ui--widgets-alist) nil)
     (set (make-local-variable 'cfs-ui--current-page) (car page-info))
     (set (make-local-variable 'cfs-ui--widgets:main-navigation) nil)
-    (set (make-local-variable 'cfs-ui--widgets:fontsize-navigation) nil)
+    (set (make-local-variable 'cfs-ui--widgets:align-navigation) nil)
     (set (make-local-variable 'cfs-ui--widgets:elisp-snippet) nil)
     (setq truncate-lines t)
     (let ((page-builder (plist-get (cdr page-info) :page-builder)))
@@ -382,16 +382,16 @@
     (widget-insert "\n")
     (cfs-ui--create-main-navigation)
     (widget-insert "\n")
-    (cfs-ui--create-fontsize-navigation)
+    (cfs-ui--create-align-navigation)
     (widget-insert "\n" )
     (dolist (fontsize-list fontsize-alist)
       (when (member (car fontsize-list) page-fontsizes)
         (let ((i 0))
           (dolist (fontsize fontsize-list)
-            (cfs-ui--create-fontsize-operate-buttons
+            (cfs-ui--create-align-operate-buttons
              (number-to-string fontsize) (car fontsize-list) i)
             (setq i (+ i 1)))
-          (cfs-ui--create-fontsize-test-buttons (car fontsize-list) i))
+          (cfs-ui--create-align-test-buttons (car fontsize-list) i))
         (widget-insert "\n")))
     (widget-insert "\n")
     (widget-insert (format "%-38s" (format "( %s )" (cfs--get-current-profile t))))
@@ -487,8 +487,8 @@
 
  功能                    按键
  ----------------------  --------
- 增大光标处的字号        \\[cfs-ui-increase-fontsize-to-align]
- 减小光标处的字号        \\[cfs-ui-decrease-fontsize-to-align]
+ 增大光标处的字号来对齐  \\[cfs-ui-increase-align]
+ 减小光标处的字号来对齐  \\[cfs-ui-decrease-align]
  测试字体对齐效果        \\[cfs-ui-test-align]
  对齐设置完成            \\[cfs-ui-quit-align]
 
@@ -634,11 +634,11 @@
   (interactive)
   (cfs-ui--operate-align widget event))
 
-(defun cfs-ui-increase-fontsize-to-align (&optional widget event)
+(defun cfs-ui-increase-align (&optional widget event)
   (interactive)
   (cfs-ui--operate-align widget event 0.5))
 
-(defun cfs-ui-decrease-fontsize-to-align (&optional widget event)
+(defun cfs-ui-decrease-align (&optional widget event)
   (interactive)
   (cfs-ui--operate-align widget event -0.5))
 
@@ -720,12 +720,12 @@
     (define-key map "\t" 'cfs-ui-forward)
     (define-key map "\e\t" 'cfs-ui-backward)
     (define-key map [backtab] 'cfs-ui-backward)
-    (define-key map "=" 'cfs-ui-increase-fontsize-to-align)
-    (define-key map "-" 'cfs-ui-decrease-fontsize-to-align)
+    (define-key map "=" 'cfs-ui-increase-align)
+    (define-key map "-" 'cfs-ui-decrease-align)
     (define-key map (kbd "C-c C-c") 'cfs-ui-test-align)
     (define-key map (kbd "C-c C-r") 'cfs-ui-quit-align)
-    (define-key map (kbd "C-<up>") 'cfs-ui-increase-fontsize-to-align)
-    (define-key map (kbd "C-<down>") 'cfs-ui-decrease-fontsize-to-align)
+    (define-key map (kbd "C-<up>") 'cfs-ui-increase-align)
+    (define-key map (kbd "C-<down>") 'cfs-ui-decrease-align)
     (define-key map "e" 'cfs-ui-switch-to-page:english-fonts-page)
     (define-key map "c" 'cfs-ui-switch-to-page:chinese-fonts-page)
     (define-key map "x" 'cfs-ui-switch-to-page:extb-fonts-page)
