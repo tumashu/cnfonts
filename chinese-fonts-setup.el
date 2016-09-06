@@ -366,6 +366,7 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
     (11.5 13.5 13.5)
     (12.5 15.0 15.0)
     (14   16.5 16.5)
+    (15   18.0 18.0)
     (16   19.5 19.5)
     (18   21.0 21.0)
     (20   24.0 24.0)

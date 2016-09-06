@@ -50,7 +50,7 @@
      :page-builder cfs-ui--create-fonts-page)
     (align-page-1
      :main-page t
-     :fontsizes (9 10 11.5 12.5 14 16 18)
+     :fontsizes (9 10 11.5 12.5 14 15 16 18)
      :page-builder cfs-ui--create-align-page)
     (align-page-2
      :fontsizes (20 22 24)
