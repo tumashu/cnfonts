@@ -12,12 +12,13 @@
     - [使用 cfs-regenerate-profile 重置 profile](#使用-cfs-regenerate-profile-重置-profile)
     - [调整字体大小](#调整字体大小)
     - [让 chinese-fonts-setup 随着 emacs 自动启动](#让-chinese-fonts-setup-随着-emacs-自动启动)
+    - [chinese-fonts-setup 与 org-mode 配合使用](#chinese-fonts-setup-与-org-mode-配合使用)
     - [使用 chinese-fonts-setup 生成 elisp 字体配置片断](#使用-chinese-fonts-setup-生成-elisp-字体配置片断)
     - [Chinese-fonts-setup 高级功能](#chinese-fonts-setup-高级功能)
   - [Tips](#tips)
   - [参考文章](#参考文章)
 
-# Chinese-fonts-setup README<a id="orgheadline18"></a>
+# Chinese-fonts-setup README<a id="orgheadline19"></a>
 
 ## 简介<a id="orgheadline1"></a>
 
@@ -53,7 +54,7 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
         ;; 让 spacemacs mode-line 中的 Unicode 图标正确显示。
         ;; (cfs-set-spacemacs-fallback-fonts)
 
-## 配置使用<a id="orgheadline15"></a>
+## 配置使用<a id="orgheadline16"></a>
 
 ### 最简单的用法（懒人必备）<a id="orgheadline5"></a>
 
@@ -279,13 +280,21 @@ emacs 自动启动，这个命令将 \`cfs-set-font-with-saved-step' 添加到�
 用户也可以手动运行 \`cfs-set-font-with-saved-step' 来让
 chinese-fonts-setup 生效。
 
-### 使用 chinese-fonts-setup 生成 elisp 字体配置片断<a id="orgheadline13"></a>
+### chinese-fonts-setup 与 org-mode 配合使用<a id="orgheadline13"></a>
+
+许多用户使用 org-mode 时，习惯让不同的标题，使用的字体大小也不同，这个特性需要用户设置：
+
+    (setq cfs-use-face-font-rescale t)
+
+注：这个功能不能在 window 系统下使用，它会让对齐功能失效，Linux 下这个功能 **一般** 可以使用，Mac 系统未测试，同学可以亲自试一试。
+
+### 使用 chinese-fonts-setup 生成 elisp 字体配置片断<a id="orgheadline14"></a>
 
 有些用户觉得 chinese-fonts-setup **太过厚重** , 他们喜欢使用简单的方式来配置字体，这些用户可以了解一下 \`cfs-insert-fonts-configure'
 命令，这个命令可以根据 chinese-fonts-setup 的设置自动生成一个
 "字体配置 elisp 片断", 并插入光标处，将这个片断写入 .emacs 文件后，就不需要启动 chinese-fonts-setup 来设置字体了。
 
-### Chinese-fonts-setup 高级功能<a id="orgheadline14"></a>
+### Chinese-fonts-setup 高级功能<a id="orgheadline15"></a>
 
 Chinese-fonts-setup **仅仅** 设置英文，中文和 EXT-B 字体，不处理其它字体，比如：symbol 字体，但 chinese-fonts-setup 提供了一个
 hook: \`cfs-set-font-finish-hook' , 用户可以用它来处理一些特殊设置，下面的一段代码用来配置 symbol 字体，参数 fontsizes-list 是一个列表，记录了 **当前使用** 的英文字体，中文字体和 EXT-B 字体的字号。
@@ -314,7 +323,7 @@ hook: \`cfs-set-font-finish-hook' , 用户可以用它来处理一些特殊设�
 
     (add-hook 'cfs-set-font-finish-hook #'my-line-spacing-setup)
 
-## Tips<a id="orgheadline16"></a>
+## Tips<a id="orgheadline17"></a>
 
 1.  如果用户需要在自己的 emacs 配置中管理一些个人字体，可以使用变量
     \`cfs-personal-fontnames' , 其结构与 \`cfs&#x2013;fontnames-fallback'一样。
@@ -330,7 +339,7 @@ hook: \`cfs-set-font-finish-hook' , 用户可以用它来处理一些特殊设�
     1.  Ext-B字符列表: <https://cdo.wikipedia.org/wiki/Wikipedia:Unicode%E6%93%B4%E5%B1%95%E6%BC%A2%E5%AD%97>
     2.  HanaMinB 下载地址: <https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/>
 
-## 参考文章<a id="orgheadline17"></a>
+## 参考文章<a id="orgheadline18"></a>
 
 1.  <http://baohaojun.github.io/perfect-emacs-chinese-font.html>
 2.  <http://zhuoqiang.me/torture-emacs.html>

@@ -188,6 +188,17 @@
 ;; 用户也可以手动运行 `cfs-set-font-with-saved-step' 来让
 ;; chinese-fonts-setup 生效。
 
+;; *** chinese-fonts-setup 与 org-mode 配合使用
+;; 许多用户使用 org-mode 时，习惯让不同的标题，使用的字体大小也不同，这个
+;; 特性需要用户设置：
+
+;; #+BEGIN_EXAMPLE
+;; (setq cfs-use-face-font-rescale t)
+;; #+END_EXAMPLE
+
+;; 注：这个功能不能在 window 系统下使用，它会让对齐功能失效，Linux 下
+;; 这个功能 *一般* 可以使用，Mac 系统未测试，同学可以亲自试一试。
+
 ;; *** 使用 chinese-fonts-setup 生成 elisp 字体配置片断
 ;; 有些用户觉得 chinese-fonts-setup *太过厚重* , 他们喜欢使用简单的
 ;; 方式来配置字体，这些用户可以了解一下 `cfs-insert-fonts-configure'
