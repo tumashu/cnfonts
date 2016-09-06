@@ -72,6 +72,16 @@
 ;;    #+END_EXAMPLE
 
 ;; ** 配置使用
+;; *** 最简单的用法（懒人必备）
+;; 通过下面几个命令，用户可以 *快速* 了解 chinese-fonts-setup 的大部分功能，
+;; 而不需要阅读整篇文档，如果用户想深入了解 chinese-fonts-setup 或者自定义
+;; 一些特殊的功能，阅读整篇文档是逃不开的。
+;; | 命令                  | 功能         |
+;; |-----------------------+--------------|
+;; | cfs-edit-profile      | 调整字体设置 |
+;; | cfs-increase-fontsize | 增大字号     |
+;; | cfs-decrease-fontsize | 减小字号     |
+
 ;; *** profile 的概念
 ;; profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概念，
 ;; 来维护多套字体配置，从而实现特定的环境使用特定的字体配置，比如：在编程

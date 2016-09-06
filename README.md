@@ -4,6 +4,7 @@
   - [使用特点](#使用特点)
   - [下载安装](#下载安装)
   - [配置使用](#配置使用)
+    - [最简单的用法（懒人必备）](#最简单的用法（懒人必备）)
     - [profile 的概念](#profile-的概念)
     - [profile 命名与切换](#profile-命名与切换)
     - [使用 cfs-edit-profile 命令调整 profile](#使用-cfs-edit-profile-命令调整-profile)
@@ -16,7 +17,7 @@
   - [Tips](#tips)
   - [参考文章](#参考文章)
 
-# Chinese-fonts-setup README<a id="orgheadline17"></a>
+# Chinese-fonts-setup README<a id="orgheadline18"></a>
 
 ## 简介<a id="orgheadline1"></a>
 
@@ -52,9 +53,48 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
         ;; 让 spacemacs mode-line 中的 Unicode 图标正确显示。
         ;; (cfs-set-spacemacs-fallback-fonts)
 
-## 配置使用<a id="orgheadline14"></a>
+## 配置使用<a id="orgheadline15"></a>
 
-### profile 的概念<a id="orgheadline5"></a>
+### 最简单的用法（懒人必备）<a id="orgheadline5"></a>
+
+通过下面几个命令，用户可以 **快速** 了解 chinese-fonts-setup 的大部分功能，而不需要阅读整篇文档，如果用户想深入了解 chinese-fonts-setup 或者自定义一些特殊的功能，阅读整篇文档是逃不开的。
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">命令</th>
+<th scope="col" class="org-left">功能</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td class="org-left">cfs-edit-profile</td>
+<td class="org-left">调整字体设置</td>
+</tr>
+
+
+<tr>
+<td class="org-left">cfs-increase-fontsize</td>
+<td class="org-left">增大字号</td>
+</tr>
+
+
+<tr>
+<td class="org-left">cfs-decrease-fontsize</td>
+<td class="org-left">减小字号</td>
+</tr>
+</tbody>
+</table>
+
+### profile 的概念<a id="orgheadline6"></a>
 
 profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概念，来维护多套字体配置，从而实现特定的环境使用特定的字体配置，比如：在编程时使用 “Consolas + 微米黑”，在阅读文章时使用 “PragmataPro + 黑体”，等等。
 
@@ -82,7 +122,7 @@ profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概�
             (30   32.0 32.0)
             (32   33.0 33.0)))
 
-### profile 命名与切换<a id="orgheadline6"></a>
+### profile 命名与切换<a id="orgheadline7"></a>
 
 Chinese-fonts-setup 默认使用三个 profile: profile1, profile2 和
 profile3, 如果想使用其它有意义的名称，可以设置:
@@ -121,7 +161,7 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 </tbody>
 </table>
 
-### 使用 cfs-edit-profile 命令调整 profile<a id="orgheadline7"></a>
+### 使用 cfs-edit-profile 命令调整 profile<a id="orgheadline8"></a>
 
 如果 **当前使用** 的字体不符合使用习惯，用户可以运行 \`cfs-edit-profile'
 命令来调整 **当前** profile,这个命令会弹出一个图形化界面，类似：
@@ -134,7 +174,7 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 ![img](./snapshots/cfs-ui-6.png)
 ![img](./snapshots/cfs-ui-7.png)
 
-### 使用 cfs-edit-profile-without-ui 命令编辑 profile<a id="orgheadline8"></a>
+### 使用 cfs-edit-profile-without-ui 命令编辑 profile<a id="orgheadline9"></a>
 
 除了使用 \`cfs-edit-profile' , **有经验** 的用户也可以使用
 \`cfs-edit-profile-without-ui' 命令，直接编辑当前 profile 文件，两个命令的效果是一样的。
@@ -186,12 +226,12 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 
 注2: 配置完成后，有可能需要重启 Emacs, 参考：<http://debbugs.gnu.org/db/17/1785.html>
 
-### 使用 cfs-regenerate-profile 重置 profile<a id="orgheadline9"></a>
+### 使用 cfs-regenerate-profile 重置 profile<a id="orgheadline10"></a>
 
 \`cfs-regenerate-profile' 命令会使用 chinese-fonts-setup 自带的
 fallback 信息，覆盖需要 **重置** 的 profile, 这个 profile 原来的内容将丢失，请紧慎使用！
 
-### 调整字体大小<a id="orgheadline10"></a>
+### 调整字体大小<a id="orgheadline11"></a>
 
 \`chinese-fonts-setup' 使用下述两个命令调整字体大小:
 
@@ -228,7 +268,7 @@ fallback 信息，覆盖需要 **重置** 的 profile, 这个 profile 原来的�
 
 ![img](./snapshots/cfs-increase-and-decrease-fontsize.gif)
 
-### 让 chinese-fonts-setup 随着 emacs 自动启动<a id="orgheadline11"></a>
+### 让 chinese-fonts-setup 随着 emacs 自动启动<a id="orgheadline12"></a>
 
 \`chinese-fonts-setup-enable' 命令可以让 chinese-fonts-setup 随着
 emacs 自动启动，这个命令将 \`cfs-set-font-with-saved-step' 添加到下面两个 hook:
@@ -239,13 +279,13 @@ emacs 自动启动，这个命令将 \`cfs-set-font-with-saved-step' 添加到�
 用户也可以手动运行 \`cfs-set-font-with-saved-step' 来让
 chinese-fonts-setup 生效。
 
-### 使用 chinese-fonts-setup 生成 elisp 字体配置片断<a id="orgheadline12"></a>
+### 使用 chinese-fonts-setup 生成 elisp 字体配置片断<a id="orgheadline13"></a>
 
 有些用户觉得 chinese-fonts-setup **太过厚重** , 他们喜欢使用简单的方式来配置字体，这些用户可以了解一下 \`cfs-insert-fonts-configure'
 命令，这个命令可以根据 chinese-fonts-setup 的设置自动生成一个
 "字体配置 elisp 片断", 并插入光标处，将这个片断写入 .emacs 文件后，就不需要启动 chinese-fonts-setup 来设置字体了。
 
-### Chinese-fonts-setup 高级功能<a id="orgheadline13"></a>
+### Chinese-fonts-setup 高级功能<a id="orgheadline14"></a>
 
 Chinese-fonts-setup **仅仅** 设置英文，中文和 EXT-B 字体，不处理其它字体，比如：symbol 字体，但 chinese-fonts-setup 提供了一个
 hook: \`cfs-set-font-finish-hook' , 用户可以用它来处理一些特殊设置，下面的一段代码用来配置 symbol 字体，参数 fontsizes-list 是一个列表，记录了 **当前使用** 的英文字体，中文字体和 EXT-B 字体的字号。
@@ -274,7 +314,7 @@ hook: \`cfs-set-font-finish-hook' , 用户可以用它来处理一些特殊设�
 
     (add-hook 'cfs-set-font-finish-hook #'my-line-spacing-setup)
 
-## Tips<a id="orgheadline15"></a>
+## Tips<a id="orgheadline16"></a>
 
 1.  如果用户需要在自己的 emacs 配置中管理一些个人字体，可以使用变量
     \`cfs-personal-fontnames' , 其结构与 \`cfs&#x2013;fontnames-fallback'一样。
@@ -290,7 +330,7 @@ hook: \`cfs-set-font-finish-hook' , 用户可以用它来处理一些特殊设�
     1.  Ext-B字符列表: <https://cdo.wikipedia.org/wiki/Wikipedia:Unicode%E6%93%B4%E5%B1%95%E6%BC%A2%E5%AD%97>
     2.  HanaMinB 下载地址: <https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/>
 
-## 参考文章<a id="orgheadline16"></a>
+## 参考文章<a id="orgheadline17"></a>
 
 1.  <http://baohaojun.github.io/perfect-emacs-chinese-font.html>
 2.  <http://zhuoqiang.me/torture-emacs.html>
