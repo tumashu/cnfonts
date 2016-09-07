@@ -518,6 +518,16 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
       (list cfs--fontnames-fallback
             cfs--fontsizes-fallback))))
 
+(defun cfs--upgrade-profile-need-p ()
+  "测试是否需要升级 profile 格式。"
+  (let* ((profile-info (cfs--read-profile))
+         (profile-fontnames (nth 0 profile-info))
+         (profile-fontsizes (nth 1 profile-info)))
+    (not (and (= (length profile-fontnames)
+                 (length cfs--fontnames-fallback))
+              (= (length profile-fontsizes)
+                 (length cfs--fontsizes-fallback))))))
+
 (defun cfs--merge-fontname-list (list1 list2 &optional list3)
   (mapcar #'delete-dups
           `((,@(nth 0 list1) ,@(nth 0 list2) ,@(nth 0 list3))

@@ -96,6 +96,7 @@
 (declare-function cfs-message "chinese-fonts-setup" (force-show &rest args))
 (declare-function cfs-decrease-fontsize "chinese-fonts-setup" ())
 (declare-function cfs-increase-fontsize "chinese-fonts-setup" ())
+(declare-function cfs--upgrade-profile-need-p "chinese-fonts-setup" ())
 
 (defun cfs-ui--switch-to-page (page-name)
   (switch-to-buffer (format " *%S*" page-name))
@@ -465,8 +466,24 @@
         (push (cons widget3 widget2) cfs-ui--widgets-alist)
         (widget-insert "\n" ))
       (widget-insert "
-注: \"P\"  表示当前字体包含在 `cfs-personal-fontnames' 中
-    \"NA\" 表示系统没有安装当前字体\n"))))
+注1: \"P\"  表示当前字体包含在 `cfs-personal-fontnames' 中
+     \"NA\" 表示系统没有安装当前字体\n")
+      (when (cfs--upgrade-profile-need-p)
+        (widget-insert "
+注2: profile 的格式已经更新，用户可以点击 ")
+        (widget-create 'push-button
+                       :tag "[ 这里 ]"
+                       :tab-stop-point t
+                       :button-face-get 'ignore
+                       :mouse-face-get 'ignore
+                       :action '(lambda (widget event)
+                                  (cfs--save-profile cfs--fontnames-fallback
+                                                     cfs--fontsizes-fallback
+                                                     cfs--current-profile)
+                                  (cfs-set-font-with-saved-step)
+                                  (cfs-ui-restart)))
+        (widget-insert " 强制
+     *重置* 当前 profile。")))))
 
 (defun cfs-ui--create-key-page (page-info)
   (widget-create 'push-button
