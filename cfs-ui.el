@@ -640,8 +640,9 @@
           (cfs-message t "Chinese-fonts-setup UI: 系统没有安装字体: %S ." font)
         (when (widget-value widget1)
           (setf (nth index fontname-alist)
-                (delete-dups
-                 `(,font ,@(nth index fontname-alist))))
+                (cl-remove-duplicates
+                 `(,font ,@(nth index fontname-alist))
+                 :from-end t :test 'equal))
           (cfs--save-profile fontname-alist fontsize-alist)
           (cfs-set-font-with-saved-step))))))
 

@@ -529,7 +529,8 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
                  (length cfs--fontsizes-fallback))))))
 
 (defun cfs--merge-fontname-list (list1 list2 &optional list3)
-  (mapcar #'delete-dups
+  (mapcar #'(lambda (lst)
+              (cl-remove-duplicates lst :from-end t :test 'equal))
           `((,@(nth 0 list1) ,@(nth 0 list2) ,@(nth 0 list3))
             (,@(nth 1 list1) ,@(nth 1 list2) ,@(nth 1 list3))
             (,@(nth 2 list1) ,@(nth 2 list2) ,@(nth 2 list3)))))
