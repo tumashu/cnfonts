@@ -228,17 +228,9 @@
 ;;       (message "字体 %S 不存在！" fontname))))
 
 ;; (add-hook 'cfs-set-font-finish-hook 'my-set-symbol-fonts)
-
 ;; #+END_EXAMPLE
 
 ;; **** 设置一些不常用汉字字符的字体
-;; 下面代码中的 "(#x3400 . #x4DFF)" 代表了所设字符在 unicode-bmp
-;; 中的范围。
-
-;; `describe-char' 命令会创建一个 buffer 来显示 *光标处字符* 的
-;; 许多信息，点击 “code point in charset” 就可以显示整个 unicode-bmp
-;; 了。
-
 ;; #+BEGIN_EXAMPLE
 ;; (defun my-set-exta-fonts (fontsizes-list)
 ;;   (let* ((fontname "微软雅黑")
@@ -253,6 +245,13 @@
 
 ;; (add-hook 'cfs-set-font-finish-hook 'my-set-exta-fonts)
 ;; #+END_EXAMPLE
+;; 注意事项：
+
+;; 1. "(#x3400 . #x4DFF)" 代表了待设字符在 unicode-bmp 中的范围。
+;; 2. 用户可以通过下面的方式来确定待字符的范围
+;;    1. 运行 `describe-char' 来显示 *待设字符* 的信息
+;;    2. 点击 “code point in charset” 处的链接，来显示整个 unicode-bmp 表
+;;    3. 获取范围
 
 ;; **** 设置行距随着字号自动调整
 
