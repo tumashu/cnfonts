@@ -210,8 +210,8 @@
 ;; Chinese-fonts-setup *仅仅* 设置英文，中文和 EXT-B 字体，不处理
 ;; 其它字符的字体，比如：symbol 字符，但 chinese-fonts-setup 可以
 ;; 通过 hook: `cfs-set-font-finish-hook' 来处理类似的问题（这个
-;; hook 使用一个参数 fontsizes-list, 记录了 *当前使用* 的英文字体，
-;; 中文字体和 EXT-B 字体的字号）。
+;; hook 使用的函数只有一个参数 fontsizes-list, 用来记录 *当前使用*
+;; 的英文字体，中文字体和 EXT-B 字体的字号）。
 
 ;; 下面是一些例子：
 ;; **** 设置 symbol 字符的字体
@@ -222,10 +222,12 @@
 ;; (add-hook 'cfs-set-font-finish-hook 'my-set-symbol-fonts)
 ;; #+END_EXAMPLE
 
-;; **** 设置 unicode-bmp 一些不常用汉字字符的字体
-;; 下面代码中的 (#x3400 . #x4DFF) 代表了所设置字符在 unicode-bmp
-;; 中的范围: `describe-char' 命令会创建一个 buffer, 来显示光标处
-;; 字符的信息，点击 “code point in charset” 就可以显示整个 unicode-bmp
+;; **** 设置一些不常用汉字字符的字体
+;; 下面代码中的 "(#x3400 . #x4DFF)" 代表了所设字符在 unicode-bmp
+;; 中的范围。
+
+;; `describe-char' 命令会创建一个 buffer 来显示 *光标处字符* 的
+;; 许多信息，点击 “code point in charset” 就可以显示整个 unicode-bmp
 ;; 了。
 
 ;; #+BEGIN_EXAMPLE
