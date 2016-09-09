@@ -305,7 +305,15 @@ hook 使用的函数只有一个参数 fontsizes-list, 用来记录 **当前使�
 1.  设置 symbol 字符的字体
 
         (defun my-set-symbol-fonts (fontsizes-list)
-          (set-fontset-font t 'symbol "Inconsolata" nil 'append))
+          (let* ((fontname "Inconsolata")
+                 (fontsize (nth 0 fontsizes-list))
+                 (fontspec (font-spec :name fontname
+                                      :size fontsize
+                                      :weight 'normal
+                                      :slant 'normal)))
+            (if (cfs--fontspec-valid-p fontspec)
+                (set-fontset-font "fontset-default" 'symbol fontspec nil 'append)
+              (message "字体 %S 不存在！" fontname))))
 
         (add-hook 'cfs-set-font-finish-hook 'my-set-symbol-fonts)
 
@@ -318,13 +326,15 @@ hook 使用的函数只有一个参数 fontsizes-list, 用来记录 **当前使�
     了。
 
         (defun my-set-exta-fonts (fontsizes-list)
-          (set-fontset-font
-           "fontset-default" '(#x3400 . #x4DFF)
-           (font-spec :name "微软雅黑"
-                      :size (nth 2 fontsizes-list)
-                      :weight 'normal
-                      :slant 'normal)
-           nil))
+          (let* ((fontname "微软雅黑")
+                 (fontsize (nth 1 fontsizes-list))
+                 (fontspec (font-spec :name fontname
+                                      :size fontsize
+                                      :weight 'normal
+                                      :slant 'normal)))
+            (if (cfs--fontspec-valid-p fontspec)
+                (set-fontset-font "fontset-default" '(#x3400 . #x4DFF) fontspec nil)
+              (message "字体 %S 不存在！" fontname))))
 
         (add-hook 'cfs-set-font-finish-hook 'my-set-exta-fonts)
 
