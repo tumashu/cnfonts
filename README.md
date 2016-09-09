@@ -18,7 +18,7 @@
   - [Tips](#tips)
   - [参考文章](#参考文章)
 
-# Chinese-fonts-setup README<a id="orgheadline19"></a>
+# Chinese-fonts-setup README<a id="orgheadline22"></a>
 
 ## 简介<a id="orgheadline1"></a>
 
@@ -54,7 +54,7 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
         ;; 让 spacemacs mode-line 中的 Unicode 图标正确显示。
         ;; (cfs-set-spacemacs-fallback-fonts)
 
-## 配置使用<a id="orgheadline16"></a>
+## 配置使用<a id="orgheadline19"></a>
 
 ### 最简单的用法（懒人必备）<a id="orgheadline5"></a>
 
@@ -294,36 +294,57 @@ chinese-fonts-setup 生效。
 命令，这个命令可以根据 chinese-fonts-setup 的设置自动生成一个
 "字体配置 elisp 片断", 并插入光标处，将这个片断写入 .emacs 文件后，就不需要启动 chinese-fonts-setup 来设置字体了。
 
-### Chinese-fonts-setup 高级功能<a id="orgheadline15"></a>
+### Chinese-fonts-setup 高级功能<a id="orgheadline18"></a>
 
-Chinese-fonts-setup **仅仅** 设置英文，中文和 EXT-B 字体，不处理其它字体，比如：symbol 字体，但 chinese-fonts-setup 提供了一个
-hook: \`cfs-set-font-finish-hook' , 用户可以用它来处理一些特殊设置，下面的一段代码用来配置 symbol 字体，参数 fontsizes-list 是一个列表，记录了 **当前使用** 的英文字体，中文字体和 EXT-B 字体的字号。
+Chinese-fonts-setup **仅仅** 设置英文，中文和 EXT-B 字体，不处理其它字符的字体，比如：symbol 字符，但 chinese-fonts-setup 可以通过 hook: \`cfs-set-font-finish-hook' 来处理类似的问题（这个
+hook 使用一个参数 fontsizes-list, 记录了 **当前使用** 的英文字体，中文字体和 EXT-B 字体的字号）。
 
-    (defun my-set-symbol-fonts (fontsizes-list)
-      (set-fontset-font t 'symbol "Inconsolata" nil 'append))
+下面是一些例子：
 
-    (add-hook 'cfs-set-font-finish-hook 'my-set-symbol-fonts)
+1.  设置 symbol 字符的字体
 
-除了字体设置，这个 hook 还可以实现其它功能，比如：行距随着字号自动调整
+        (defun my-set-symbol-fonts (fontsizes-list)
+          (set-fontset-font t 'symbol "Inconsolata" nil 'append))
 
-    (defvar my-line-spacing-alist
-          '((9 . 0.1) (10 . 0.9) (11.5 . 0.2)
-            (12.5 . 0.2) (14 . 0.2) (16 . 0.2)
-            (18 . 0.2) (20 . 1.0) (22 . 0.2)
-            (24 . 0.2) (26 . 0.2) (28 . 0.2)
-            (30 . 0.2) (32 . 0.2)))
+        (add-hook 'cfs-set-font-finish-hook 'my-set-symbol-fonts)
 
-    (defun my-line-spacing-setup (fontsizes-list)
-      (let ((fontsize (car fontsizes-list))
-            (line-spacing-alist (copy-list my-line-spacing-alist)))
-        (dolist (list line-spacing-alist)
-          (when (= fontsize (car list))
-            (setq line-spacing-alist nil)
-            (setq-default line-spacing (cdr list))))))
+2.  设置 unicode-bmp 一些不常用汉字字符的字体
 
-    (add-hook 'cfs-set-font-finish-hook #'my-line-spacing-setup)
+    下面代码中的 (#x3400 . #x4DFF) 代表了所设置字符在 unicode-bmp
+    中的范围: \`describe-char' 命令会创建一个 buffer, 来显示光标处字符的信息，点击 “code point in charset” 就可以显示整个 unicode-bmp
+    了。
 
-## Tips<a id="orgheadline17"></a>
+        (defun my-set-exta-fonts (fontsizes-list)
+          (set-fontset-font
+           "fontset-default" '(#x3400 . #x4DFF)
+           (font-spec :name "微软雅黑"
+                      :size (nth 2 fontsizes-list)
+                      :weight 'normal
+                      :slant 'normal)
+           nil))
+
+        (add-hook 'cfs-set-font-finish-hook 'my-set-exta-fonts)
+
+3.  设置行距随着字号自动调整
+
+        (defvar my-line-spacing-alist
+              '((9 . 0.1) (10 . 0.9) (11.5 . 0.2)
+                (12.5 . 0.2) (14 . 0.2) (16 . 0.2)
+                (18 . 0.2) (20 . 1.0) (22 . 0.2)
+                (24 . 0.2) (26 . 0.2) (28 . 0.2)
+                (30 . 0.2) (32 . 0.2)))
+
+        (defun my-line-spacing-setup (fontsizes-list)
+          (let ((fontsize (car fontsizes-list))
+                (line-spacing-alist (copy-list my-line-spacing-alist)))
+            (dolist (list line-spacing-alist)
+              (when (= fontsize (car list))
+                (setq line-spacing-alist nil)
+                (setq-default line-spacing (cdr list))))))
+
+        (add-hook 'cfs-set-font-finish-hook #'my-line-spacing-setup)
+
+## Tips<a id="orgheadline20"></a>
 
 1.  如果用户需要在自己的 emacs 配置中管理一些个人字体，可以使用变量
     \`cfs-personal-fontnames' , 其结构与 \`cfs&#x2013;fontnames-fallback'一样。
@@ -339,7 +360,7 @@ hook: \`cfs-set-font-finish-hook' , 用户可以用它来处理一些特殊设�
     1.  Ext-B字符列表: <https://cdo.wikipedia.org/wiki/Wikipedia:Unicode%E6%93%B4%E5%B1%95%E6%BC%A2%E5%AD%97>
     2.  HanaMinB 下载地址: <https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/>
 
-## 参考文章<a id="orgheadline18"></a>
+## 参考文章<a id="orgheadline21"></a>
 
 1.  <http://baohaojun.github.io/perfect-emacs-chinese-font.html>
 2.  <http://zhuoqiang.me/torture-emacs.html>

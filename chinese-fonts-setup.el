@@ -208,11 +208,13 @@
 
 ;; *** Chinese-fonts-setup 高级功能
 ;; Chinese-fonts-setup *仅仅* 设置英文，中文和 EXT-B 字体，不处理
-;; 其它字体，比如：symbol 字体，但 chinese-fonts-setup 提供了一个
-;; hook: `cfs-set-font-finish-hook' , 用户可以用它来处理一些特殊设置，
-;; 下面的一段代码用来配置 symbol 字体，参数 fontsizes-list 是一个列表，
-;; 记录了 *当前使用* 的英文字体，中文字体和 EXT-B 字体的字号。
+;; 其它字符的字体，比如：symbol 字符，但 chinese-fonts-setup 可以
+;; 通过 hook: `cfs-set-font-finish-hook' 来处理类似的问题（这个
+;; hook 使用一个参数 fontsizes-list, 记录了 *当前使用* 的英文字体，
+;; 中文字体和 EXT-B 字体的字号）。
 
+;; 下面是一些例子：
+;; **** 设置 symbol 字符的字体
 ;; #+BEGIN_EXAMPLE
 ;; (defun my-set-symbol-fonts (fontsizes-list)
 ;;   (set-fontset-font t 'symbol "Inconsolata" nil 'append))
@@ -220,7 +222,26 @@
 ;; (add-hook 'cfs-set-font-finish-hook 'my-set-symbol-fonts)
 ;; #+END_EXAMPLE
 
-;; 除了字体设置，这个 hook 还可以实现其它功能，比如：行距随着字号自动调整
+;; **** 设置 unicode-bmp 一些不常用汉字字符的字体
+;; 下面代码中的 (#x3400 . #x4DFF) 代表了所设置字符在 unicode-bmp
+;; 中的范围: `describe-char' 命令会创建一个 buffer, 来显示光标处
+;; 字符的信息，点击 “code point in charset” 就可以显示整个 unicode-bmp
+;; 了。
+
+;; #+BEGIN_EXAMPLE
+;; (defun my-set-exta-fonts (fontsizes-list)
+;;   (set-fontset-font
+;;    "fontset-default" '(#x3400 . #x4DFF)
+;;    (font-spec :name "微软雅黑"
+;;               :size (nth 2 fontsizes-list)
+;;               :weight 'normal
+;;               :slant 'normal)
+;;    nil))
+
+;; (add-hook 'cfs-set-font-finish-hook 'my-set-exta-fonts)
+;; #+END_EXAMPLE
+
+;; **** 设置行距随着字号自动调整
 
 ;; #+BEGIN_EXAMPLE
 ;; (defvar my-line-spacing-alist
