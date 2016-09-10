@@ -327,7 +327,7 @@ hook 使用的函数只有一个参数 fontsizes-list, 用来记录 **当前使�
                                       :weight 'normal
                                       :slant 'normal)))
             (if (cfs--fontspec-valid-p fontspec)
-                (set-fontset-font "fontset-default" '(#x3400 . #x4DFF) fontspec nil)
+                (set-fontset-font "fontset-default" '(#x3400 . #x4DFF) fontspec nil 'append)
               (message "字体 %S 不存在！" fontname))))
 
         (add-hook 'cfs-set-font-finish-hook 'my-set-exta-fonts)
