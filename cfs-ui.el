@@ -467,9 +467,9 @@
   (cfs-ui--create-page page-info
     (cfs-ui--create-tab-stop-point)
     (cfs-ui--create-main-navigation)
-    (widget-insert "\n")
     (widget-insert
      (substitute-command-keys "
+
 ** 标签切换快捷键
 
  功能                    按键
@@ -545,9 +545,10 @@
   (cfs-ui--create-page page-info
     (cfs-ui--create-tab-stop-point)
     (cfs-ui--create-main-navigation)
-    (widget-insert "\n\n")
-    (widget-insert "------------------------------------------------------\n")
-    (widget-insert "** 根据 cfs 的设置，自动生成一个 elisp 字体配置片断
+    (widget-insert "
+
+------------------------------------------------------
+** 根据 cfs 的设置，自动生成一个 elisp 字体配置片断
 
 如果用户觉得 chinese-fonts-setup *太厚重*, 可以将下面
 一段 elisp 粘贴到 ~/.emacs 文件，然后保存，就不需要启
@@ -571,8 +572,8 @@
                              (widget-value-set
                               cfs-ui--widgets:elisp-snippet
                               (cfs--return-fonts-configure-string))))
-    (widget-insert "\n")
-    (widget-insert "------------------------------------------------------\n")
+    (widget-insert "
+------------------------------------------------------\n")
     (cfs-ui--create-tab-stop-point)))
 
 (defun cfs-ui-toggle-select-font (&optional widget event)
