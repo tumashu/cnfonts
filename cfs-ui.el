@@ -40,29 +40,29 @@
      :index 0
      :main-page t
      :keybinding "e"
-     :button-name " 英文 "
+     :button-name "英文"
      :page-switcher cfs-ui-switch-to-page:english-fonts-page
      :page-builder cfs-ui--create-fonts-page)
     (chinese-fonts-page
      :index 1
      :main-page t
      :keybinding "c"
-     :button-name " 中文 "
+     :button-name "中文"
      :page-switcher cfs-ui-switch-to-page:chinese-fonts-page
      :page-builder cfs-ui--create-fonts-page)
     (extb-fonts-page
      :index 2
      :main-page t
      :keybinding "x"
-     :button-name " EXT-B "
+     :button-name "EXT-B"
      :page-switcher cfs-ui-switch-to-page:extb-fonts-page
      :page-builder cfs-ui--create-fonts-page)
     (align-page-1
      :main-page t
      :align-page t
      :keybinding "1"
-     :button-name " 对齐 "
-     :alter-button-name " 9.0-18 "
+     :button-name "对齐"
+     :alter-button-name "9.0-18"
      :group-pages (align-page-1 align-page-2 align-page-3
                                 align-page-4 align-page-5)
      :fontsizes (9 10 11.5 12.5 14 15 16 18)
@@ -72,46 +72,46 @@
      :fontsizes (20 22 24)
      :align-page t
      :keybinding "2"
-     :button-name " 20-24 "
+     :button-name "20-24"
      :page-switcher cfs-ui-switch-to-page:align-page-2
      :page-builder cfs-ui--create-align-page)
     (align-page-3
      :fontsizes (26 28)
      :keybinding "3"
      :align-page t
-     :button-name " 26-28 "
+     :button-name "26-28"
      :page-switcher cfs-ui-switch-to-page:align-page-3
      :page-builder cfs-ui--create-align-page)
     (align-page-4
      :fontsizes (30)
      :keybinding "4"
      :align-page t
-     :button-name " -30- "
+     :button-name "-30-"
      :page-switcher cfs-ui-switch-to-page:align-page-4
      :page-builder cfs-ui--create-align-page)
     (align-page-5
      :fontsizes (32)
      :keybinding "5"
      :align-page t
-     :button-name " -32- "
+     :button-name "-32-"
      :page-switcher cfs-ui-switch-to-page:align-page-5
      :page-builder cfs-ui--create-align-page)
     (other-features-page
      :keybinding "o"
      :main-page t
-     :button-name " 其它 "
+     :button-name "其它"
      :page-switcher cfs-ui-switch-to-page:other-features-page
      :page-builder cfs-ui--create-other-features-page)
     (key-page
      :keybinding "k"
      :main-page t
-     :button-name " 快捷键 "
+     :button-name "快捷键"
      :page-switcher cfs-ui-switch-to-page:key-page
      :page-builder cfs-ui--create-key-page)
     (help-page
      :keybinding "h"
      :main-page t
-     :button-name " 帮助 "
+     :button-name "帮助"
      :page-switcher cfs-ui-switch-to-page:help-page
      :page-builder cfs-ui--create-help-page)))
 
@@ -172,14 +172,14 @@
          (action (plist-get (cdr page-info) :page-switcher)))
     (if ignore-face
         (widget-create 'push-button
-                       :value (format "[%s]" (or alter-button-name button-name))
+                       :value (format "[ %s ]" (or alter-button-name button-name))
                        :button-face-get 'ignore
                        :mouse-face-get 'ignore
                        :group-pages group-pages
                        :page-name page-name
                        :action action)
       (widget-create 'push-button
-                     :value button-name
+                     :value (format " %s " button-name)
                      :page-name page-name
                      :group-pages group-pages
                      :action action))))
