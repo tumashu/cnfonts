@@ -456,13 +456,16 @@
           (widget-insert " 强制
      *重置* 当前 profile。"))))))
 
+(defun cfs-ui--create-tab-stop-point ()
+  (widget-create 'push-button
+                 :tag "\n"
+                 :tab-stop-point t
+                 :button-face-get 'ignore
+                 :mouse-face-get 'ignore))
+
 (defun cfs-ui--create-key-page (page-info)
   (cfs-ui--create-page page-info
-    (widget-create 'push-button
-                   :tag "\n"
-                   :tab-stop-point t
-                   :button-face-get 'ignore
-                   :mouse-face-get 'ignore)
+    (cfs-ui--create-tab-stop-point)
     (cfs-ui--create-main-navigation)
     (widget-insert "\n")
     (widget-insert
@@ -510,20 +513,12 @@
  ----------------------  --------
  重启UI                  \\[cfs-ui-restart]
 "))
-    (widget-create 'push-button
-                   :tag "\n"
-                   :tab-stop-point t
-                   :button-face-get 'ignore
-                   :mouse-face-get 'ignore)
+    (cfs-ui--create-tab-stop-point)
     (widget-insert "\n" )))
 
 (defun cfs-ui--create-help-page (page-info)
   (cfs-ui--create-page page-info
-    (widget-create 'push-button
-                   :tag "\n"
-                   :tab-stop-point t
-                   :button-face-get 'ignore
-                   :mouse-face-get 'ignore)
+    (cfs-ui--create-tab-stop-point)
     (cfs-ui--create-main-navigation)
     (widget-insert "\n\n")
     (let ((file (concat (file-name-directory (locate-library "chinese-fonts-setup"))
@@ -544,19 +539,11 @@
                            "^;; " ""
                            (buffer-substring-no-properties begin end)))))))
       (widget-insert (or string "")))
-    (widget-create 'push-button
-                   :tag "\n"
-                   :tab-stop-point t
-                   :button-face-get 'ignore
-                   :mouse-face-get 'ignore)))
+    (cfs-ui--create-tab-stop-point)))
 
 (defun cfs-ui--create-other-features-page (page-info)
   (cfs-ui--create-page page-info
-    (widget-create 'push-button
-                   :tag "\n"
-                   :tab-stop-point t
-                   :button-face-get 'ignore
-                   :mouse-face-get 'ignore)
+    (cfs-ui--create-tab-stop-point)
     (cfs-ui--create-main-navigation)
     (widget-insert "\n\n")
     (widget-insert "------------------------------------------------------\n")
@@ -586,11 +573,7 @@
                               (cfs--return-fonts-configure-string))))
     (widget-insert "\n")
     (widget-insert "------------------------------------------------------\n")
-    (widget-create 'push-button
-                   :tag "\n"
-                   :tab-stop-point t
-                   :button-face-get 'ignore
-                   :mouse-face-get 'ignore)))
+    (cfs-ui--create-tab-stop-point)))
 
 (defun cfs-ui-toggle-select-font (&optional widget event)
   (interactive)
