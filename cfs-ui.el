@@ -296,12 +296,13 @@
 
 (defmacro cfs-ui-create-page (page-name &rest body)
   (declare (indent 1) (debug t))
-  (let ((func-name (intern (concat "cfs-ui:" (symbol-name page-name)))))
+  (let ((func-name (intern (concat "cfs-ui:" (symbol-name page-name))))
+        (buffer-name (make-symbol "buffer-name")))
     `(defun ,func-name (&optional widget event create-buffer)
        (interactive)
-       (let ((buffer-name (format " *%S*" ',page-name)))
+       (let ((,buffer-name (format " *%S*" ',page-name)))
          (if create-buffer
-             (with-current-buffer (get-buffer-create buffer-name)
+             (with-current-buffer (get-buffer-create ,buffer-name)
                (let ((inhibit-read-only t))
                  (erase-buffer))
                (cfs-ui-mode)
