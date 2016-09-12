@@ -293,6 +293,9 @@
 ;;    题，这可能是 ext-b 字体缺失引起的，建议安装 ext-b 字体试试。
 ;;    1. Ext-B字符列表: https://cdo.wikipedia.org/wiki/Wikipedia:Unicode%E6%93%B4%E5%B1%95%E6%BC%A2%E5%AD%97
 ;;    2. HanaMinB 下载地址: https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/
+;; 7. 字体设置和 coding 设置也有关系，如果 chinese-fonts-setup 的行为很奇怪，
+;;    又找不到确切原因，可以参考：https://github.com/tumashu/chinese-fonts-setup/issues/54#issuecomment-246228904
+
 
 ;; ** 参考文章
 ;; 1. http://baohaojun.github.io/perfect-emacs-chinese-font.html
