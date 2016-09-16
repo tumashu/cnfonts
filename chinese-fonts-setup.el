@@ -177,6 +177,12 @@
 
 ;; [[./snapshots/cfs-increase-and-decrease-fontsize.gif]]
 
+;; *** 使用 cfs-use-system-type
+;; 有些用户希望将 profile 配置文件做为自己的 emacs 配置，在不同
+;; 的计算机上同步和管理，我建议这些用户将 `cfs-use-system-type'
+;; 设置为 t, 这样，相同名称的 profile 在不同的操作系统下，保存的
+;; 位置也不同，可以避免 profile 冲突。
+
 ;; *** 让 chinese-fonts-setup 随着 emacs 自动启动
 ;; `chinese-fonts-setup-enable' 命令可以让 chinese-fonts-setup 随着
 ;; emacs 自动启动，这个命令将 `cfs-set-font-with-saved-step' 添加到
@@ -319,6 +325,14 @@
   "*Directory variable from which all other chinese-fonts-setup profiles are derived."
   :group 'chinese-fonts-setup
   :type 'directory)
+
+(defcustom cfs-use-system-type nil
+  "构建 profile 文件所在的目录时，是否考虑当前的 `system-type'.
+
+假设当前系统为 Linux, 当这个选项设置为 t 后，profile1 文件的路径，
+将从 'DIR/profile1.el' 转为 'DIR/SYSTEM-TYPE/profile.el'"
+  :group 'chinese-fonts-setup
+  :type 'boolean)
 
 (defcustom cfs-keep-frame-size t
   "在调整字体的时候，是否保持当前 frame 大小不变。"
@@ -483,7 +497,12 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
           (expand-file-name
            (file-name-as-directory
             (concat (file-name-as-directory cfs-profiles-directory)
-                    cfs-profile-version)))))
+                    cfs-profile-version
+                    "/"
+                    (if cfs-use-system-type
+                        (replace-regexp-in-string
+                         "/" "-" (symbol-name system-type))
+                      ""))))))
     (make-directory directory-name t)
     (concat directory-name
             (replace-regexp-in-string
