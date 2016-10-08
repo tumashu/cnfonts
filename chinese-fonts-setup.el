@@ -354,6 +354,11 @@
   :group 'chinese-fonts-setup
   :type 'boolean)
 
+(defcustom cfs-save-current-profile t
+  "是否保存将当前 profile 的信息。"
+  :group 'chinese-fonts-setup
+  :type 'boolean)
+
 (defcustom cfs-use-face-font-rescale nil
   "是否通过设定 `face-font-rescale-alist' 来达到中英文对齐。
 
@@ -535,8 +540,13 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
   (if (assoc profile-name cfs--profiles-steps)
       (setf (cdr (assoc profile-name cfs--profiles-steps)) step)
     (push `(,profile-name . ,step) cfs--profiles-steps))
-  (customize-save-variable 'cfs--current-profile profile-name)
+  (cfs--save-current-profile profile-name)
   (customize-save-variable 'cfs--profiles-steps cfs--profiles-steps))
+
+(defun cfs--save-current-profile (profile-name)
+  (when cfs-save-current-profile
+    (customize-save-variable
+     'cfs--current-profile profile-name)))
 
 (defun cfs--get-profile-step (profile-name)
   (or (cdr (assoc profile-name cfs--profiles-steps)) 4))
@@ -867,7 +877,7 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
 (defun cfs--select-profile (profile-name)
   (if (member profile-name cfs-profiles)
       (progn (setq cfs--current-profile profile-name)
-             (customize-save-variable 'cfs--current-profile profile-name)
+             (cfs--save-current-profile profile-name)
              (cfs-set-font-with-saved-step))
     (cfs-message t "%s doesn't exist." profile-name)))
 
@@ -886,7 +896,7 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
               (car profiles)))
     (when next-profile
       (setq cfs--current-profile next-profile)
-      (customize-save-variable 'cfs--current-profile next-profile))
+      (cfs--save-current-profile next-profile))
     (when (display-graphic-p)
       (cfs-set-font-with-saved-step))
     (cfs-message t "Current chinese-fonts-setup profile is set to: \"%s\"" next-profile)))
