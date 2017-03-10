@@ -31,7 +31,6 @@
 ;;; Code:
 
 ;; * 代码                                                                 :code:
-;; #+BEGIN_SRC emacs-lisp
 (require 'cl-lib)
 (require 'cus-edit)
 
@@ -725,9 +724,7 @@ It is meant for internal use."
         (funcall (cfs-ui--get-page-function page-name) nil nil t)))
     (funcall (cfs-ui--get-page-function 'english-fonts-page))))
 
-;; #+END_SRC
 ;; * Footer
-;; #+BEGIN_SRC emacs-lisp
 (provide 'cfs-ui)
 
 ;; Local Variables:
@@ -735,4 +732,3 @@ It is meant for internal use."
 ;; End:
 
 ;;; cfs-ui.el ends here
-;; #+END_SRC

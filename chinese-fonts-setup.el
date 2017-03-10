@@ -310,7 +310,6 @@
 ;;; Code:
 
 ;; * 代码                                                                 :code:
-;; #+BEGIN_SRC emacs-lisp
 (require 'cl-lib)
 (require 'format-spec)
 (require 'thingatpt)
@@ -1082,10 +1081,8 @@ spacemacs 将这些字体的名字内置在 `spacemacs/set-default-font' 的代�
   (add-hook 'cfs-set-font-finish-hook
             #'cfs--set-spacemacs-fallback-fonts)
   (cfs-message nil "chinese-fonts-setup: 激活 spacemacs fallback 字体，用于显示 mode-line 中的漂亮图标。"))
-;; #+END_SRC
 
 ;; * Footer
-;; #+BEGIN_SRC emacs-lisp
 (provide 'chinese-fonts-setup)
 
 ;; Local Variables:
@@ -1093,4 +1090,3 @@ spacemacs 将这些字体的名字内置在 `spacemacs/set-default-font' 的代�
 ;; End:
 
 ;;; chinese-fonts-setup.el ends here
-;; #+END_SRC
