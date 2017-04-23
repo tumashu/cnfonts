@@ -843,9 +843,8 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
   "运行这个函数，可以让 emacs 启动的时候就激活 chinese-fonts-setup."
   (interactive)
   (setq cfs--enabled-p t)
-  (if (and (fboundp 'daemonp) (daemonp))
-      (add-hook 'after-make-frame-functions #'cfs-set-font-with-saved-step)
-    (add-hook 'window-setup-hook #'cfs-set-font-with-saved-step)))
+  (add-hook 'after-make-frame-functions #'cfs-set-font-with-saved-step)
+  (add-hook 'window-setup-hook #'cfs-set-font-with-saved-step))
 
 (defun chinese-fonts-setup-disable ()
   "清除与 chinese-fonts-setup 相关的 hook 设定。"
