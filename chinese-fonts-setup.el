@@ -260,7 +260,6 @@
 ;;    3. 获取范围
 ;; 3. 如果遇到 *部分符号* 无法正确对齐，可以参考:
 ;;    1. https://github.com/tumashu/chinese-fonts-setup/issues/64#issuecomment-296414028
-;;    2. https://github.com/tumashu/chinese-fonts-setup/issues/65#issuecomment-296414006
 
 ;; **** 设置行距随着字号自动调整
 
