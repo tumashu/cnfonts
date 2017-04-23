@@ -301,7 +301,10 @@
 ;;    2. HanaMinB 下载地址: https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/
 ;; 7. 字体设置和 coding 设置也有关系，如果 chinese-fonts-setup 的行为很奇怪，
 ;;    又找不到确切原因，可以参考：https://github.com/tumashu/chinese-fonts-setup/issues/54#issuecomment-246228904
-
+;; 8. Spacemace 本身的设置有时候会和 chinese-fonts-setup 冲突，spacemacs 用户如果遇到问题
+;;    可以阅读几个 spacemacs 用户的 *血泪史* , 也许会有启发和帮助：
+;;    1. https://github.com/tumashu/chinese-fonts-setup/issues/64#issuecomment-296414028
+;;    2. https://github.com/tumashu/chinese-fonts-setup/issues/65#issuecomment-296414006
 
 ;; ** 参考文章
 ;; 1. http://baohaojun.github.io/perfect-emacs-chinese-font.html

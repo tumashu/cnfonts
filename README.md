@@ -1,31 +1,31 @@
-- [Chinese-fonts-setup README](#orgd2b5812)
-  - [简介](#org1bfa30f)
-  - [基本原理](#orgeca31b7)
-  - [使用特点](#orgb51bf28)
-  - [下载安装](#org3c33350)
-  - [配置使用](#org78fc32c)
-    - [最简单的用法（懒人必备）](#org9f8c549)
-    - [profile 的概念](#orga9aa5b1)
-    - [profile 命名与切换](#orga0c639f)
-    - [使用 cfs-edit-profile 命令调整 profile](#org3c88b6a)
-    - [使用 cfs-edit-profile-without-ui 命令编辑 profile](#org249c90a)
-    - [使用 cfs-regenerate-profile 重置 profile](#org21faab2)
-    - [调整字体大小](#org8a5e6f8)
-    - [使用 cfs-use-system-type](#org6497da7)
-    - [让 chinese-fonts-setup 随着 emacs 自动启动](#org95c9a21)
-    - [chinese-fonts-setup 与 org-mode 配合使用](#org4b666f5)
-    - [使用 chinese-fonts-setup 生成 elisp 字体配置片断](#org31fec59)
-    - [Chinese-fonts-setup 高级功能](#org7b6b827)
-  - [Tips](#org90c2610)
-  - [参考文章](#org0504938)
+- [Chinese-fonts-setup README](#orge408bce)
+  - [简介](#org2fdbb75)
+  - [基本原理](#org1586192)
+  - [使用特点](#org34b4b50)
+  - [下载安装](#org991f463)
+  - [配置使用](#org8feeab1)
+    - [最简单的用法（懒人必备）](#org0e755b9)
+    - [profile 的概念](#orgc2097f6)
+    - [profile 命名与切换](#orgc91f287)
+    - [使用 cfs-edit-profile 命令调整 profile](#orgd901504)
+    - [使用 cfs-edit-profile-without-ui 命令编辑 profile](#orgfa0ef1e)
+    - [使用 cfs-regenerate-profile 重置 profile](#org4e70798)
+    - [调整字体大小](#org53f0006)
+    - [使用 cfs-use-system-type](#orgcd2e560)
+    - [让 chinese-fonts-setup 随着 emacs 自动启动](#org39a165a)
+    - [chinese-fonts-setup 与 org-mode 配合使用](#org1ddd302)
+    - [使用 chinese-fonts-setup 生成 elisp 字体配置片断](#org1e11825)
+    - [Chinese-fonts-setup 高级功能](#org5c0b358)
+  - [Tips](#org1e0a46a)
+  - [参考文章](#orga13bc62)
 
 
-<a id="orgd2b5812"></a>
+<a id="orge408bce"></a>
 
 # Chinese-fonts-setup README
 
 
-<a id="org1bfa30f"></a>
+<a id="org2fdbb75"></a>
 
 ## 简介
 
@@ -34,7 +34,7 @@ Chinese-fonts-setup 是一个 emacs 中英文字体配置工具。可以比较�
 注： 这个 package 特别适用于需要处理中英文混合表格的中文 org-mode 用户。
 
 
-<a id="orgeca31b7"></a>
+<a id="org1586192"></a>
 
 ## 基本原理
 
@@ -46,7 +46,7 @@ Chinese-fonts-setup 的核心很简单，就是让中文字体和英文字体使
                         charset (font-spec :family "Microsoft Yahei" :size 16)))
 
 
-<a id="orgb51bf28"></a>
+<a id="org34b4b50"></a>
 
 ## 使用特点
 
@@ -56,7 +56,7 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
 2.  设置方便：Chinese-fonts-setup 自带一个 profile 文件调整工具，这个工具 有直观的图形界面，可以让用户设置字体名称和字体大小，分分钟实现中文字 体和英文字体的等宽对齐。
 
 
-<a id="org3c33350"></a>
+<a id="org991f463"></a>
 
 ## 下载安装
 
@@ -71,12 +71,12 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
         ;; (cfs-set-spacemacs-fallback-fonts)
 
 
-<a id="org78fc32c"></a>
+<a id="org8feeab1"></a>
 
 ## 配置使用
 
 
-<a id="org9f8c549"></a>
+<a id="org0e755b9"></a>
 
 ### 最简单的用法（懒人必备）
 
@@ -89,7 +89,7 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
 | cfs-decrease-fontsize | 减小字号 |
 
 
-<a id="orga9aa5b1"></a>
+<a id="orgc2097f6"></a>
 
 ### profile 的概念
 
@@ -119,7 +119,7 @@ profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概�
             (32   33.0 33.0)))
 
 
-<a id="orga0c639f"></a>
+<a id="orgc91f287"></a>
 
 ### profile 命名与切换
 
@@ -136,7 +136,7 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 | cfs-next-profile   | 直接切换到下一个profile |
 
 
-<a id="org3c88b6a"></a>
+<a id="orgd901504"></a>
 
 ### 使用 cfs-edit-profile 命令调整 profile
 
@@ -145,7 +145,7 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 ![img](./snapshots/cfs-ui-1.png) ![img](./snapshots/cfs-ui-2.png) ![img](./snapshots/cfs-ui-3.png) ![img](./snapshots/cfs-ui-4.png) ![img](./snapshots/cfs-ui-5.png) ![img](./snapshots/cfs-ui-6.png) ![img](./snapshots/cfs-ui-7.png)
 
 
-<a id="org249c90a"></a>
+<a id="orgfa0ef1e"></a>
 
 ### 使用 cfs-edit-profile-without-ui 命令编辑 profile
 
@@ -164,14 +164,14 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 注2: 配置完成后，有可能需要重启 Emacs, 参考：<http://debbugs.gnu.org/db/17/1785.html>
 
 
-<a id="org21faab2"></a>
+<a id="org4e70798"></a>
 
 ### 使用 cfs-regenerate-profile 重置 profile
 
 \`cfs-regenerate-profile' 命令会使用 chinese-fonts-setup 自带的 fallback 信息，覆盖需要 **重置** 的 profile, 这个 profile 原来的 内容将丢失，请紧慎使用！
 
 
-<a id="org8a5e6f8"></a>
+<a id="org53f0006"></a>
 
 ### 调整字体大小
 
@@ -187,14 +187,14 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 ![img](./snapshots/cfs-increase-and-decrease-fontsize.gif)
 
 
-<a id="org6497da7"></a>
+<a id="orgcd2e560"></a>
 
 ### 使用 cfs-use-system-type
 
 有些用户希望将 profile 配置文件做为自己的 emacs 配置，在不同 的计算机上同步和管理，我建议这些用户将 \`cfs-use-system-type' 设置为 t, 这样，相同名称的 profile 在不同的操作系统下，保存的 位置也不同，可以避免 profile 冲突。
 
 
-<a id="org95c9a21"></a>
+<a id="org39a165a"></a>
 
 ### 让 chinese-fonts-setup 随着 emacs 自动启动
 
@@ -206,7 +206,7 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 用户也可以手动运行 \`cfs-set-font-with-saved-step' 来让 chinese-fonts-setup 生效。
 
 
-<a id="org4b666f5"></a>
+<a id="org1ddd302"></a>
 
 ### chinese-fonts-setup 与 org-mode 配合使用
 
@@ -217,14 +217,14 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 注：这个功能不能在 window 系统下使用，它会让对齐功能失效，Linux 下 这个功能 **一般** 可以使用，Mac 系统未测试，同学可以亲自试一试。
 
 
-<a id="org31fec59"></a>
+<a id="org1e11825"></a>
 
 ### 使用 chinese-fonts-setup 生成 elisp 字体配置片断
 
 有些用户觉得 chinese-fonts-setup **太过厚重** , 他们喜欢使用简单的 方式来配置字体，这些用户可以了解一下 \`cfs-insert-fonts-configure' 命令，这个命令可以根据 chinese-fonts-setup 的设置自动生成一个 "字体配置 elisp 片断", 并插入光标处，将这个片断写入 .emacs 文件 后，就不需要启动 chinese-fonts-setup 来设置字体了。
 
 
-<a id="org7b6b827"></a>
+<a id="org5c0b358"></a>
 
 ### Chinese-fonts-setup 高级功能
 
@@ -290,7 +290,7 @@ Chinese-fonts-setup **仅仅** 设置英文，中文和 EXT-B 字体，不处理
         (add-hook 'cfs-set-font-finish-hook #'my-line-spacing-setup)
 
 
-<a id="org90c2610"></a>
+<a id="org1e0a46a"></a>
 
 ## Tips
 
@@ -307,9 +307,12 @@ Chinese-fonts-setup **仅仅** 设置英文，中文和 EXT-B 字体，不处理
     1.  Ext-B字符列表: <https://cdo.wikipedia.org/wiki/Wikipedia:Unicode%E6%93%B4%E5%B1%95%E6%BC%A2%E5%AD%97>
     2.  HanaMinB 下载地址: <https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/>
 7.  字体设置和 coding 设置也有关系，如果 chinese-fonts-setup 的行为很奇怪， 又找不到确切原因，可以参考：<https://github.com/tumashu/chinese-fonts-setup/issues/54#issuecomment-246228904>
+8.  Spacemace 本身的设置有时候会和 chinese-fonts-setup 冲突，spacemacs 用户如果遇到问题 可以阅读几个 spacemacs 用户的 **血泪史** , 也许会有启发和帮助：
+    1.  <https://github.com/tumashu/chinese-fonts-setup/issues/64#issuecomment-296414028>
+    2.  <https://github.com/tumashu/chinese-fonts-setup/issues/65#issuecomment-296414006>
 
 
-<a id="org0504938"></a>
+<a id="orga13bc62"></a>
 
 ## 参考文章
 
