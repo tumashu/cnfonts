@@ -835,7 +835,10 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
           (when (display-graphic-p)
             (cfs--set-font fontsizes-list)))
       (when (display-graphic-p)
-        (cfs--set-font fontsizes-list)))))
+        (cfs--set-font fontsizes-list)))
+    ;; This is useful for exwm to adjust mode-line, please see:
+    ;; https://github.com/ch11ng/exwm/issues/249#issuecomment-299692305
+    (redisplay t)))
 
 (defun chinese-fonts-setup-enable ()
   "运行这个函数，可以让 emacs 启动的时候就激活 chinese-fonts-setup."
