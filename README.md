@@ -1,31 +1,31 @@
-- [Chinese-fonts-setup README](#orgfc62ee7)
-  - [简介](#org278fbd9)
-  - [基本原理](#orgd3a4ece)
-  - [使用特点](#org09c5ede)
-  - [下载安装](#orgab6061f)
-  - [配置使用](#orga247789)
-    - [最简单的用法（懒人必备）](#org77080ce)
-    - [profile 的概念](#org55cace0)
-    - [profile 命名与切换](#orge27b253)
-    - [使用 cfs-edit-profile 命令调整 profile](#org3d4debd)
-    - [使用 cfs-edit-profile-without-ui 命令编辑 profile](#orga5df36e)
-    - [使用 cfs-regenerate-profile 重置 profile](#org23dd18c)
-    - [调整字体大小](#org43c1bf4)
-    - [使用 cfs-use-system-type](#orgaac7483)
-    - [让 chinese-fonts-setup 随着 emacs 自动启动](#orgc2c5a3c)
-    - [chinese-fonts-setup 与 org-mode 配合使用](#orge24816e)
-    - [使用 chinese-fonts-setup 生成 elisp 字体配置片断](#org2460cc9)
-    - [Chinese-fonts-setup 高级功能](#org96e1376)
-  - [Tips](#orgf1c38de)
-  - [参考文章](#orge5c044e)
+- [Chinese-fonts-setup README](#orgab73307)
+  - [简介](#org539194f)
+  - [基本原理](#org04f9edf)
+  - [使用特点](#org30bdaa6)
+  - [下载安装](#org2a9ef43)
+  - [配置使用](#org4ce283f)
+    - [最简单的用法（懒人必备）](#orge9ee100)
+    - [profile 的概念](#orgb7372f1)
+    - [profile 命名与切换](#org21138f7)
+    - [使用 cfs-edit-profile 命令调整 profile](#orge3bde3a)
+    - [使用 cfs-edit-profile-without-ui 命令编辑 profile](#org3aa7805)
+    - [使用 cfs-regenerate-profile 重置 profile](#org70c121a)
+    - [调整字体大小](#orgae1a168)
+    - [使用 cfs-use-system-type](#orgaa0251c)
+    - [让 chinese-fonts-setup 随着 emacs 自动启动](#org2cb6d02)
+    - [chinese-fonts-setup 与 org-mode 配合使用](#org3eaa37e)
+    - [使用 chinese-fonts-setup 生成 elisp 字体配置片断](#org55a3d01)
+    - [Chinese-fonts-setup 高级功能](#org0fdd57e)
+  - [Tips](#org3ea7dba)
+  - [参考文章](#org33f5ffa)
 
 
-<a id="orgfc62ee7"></a>
+<a id="orgab73307"></a>
 
 # Chinese-fonts-setup README
 
 
-<a id="org278fbd9"></a>
+<a id="org539194f"></a>
 
 ## 简介
 
@@ -34,7 +34,7 @@ Chinese-fonts-setup 是一个 emacs 中英文字体配置工具。可以比较�
 注： 这个 package 特别适用于需要处理中英文混合表格的中文 org-mode 用户。
 
 
-<a id="orgd3a4ece"></a>
+<a id="org04f9edf"></a>
 
 ## 基本原理
 
@@ -46,7 +46,7 @@ Chinese-fonts-setup 的核心很简单，就是让中文字体和英文字体使
                         charset (font-spec :family "Microsoft Yahei" :size 16)))
 
 
-<a id="org09c5ede"></a>
+<a id="org30bdaa6"></a>
 
 ## 使用特点
 
@@ -56,7 +56,7 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
 2.  设置方便：Chinese-fonts-setup 自带一个 profile 文件调整工具，这个工具 有直观的图形界面，可以让用户设置字体名称和字体大小，分分钟实现中文字 体和英文字体的等宽对齐。
 
 
-<a id="orgab6061f"></a>
+<a id="org2a9ef43"></a>
 
 ## 下载安装
 
@@ -71,12 +71,12 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
         ;; (cfs-set-spacemacs-fallback-fonts)
 
 
-<a id="orga247789"></a>
+<a id="org4ce283f"></a>
 
 ## 配置使用
 
 
-<a id="org77080ce"></a>
+<a id="orge9ee100"></a>
 
 ### 最简单的用法（懒人必备）
 
@@ -89,7 +89,7 @@ Chinese-fonts-setup 添加了许多辅助工具，使配置和调节字体和字
 | cfs-decrease-fontsize | 减小字号 |
 
 
-<a id="org55cace0"></a>
+<a id="orgb7372f1"></a>
 
 ### profile 的概念
 
@@ -119,7 +119,7 @@ profile 代表了一套字体配置，chinese-fonts-setup 使用 profile 的概�
             (32   33.0 33.0)))
 
 
-<a id="orge27b253"></a>
+<a id="org21138f7"></a>
 
 ### profile 命名与切换
 
@@ -136,7 +136,7 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 | cfs-next-profile   | 直接切换到下一个profile |
 
 
-<a id="org3d4debd"></a>
+<a id="orge3bde3a"></a>
 
 ### 使用 cfs-edit-profile 命令调整 profile
 
@@ -145,7 +145,7 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 ![img](./snapshots/cfs-ui-1.png) ![img](./snapshots/cfs-ui-2.png) ![img](./snapshots/cfs-ui-3.png) ![img](./snapshots/cfs-ui-4.png) ![img](./snapshots/cfs-ui-5.png) ![img](./snapshots/cfs-ui-6.png) ![img](./snapshots/cfs-ui-7.png)
 
 
-<a id="orga5df36e"></a>
+<a id="org3aa7805"></a>
 
 ### 使用 cfs-edit-profile-without-ui 命令编辑 profile
 
@@ -164,14 +164,14 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 注2: 配置完成后，有可能需要重启 Emacs, 参考：<http://debbugs.gnu.org/db/17/1785.html>
 
 
-<a id="org23dd18c"></a>
+<a id="org70c121a"></a>
 
 ### 使用 cfs-regenerate-profile 重置 profile
 
 \`cfs-regenerate-profile' 命令会使用 chinese-fonts-setup 自带的 fallback 信息，覆盖需要 **重置** 的 profile, 这个 profile 原来的 内容将丢失，请紧慎使用！
 
 
-<a id="org43c1bf4"></a>
+<a id="orgae1a168"></a>
 
 ### 调整字体大小
 
@@ -182,19 +182,19 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 | cfs-increase-fontsize | 增大字体大小 |
 | cfs-decrease-fontsize | 减小字体大小 |
 
-注意：在调整字体大小的同时，字号信息也会保存 \`cfs-config-file' 文件中。
+注意：在调整字体大小的同时，字号信息也会保存到 \`cfs-directory' 目录下 \`cfs-config-filename' 对应的文件中。
 
 ![img](./snapshots/cfs-increase-and-decrease-fontsize.gif)
 
 
-<a id="orgaac7483"></a>
+<a id="orgaa0251c"></a>
 
 ### 使用 cfs-use-system-type
 
 有些用户希望将 profile 配置文件做为自己的 emacs 配置，在不同 的计算机上同步和管理，我建议这些用户将 \`cfs-use-system-type' 设置为 t, 这样，相同名称的 profile 在不同的操作系统下，保存的 位置也不同，可以避免 profile 冲突。
 
 
-<a id="orgc2c5a3c"></a>
+<a id="org2cb6d02"></a>
 
 ### 让 chinese-fonts-setup 随着 emacs 自动启动
 
@@ -206,7 +206,7 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 用户也可以手动运行 \`cfs-set-font-with-saved-step' 来让 chinese-fonts-setup 生效。
 
 
-<a id="orge24816e"></a>
+<a id="org3eaa37e"></a>
 
 ### chinese-fonts-setup 与 org-mode 配合使用
 
@@ -217,14 +217,14 @@ chinese-fonts-setup 使用下面两个命令来切换 profile ：
 注：这个功能不能在 window 系统下使用，它会让对齐功能失效，Linux 下 这个功能 **一般** 可以使用，Mac 系统未测试，同学可以亲自试一试。
 
 
-<a id="org2460cc9"></a>
+<a id="org55a3d01"></a>
 
 ### 使用 chinese-fonts-setup 生成 elisp 字体配置片断
 
 有些用户觉得 chinese-fonts-setup **太过厚重** , 他们喜欢使用简单的 方式来配置字体，这些用户可以了解一下 \`cfs-insert-fonts-configure' 命令，这个命令可以根据 chinese-fonts-setup 的设置自动生成一个 "字体配置 elisp 片断", 并插入光标处，将这个片断写入 .emacs 文件 后，就不需要启动 chinese-fonts-setup 来设置字体了。
 
 
-<a id="org96e1376"></a>
+<a id="org0fdd57e"></a>
 
 ### Chinese-fonts-setup 高级功能
 
@@ -292,7 +292,7 @@ Chinese-fonts-setup **仅仅** 设置英文，中文和 EXT-B 字体，不处理
         (add-hook 'cfs-set-font-finish-hook #'my-line-spacing-setup)
 
 
-<a id="orgf1c38de"></a>
+<a id="org3ea7dba"></a>
 
 ## Tips
 
@@ -311,7 +311,7 @@ Chinese-fonts-setup **仅仅** 设置英文，中文和 EXT-B 字体，不处理
 7.  字体设置和 coding 设置也有关系，如果 chinese-fonts-setup 的行为很奇怪， 又找不到确切原因，可以参考：<https://github.com/tumashu/chinese-fonts-setup/issues/54#issuecomment-246228904>
 
 
-<a id="orge5c044e"></a>
+<a id="org33f5ffa"></a>
 
 ## 参考文章
 

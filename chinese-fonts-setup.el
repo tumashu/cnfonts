@@ -173,7 +173,8 @@
 ;; | cfs-increase-fontsize | 增大字体大小 |
 ;; | cfs-decrease-fontsize | 减小字体大小 |
 
-;; 注意：在调整字体大小的同时，字号信息也会保存 `cfs-config-file' 文件中。
+;; 注意：在调整字体大小的同时，字号信息也会保存到 `cfs-directory' 目录下
+;; `cfs-config-filename' 对应的文件中。
 
 ;; [[./snapshots/cfs-increase-and-decrease-fontsize.gif]]
 
@@ -328,12 +329,11 @@
 
 (define-obsolete-variable-alias 'cfs-profiles-directory 'cfs-directory)
 
-(defcustom cfs-config-file
-  (concat (file-name-as-directory cfs-profiles-directory) "cfs-config.el")
-  "Config file of chinese-fonts-setup, which record the current profile
-and profile steps."
+(defcustom cfs-config-filename "cfs.conf"
+  "Filename of chinese-fonts-setup config file, which record the
+current profile and profile steps."
   :group 'chinese-fonts-setup
-  :type 'file)
+  :type 'string)
 
 (defcustom cfs-use-system-type nil
   "构建 profile 文件所在的目录时，是否考虑当前的 `system-type'.
@@ -545,18 +545,23 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
                                             (format "%-4S" x)) e  " ") ")")))
            (insert "\n        ))\n"))))
 
+(defun cfs--return-config-file-path ()
+  (expand-file-name
+   (concat (file-name-as-directory cfs-directory)
+           cfs-config-filename)))
+
 (defun cfs--save-config-file (profile-name &optional step)
   (when step
     (if (assoc profile-name cfs--profiles-steps)
         (setf (cdr (assoc profile-name cfs--profiles-steps)) step)
       (push `(,profile-name . ,step) cfs--profiles-steps)))
-  (with-temp-file (expand-file-name cfs-config-file)
+  (with-temp-file (cfs--return-config-file-path)
     (when cfs-save-current-profile
       (prin1 (list cfs--current-profile) (current-buffer)))
     (prin1 cfs--profiles-steps (current-buffer))))
 
 (defun cfs--read-config-file ()
-  (let ((save-file (expand-file-name cfs-config-file)))
+  (let ((save-file (cfs--return-config-file-path)))
     (if (file-readable-p save-file)
         (with-temp-buffer
           (insert-file-contents save-file)
