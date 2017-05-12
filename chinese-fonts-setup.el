@@ -173,7 +173,7 @@
 ;; | cfs-increase-fontsize | 增大字体大小 |
 ;; | cfs-decrease-fontsize | 减小字体大小 |
 
-;; 注意：在调整字体大小的同时，字号信息也会保存 ~/.emacs 中。
+;; 注意：在调整字体大小的同时，字号信息也会保存 `cfs-config-file' 文件中。
 
 ;; [[./snapshots/cfs-increase-and-decrease-fontsize.gif]]
 
@@ -321,10 +321,19 @@
   :group 'chinese-fonts-setup
   :type 'list)
 
-(defcustom cfs-profiles-directory (locate-user-emacs-file "chinese-fonts-setup/")
-  "*Directory variable from which all other chinese-fonts-setup profiles are derived."
+(defcustom cfs-directory (locate-user-emacs-file "chinese-fonts-setup/")
+  "Directory, chinese-fonts-setup config file and profiles will be stored in."
   :group 'chinese-fonts-setup
   :type 'directory)
+
+(define-obsolete-variable-alias 'cfs-profiles-directory 'cfs-directory)
+
+(defcustom cfs-config-file
+  (concat (file-name-as-directory cfs-profiles-directory) "cfs-config.el")
+  "Config file of chinese-fonts-setup, which record the current profile
+and profile steps."
+  :group 'chinese-fonts-setup
+  :type 'file)
 
 (defcustom cfs-use-system-type nil
   "构建 profile 文件所在的目录时，是否考虑当前的 `system-type'.
@@ -536,17 +545,25 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
                                             (format "%-4S" x)) e  " ") ")")))
            (insert "\n        ))\n"))))
 
-(defun cfs--save-profile-step (profile-name step)
-  (if (assoc profile-name cfs--profiles-steps)
-      (setf (cdr (assoc profile-name cfs--profiles-steps)) step)
-    (push `(,profile-name . ,step) cfs--profiles-steps))
-  (cfs--save-current-profile profile-name)
-  (customize-save-variable 'cfs--profiles-steps cfs--profiles-steps))
+(defun cfs--save-config-file (profile-name &optional step)
+  (when step
+    (if (assoc profile-name cfs--profiles-steps)
+        (setf (cdr (assoc profile-name cfs--profiles-steps)) step)
+      (push `(,profile-name . ,step) cfs--profiles-steps)))
+  (with-temp-file (expand-file-name cfs-config-file)
+    (when cfs-save-current-profile
+      (prin1 (list cfs--current-profile) (current-buffer)))
+    (prin1 cfs--profiles-steps (current-buffer))))
 
-(defun cfs--save-current-profile (profile-name)
-  (when cfs-save-current-profile
-    (customize-save-variable
-     'cfs--current-profile profile-name)))
+(defun cfs--read-config-file ()
+  (let ((save-file (expand-file-name cfs-config-file)))
+    (if (file-readable-p save-file)
+        (with-temp-buffer
+          (insert-file-contents save-file)
+          (ignore-errors
+            (when cfs-save-current-profile
+              (setq cfs--current-profile (car (read (current-buffer)))))
+            (setq cfs--profiles-steps (read (current-buffer))))))))
 
 (defun cfs--get-profile-step (profile-name)
   (or (cdr (assoc profile-name cfs--profiles-steps)) 4))
@@ -822,11 +839,12 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
                         (length cfs--fontsizes-fallback))))
            (fontsizes-list (cfs--get-fontsizes profile-step)))
       (cfs--set-font fontsizes-list)
-      (cfs--save-profile-step profile-name profile-step)
+      (cfs--save-config-file profile-name profile-step)
       (cfs-message t cfs--minibuffer-echo-string))))
 
 (defun cfs-set-font-with-saved-step (&optional frame)
   (interactive)
+  (cfs--read-config-file)
   (let* ((profile-name (cfs--get-current-profile t))
          (profile-step (cfs--get-profile-step profile-name))
          (fontsizes-list (cfs--get-fontsizes profile-step)))
@@ -879,7 +897,7 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
 (defun cfs--select-profile (profile-name)
   (if (member profile-name cfs-profiles)
       (progn (setq cfs--current-profile profile-name)
-             (cfs--save-current-profile profile-name)
+             (cfs--save-config-file profile-name)
              (cfs-set-font-with-saved-step))
     (cfs-message t "%s doesn't exist." profile-name)))
 
@@ -898,7 +916,7 @@ which can be inserted into '~/.emacs' file to config emacs fonts.
               (car profiles)))
     (when next-profile
       (setq cfs--current-profile next-profile)
-      (cfs--save-current-profile next-profile))
+      (cfs--save-config-file next-profile))
     (when (display-graphic-p)
       (cfs-set-font-with-saved-step))
     (cfs-message t "Current chinese-fonts-setup profile is set to: \"%s\"" next-profile)))
