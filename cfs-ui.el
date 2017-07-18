@@ -92,6 +92,31 @@
      :main-page t
      :button-name "帮助")))
 
+(defvar cfs-ui-mode-map
+  (let ((map (make-keymap)))
+    (set-keymap-parent map (make-composed-keymap widget-keymap
+                                                 special-mode-map))
+    (suppress-keymap map)
+    (define-key map "n" 'next-line)
+    (define-key map "p" 'previous-line)
+    (define-key map "f" 'cfs-ui-next-main-page)
+    (define-key map "b" 'cfs-ui-previous-main-page)
+    (define-key map "F" 'cfs-ui-next-page)
+    (define-key map "B" 'cfs-ui-previous-page)
+    (define-key map "R" 'cfs-ui-restart)
+    (define-key map " " 'cfs-ui-toggle-select-font)
+    (define-key map "\t" 'cfs-ui-forward)
+    (define-key map "\e\t" 'cfs-ui-backward)
+    (define-key map [backtab] 'cfs-ui-backward)
+    (define-key map "=" 'cfs-ui-increase-align)
+    (define-key map "-" 'cfs-ui-decrease-align)
+    (define-key map (kbd "C-c C-c") 'cfs-ui-test-align)
+    (define-key map (kbd "C-c C-r") 'cfs-ui-quit-align)
+    (define-key map (kbd "C-<up>") 'cfs-ui-increase-align)
+    (define-key map (kbd "C-<down>") 'cfs-ui-decrease-align)
+    map)
+  "Keymap for `cfs-ui-mode'.")
+
 (defvar cfs-ui--widgets-alist nil)
 (defvar cfs-ui--current-page nil)
 (defvar cfs-ui--widgets:main-navigation nil)
@@ -677,31 +702,6 @@
     (cfs-ui)
     (cfs-ui--switch-to-page current-page)
     (goto-char point)))
-
-(defvar cfs-ui-mode-map
-  (let ((map (make-keymap)))
-    (set-keymap-parent map (make-composed-keymap widget-keymap
-                                                 special-mode-map))
-    (suppress-keymap map)
-    (define-key map "n" 'next-line)
-    (define-key map "p" 'previous-line)
-    (define-key map "f" 'cfs-ui-next-main-page)
-    (define-key map "b" 'cfs-ui-previous-main-page)
-    (define-key map "F" 'cfs-ui-next-page)
-    (define-key map "B" 'cfs-ui-previous-page)
-    (define-key map "R" 'cfs-ui-restart)
-    (define-key map " " 'cfs-ui-toggle-select-font)
-    (define-key map "\t" 'cfs-ui-forward)
-    (define-key map "\e\t" 'cfs-ui-backward)
-    (define-key map [backtab] 'cfs-ui-backward)
-    (define-key map "=" 'cfs-ui-increase-align)
-    (define-key map "-" 'cfs-ui-decrease-align)
-    (define-key map (kbd "C-c C-c") 'cfs-ui-test-align)
-    (define-key map (kbd "C-c C-r") 'cfs-ui-quit-align)
-    (define-key map (kbd "C-<up>") 'cfs-ui-increase-align)
-    (define-key map (kbd "C-<down>") 'cfs-ui-decrease-align)
-    map)
-  "Keymap for `cfs-ui-mode'.")
 
 (define-derived-mode cfs-ui-mode special-mode "CFS-UI"
   "Major mode for cfs-ui. Do not call this mode function yourself.
