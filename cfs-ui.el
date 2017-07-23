@@ -1,10 +1,11 @@
-;;; cfs-ui.el --- A chinese-fonts-setup profile editor with beautiful interface
+;;; cfs-ui.el --- A cfs profile editor with beautiful interface.
 
 ;; * Header
 ;; Copyright (c) 2016, Feng Shu
 
 ;; Author: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/chinese-fonts-setup
+;; Package-Requires: ((emacs "24"))
 ;; Version: 0.6
 ;; Keywords: convenience, Chinese, font
 
@@ -119,9 +120,9 @@
 
 (defvar cfs-ui--widgets-alist nil)
 (defvar cfs-ui--current-page nil)
-(defvar cfs-ui--widgets:main-navigation nil)
-(defvar cfs-ui--widgets:align-navigation nil)
-(defvar cfs-ui--widgets:elisp-snippet nil)
+(defvar cfs-ui--widgets-main-navigation nil)
+(defvar cfs-ui--widgets-align-navigation nil)
+(defvar cfs-ui--widgets-elisp-snippet nil)
 
 ;; Deal with compile warn.
 (defvar cfs-personal-fontnames)
@@ -145,8 +146,9 @@
 (declare-function cfs--upgrade-profile-need-p "chinese-fonts-setup" ())
 
 (defun cfs-ui--switch-to-page (page-name)
+  "Switch to page which name is PAGE-NAME."
   (switch-to-buffer (format " *%S*" page-name))
-  (dolist (widget cfs-ui--widgets:main-navigation)
+  (dolist (widget cfs-ui--widgets-main-navigation)
     (let ((orig-value (widget-value widget))
           (widget-page (widget-get widget :page-name))
           (widget-group-pages (widget-get widget :group-pages)))
@@ -157,7 +159,7 @@
            widget (replace-regexp-in-string " " "*" orig-value))
         (widget-value-set
          widget (replace-regexp-in-string "*" " " orig-value)))))
-  (dolist (widget cfs-ui--widgets:align-navigation)
+  (dolist (widget cfs-ui--widgets-align-navigation)
     (let ((orig-value (widget-value widget))
           (widget-page (widget-get widget :page-name)))
       (if (eq cfs-ui--current-page widget-page)
@@ -167,6 +169,8 @@
          widget (replace-regexp-in-string "*" " " orig-value))))))
 
 (defun cfs-ui--create-page-switch-button (page-name &optional ignore-face)
+  "Create a button which used to switch page named PAGE-NAME.
+TODO: IGNORE-FACE."
   (let ((button-name (cfs-ui--get-page-info page-name :button-name))
         (alter-button-name (cfs-ui--get-page-info page-name :alter-button-name))
         (group-pages (cfs-ui--get-page-info page-name :group-pages))
@@ -196,7 +200,7 @@
 (defun cfs-ui--create-main-navigation ()
   (dolist (page-name (cfs-ui--filter-page :main-page))
     (push (cfs-ui--create-page-switch-button page-name)
-          cfs-ui--widgets:main-navigation)
+          cfs-ui--widgets-main-navigation)
     (widget-insert " ")))
 
 (defun cfs-ui--create-align-navigation ()
@@ -204,7 +208,7 @@
   (widget-insert "| ")
   (dolist (page-name (cfs-ui--filter-page :align-page))
     (push (cfs-ui--create-page-switch-button page-name t)
-          cfs-ui--widgets:align-navigation)
+          cfs-ui--widgets-align-navigation)
     (widget-insert " "))
   (widget-insert "  |")
   (widget-insert "
@@ -313,11 +317,11 @@
           (if (member font (nth index cfs-personal-fontnames)) "P" "")))
 
 (defun cfs-ui--get-page-function (page-name)
-  (intern (concat "cfs-ui:" (symbol-name page-name))))
+  (intern (concat "cfs-ui-page-" (symbol-name page-name))))
 
 (defmacro cfs-ui-create-page (page-name &rest body)
   (declare (indent 1) (debug t))
-  (let ((func-name (intern (concat "cfs-ui:" (symbol-name page-name))))
+  (let ((func-name (intern (concat "cfs-ui-page-" (symbol-name page-name))))
         (buffer-name (make-symbol "buffer-name")))
     `(defun ,func-name (&optional widget event create-buffer)
        (interactive)
@@ -330,9 +334,9 @@
                (define-key cfs-ui-mode-map (cfs-ui--get-page-info ',page-name :keybinding) ',func-name)
                (set (make-local-variable 'cfs-ui--widgets-alist) nil)
                (set (make-local-variable 'cfs-ui--current-page) ',page-name)
-               (set (make-local-variable 'cfs-ui--widgets:main-navigation) nil)
-               (set (make-local-variable 'cfs-ui--widgets:align-navigation) nil)
-               (set (make-local-variable 'cfs-ui--widgets:elisp-snippet) nil)
+               (set (make-local-variable 'cfs-ui--widgets-main-navigation) nil)
+               (set (make-local-variable 'cfs-ui--widgets-align-navigation) nil)
+               (set (make-local-variable 'cfs-ui--widgets-elisp-snippet) nil)
                (setq truncate-lines t)
                ,@body
                (goto-char (point-min))
@@ -479,18 +483,18 @@
  切换到上一个主标签      \\[cfs-ui-previous-main-page]
  切换到下一个标签        \\[cfs-ui-next-page]
  切换到上一个标签        \\[cfs-ui-previous-page]
- 切换到 [ 英文 ] 标签    \\[cfs-ui:english-fonts-page]
- 切换到 [ 中文 ] 标签    \\[cfs-ui:chinese-fonts-page]
- 切换到 [ EXT-B ] 标签   \\[cfs-ui:extb-fonts-page]
- 切换到 [ 对齐 ] 标签    \\[cfs-ui:align-page-1]
- 切换到 [09--18] 标签    \\[cfs-ui:align-page-1]
- 切换到 [20--24] 标签    \\[cfs-ui:align-page-2]
- 切换到 [26--28] 标签    \\[cfs-ui:align-page-3]
- 切换到 [  30  ] 标签    \\[cfs-ui:align-page-4]
- 切换到 [  32  ] 标签    \\[cfs-ui:align-page-5]
- 切换到 [ 其他 ] 标签    \\[cfs-ui:other-features-page]
- 切换到 [ 快捷键 ] 标签  \\[cfs-ui:key-page]
- 切换到 [ 帮助 ] 标签    \\[cfs-ui:help-page]
+ 切换到 [ 英文 ] 标签    \\[cfs-ui-page-english-fonts-page]
+ 切换到 [ 中文 ] 标签    \\[cfs-ui-page-chinese-fonts-page]
+ 切换到 [ EXT-B ] 标签   \\[cfs-ui-page-extb-fonts-page]
+ 切换到 [ 对齐 ] 标签    \\[cfs-ui-page-align-page-1]
+ 切换到 [09--18] 标签    \\[cfs-ui-page-align-page-1]
+ 切换到 [20--24] 标签    \\[cfs-ui-page-align-page-2]
+ 切换到 [26--28] 标签    \\[cfs-ui-page-align-page-3]
+ 切换到 [  30  ] 标签    \\[cfs-ui-page-align-page-4]
+ 切换到 [  32  ] 标签    \\[cfs-ui-page-align-page-5]
+ 切换到 [ 其他 ] 标签    \\[cfs-ui-page-other-features-page]
+ 切换到 [ 快捷键 ] 标签  \\[cfs-ui-page-key-page]
+ 切换到 [ 帮助 ] 标签    \\[cfs-ui-page-help-page]
 
 ** 字体选择快捷键
 
@@ -554,7 +558,7 @@
 
 -------
 ")
-  (setq cfs-ui--widgets:elisp-snippet
+  (setq cfs-ui--widgets-elisp-snippet
         (widget-create 'push-button
                        :value (cfs--return-fonts-configure-string)
                        :tab-stop-point t
@@ -568,7 +572,7 @@
                  :mouse-face-get 'ignore
                  :action (lambda (widget event)
                            (widget-value-set
-                            cfs-ui--widgets:elisp-snippet
+                            cfs-ui--widgets-elisp-snippet
                             (cfs--return-fonts-configure-string))))
   (widget-insert "
 ------------------------------------------------------\n")
