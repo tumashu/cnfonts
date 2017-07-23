@@ -628,6 +628,7 @@ TODO: IGNORE-FACE."
           (cfs--set-font fontsizes-list))))))
 
 (defun cfs-ui--create-tab-stop-point ()
+  "Create a widget, the curse will stop to this widget when forward/backward widget."
   (widget-create 'push-button
                  :tag "\n"
                  :tab-stop-point t
@@ -635,10 +636,12 @@ TODO: IGNORE-FACE."
                  :mouse-face-get 'ignore))
 
 (defun cfs-ui-quit-align (&optional widget event)
+  "Quit align."
   (interactive)
   (cfs--step-fontsize 0))
 
 (defun cfs-ui-test-align (&optional widget event)
+  "Align test command."
   (interactive)
   (cfs-ui--operate-align widget event))
 
@@ -651,6 +654,8 @@ TODO: IGNORE-FACE."
   (cfs-ui--operate-align widget event -0.5))
 
 (defun cfs-ui-forward (&optional backward)
+  "Switch to next widget of current page.
+If BACKWARD is non-nil, switch to previous widget."
   (interactive)
   (run-hooks 'widget-forward-hook)
   (let ((step (if backward -1 1))
@@ -662,10 +667,12 @@ TODO: IGNORE-FACE."
         (widget-move step)))))
 
 (defun cfs-ui-backward ()
+  "Switch to previous widget of current page."
   (interactive)
   (cfs-ui-forward t))
 
 (defun cfs-ui--operate-page (step &optional operate-all-page)
+  "Internal function, which used to cfs-ui page switch."
   (let* ((pages (cfs-ui--filter-page :main-page operate-all-page))
          (pos-max (- (length pages) 1))
          (cur-page-pos
@@ -684,22 +691,27 @@ TODO: IGNORE-FACE."
     (cfs-ui--switch-to-page next-page)))
 
 (defun cfs-ui-next-main-page ()
+  "Switch to next main page of cfs-ui."
   (interactive)
   (cfs-ui--operate-page 1))
 
 (defun cfs-ui-previous-main-page ()
+  "Switch to previous main page of cfs-ui."
   (interactive)
   (cfs-ui--operate-page -1))
 
 (defun cfs-ui-next-page ()
+  "Switch to next page of cfs-ui."
   (interactive)
   (cfs-ui--operate-page 1 t))
 
 (defun cfs-ui-previous-page ()
+  "Switch to previous page of cfs-ui."
   (interactive)
   (cfs-ui--operate-page -1 t))
 
 (defun cfs-ui-restart ()
+  "Restart cfs-ui."
   (interactive)
   (let ((current-page cfs-ui--current-page)
         (point (point)))
