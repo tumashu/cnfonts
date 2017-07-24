@@ -1,10 +1,9 @@
-;;; cfs-ui.el --- A cfs profile editor with beautiful interface.
+;;; cnfonts-ui.el --- A cnfonts profile editor with beautiful interface.
 
 ;; * Header
 ;; Copyright (c) 2016, Feng Shu
 
 ;; Author: Feng Shu <tumashu@163.com>
-;; URL: https://github.com/tumashu/chinese-fonts-setup
 ;; Package-Requires: ((emacs "24"))
 ;; Version: 0.6
 ;; Keywords: convenience, Chinese, font
@@ -27,7 +26,7 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
-;;  A chinese-fonts-setup profile editor which has a beautiful interface.
+;;  A cnfonts profile editor which has a beautiful interface.
 
 ;;; Code:
 
@@ -35,7 +34,7 @@
 (require 'cl-lib)
 (require 'cus-edit)
 
-(defconst cfs-ui--pages
+(defconst cnfonts-ui--pages
   '((english-fonts-page
      :index 0
      :main-page t
@@ -93,88 +92,88 @@
      :main-page t
      :button-name "帮助")))
 
-(defvar cfs-ui-mode-map
+(defvar cnfonts-ui-mode-map
   (let ((map (make-keymap)))
     (set-keymap-parent map (make-composed-keymap widget-keymap
                                                  special-mode-map))
     (suppress-keymap map)
     (define-key map "n" 'next-line)
     (define-key map "p" 'previous-line)
-    (define-key map "f" 'cfs-ui-next-main-page)
-    (define-key map "b" 'cfs-ui-previous-main-page)
-    (define-key map "F" 'cfs-ui-next-page)
-    (define-key map "B" 'cfs-ui-previous-page)
-    (define-key map "R" 'cfs-ui-restart)
-    (define-key map " " 'cfs-ui-toggle-select-font)
-    (define-key map "\t" 'cfs-ui-forward)
-    (define-key map "\e\t" 'cfs-ui-backward)
-    (define-key map [backtab] 'cfs-ui-backward)
-    (define-key map "=" 'cfs-ui-increase-align)
-    (define-key map "-" 'cfs-ui-decrease-align)
-    (define-key map (kbd "C-c C-c") 'cfs-ui-test-align)
-    (define-key map (kbd "C-c C-r") 'cfs-ui-quit-align)
-    (define-key map (kbd "C-<up>") 'cfs-ui-increase-align)
-    (define-key map (kbd "C-<down>") 'cfs-ui-decrease-align)
+    (define-key map "f" 'cnfonts-ui-next-main-page)
+    (define-key map "b" 'cnfonts-ui-previous-main-page)
+    (define-key map "F" 'cnfonts-ui-next-page)
+    (define-key map "B" 'cnfonts-ui-previous-page)
+    (define-key map "R" 'cnfonts-ui-restart)
+    (define-key map " " 'cnfonts-ui-toggle-select-font)
+    (define-key map "\t" 'cnfonts-ui-forward)
+    (define-key map "\e\t" 'cnfonts-ui-backward)
+    (define-key map [backtab] 'cnfonts-ui-backward)
+    (define-key map "=" 'cnfonts-ui-increase-align)
+    (define-key map "-" 'cnfonts-ui-decrease-align)
+    (define-key map (kbd "C-c C-c") 'cnfonts-ui-test-align)
+    (define-key map (kbd "C-c C-r") 'cnfonts-ui-quit-align)
+    (define-key map (kbd "C-<up>") 'cnfonts-ui-increase-align)
+    (define-key map (kbd "C-<down>") 'cnfonts-ui-decrease-align)
     map)
-  "Keymap for `cfs-ui-mode'.")
+  "Keymap for `cnfonts-ui-mode'.")
 
-(defvar cfs-ui--widgets-alist nil)
-(defvar cfs-ui--current-page nil)
-(defvar cfs-ui--widgets-main-navigation nil)
-(defvar cfs-ui--widgets-align-navigation nil)
-(defvar cfs-ui--widgets-elisp-snippet nil)
+(defvar cnfonts-ui--widgets-alist nil)
+(defvar cnfonts-ui--current-page nil)
+(defvar cnfonts-ui--widgets-main-navigation nil)
+(defvar cnfonts-ui--widgets-align-navigation nil)
+(defvar cnfonts-ui--widgets-elisp-snippet nil)
 
 ;; Deal with compile warn.
-(defvar cfs-personal-fontnames)
-(defvar cfs--enabled-p)
-(defvar cfs-verbose)
+(defvar cnfonts-personal-fontnames)
+(defvar cnfonts--enabled-p)
+(defvar cnfonts-verbose)
 
-(declare-function cfs--get-xlfd "chinese-fonts-setup" (fontname &optional uncheck))
-(declare-function cfs--get-valid-fonts "chinese-fonts-setup" (&optional prefer-shortname))
-(declare-function cfs--read-profile "chinese-fonts-setup" ())
-(declare-function cfs--font-exists-p "chinese-fonts-setup" (font))
-(declare-function cfs--save-profile "chinese-fonts-setup" (fontnames fontsizes &optional profile-name))
-(declare-function cfs--set-font "chinese-fonts-setup" (fontsizes-list))
-(declare-function cfs--step-fontsize "chinese-fonts-setup" (num))
-(declare-function cfs--get-current-profile "chinese-fonts-setup" (&optional return-profile-name))
-(declare-function cfs--get-current-fontsizes "chinese-fonts-setup" ())
-(declare-function cfs-set-font-with-saved-step "chinese-fonts-setup" (&optional frame))
-(declare-function cfs--return-fonts-configure-string "chinese-fonts-setup" ())
-(declare-function cfs-message "chinese-fonts-setup" (force-show &rest args))
-(declare-function cfs-decrease-fontsize "chinese-fonts-setup" ())
-(declare-function cfs-increase-fontsize "chinese-fonts-setup" ())
-(declare-function cfs--upgrade-profile-need-p "chinese-fonts-setup" ())
+(declare-function cnfonts--get-xlfd "cnfonts" (fontname &optional uncheck))
+(declare-function cnfonts--get-valid-fonts "cnfonts" (&optional prefer-shortname))
+(declare-function cnfonts--read-profile "cnfonts" ())
+(declare-function cnfonts--font-exists-p "cnfonts" (font))
+(declare-function cnfonts--save-profile "cnfonts" (fontnames fontsizes &optional profile-name))
+(declare-function cnfonts--set-font "cnfonts" (fontsizes-list))
+(declare-function cnfonts--step-fontsize "cnfonts" (num))
+(declare-function cnfonts--get-current-profile "cnfonts" (&optional return-profile-name))
+(declare-function cnfonts--get-current-fontsizes "cnfonts" ())
+(declare-function cnfonts-set-font-with-saved-step "cnfonts" (&optional frame))
+(declare-function cnfonts--return-fonts-configure-string "cnfonts" ())
+(declare-function cnfonts-message "cnfonts" (force-show &rest args))
+(declare-function cnfonts-decrease-fontsize "cnfonts" ())
+(declare-function cnfonts-increase-fontsize "cnfonts" ())
+(declare-function cnfonts--upgrade-profile-need-p "cnfonts" ())
 
-(defun cfs-ui--switch-to-page (page-name)
+(defun cnfonts-ui--switch-to-page (page-name)
   "Switch to page which name is PAGE-NAME."
   (switch-to-buffer (format " *%S*" page-name))
-  (dolist (widget cfs-ui--widgets-main-navigation)
+  (dolist (widget cnfonts-ui--widgets-main-navigation)
     (let ((orig-value (widget-value widget))
           (widget-page (widget-get widget :page-name))
           (widget-group-pages (widget-get widget :group-pages)))
       (if (if widget-group-pages
-              (memq cfs-ui--current-page widget-group-pages)
-            (eq cfs-ui--current-page widget-page))
+              (memq cnfonts-ui--current-page widget-group-pages)
+            (eq cnfonts-ui--current-page widget-page))
           (widget-value-set
            widget (replace-regexp-in-string " " "*" orig-value))
         (widget-value-set
          widget (replace-regexp-in-string "*" " " orig-value)))))
-  (dolist (widget cfs-ui--widgets-align-navigation)
+  (dolist (widget cnfonts-ui--widgets-align-navigation)
     (let ((orig-value (widget-value widget))
           (widget-page (widget-get widget :page-name)))
-      (if (eq cfs-ui--current-page widget-page)
+      (if (eq cnfonts-ui--current-page widget-page)
           (widget-value-set
            widget (replace-regexp-in-string " " "*" orig-value))
         (widget-value-set
          widget (replace-regexp-in-string "*" " " orig-value))))))
 
-(defun cfs-ui--create-page-switch-button (page-name &optional ignore-face)
+(defun cnfonts-ui--create-page-switch-button (page-name &optional ignore-face)
   "Create a button which used to switch page named PAGE-NAME.
 TODO: IGNORE-FACE."
-  (let ((button-name (cfs-ui--get-page-info page-name :button-name))
-        (alter-button-name (cfs-ui--get-page-info page-name :alter-button-name))
-        (group-pages (cfs-ui--get-page-info page-name :group-pages))
-        (action (cfs-ui--get-page-function page-name)))
+  (let ((button-name (cnfonts-ui--get-page-info page-name :button-name))
+        (alter-button-name (cnfonts-ui--get-page-info page-name :alter-button-name))
+        (group-pages (cnfonts-ui--get-page-info page-name :group-pages))
+        (action (cnfonts-ui--get-page-function page-name)))
     (if ignore-face
         (widget-create 'push-button
                        :value (format "[ %s ]" (or alter-button-name button-name))
@@ -189,26 +188,26 @@ TODO: IGNORE-FACE."
                      :group-pages group-pages
                      :action action))))
 
-(defun cfs-ui--filter-page (arg &optional all-page)
+(defun cnfonts-ui--filter-page (arg &optional all-page)
   (remove nil
           (mapcar #'(lambda (x)
                       (when (or all-page
                                 (plist-get (cdr x) arg))
                         (car x)))
-                  cfs-ui--pages)))
+                  cnfonts-ui--pages)))
 
-(defun cfs-ui--create-main-navigation ()
-  (dolist (page-name (cfs-ui--filter-page :main-page))
-    (push (cfs-ui--create-page-switch-button page-name)
-          cfs-ui--widgets-main-navigation)
+(defun cnfonts-ui--create-main-navigation ()
+  (dolist (page-name (cnfonts-ui--filter-page :main-page))
+    (push (cnfonts-ui--create-page-switch-button page-name)
+          cnfonts-ui--widgets-main-navigation)
     (widget-insert " ")))
 
-(defun cfs-ui--create-align-navigation ()
+(defun cnfonts-ui--create-align-navigation ()
   (widget-insert "+----------------------------------------------------+\n")
   (widget-insert "| ")
-  (dolist (page-name (cfs-ui--filter-page :align-page))
-    (push (cfs-ui--create-page-switch-button page-name t)
-          cfs-ui--widgets-align-navigation)
+  (dolist (page-name (cnfonts-ui--filter-page :align-page))
+    (push (cnfonts-ui--create-page-switch-button page-name t)
+          cnfonts-ui--widgets-align-navigation)
     (widget-insert " "))
   (widget-insert "  |")
   (widget-insert "
@@ -218,35 +217,35 @@ TODO: IGNORE-FACE."
 | 英文字号   中文对齐设置    EXT-B 对齐设置    测试  |
 +----------------------------------------------------+"))
 
-(defun cfs-ui--create-warning-board ()
+(defun cnfonts-ui--create-warning-board ()
   (cond
-   (cfs-verbose
+   (cnfonts-verbose
     (widget-insert "
 +----------------------------------------------------+
-| 如果需要 emacs 启动时激活 chinese-fonts-setup，请  |
-| 在 emacs 配置文件中添加一行代码：                  |
+| 如果需要 emacs 启动时激活 cnfonts，请在 emacs 配置 |
+| 文件中添加一行代码：                               |
 |                                                    |
-|          (chinese-fonts-setup-enable)              |
+|                (cnfonts-enable)                    |
 |                                                    |
-| 常用命令                  功能                     |
-| ----------------------    -------------            |
-| cfs-edit-profile          调整字体设置             |
-| cfs-increase-fontsize     增大字号                 |
-| cfs-decrease-fontsize     减小字号                 |
+| 常用命令                      功能                 |
+| ----------------------        -------------        |
+| cnfonts-edit-profile          调整字体设置         |
+| cnfonts-increase-fontsize     增大字号             |
+| cnfonts-decrease-fontsize     减小字号             |
 |                                                    |
-| 注: 设置 cfs-verbose 为 nil , 可以隐藏这个消息。   |
+| 注: 设置 cnfonts-verbose 为 nil , 可以隐藏这个消息 |
 +----------------------------------------------------+
 "))
-   ((not (nth 2 (cfs--get-valid-fonts)))
+   ((not (nth 2 (cnfonts--get-valid-fonts)))
     (widget-insert "
 +----------------------------------------------------+
-| 注：如果安装 chinese-fonts-setup 后，发现 emacs 卡 |
-| 顿甚至崩溃，可以安装 HanaMinB 字体试试，这个字体的 |
-| 下载地址可以从 [ 帮助 ] 页面中找到。               |
+| 注：如果安装 cnfonts 后，发现 emacs 卡顿甚至崩溃， |
+| 可以安装 HanaMinB 字体试试，这个字体的下载地址可   |
+| 以从 [ 帮助 ] 页面中找到。                         |
 +----------------------------------------------------+
 "))))
 
-(defun cfs-ui--create-align-operate-buttons (fontsize key index)
+(defun cnfonts-ui--create-align-operate-buttons (fontsize key index)
   (let (widget1 widget2 widget3 widget4 widget5)
     (if (= index 0)
         (progn (setq widget1 (widget-create 'push-button
@@ -255,8 +254,8 @@ TODO: IGNORE-FACE."
                                             :key key
                                             :button-face-get 'ignore
                                             :mouse-face-get 'ignore
-                                            :action 'cfs-ui-test-align))
-               (push (cons widget1 widget1) cfs-ui--widgets-alist))
+                                            :action 'cnfonts-ui-test-align))
+               (push (cons widget1 widget1) cnfonts-ui--widgets-alist))
       (setq widget2 (widget-create 'push-button
                                    :value (format "%-5s" fontsize)
                                    :key key
@@ -265,7 +264,7 @@ TODO: IGNORE-FACE."
                                    :tab-stop-point t
                                    :button-face-get 'ignore
                                    :mouse-face-get 'ignore
-                                   :action 'cfs-ui-test-align))
+                                   :action 'cnfonts-ui-test-align))
       (setq widget3 (widget-create 'push-button
                                    :tag "[-]"
                                    :key key
@@ -273,7 +272,7 @@ TODO: IGNORE-FACE."
                                    :flag t
                                    :button-face-get 'ignore
                                    :mouse-face-get 'ignore
-                                   :action 'cfs-ui-decrease-align))
+                                   :action 'cnfonts-ui-decrease-align))
       (setq widget4 (widget-create 'push-button
                                    :tag "[+]"
                                    :key key
@@ -281,20 +280,20 @@ TODO: IGNORE-FACE."
                                    :flag t
                                    :button-face-get 'ignore
                                    :mouse-face-get 'ignore
-                                   :action 'cfs-ui-increase-align))
-      (push (cons widget2 widget2) cfs-ui--widgets-alist)
-      (push (cons widget3 widget2) cfs-ui--widgets-alist)
-      (push (cons widget4 widget2) cfs-ui--widgets-alist))
+                                   :action 'cnfonts-ui-increase-align))
+      (push (cons widget2 widget2) cnfonts-ui--widgets-alist)
+      (push (cons widget3 widget2) cnfonts-ui--widgets-alist)
+      (push (cons widget4 widget2) cnfonts-ui--widgets-alist))
     (setq widget5 (widget-create 'push-button
                                  :value "     "
                                  :flag t
                                  :key key
                                  :button-face-get 'ignore
                                  :mouse-face-get 'ignore
-                                 :action 'cfs-ui-test-align))
-    (push (cons widget5 widget5) cfs-ui--widgets-alist)))
+                                 :action 'cnfonts-ui-test-align))
+    (push (cons widget5 widget5) cnfonts-ui--widgets-alist)))
 
-(defun cfs-ui--create-align-test-buttons (key index)
+(defun cnfonts-ui--create-align-test-buttons (key index)
   (let (widget1 widget2)
     (setq widget1 (widget-create 'push-button
                                  :value "  "
@@ -302,26 +301,26 @@ TODO: IGNORE-FACE."
                                  :key key
                                  :button-face-get 'ignore
                                  :mouse-face-get 'ignore
-                                 :action 'cfs-ui-test-align))
+                                 :action 'cnfonts-ui-test-align))
     (setq widget2 (widget-create 'push-button
                                  :tag " 测试 "
                                  :key key
                                  :flag t
-                                 :action 'cfs-ui-test-align))
-    (push (cons widget1 widget1) cfs-ui--widgets-alist)
-    (push (cons widget2 widget2) cfs-ui--widgets-alist)))
+                                 :action 'cnfonts-ui-test-align))
+    (push (cons widget1 widget1) cnfonts-ui--widgets-alist)
+    (push (cons widget2 widget2) cnfonts-ui--widgets-alist)))
 
-(defun cfs-ui--return-status-string (font index)
+(defun cnfonts-ui--return-status-string (font index)
   (format "%-2s %-2s"
-          (if (cfs--get-xlfd font t) "" "NA")
-          (if (member font (nth index cfs-personal-fontnames)) "P" "")))
+          (if (cnfonts--get-xlfd font t) "" "NA")
+          (if (member font (nth index cnfonts-personal-fontnames)) "P" "")))
 
-(defun cfs-ui--get-page-function (page-name)
-  (intern (concat "cfs-ui-page-" (symbol-name page-name))))
+(defun cnfonts-ui--get-page-function (page-name)
+  (intern (concat "cnfonts-ui-page-" (symbol-name page-name))))
 
-(defmacro cfs-ui-create-page (page-name &rest body)
+(defmacro cnfonts-ui-create-page (page-name &rest body)
   (declare (indent 1) (debug t))
-  (let ((func-name (intern (concat "cfs-ui-page-" (symbol-name page-name))))
+  (let ((func-name (intern (concat "cnfonts-ui-page-" (symbol-name page-name))))
         (buffer-name (make-symbol "buffer-name")))
     `(defun ,func-name (&optional widget event create-buffer)
        (interactive)
@@ -330,57 +329,57 @@ TODO: IGNORE-FACE."
              (with-current-buffer (get-buffer-create ,buffer-name)
                (let ((inhibit-read-only t))
                  (erase-buffer))
-               (cfs-ui-mode)
-               (define-key cfs-ui-mode-map (cfs-ui--get-page-info ',page-name :keybinding) ',func-name)
-               (set (make-local-variable 'cfs-ui--widgets-alist) nil)
-               (set (make-local-variable 'cfs-ui--current-page) ',page-name)
-               (set (make-local-variable 'cfs-ui--widgets-main-navigation) nil)
-               (set (make-local-variable 'cfs-ui--widgets-align-navigation) nil)
-               (set (make-local-variable 'cfs-ui--widgets-elisp-snippet) nil)
+               (cnfonts-ui-mode)
+               (define-key cnfonts-ui-mode-map (cnfonts-ui--get-page-info ',page-name :keybinding) ',func-name)
+               (set (make-local-variable 'cnfonts-ui--widgets-alist) nil)
+               (set (make-local-variable 'cnfonts-ui--current-page) ',page-name)
+               (set (make-local-variable 'cnfonts-ui--widgets-main-navigation) nil)
+               (set (make-local-variable 'cnfonts-ui--widgets-align-navigation) nil)
+               (set (make-local-variable 'cnfonts-ui--widgets-elisp-snippet) nil)
                (setq truncate-lines t)
                ,@body
                (goto-char (point-min))
                (widget-setup))
-           (cfs-ui--switch-to-page ',page-name))))))
+           (cnfonts-ui--switch-to-page ',page-name))))))
 
-(defun cfs-ui--get-page-info (page-name key)
-  (let ((page-info (cdr (assq page-name cfs-ui--pages))))
+(defun cnfonts-ui--get-page-info (page-name key)
+  (let ((page-info (cdr (assq page-name cnfonts-ui--pages))))
     (plist-get page-info key)))
 
-(defun cfs-ui--create-align-page (page-name)
-  (let ((index (cfs-ui--get-page-info page-name :index))
-        (fontsize-alist (car (cdr (cfs--read-profile))))
-        (page-fontsizes (cfs-ui--get-page-info page-name :fontsizes)))
+(defun cnfonts-ui--create-align-page (page-name)
+  (let ((index (cnfonts-ui--get-page-info page-name :index))
+        (fontsize-alist (car (cdr (cnfonts--read-profile))))
+        (page-fontsizes (cnfonts-ui--get-page-info page-name :fontsizes)))
     (widget-insert "\n")
-    (cfs-ui--create-main-navigation)
+    (cnfonts-ui--create-main-navigation)
     (widget-insert "\n")
-    (cfs-ui--create-align-navigation)
+    (cnfonts-ui--create-align-navigation)
     (widget-insert "\n" )
     (dolist (fontsize-list fontsize-alist)
       (when (member (car fontsize-list) page-fontsizes)
         (let ((i 0))
           (dolist (fontsize fontsize-list)
-            (cfs-ui--create-align-operate-buttons
+            (cnfonts-ui--create-align-operate-buttons
              (number-to-string fontsize) (car fontsize-list) i)
             (setq i (+ i 1)))
-          (cfs-ui--create-align-test-buttons (car fontsize-list) i))
+          (cnfonts-ui--create-align-test-buttons (car fontsize-list) i))
         (widget-insert "\n")))
     (widget-insert "\n")
-    (widget-insert (format "%-38s" (format "( %s )" (cfs--get-current-profile t))))
+    (widget-insert (format "%-38s" (format "( %s )" (cnfonts--get-current-profile t))))
     (widget-create 'push-button
                    :tag "[ 对齐设置完成 ]"
                    :tab-stop-point t
                    :button-face-get 'ignore
                    :mouse-face-get 'ignore
-                   :action 'cfs-ui-quit-align)))
+                   :action 'cnfonts-ui-quit-align)))
 
-(defun cfs-ui--create-fonts-page (page-name)
-  (let ((index (cfs-ui--get-page-info page-name :index))
-        (fontname-alist (car (cfs--read-profile))))
+(defun cnfonts-ui--create-fonts-page (page-name)
+  (let ((index (cnfonts-ui--get-page-info page-name :index))
+        (fontname-alist (car (cnfonts--read-profile))))
     (widget-insert "\n")
-    (cfs-ui--create-main-navigation)
+    (cnfonts-ui--create-main-navigation)
     (widget-insert "\n")
-    (cfs-ui--create-warning-board)
+    (cnfonts-ui--create-warning-board)
     (widget-insert "\n")
     (let ((fonts (nth index fontname-alist))
           widget1 widget2 widget3)
@@ -390,14 +389,14 @@ TODO: IGNORE-FACE."
                      :mouse-face-get 'ignore
                      :tag "[-]"
                      :action '(lambda (widget event)
-                                (cfs-decrease-fontsize)))
+                                (cnfonts-decrease-fontsize)))
       (widget-create 'push-button
                      :button-face-get 'ignore
                      :mouse-face-get 'ignore
                      :tag "[+]"
                      :action '(lambda (widget event)
-                                (cfs-increase-fontsize)))
-      (widget-insert (format "%33s\n" (format "( %s )" (cfs--get-current-profile t))))
+                                (cnfonts-increase-fontsize)))
+      (widget-insert (format "%33s\n" (format "( %s )" (cnfonts--get-current-profile t))))
       (widget-insert "----  -----------------------------------------------\n")
       (dolist (font fonts)
         (setq widget1
@@ -406,7 +405,7 @@ TODO: IGNORE-FACE."
                              :index index
                              :button-face-get 'ignore
                              :mouse-face-get 'ignore
-                             :value (format "%-6s" (cfs-ui--return-status-string font index))))
+                             :value (format "%-6s" (cnfonts-ui--return-status-string font index))))
         (setq widget2
               (widget-create 'checkbox
                              :value (equal font (car (nth index fontname-alist)))
@@ -414,21 +413,21 @@ TODO: IGNORE-FACE."
                              :flag t
                              :tab-stop-point t
                              :index index
-                             :action 'cfs-ui-toggle-select-font))
+                             :action 'cnfonts-ui-toggle-select-font))
         (setq widget3
               (widget-create 'push-button
                              :button-face-get 'ignore
                              :mouse-face-get 'ignore
                              :value (format " %-50s" font)
-                             :action 'cfs-ui-toggle-select-font))
-        (push (cons widget1 widget2) cfs-ui--widgets-alist)
-        (push (cons widget2 widget2) cfs-ui--widgets-alist)
-        (push (cons widget3 widget2) cfs-ui--widgets-alist)
+                             :action 'cnfonts-ui-toggle-select-font))
+        (push (cons widget1 widget2) cnfonts-ui--widgets-alist)
+        (push (cons widget2 widget2) cnfonts-ui--widgets-alist)
+        (push (cons widget3 widget2) cnfonts-ui--widgets-alist)
         (widget-insert "\n" ))
       (widget-insert "
-注1: \"P\"  表示当前字体包含在 `cfs-personal-fontnames' 中
+注1: \"P\"  表示当前字体包含在 `cnfonts-personal-fontnames' 中
      \"NA\" 表示系统没有安装当前字体\n")
-      (when (cfs--upgrade-profile-need-p)
+      (when (cnfonts--upgrade-profile-need-p)
         (widget-insert "
 注2: profile 的格式已经更新，用户可以点击 ")
         (widget-create 'push-button
@@ -437,41 +436,41 @@ TODO: IGNORE-FACE."
                        :button-face-get 'ignore
                        :mouse-face-get 'ignore
                        :action '(lambda (widget event)
-                                  (cfs--save-profile cfs--fontnames-fallback
-                                                     cfs--fontsizes-fallback
-                                                     cfs--current-profile)
-                                  (cfs-set-font-with-saved-step)
-                                  (cfs-ui-restart)))
+                                  (cnfonts--save-profile cnfonts--fontnames-fallback
+                                                     cnfonts--fontsizes-fallback
+                                                     cnfonts--current-profile)
+                                  (cnfonts-set-font-with-saved-step)
+                                  (cnfonts-ui-restart)))
         (widget-insert " 强制
      *重置* 当前 profile。")))))
 
-(cfs-ui-create-page english-fonts-page
-  (cfs-ui--create-fonts-page 'english-fonts-page))
+(cnfonts-ui-create-page english-fonts-page
+  (cnfonts-ui--create-fonts-page 'english-fonts-page))
 
-(cfs-ui-create-page chinese-fonts-page
-  (cfs-ui--create-fonts-page 'chinese-fonts-page))
+(cnfonts-ui-create-page chinese-fonts-page
+  (cnfonts-ui--create-fonts-page 'chinese-fonts-page))
 
-(cfs-ui-create-page extb-fonts-page
-  (cfs-ui--create-fonts-page 'extb-fonts-page))
+(cnfonts-ui-create-page extb-fonts-page
+  (cnfonts-ui--create-fonts-page 'extb-fonts-page))
 
-(cfs-ui-create-page align-page-1
-  (cfs-ui--create-align-page 'align-page-1))
+(cnfonts-ui-create-page align-page-1
+  (cnfonts-ui--create-align-page 'align-page-1))
 
-(cfs-ui-create-page align-page-2
-  (cfs-ui--create-align-page 'align-page-2))
+(cnfonts-ui-create-page align-page-2
+  (cnfonts-ui--create-align-page 'align-page-2))
 
-(cfs-ui-create-page align-page-3
-  (cfs-ui--create-align-page 'align-page-3))
+(cnfonts-ui-create-page align-page-3
+  (cnfonts-ui--create-align-page 'align-page-3))
 
-(cfs-ui-create-page align-page-4
-  (cfs-ui--create-align-page 'align-page-4))
+(cnfonts-ui-create-page align-page-4
+  (cnfonts-ui--create-align-page 'align-page-4))
 
-(cfs-ui-create-page align-page-5
-  (cfs-ui--create-align-page 'align-page-5))
+(cnfonts-ui-create-page align-page-5
+  (cnfonts-ui--create-align-page 'align-page-5))
 
-(cfs-ui-create-page key-page
-  (cfs-ui--create-tab-stop-point)
-  (cfs-ui--create-main-navigation)
+(cnfonts-ui-create-page key-page
+  (cnfonts-ui--create-tab-stop-point)
+  (cnfonts-ui--create-main-navigation)
   (widget-insert
    (substitute-command-keys "
 
@@ -479,50 +478,50 @@ TODO: IGNORE-FACE."
 
  功能                    按键
  ----------------------  --------
- 切换到下一个主标签      \\[cfs-ui-next-main-page]
- 切换到上一个主标签      \\[cfs-ui-previous-main-page]
- 切换到下一个标签        \\[cfs-ui-next-page]
- 切换到上一个标签        \\[cfs-ui-previous-page]
- 切换到 [ 英文 ] 标签    \\[cfs-ui-page-english-fonts-page]
- 切换到 [ 中文 ] 标签    \\[cfs-ui-page-chinese-fonts-page]
- 切换到 [ EXT-B ] 标签   \\[cfs-ui-page-extb-fonts-page]
- 切换到 [ 对齐 ] 标签    \\[cfs-ui-page-align-page-1]
- 切换到 [09--18] 标签    \\[cfs-ui-page-align-page-1]
- 切换到 [20--24] 标签    \\[cfs-ui-page-align-page-2]
- 切换到 [26--28] 标签    \\[cfs-ui-page-align-page-3]
- 切换到 [  30  ] 标签    \\[cfs-ui-page-align-page-4]
- 切换到 [  32  ] 标签    \\[cfs-ui-page-align-page-5]
- 切换到 [ 其他 ] 标签    \\[cfs-ui-page-other-features-page]
- 切换到 [ 快捷键 ] 标签  \\[cfs-ui-page-key-page]
- 切换到 [ 帮助 ] 标签    \\[cfs-ui-page-help-page]
+ 切换到下一个主标签      \\[cnfonts-ui-next-main-page]
+ 切换到上一个主标签      \\[cnfonts-ui-previous-main-page]
+ 切换到下一个标签        \\[cnfonts-ui-next-page]
+ 切换到上一个标签        \\[cnfonts-ui-previous-page]
+ 切换到 [ 英文 ] 标签    \\[cnfonts-ui-page-english-fonts-page]
+ 切换到 [ 中文 ] 标签    \\[cnfonts-ui-page-chinese-fonts-page]
+ 切换到 [ EXT-B ] 标签   \\[cnfonts-ui-page-extb-fonts-page]
+ 切换到 [ 对齐 ] 标签    \\[cnfonts-ui-page-align-page-1]
+ 切换到 [09--18] 标签    \\[cnfonts-ui-page-align-page-1]
+ 切换到 [20--24] 标签    \\[cnfonts-ui-page-align-page-2]
+ 切换到 [26--28] 标签    \\[cnfonts-ui-page-align-page-3]
+ 切换到 [  30  ] 标签    \\[cnfonts-ui-page-align-page-4]
+ 切换到 [  32  ] 标签    \\[cnfonts-ui-page-align-page-5]
+ 切换到 [ 其他 ] 标签    \\[cnfonts-ui-page-other-features-page]
+ 切换到 [ 快捷键 ] 标签  \\[cnfonts-ui-page-key-page]
+ 切换到 [ 帮助 ] 标签    \\[cnfonts-ui-page-help-page]
 
 ** 字体选择快捷键
 
  功能                    按键
  ----------------------  --------
- 选择/不选择当前字体     \\[cfs-ui-toggle-select-font]
+ 选择/不选择当前字体     \\[cnfonts-ui-toggle-select-font]
 
 
 ** 中英文等宽对齐快捷键
 
  功能                    按键
  ----------------------  --------
- 增大光标处的字号来对齐  \\[cfs-ui-increase-align]
- 减小光标处的字号来对齐  \\[cfs-ui-decrease-align]
- 测试字体对齐效果        \\[cfs-ui-test-align]
- 对齐设置完成            \\[cfs-ui-quit-align]
+ 增大光标处的字号来对齐  \\[cnfonts-ui-increase-align]
+ 减小光标处的字号来对齐  \\[cnfonts-ui-decrease-align]
+ 测试字体对齐效果        \\[cnfonts-ui-test-align]
+ 对齐设置完成            \\[cnfonts-ui-quit-align]
 
 ** 其它快捷键
 
  功能                    按键
  ----------------------  --------
- 重启UI                  \\[cfs-ui-restart]
+ 重启UI                  \\[cnfonts-ui-restart]
 "))
-  (cfs-ui--create-tab-stop-point))
+  (cnfonts-ui--create-tab-stop-point))
 
-(cfs-ui-create-page help-page
-  (cfs-ui--create-tab-stop-point)
-  (cfs-ui--create-main-navigation)
+(cnfonts-ui-create-page help-page
+  (cnfonts-ui--create-tab-stop-point)
+  (cnfonts-ui--create-main-navigation)
   (widget-insert "\n\n")
   (let ((file (concat (file-name-directory (locate-library "chinese-fonts-setup"))
                       "chinese-fonts-setup.el"))
@@ -542,25 +541,25 @@ TODO: IGNORE-FACE."
                          "^;; " ""
                          (buffer-substring-no-properties begin end)))))))
     (widget-insert (or string "")))
-  (cfs-ui--create-tab-stop-point))
+  (cnfonts-ui--create-tab-stop-point))
 
-(cfs-ui-create-page other-features-page
-  (cfs-ui--create-tab-stop-point)
-  (cfs-ui--create-main-navigation)
+(cnfonts-ui-create-page other-features-page
+  (cnfonts-ui--create-tab-stop-point)
+  (cnfonts-ui--create-main-navigation)
   (widget-insert "
 
 ------------------------------------------------------
-** 根据 cfs 的设置，自动生成一个 elisp 字体配置片断
+** 根据 cnfonts 的设置，自动生成一个 elisp 字体配置片断
 
-如果用户觉得 chinese-fonts-setup *太厚重*, 可以将下面
+如果用户觉得 cnfonts *太厚重*, 可以将下面
 一段 elisp 粘贴到 ~/.emacs 文件，然后保存，就不需要启
-动 chinese-fonts-setup 来配置字体了。
+动 cnfonts 来配置字体了。
 
 -------
 ")
-  (setq cfs-ui--widgets-elisp-snippet
+  (setq cnfonts-ui--widgets-elisp-snippet
         (widget-create 'push-button
-                       :value (cfs--return-fonts-configure-string)
+                       :value (cnfonts--return-fonts-configure-string)
                        :tab-stop-point t
                        :button-face-get 'ignore
                        :mouse-face-get 'ignore))
@@ -572,50 +571,50 @@ TODO: IGNORE-FACE."
                  :mouse-face-get 'ignore
                  :action (lambda (widget event)
                            (widget-value-set
-                            cfs-ui--widgets-elisp-snippet
-                            (cfs--return-fonts-configure-string))))
+                            cnfonts-ui--widgets-elisp-snippet
+                            (cnfonts--return-fonts-configure-string))))
   (widget-insert "
 ------------------------------------------------------\n")
-  (cfs-ui--create-tab-stop-point))
+  (cnfonts-ui--create-tab-stop-point))
 
-(defun cfs-ui-toggle-select-font (&optional widget event)
+(defun cnfonts-ui-toggle-select-font (&optional widget event)
   (interactive)
   (let* ((widget (or widget (widget-at)))
-         (widget1 (cdr (assoc widget cfs-ui--widgets-alist)))
-         (widgets (mapcar #'cdr cfs-ui--widgets-alist))
+         (widget1 (cdr (assoc widget cnfonts-ui--widgets-alist)))
+         (widgets (mapcar #'cdr cnfonts-ui--widgets-alist))
          (font (widget-get widget1 :font-name))
          (index (widget-get widget1 :index))
          (flag (widget-get widget1 :flag))
-         (fontname-alist (car (cfs--read-profile)))
-         (fontsize-alist (car (cdr (cfs--read-profile))))
+         (fontname-alist (car (cnfonts--read-profile)))
+         (fontsize-alist (car (cdr (cnfonts--read-profile))))
          fonts-list)
     (if (not flag)
-        (cfs-message t "当前光标所在位置不对，请将光标移动到字体所在的行上面。")
+        (cnfonts-message t "当前光标所在位置不对，请将光标移动到字体所在的行上面。")
       (widget-toggle-action widget1 event)
       (dolist (w widgets)
         (unless (equal (widget-get w :font-name) font)
           (widget-value-set w nil)
           (widget-apply w :notify w event)))
-      (if (not (cfs--font-exists-p font))
-          (cfs-message t "Chinese-fonts-setup UI: 系统没有安装字体: %S ." font)
+      (if (not (cnfonts--font-exists-p font))
+          (cnfonts-message t "cnfonts UI: 系统没有安装字体: %S ." font)
         (when (widget-value widget1)
           (setf (nth index fontname-alist)
                 (cl-remove-duplicates
                  `(,font ,@(nth index fontname-alist))
                  :from-end t :test 'equal))
-          (cfs--save-profile fontname-alist fontsize-alist)
-          (cfs-set-font-with-saved-step))))))
+          (cnfonts--save-profile fontname-alist fontsize-alist)
+          (cnfonts-set-font-with-saved-step))))))
 
-(defun cfs-ui--operate-align (&optional widget event n)
+(defun cnfonts-ui--operate-align (&optional widget event n)
   (let* ((widget (or widget (widget-at)))
          (key (widget-get widget :key))
          (index (widget-get widget :index))
          (flag (widget-get widget :flag))
-         (widget-show-fontsize (cdr (assoc widget cfs-ui--widgets-alist)))
-         (fontname-alist (car (cfs--read-profile)))
-         (fontsize-alist (car (cdr (cfs--read-profile)))))
+         (widget-show-fontsize (cdr (assoc widget cnfonts-ui--widgets-alist)))
+         (fontname-alist (car (cnfonts--read-profile)))
+         (fontsize-alist (car (cdr (cnfonts--read-profile)))))
     (if (not flag)
-        (cfs-message t "当前光标所在位置不对，请将光标移动到 ‘中文字号’ 或者 ‘EXT-B字体字号’ 对应的数字上。")
+        (cnfonts-message t "当前光标所在位置不对，请将光标移动到 ‘中文字号’ 或者 ‘EXT-B字体字号’ 对应的数字上。")
       (when (and index key (numberp n))
         (cl-incf (nth index (assoc key fontsize-alist)) n)
         ;; 更新加号按钮和减号按钮前面的数字标签
@@ -624,10 +623,10 @@ TODO: IGNORE-FACE."
          (format "%-5s" (nth index (assoc key fontsize-alist)))))
       (when key
         (let ((fontsizes-list (assoc key fontsize-alist)))
-          (cfs--save-profile fontname-alist fontsize-alist)
-          (cfs--set-font fontsizes-list))))))
+          (cnfonts--save-profile fontname-alist fontsize-alist)
+          (cnfonts--set-font fontsizes-list))))))
 
-(defun cfs-ui--create-tab-stop-point ()
+(defun cnfonts-ui--create-tab-stop-point ()
   "Create a widget, the curse will stop to this widget when forward/backward widget."
   (widget-create 'push-button
                  :tag "\n"
@@ -635,25 +634,25 @@ TODO: IGNORE-FACE."
                  :button-face-get 'ignore
                  :mouse-face-get 'ignore))
 
-(defun cfs-ui-quit-align (&optional widget event)
+(defun cnfonts-ui-quit-align (&optional widget event)
   "Quit align."
   (interactive)
-  (cfs--step-fontsize 0))
+  (cnfonts--step-fontsize 0))
 
-(defun cfs-ui-test-align (&optional widget event)
+(defun cnfonts-ui-test-align (&optional widget event)
   "Align test command."
   (interactive)
-  (cfs-ui--operate-align widget event))
+  (cnfonts-ui--operate-align widget event))
 
-(defun cfs-ui-increase-align (&optional widget event)
+(defun cnfonts-ui-increase-align (&optional widget event)
   (interactive)
-  (cfs-ui--operate-align widget event 0.5))
+  (cnfonts-ui--operate-align widget event 0.5))
 
-(defun cfs-ui-decrease-align (&optional widget event)
+(defun cnfonts-ui-decrease-align (&optional widget event)
   (interactive)
-  (cfs-ui--operate-align widget event -0.5))
+  (cnfonts-ui--operate-align widget event -0.5))
 
-(defun cfs-ui-forward (&optional backward)
+(defun cnfonts-ui-forward (&optional backward)
   "Switch to next widget of current page.
 If BACKWARD is non-nil, switch to previous widget."
   (interactive)
@@ -666,17 +665,17 @@ If BACKWARD is non-nil, switch to previous widget."
           (setq forward nil)
         (widget-move step)))))
 
-(defun cfs-ui-backward ()
+(defun cnfonts-ui-backward ()
   "Switch to previous widget of current page."
   (interactive)
-  (cfs-ui-forward t))
+  (cnfonts-ui-forward t))
 
-(defun cfs-ui--operate-page (step &optional operate-all-page)
-  "Internal function, which used to cfs-ui page switch."
-  (let* ((pages (cfs-ui--filter-page :main-page operate-all-page))
+(defun cnfonts-ui--operate-page (step &optional operate-all-page)
+  "Internal function, which used to cnfonts-ui page switch."
+  (let* ((pages (cnfonts-ui--filter-page :main-page operate-all-page))
          (pos-max (- (length pages) 1))
          (cur-page-pos
-          (cl-position cfs-ui--current-page pages))
+          (cl-position cnfonts-ui--current-page pages))
          (next-page-pos
           (if cur-page-pos
               (if (> step 0)
@@ -688,63 +687,63 @@ If BACKWARD is non-nil, switch to previous widget."
                   (+ step cur-page-pos)))
             0))
          (next-page (nth next-page-pos pages)))
-    (cfs-ui--switch-to-page next-page)))
+    (cnfonts-ui--switch-to-page next-page)))
 
-(defun cfs-ui-next-main-page ()
-  "Switch to next main page of cfs-ui."
+(defun cnfonts-ui-next-main-page ()
+  "Switch to next main page of cnfonts-ui."
   (interactive)
-  (cfs-ui--operate-page 1))
+  (cnfonts-ui--operate-page 1))
 
-(defun cfs-ui-previous-main-page ()
-  "Switch to previous main page of cfs-ui."
+(defun cnfonts-ui-previous-main-page ()
+  "Switch to previous main page of cnfonts-ui."
   (interactive)
-  (cfs-ui--operate-page -1))
+  (cnfonts-ui--operate-page -1))
 
-(defun cfs-ui-next-page ()
-  "Switch to next page of cfs-ui."
+(defun cnfonts-ui-next-page ()
+  "Switch to next page of cnfonts-ui."
   (interactive)
-  (cfs-ui--operate-page 1 t))
+  (cnfonts-ui--operate-page 1 t))
 
-(defun cfs-ui-previous-page ()
-  "Switch to previous page of cfs-ui."
+(defun cnfonts-ui-previous-page ()
+  "Switch to previous page of cnfonts-ui."
   (interactive)
-  (cfs-ui--operate-page -1 t))
+  (cnfonts-ui--operate-page -1 t))
 
-(defun cfs-ui-restart ()
-  "Restart cfs-ui."
+(defun cnfonts-ui-restart ()
+  "Restart cnfonts-ui."
   (interactive)
-  (let ((current-page cfs-ui--current-page)
+  (let ((current-page cnfonts-ui--current-page)
         (point (point)))
-    (cfs-ui)
-    (cfs-ui--switch-to-page current-page)
+    (cnfonts-ui)
+    (cnfonts-ui--switch-to-page current-page)
     (goto-char point)))
 
-(define-derived-mode cfs-ui-mode special-mode "CFS-UI"
-  "Major mode for cfs-ui. Do not call this mode function yourself.
+(define-derived-mode cnfonts-ui-mode special-mode "CNFONTS-UI"
+  "Major mode for cnfonts-ui. Do not call this mode function yourself.
 It is meant for internal use."
-  (use-local-map cfs-ui-mode-map)
+  (use-local-map cnfonts-ui-mode-map)
   (custom--initialize-widget-variables))
-(put 'cfs-ui-mode 'mode-class 'special)
+(put 'cnfonts-ui-mode 'mode-class 'special)
 
-(defun cfs-ui ()
+(defun cnfonts-ui ()
   (interactive)
   (if (not (display-graphic-p))
-      (cfs-message t "Chinese-fonts-setup 不支持 emacs 终端模式！")
+      (cnfonts-message t "cnfonts 不支持 emacs 终端模式！")
     ;; "cus-edit" 不能很好的在 emacs daemon 下工作，hack!
     (setq custom-raised-buttons
           (not (equal (face-valid-attribute-values :box)
                       '(("unspecified" . unspecified)))))
     (load-library "cus-edit")
-    (dolist (page-info cfs-ui--pages)
+    (dolist (page-info cnfonts-ui--pages)
       (let ((page-name (car page-info)))
-        (funcall (cfs-ui--get-page-function page-name) nil nil t)))
-    (funcall (cfs-ui--get-page-function 'english-fonts-page))))
+        (funcall (cnfonts-ui--get-page-function page-name) nil nil t)))
+    (funcall (cnfonts-ui--get-page-function 'english-fonts-page))))
 
 ;; * Footer
-(provide 'cfs-ui)
+(provide 'cnfonts-ui)
 
 ;; Local Variables:
 ;; coding: utf-8-unix
 ;; End:
 
-;;; cfs-ui.el ends here
+;;; cnfonts-ui.el ends here
