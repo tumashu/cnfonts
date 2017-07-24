@@ -81,8 +81,8 @@
 ;; 通过下面几个命令，用户可以 *快速* 了解 cnfonts 的大部分功能，
 ;; 而不需要阅读整篇文档，如果用户想深入了解 cnfonts 或者自定义
 ;; 一些特殊的功能，阅读整篇文档是逃不开的。
-;; | 命令                  | 功能         |
-;; |-----------------------+--------------|
+;; | 命令                      | 功能         |
+;; |---------------------------+--------------|
 ;; | cnfonts-edit-profile      | 调整字体设置 |
 ;; | cnfonts-increase-fontsize | 增大字号     |
 ;; | cnfonts-decrease-fontsize | 减小字号     |
@@ -131,8 +131,8 @@
 
 ;; cnfonts 使用下面两个命令来切换 profile ：
 
-;; | Command            | Help                    |
-;; |--------------------+-------------------------|
+;; | Command                | Help                    |
+;; |------------------------+-------------------------|
 ;; | cnfonts-switch-profile | 选择并切换 profile      |
 ;; | cnfonts-next-profile   | 直接切换到下一个profile |
 
@@ -155,8 +155,8 @@
 
 ;; 在编辑的过程中，用户可以使用下面三个命令 *快速* 的测试编辑效果：
 
-;; | Key     | Command                         | Help                                   |
-;; |---------+---------------------------------+----------------------------------------|
+;; | Key     | Command                             | Help                                   |
+;; |---------+-------------------------------------+----------------------------------------|
 ;; | C-c C-c | cnfonts-test-fontsizes-at-point     | 查看字体显示效果                       |
 ;; | C-up    | cnfonts-increment-fontsize-at-point | 增大光标下字号的大小，同时显示对齐效果 |
 ;; | C-down  | cnfonts-decrement-fontsize-at-point | 减小光标下字号的大小，同时显示对齐效果 |
@@ -173,8 +173,8 @@
 ;; *** 调整字体大小
 ;; `cnfonts' 使用下述两个命令调整字体大小:
 
-;; | Command               | Help         |
-;; |-----------------------+--------------|
+;; | Command                   | Help         |
+;; |---------------------------+--------------|
 ;; | cnfonts-increase-fontsize | 增大字体大小 |
 ;; | cnfonts-decrease-fontsize | 减小字体大小 |
 
@@ -481,7 +481,7 @@ It can be inserted into '~/.emacs' file to config Emacs fonts.
 
 (defconst cnfonts--test-string "
 | 如果此表格无法对齐，请调整下面变量中的数字 |
-|        `cnfonts--custom-set-fontsizes'         |
+|       `cnfonts--custom-set-fontsizes'      |
 | 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄇 |
 ")
 
