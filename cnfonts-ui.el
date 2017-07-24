@@ -523,8 +523,8 @@ TODO: IGNORE-FACE."
   (cnfonts-ui--create-tab-stop-point)
   (cnfonts-ui--create-main-navigation)
   (widget-insert "\n\n")
-  (let ((file (concat (file-name-directory (locate-library "chinese-fonts-setup"))
-                      "chinese-fonts-setup.el"))
+  (let ((file (concat (file-name-directory (locate-library "cnfonts"))
+                      "cnfonts.el"))
         begin end string)
     (when (file-exists-p file)
       (with-temp-buffer
