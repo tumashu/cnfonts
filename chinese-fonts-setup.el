@@ -5,7 +5,7 @@
 
 ;; Author: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/chinese-fonts-setup
-;; Package-Requires: ((emacs "24"))
+;; Package-Requires: ((emacs "24")(cnfonts "0.6"))
 ;; Version: 0.6
 ;; Keywords: convenience, Chinese, font
 
