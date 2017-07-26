@@ -991,7 +991,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   (let ((profile-name (completing-read "Regenerate profile: " cnfonts-profiles)))
     (if (yes-or-no-p (format "Regenerate (%s)? " profile-name))
         (cnfonts--save-profile cnfonts--fontnames-fallback
-                           cnfonts--fontsizes-fallback profile-name)
+                               cnfonts--fontsizes-fallback profile-name)
       (cnfonts-message t "Ignore regenerate profile!"))))
 
 (defun cnfonts-test-fontsize-at-point ()
