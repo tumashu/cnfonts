@@ -35,6 +35,7 @@
 (require 'cnfonts)
 (require 'cnfonts-ui)
 
+;;;###autoload
 (defun chinese-fonts-setup-enable ()
   "运行这个函数，可以让 Emacs 启动的时候就激活 chinese-fonts-setup."
   (interactive)
@@ -59,6 +60,7 @@
 ")
   (call-interactively #'cnfonts-enable))
 
+;;;###autoload
 (defun chinese-fonts-setup-disable ()
   "清除与 chinese-fonts-setup 相关的 hook 设定."
   (interactive)

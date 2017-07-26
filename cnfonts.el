@@ -881,6 +881,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
       (cnfonts--save-config-file profile-name profile-step)
       (cnfonts-message t cnfonts--minibuffer-echo-string))))
 
+;;;###autoload
 (defun cnfonts-set-font-with-saved-step (&optional frame)
   "设置字体为：当前保存 step 对应的字体.
 如果 FRAME 是 non-nil, 设置对应的 FRAME 的字体。"
@@ -899,11 +900,13 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
     ;; https://github.com/ch11ng/exwm/issues/249#issuecomment-299692305
     (redisplay t)))
 
+;;;###autoload
 (defun cnfonts-decrease-fontsize ()
   "Cnfonts 减小字体."
   (interactive)
   (cnfonts--step-fontsize -1))
 
+;;;###autoload
 (defun cnfonts-increase-fontsize ()
   "Cnfonts 增大字体."
   (interactive)
@@ -931,12 +934,14 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
              (cnfonts-set-font-with-saved-step))
     (cnfonts-message t "%s doesn't exist." profile-name)))
 
+;;;###autoload
 (defun cnfonts-switch-profile ()
   "切换 cnfonts profile."
   (interactive)
   (let ((profile (completing-read "Set cnfonts profile to:" cnfonts-profiles)))
     (cnfonts--select-profile profile)))
 
+;;;###autoload
 (defun cnfonts-next-profile (&optional step)
   "选择下一个 profile 中当前 STEP 对应的字体设置."
   (interactive)
@@ -953,6 +958,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
       (cnfonts-set-font-with-saved-step))
     (cnfonts-message t "Current cnfonts profile is set to: \"%s\"" next-profile)))
 
+;;;###autoload
 (defun cnfonts-edit-profile ()
   "编辑当前 cnfonts profile."
   (interactive)
@@ -964,6 +970,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
                                cnfonts--fontsizes-fallback))
       (cnfonts-ui))))
 
+;;;###autoload
 (defun cnfonts-edit-profile-without-ui ()
   "编辑当前 cnfonts profile, 不使用 ‘cnfonts-ui’ 组件."
   (interactive)
@@ -977,6 +984,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
       (cnfonts-profile-edit-mode 1)
       (goto-char (point-min)))))
 
+;;;###autoload
 (defun cnfonts-regenerate-profile ()
   "重新生成当前 profile."
   (interactive)
@@ -1044,6 +1052,7 @@ FONTSIZES-LIST."
       (cnfonts--set-font fontsizes-list))
     (cnfonts-message t cnfonts--minibuffer-echo-string)))
 
+;;;###autoload
 (defun cnfonts-insert-fonts-configure ()
   "在光标处，插入一个 elisp 片断，这个 elisp 片断可以用来配置中文和英文字体."
   (interactive)
@@ -1069,6 +1078,7 @@ FONTSIZES-LIST."
                    (?e . ,english-fontsize)
                    (?c . ,chinese-fontsize)))))
 
+;;;###autoload
 (defun cnfonts-insert-fontname ()
   "Select a valid font name, and insert at point."
   (interactive)
@@ -1093,6 +1103,7 @@ FONTSIZES-LIST."
     (when choose
       (insert (format "\"%s\"" choose)))))
 
+;;;###autoload
 (defun cnfonts-enable ()
   "运行这个函数，可以让 Emacs 启动的时候就激活 cnfonts."
   (interactive)
@@ -1100,6 +1111,7 @@ FONTSIZES-LIST."
   (add-hook 'after-make-frame-functions #'cnfonts-set-font-with-saved-step)
   (add-hook 'window-setup-hook #'cnfonts-set-font-with-saved-step))
 
+;;;###autoload
 (defun cnfonts-disable ()
   "清除与 cnfonts 相关的 hook 设定."
   (interactive)
@@ -1149,6 +1161,7 @@ FONTSIZES-LIST."
           (set-fontset-font "fontset-default"
                             '(#x2190 . #x2200) fallback-spec2 nil 'prepend))))))
 
+;;;###autoload
 (defun cnfonts-set-spacemacs-fallback-fonts ()
   "显示 Spacemace mode-line 上面有一些 Unicode 字符.
 这些字符需要专门的字体来显示，spacemacs 将这些字体的名字内置在
