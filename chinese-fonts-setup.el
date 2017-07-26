@@ -1,4 +1,4 @@
-;;; chinese-fonts-setup.el --- A simple Chinese fonts config tool
+;;; chinese-fonts-setup.el --- Please use "cnfonts" package instead.
 
 ;; * Header
 ;; Copyright (c) 2011-2015, Feng Shu
