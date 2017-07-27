@@ -468,57 +468,6 @@ TODO: IGNORE-FACE."
 (cnfonts-ui-create-page align-page-5
   (cnfonts-ui--create-align-page 'align-page-5))
 
-(cnfonts-ui-create-page key-page
-  (cnfonts-ui--create-tab-stop-point)
-  (cnfonts-ui--create-main-navigation)
-  (widget-insert
-   (substitute-command-keys "
-
-** 标签切换快捷键
-
- 功能                    按键
- ----------------------  --------
- 切换到下一个主标签      \\[cnfonts-ui-next-main-page]
- 切换到上一个主标签      \\[cnfonts-ui-previous-main-page]
- 切换到下一个标签        \\[cnfonts-ui-next-page]
- 切换到上一个标签        \\[cnfonts-ui-previous-page]
- 切换到 [ 英文 ] 标签    \\[cnfonts-ui-page-english-fonts-page]
- 切换到 [ 中文 ] 标签    \\[cnfonts-ui-page-chinese-fonts-page]
- 切换到 [ EXT-B ] 标签   \\[cnfonts-ui-page-extb-fonts-page]
- 切换到 [ 对齐 ] 标签    \\[cnfonts-ui-page-align-page-1]
- 切换到 [09--18] 标签    \\[cnfonts-ui-page-align-page-1]
- 切换到 [20--24] 标签    \\[cnfonts-ui-page-align-page-2]
- 切换到 [26--28] 标签    \\[cnfonts-ui-page-align-page-3]
- 切换到 [  30  ] 标签    \\[cnfonts-ui-page-align-page-4]
- 切换到 [  32  ] 标签    \\[cnfonts-ui-page-align-page-5]
- 切换到 [ 其他 ] 标签    \\[cnfonts-ui-page-other-features-page]
- 切换到 [ 快捷键 ] 标签  \\[cnfonts-ui-page-key-page]
- 切换到 [ 帮助 ] 标签    \\[cnfonts-ui-page-help-page]
-
-** 字体选择快捷键
-
- 功能                    按键
- ----------------------  --------
- 选择/不选择当前字体     \\[cnfonts-ui-toggle-select-font]
-
-
-** 中英文等宽对齐快捷键
-
- 功能                    按键
- ----------------------  --------
- 增大光标处的字号来对齐  \\[cnfonts-ui-increase-align]
- 减小光标处的字号来对齐  \\[cnfonts-ui-decrease-align]
- 测试字体对齐效果        \\[cnfonts-ui-test-align]
- 对齐设置完成            \\[cnfonts-ui-quit-align]
-
-** 其它快捷键
-
- 功能                    按键
- ----------------------  --------
- 重启UI                  \\[cnfonts-ui-restart]
-"))
-  (cnfonts-ui--create-tab-stop-point))
-
 (cnfonts-ui-create-page help-page
   (cnfonts-ui--create-tab-stop-point)
   (cnfonts-ui--create-main-navigation)
@@ -575,6 +524,59 @@ TODO: IGNORE-FACE."
                             (cnfonts--return-fonts-configure-string))))
   (widget-insert "
 ------------------------------------------------------\n")
+  (cnfonts-ui--create-tab-stop-point))
+
+;; key-page *must* create at the end, make sure other page's
+;; keybinding are defined.
+(cnfonts-ui-create-page key-page
+  (cnfonts-ui--create-tab-stop-point)
+  (cnfonts-ui--create-main-navigation)
+  (widget-insert
+   (substitute-command-keys "
+
+** 标签切换快捷键
+
+ 功能                    按键
+ ----------------------  --------
+ 切换到下一个主标签      \\[cnfonts-ui-next-main-page]
+ 切换到上一个主标签      \\[cnfonts-ui-previous-main-page]
+ 切换到下一个标签        \\[cnfonts-ui-next-page]
+ 切换到上一个标签        \\[cnfonts-ui-previous-page]
+ 切换到 [ 英文 ] 标签    \\[cnfonts-ui-page-english-fonts-page]
+ 切换到 [ 中文 ] 标签    \\[cnfonts-ui-page-chinese-fonts-page]
+ 切换到 [ EXT-B ] 标签   \\[cnfonts-ui-page-extb-fonts-page]
+ 切换到 [ 对齐 ] 标签    \\[cnfonts-ui-page-align-page-1]
+ 切换到 [09--18] 标签    \\[cnfonts-ui-page-align-page-1]
+ 切换到 [20--24] 标签    \\[cnfonts-ui-page-align-page-2]
+ 切换到 [26--28] 标签    \\[cnfonts-ui-page-align-page-3]
+ 切换到 [  30  ] 标签    \\[cnfonts-ui-page-align-page-4]
+ 切换到 [  32  ] 标签    \\[cnfonts-ui-page-align-page-5]
+ 切换到 [ 其他 ] 标签    \\[cnfonts-ui-page-other-features-page]
+ 切换到 [ 快捷键 ] 标签  \\[cnfonts-ui-page-key-page]
+ 切换到 [ 帮助 ] 标签    \\[cnfonts-ui-page-help-page]
+
+** 字体选择快捷键
+
+ 功能                    按键
+ ----------------------  --------
+ 选择/不选择当前字体     \\[cnfonts-ui-toggle-select-font]
+
+
+** 中英文等宽对齐快捷键
+
+ 功能                    按键
+ ----------------------  --------
+ 增大光标处的字号来对齐  \\[cnfonts-ui-increase-align]
+ 减小光标处的字号来对齐  \\[cnfonts-ui-decrease-align]
+ 测试字体对齐效果        \\[cnfonts-ui-test-align]
+ 对齐设置完成            \\[cnfonts-ui-quit-align]
+
+** 其它快捷键
+
+ 功能                    按键
+ ----------------------  --------
+ 重启UI                  \\[cnfonts-ui-restart]
+"))
   (cnfonts-ui--create-tab-stop-point))
 
 (defun cnfonts-ui-toggle-select-font (&optional widget event)
