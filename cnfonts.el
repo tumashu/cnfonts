@@ -473,7 +473,9 @@ It can be inserted into '~/.emacs' file to config Emacs fonts.
      "Menlo" "Ubuntu Mono" "Anka/Coder Condensed" "Fantasque Sans Mono" "M+ 1m" "CamingoCode"
      "Office Code Pro" "Roboto Mono" "Input Mono" "Courier Prime Code" "NanumGothicCoding"
      "Monoid" "Edlo" "Iosevka" "Mononoki" "Robot Mono" "Fantasque" "Fira Code" "Go Mono"
-     "Noto Sans Mono CJK" "InputMonoCompressed" "Hasklig" "Terminus" "FantasqueSansMono")
+     "Noto Sans Mono CJK" "InputMonoCompressed" "Hasklig" "Terminus" "FantasqueSansMono"
+     "AnonymousPro" "3270" "Arimo" "D2Coding" "Inconsolata-g" "ProFont for Powerline"
+     "Meslo" "Meslo Dotted" "Noto Mono" "Symbol Neu" "Tinos" "Space Mono")
     ("微软雅黑" "Noto Sans S Chinese Regular" "Microsoft Yahei" "Microsoft_Yahei" "Ubuntu Mono"
      "文泉驿等宽微米黑" "文泉驿等宽正黑" "黑体" "Hiragino Sans GB"  "文泉驿正黑" "文泉驿点阵正黑"
      "SimHei" "SimSun" "NSimSun" "FangSong" "KaiTi" "FangSong_GB2312" "KaiTi_GB2312" "LiSu"
