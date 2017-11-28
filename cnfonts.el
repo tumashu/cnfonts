@@ -428,11 +428,30 @@ It can be inserted into '~/.emacs' file to config Emacs fonts.
   :group 'cnfonts
   :type 'string)
 
-(defvar cnfonts--current-profile nil
+(defvar cnfonts-use-cache nil
+  "是否使用缓存.
+
+cnfont 的设置都保存在文件中，在默认情况下，每次读取 profile
+和 config 都需要从硬盘上读取相关文件，如果这个选项设置为 t，
+那么 cnfonts 会缓存上次读取的结果，从而加快运行，但这个选项
+只适用下面两种情况：
+
+1. 加速 Emacs 启动 （启动的时候，cnfonts 的配置是不会改变的）
+2. cnfonts 的配置长期不变的用户。
+
+其他情况下，将这个变量设置为t，很有可能会让 cnfonts 调整字体的
+功能失效，请谨慎使用。")
+
+(defvar cnfonts--current-profile-cache nil
+  "这个变量用于保存 profile 设置的缓存.")
+
+(defvar cnfonts--current-profile-name nil
   "Current profile name used by cnfonts.")
 
 (defvar cnfonts--profiles-steps nil
   "用来保存每一个 profile 使用 `cnfonts--fontsizes-fallback' 中第几个字号组合.")
+
+(defvar cnfonts--read-config-file-p nil)
 
 (defconst cnfonts--fontsizes-fallback
   '((9    10.5 10.5)
@@ -595,8 +614,8 @@ ARGS is the same as message's ARGS."
   "Get current profile file.
 When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
   (let ((profile-name
-         (if (member cnfonts--current-profile cnfonts-profiles)
-             cnfonts--current-profile
+         (if (member cnfonts--current-profile-name cnfonts-profiles)
+             cnfonts--current-profile-name
            (car cnfonts-profiles))))
     (if return-profile-name
         profile-name
@@ -629,19 +648,22 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
       (push `(,profile-name . ,step) cnfonts--profiles-steps)))
   (with-temp-file (cnfonts--return-config-file-path)
     (when cnfonts-save-current-profile
-      (prin1 (list cnfonts--current-profile) (current-buffer)))
+      (prin1 (list cnfonts--current-profile-name) (current-buffer)))
     (prin1 cnfonts--profiles-steps (current-buffer))))
 
 (defun cnfonts--read-config-file ()
   "Read cnfonts's config file."
-  (let ((save-file (cnfonts--return-config-file-path)))
-    (if (file-readable-p save-file)
-        (with-temp-buffer
-          (insert-file-contents save-file)
-          (ignore-errors
-            (when cnfonts-save-current-profile
-              (setq cnfonts--current-profile (car (read (current-buffer)))))
-            (setq cnfonts--profiles-steps (read (current-buffer))))))))
+  (unless (and cnfonts-use-cache
+               cnfonts--read-config-file-p)
+    (let ((save-file (cnfonts--return-config-file-path)))
+      (if (file-readable-p save-file)
+          (with-temp-buffer
+            (insert-file-contents save-file)
+            (setq cnfonts--return-config-file-p t)
+            (ignore-errors
+              (when cnfonts-save-current-profile
+                (setq cnfonts--current-profile-name (car (read (current-buffer)))))
+              (setq cnfonts--profiles-steps (read (current-buffer)))))))))
 
 (defun cnfonts--get-profile-step (profile-name)
   "Get the step info from profile which name is PROFILE-NAME."
@@ -664,21 +686,26 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 (defun cnfonts--read-profile ()
   "Get previously saved fontnames and fontsizes from current profile."
   (interactive)
-  (let ((file (cnfonts--get-current-profile)))
-    (if (file-readable-p file)
-        (progn (when (load (expand-file-name file) nil t)
-                 (cnfonts-message t "[cnfonts]: load %S successfully." (cnfonts--get-current-profile t)))
-               (list
-                (if cnfonts--custom-set-fontnames
-                    (cnfonts--merge-fontname-list cnfonts--custom-set-fontnames
-                                                  cnfonts-personal-fontnames
-                                                  cnfonts--fontnames-fallback)
-                  (cnfonts--merge-fontname-list cnfonts-personal-fontnames
-                                                cnfonts--fontnames-fallback))
-                (or cnfonts--custom-set-fontsizes
-                    cnfonts--fontsizes-fallback)))
-      (list cnfonts--fontnames-fallback
-            cnfonts--fontsizes-fallback))))
+  (if (and cnfonts-use-cache
+           cnfonts--current-profile-cache)
+      cnfonts--current-profile-cache
+    (let ((file (cnfonts--get-current-profile)))
+      (if (file-readable-p file)
+          (progn (when (load (expand-file-name file) nil t)
+                   (cnfonts-message t "[cnfonts]: load %S successfully." (cnfonts--get-current-profile t)))
+                 (setq cnfonts--current-profile-cache
+                       (list
+                        (if cnfonts--custom-set-fontnames
+                            (cnfonts--merge-fontname-list cnfonts--custom-set-fontnames
+                                                          cnfonts-personal-fontnames
+                                                          cnfonts--fontnames-fallback)
+                          (cnfonts--merge-fontname-list cnfonts-personal-fontnames
+                                                        cnfonts--fontnames-fallback))
+                        (or cnfonts--custom-set-fontsizes
+                            cnfonts--fontsizes-fallback))))
+        (setq cnfonts--current-profile-cache
+              (list cnfonts--fontnames-fallback
+                    cnfonts--fontsizes-fallback))))))
 
 (defun cnfonts--upgrade-profile-need-p ()
   "测试是否需要升级 profile 格式."
@@ -983,7 +1010,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
 (defun cnfonts--select-profile (profile-name)
   "选择 PROFILE-NAME."
   (if (member profile-name cnfonts-profiles)
-      (progn (setq cnfonts--current-profile profile-name)
+      (progn (setq cnfonts--current-profile-name profile-name)
              (cnfonts--save-config-file profile-name)
              (cnfonts-set-font-with-saved-step))
     (cnfonts-message t "%s doesn't exist." profile-name)))
@@ -1006,7 +1033,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
           (or (cadr (member current-profile profiles))
               (car profiles)))
     (when next-profile
-      (setq cnfonts--current-profile next-profile)
+      (setq cnfonts--current-profile-name next-profile)
       (cnfonts--save-config-file next-profile))
     (when (display-graphic-p)
       (cnfonts-set-font-with-saved-step))
@@ -1157,21 +1184,28 @@ FONTSIZES-LIST."
     (when choose
       (insert (format "\"%s\"" choose)))))
 
+(defun cnfonts-set-font-first-time ()
+  "Emacs 启动后，第一次设置字体使用的函数.
+
+这个函数会使用 cnfonts 缓存机制，设置字体速度较快。"
+  (let ((cnfonts-use-cache t))
+    (cnfonts-set-font-with-saved-step)))
+
 ;;;###autoload
 (defun cnfonts-enable ()
   "运行这个函数，可以让 Emacs 启动的时候就激活 cnfonts."
   (interactive)
   (setq cnfonts--enabled-p t)
-  (add-hook 'after-make-frame-functions #'cnfonts-set-font-with-saved-step)
-  (add-hook 'window-setup-hook #'cnfonts-set-font-with-saved-step))
+  (add-hook 'after-make-frame-functions #'cnfonts-set-font-first-time)
+  (add-hook 'window-setup-hook #'cnfonts-set-font-first-time))
 
 ;;;###autoload
 (defun cnfonts-disable ()
   "清除与 cnfonts 相关的 hook 设定."
   (interactive)
   (setq cnfonts--enabled-p nil)
-  (remove-hook 'after-make-frame-functions #'cnfonts-set-font-with-saved-step)
-  (remove-hook 'window-setup-hook #'cnfonts-set-font-with-saved-step))
+  (remove-hook 'after-make-frame-functions #'cnfonts-set-font-first-time)
+  (remove-hook 'window-setup-hook #'cnfonts-set-font-first-time))
 
 ;; Steal code from `spacemacs/set-default-font'
 (defun cnfonts--set-spacemacs-fallback-fonts (fontsizes-list)
