@@ -1184,7 +1184,7 @@ FONTSIZES-LIST."
     (when choose
       (insert (format "\"%s\"" choose)))))
 
-(defun cnfonts-set-font-first-time ()
+(defun cnfonts-set-font-first-time (&rest _args)
   "Emacs 启动后，第一次设置字体使用的函数.
 
 这个函数会使用 cnfonts 缓存机制，设置字体速度较快。"
