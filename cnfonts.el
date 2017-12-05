@@ -332,6 +332,11 @@
   :group 'cnfonts
   :type 'list)
 
+(defcustom cnfonts-default-step 5
+  "default cnfonts step."
+  :group 'cnfonts
+  :type 'integer)
+
 (defcustom cnfonts-directory (locate-user-emacs-file "cnfonts/")
   "Directory, cnfonts config file and profiles will be stored in."
   :group 'cnfonts
@@ -980,6 +985,15 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
     ;; This is useful for exwm to adjust mode-line, please see:
     ;; https://github.com/ch11ng/exwm/issues/249#issuecomment-299692305
     (redisplay t)))
+
+;;;###autoload
+(defun cnfonts-reset-fontsize ()
+  "设置字体为：default font step."
+  (interactive)
+	(let* ((profile-name (cnfonts--get-current-profile t))
+					(profile-step (cnfonts--get-profile-step profile-name))
+					(reset-step (- cnfonts-default-step profile-step)))
+  (cnfonts--step-fontsize reset-step)))
 
 ;;;###autoload
 (defun cnfonts-decrease-fontsize ()
