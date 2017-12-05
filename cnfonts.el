@@ -991,9 +991,9 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   "设置字体为：default font step."
   (interactive)
   (let* ((profile-name (cnfonts--get-current-profile t))
-          (profile-step (cnfonts--get-profile-step profile-name))
-          (reset-step (- cnfonts-default-step profile-step)))
-  (cnfonts--step-fontsize reset-step)))
+         (profile-step (cnfonts--get-profile-step profile-name))
+         (reset-step (- cnfonts-default-step profile-step)))
+    (cnfonts--step-fontsize reset-step)))
 
 ;;;###autoload
 (defun cnfonts-decrease-fontsize ()
