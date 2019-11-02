@@ -170,7 +170,7 @@ cnfonts 使用下面两个命令来切换 profile ：
 
 ### 使用 cnfonts-regenerate-profile 重置 profile
 
-\`cnfonts-regenerate-profile' 命令会使用 cnfonts 自带的 fallback 信息，覆盖需要 **重置** 的 profile, 这个 profile 原来的 内容将丢失，请紧慎使用！
+\`cnfonts-regenerate-profile' 命令会使用 cnfonts 自带的 fallback 信息，覆盖需要 **重置** 的 profile, 这个 profile 原来的 内容将丢失，请谨慎使用！
 
 
 <a id="orgb511c67"></a>
