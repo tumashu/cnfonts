@@ -557,7 +557,11 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
      "长城粗圆体" "长城特粗黑" "长城特粗宋体" "长城特粗圆体" "长城特圆体" "长城楷体" "长城新魏碑体"
      "长城新艺体" "长城报宋体" "长城小标宋体" "长城小姚体" "长城宋体" "长城大黑体" "长城大标宋体"
      "长城仿宋体" "长城中隶体" "长城中行书体" )
-    ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB" "PMingLiU-ExtB" "MingLiU_HKSCS-ExtB")))
+    ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB" "PMingLiU-ExtB" "MingLiU_HKSCS-ExtB"
+     "Hanazono Mincho" "Hanazono Mincho A" "Hanazono Mincho B"
+     "Hanazono Mincho C" "Hanazono Mincho Ex" "Hanazono Mincho Ex A1"
+     "Hanazono Mincho Ex A2" "Hanazono Mincho Ex B" "Hanazono Mincho Ex C"
+     "Hanazono Mincho I")))
 
 (defconst cnfonts--test-string "
 | 如果此表格无法对齐，请调整下面变量中的数字 |
