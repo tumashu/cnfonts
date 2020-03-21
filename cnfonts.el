@@ -500,7 +500,7 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
      "Noto Sans Mono CJK" "InputMonoCompressed" "Hasklig" "Terminus" "FantasqueSansMono"
      "AnonymousPro" "3270" "Arimo" "D2Coding" "Inconsolata-g" "ProFont for Powerline"
      "Meslo" "Meslo Dotted" "Noto Mono" "Symbol Neu" "Tinos" "Space Mono")
-    ("微软雅黑" "Noto Sans S Chinese Regular" "Microsoft Yahei" "Microsoft_Yahei" "Ubuntu Mono"
+    ("微软雅黑" "Noto Sans S Chinese Regular" "Microsoft Yahei" "Microsoft YaHei Mono" "Microsoft_Yahei" "Ubuntu Mono"
      "文泉驿等宽微米黑" "文泉驿等宽正黑" "黑体" "Source Han Sans SC"  "Source Han Serif SC"
      "思源黑体 CN Regular" "思源黑体 CN Medium" "思源黑体 CN Normal" "思源宋体 CN"
      "思源宋体 CN Medium" "思源宋体 CN SemiBold" "Hiragino Sans GB"  "文泉驿正黑" "文泉驿点阵正黑"
