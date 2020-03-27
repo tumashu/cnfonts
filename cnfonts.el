@@ -330,7 +330,7 @@
 (defcustom cnfonts-profiles '("profile1" "profile2" "profile3")
   "Lists cnfonts profiles."
   :group 'cnfonts
-  :type 'list)
+  :type '(repeat string))
 
 (defcustom cnfonts-default-step 5
   "default cnfonts step."
@@ -478,7 +478,11 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
 
 (defcustom cnfonts-personal-fontnames nil
   "用户自己维护的字体列表，其结构与 `cnfonts--fontnames-fallback' 一致."
-  :group 'cnfonts)
+  :group 'cnfonts
+  :type '(choice (const :tag "None" nil)
+                 (list (repeat :tag "English fonts" string)
+                       (repeat :tag "Chinese fonts" string)
+                       (repeat :tag "Ext-B fonts" string))))
 
 (defcustom cnfonts-verbose t
   "设置为 t 时， cnfonts 将 message 较多信息."
