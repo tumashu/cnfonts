@@ -342,8 +342,6 @@
   :group 'cnfonts
   :type 'directory)
 
-(define-obsolete-variable-alias 'cnfonts-profiles-directory 'cnfonts-directory)
-
 (defcustom cnfonts-config-filename "cnfonts.conf"
   "Filename of cnfonts config file.
 It record the current profile and profile steps."
