@@ -93,8 +93,8 @@
 ;; 时使用 “Consolas + 微米黑”，在阅读文章时使用 “PragmataPro + 黑体”，
 ;; 等等。
 
-;; 每一个 profile 都对应一个 emacs-lisp 文件, 保存在 `cnfonts-profiles-directory'
-;; 目录中, 这些文件包含了英文字体设置，中文字体设置以及中文字体大小，
+;; 每一个 profile 都对应一个 emacs-lisp 文件, 保存在 `cnfonts-directory'
+;; 对应的目录中, 这些文件包含了英文字体设置，中文字体设置以及中文字体大小，
 ;; 其结构类似：
 
 ;; #+BEGIN_EXAMPLE
@@ -342,8 +342,6 @@
   :group 'cnfonts
   :type 'directory)
 
-(define-obsolete-variable-alias 'cnfonts-profiles-directory 'cnfonts-directory)
-
 (defcustom cnfonts-config-filename "cnfonts.conf"
   "Filename of cnfonts config file.
 It record the current profile and profile steps."
@@ -588,12 +586,12 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
 
 (defvar cnfonts--custom-set-fontnames nil
   "*专用* 变量，只用与 cnfonts 的 profile 文件.
-这些 profile 文件保存在 `cnfonts-profiles-directory' 对应的目录中。在其它地方
+这些 profile 文件保存在 `cnfonts-directory' 对应的目录中。在其它地方
 设置这个变量没有任何用处！")
 
 (defvar cnfonts--custom-set-fontsizes nil
   "*专用* 变量，只用与 cnfonts 的 profile 文件.
-这些 profile 文件保存在 `cnfonts-profiles-directory' 对应的目录中。在其它地方
+这些 profile 文件保存在 `cnfonts-directory' 对应的目录中。在其它地方
 设置这个变量没有任何用处！")
 
 (defvar cnfonts--enabled-p nil)
@@ -612,7 +610,7 @@ ARGS is the same as message's ARGS."
          (directory-name
           (expand-file-name
            (file-name-as-directory
-            (concat (file-name-as-directory cnfonts-profiles-directory)
+            (concat (file-name-as-directory cnfonts-directory)
                     cnfonts-profile-version
                     "/"
                     (if cnfonts-use-system-type
