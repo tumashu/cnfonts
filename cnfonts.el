@@ -1,4 +1,4 @@
-;;; cnfonts.el --- A simple Chinese fonts config tool
+;;; cnfonts.el --- A simple Chinese fonts config tool  -*- lexical-binding: t; -*-
 
 ;; * Header
 ;; Copyright (c) 2011-2015, Feng Shu
@@ -855,7 +855,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
          (chinese-extra-fontsize (cnfonts--float (nth 2 fontsizes-list)))
 
          (english-symbol-fontsize (cnfonts--float (nth 0 fontsizes-list)))
-         (chinese-symbol-fontsize (cnfonts--float (nth 1 fontsizes-list)))
+         ;; (chinese-symbol-fontsize (cnfonts--float (nth 1 fontsizes-list)))
 
          (english-main-fontspec
           (when english-main-fontname
@@ -894,13 +894,13 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
                        :size chinese-main-fontsize
                        :weight 'normal
                        :slant 'normal)))
-         (chinese-symbol-fontspec
-          (when chinese-main-fontname
-            (font-spec :name chinese-main-fontname
-                       :size (or chinese-symbol-fontsize
-                                 chinese-main-fontsize)
-                       :weight 'normal
-                       :slant 'normal)))
+         ;; (chinese-symbol-fontspec
+         ;;  (when chinese-main-fontname
+         ;;    (font-spec :name chinese-main-fontname
+         ;;               :size (or chinese-symbol-fontsize
+         ;;                         chinese-main-fontsize)
+         ;;               :weight 'normal
+         ;;               :slant 'normal)))
          (chinese-extra-fontspec
           (when chinese-extra-fontname
             (font-spec :name chinese-extra-fontname
@@ -1045,7 +1045,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
     (cnfonts--select-profile profile)))
 
 ;;;###autoload
-(defun cnfonts-next-profile (&optional step)
+(defun cnfonts-next-profile (&optional _step)
   "选择下一个 profile 中当前 STEP 对应的字体设置."
   (interactive)
   (let ((profiles cnfonts-profiles)

@@ -1,4 +1,4 @@
-;;; cnfonts-ui.el --- A cnfonts profile editor with beautiful interface.
+;;; cnfonts-ui.el --- A cnfonts profile editor with beautiful interface.  -*- lexical-binding: t; -*-
 
 ;; * Header
 ;; Copyright (c) 2016, Feng Shu
@@ -293,7 +293,7 @@ TODO: IGNORE-FACE."
                                  :action 'cnfonts-ui-test-align))
     (push (cons widget5 widget5) cnfonts-ui--widgets-alist)))
 
-(defun cnfonts-ui--create-align-test-buttons (key index)
+(defun cnfonts-ui--create-align-test-buttons (key _index)
   (let (widget1 widget2)
     (setq widget1 (widget-create 'push-button
                                  :value "  "
@@ -322,7 +322,7 @@ TODO: IGNORE-FACE."
   (declare (indent 1) (debug t))
   (let ((func-name (intern (concat "cnfonts-ui-page-" (symbol-name page-name))))
         (buffer-name (make-symbol "buffer-name")))
-    `(defun ,func-name (&optional widget event create-buffer)
+    `(defun ,func-name (&optional _widget _event create-buffer)
        (interactive)
        (let ((,buffer-name (format " *%S*" ',page-name)))
          (if create-buffer
@@ -347,8 +347,7 @@ TODO: IGNORE-FACE."
     (plist-get page-info key)))
 
 (defun cnfonts-ui--create-align-page (page-name)
-  (let ((index (cnfonts-ui--get-page-info page-name :index))
-        (fontsize-alist (car (cdr (cnfonts--read-profile))))
+  (let ((fontsize-alist (car (cdr (cnfonts--read-profile))))
         (page-fontsizes (cnfonts-ui--get-page-info page-name :fontsizes)))
     (widget-insert "\n")
     (cnfonts-ui--create-main-navigation)
@@ -518,7 +517,7 @@ TODO: IGNORE-FACE."
                  :tab-stop-point t
                  :button-face-get 'ignore
                  :mouse-face-get 'ignore
-                 :action (lambda (widget event)
+                 :action (lambda (_widget _event)
                            (widget-value-set
                             cnfonts-ui--widgets-elisp-snippet
                             (cnfonts--return-fonts-configure-string))))
@@ -588,8 +587,7 @@ TODO: IGNORE-FACE."
          (index (widget-get widget1 :index))
          (flag (widget-get widget1 :flag))
          (fontname-alist (car (cnfonts--read-profile)))
-         (fontsize-alist (car (cdr (cnfonts--read-profile))))
-         fonts-list)
+         (fontsize-alist (car (cdr (cnfonts--read-profile)))))
     (if (not flag)
         (cnfonts-message t "当前光标所在位置不对，请将光标移动到字体所在的行上面。")
       (widget-toggle-action widget1 event)
@@ -607,7 +605,7 @@ TODO: IGNORE-FACE."
           (cnfonts--save-profile fontname-alist fontsize-alist)
           (cnfonts-set-font-with-saved-step))))))
 
-(defun cnfonts-ui--operate-align (&optional widget event n)
+(defun cnfonts-ui--operate-align (&optional widget _event n)
   (let* ((widget (or widget (widget-at)))
          (key (widget-get widget :key))
          (index (widget-get widget :index))
@@ -636,7 +634,7 @@ TODO: IGNORE-FACE."
                  :button-face-get 'ignore
                  :mouse-face-get 'ignore))
 
-(defun cnfonts-ui-quit-align (&optional widget event)
+(defun cnfonts-ui-quit-align (&optional _widget _event)
   "Quit align."
   (interactive)
   (cnfonts--step-fontsize 0))
