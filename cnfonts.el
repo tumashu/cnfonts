@@ -672,7 +672,6 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
       (if (file-readable-p save-file)
           (with-temp-buffer
             (insert-file-contents save-file)
-            (setq cnfonts--return-config-file-p t)
             (ignore-errors
               (when cnfonts-save-current-profile
                 (setq cnfonts--current-profile-name (car (read (current-buffer)))))
