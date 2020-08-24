@@ -1284,8 +1284,4 @@ FONTSIZES-LIST."
 ;; * Footer
 (provide 'cnfonts)
 
-;; Local Variables:
-;; coding: utf-8-unix
-;; End:
-
 ;;; cnfonts.el ends here

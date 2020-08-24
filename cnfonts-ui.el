@@ -742,8 +742,4 @@ It is meant for internal use."
 ;; * Footer
 (provide 'cnfonts-ui)
 
-;; Local Variables:
-;; coding: utf-8-unix
-;; End:
-
 ;;; cnfonts-ui.el ends here
