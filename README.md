@@ -1,3 +1,6 @@
+[![MELPA](https://melpa.org/packages/cnfonts-badge.svg)](https://melpa.org/#/cnfonts)
+[![MELPA Stable](https://stable.melpa.org/packages/cnfonts-badge.svg)](https://stable.melpa.org/#/cnfonts)
+
 - [cnfonts README](#org5887b9d)
   - [简介](#orgf6ad03e)
   - [基本原理](#orgfad3c59)
