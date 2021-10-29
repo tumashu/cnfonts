@@ -33,7 +33,7 @@
 ;; ** 简介
 ;; 注意：cnfonts 原来叫： chinese-fonts-setup, 一开始使用三个词的首字
 ;; 母组成的字符串 "cfs-" 做为包的前缀，但不幸和 gnu 的项目 cfs.el 冲突，
-;; 所以将包的前缀更改为 "cnfonts". chinese-fonts-setup 将做为 cnfonts
+;; 所以将包的前缀更改为 "cnfonts".  chinese-fonts-setup 将做为 cnfonts
 ;; 的别名使用。
 
 ;; cnfonts 是一个 Emacs 中英文字体配置工具。可以比较方便地实
@@ -333,7 +333,7 @@
   :type '(repeat string))
 
 (defcustom cnfonts-default-step 5
-  "default cnfonts step."
+  "Default cnfonts step."
   :group 'cnfonts
   :type 'integer)
 
@@ -1026,7 +1026,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   "Keymap for variable `cnfonts-profile-edit-mode', a minor mode used to setup fonts names and sizes.")
 
 (define-minor-mode cnfonts-profile-edit-mode
-  "Minor for setup fonts names and sizes"
+  "Minor for setup fonts names and sizes."
   nil " Rem" cnfonts-profile-edit-mode-map)
 
 (defun cnfonts--select-profile (profile-name)
@@ -1207,7 +1207,7 @@ FONTSIZES-LIST."
       (insert (format "\"%s\"" choose)))))
 
 (defun cnfonts-set-font-first-time (&optional frame)
-  "Emacs 启动后，第一次设置字体使用的函数.
+  "Emacs 启动后，第一次设置 FRAME 字体使用的函数.
 
 这个函数会使用 cnfonts 缓存机制，设置字体速度较快。"
   (let ((cnfonts-use-cache t))
