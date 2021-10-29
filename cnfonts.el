@@ -1169,7 +1169,7 @@ FONTSIZES-LIST."
 
 (defun cnfonts--return-fonts-configure-string ()
   "返回一个 elisp 片断，这个 elisp 片断可以用来配置中文和英文字体."
-  (let* ((fonts (cnfonts--get-valid-fonts))
+  (let* ((fonts (cnfonts--get-valid-fonts t))
          (fontsizes (cnfonts--get-current-fontsizes))
          (english-fontname (nth 0 fonts))
          (chinese-fontname (nth 1 fonts))
