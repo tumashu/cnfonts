@@ -414,7 +414,7 @@ The below is an example which is used to set symbol fonts:
                     :size %e))
   (dolist (charset '(kana han symbol cjk-misc bopomofo))
     (set-fontset-font
-     (frame-parameter nil 'font)
+     \"fontset-default\"
      charset
      (font-spec :name \"%C\"
                 :weight 'normal
