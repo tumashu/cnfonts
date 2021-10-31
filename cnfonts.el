@@ -43,12 +43,13 @@
 
 ;; ** 基本原理
 ;; cnfonts 的核心很简单，就是让中文字体和英文字体使用不同的字
-;; 号，从而实现中英文对齐，它和下面的样例代码原理是一样的：
+;; 号，从而实现中英文对齐，它和下面的样例代码原理是 *类似* 的，只是用的命令
+;; 稍微不同。
 
 ;; #+BEGIN_EXAMPLE
 ;; (set-frame-font "-unknown-PragmataPro-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1")
 ;; (dolist (charset '(kana han symbol cjk-misc bopomofo))
-;;   (set-fontset-font (frame-parameter nil 'font)
+;;   (set-fontset-font "fontset-default"
 ;;                     charset (font-spec :family "Microsoft Yahei" :size 16)))
 ;; #+END_EXAMPLE
 
