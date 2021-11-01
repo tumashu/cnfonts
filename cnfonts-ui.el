@@ -370,7 +370,11 @@ TODO: IGNORE-FACE."
                    :tab-stop-point t
                    :button-face-get 'ignore
                    :mouse-face-get 'ignore
-                   :action 'cnfonts-ui-quit-align)))
+                   :action 'cnfonts-ui-quit-align)
+    (widget-insert "\n\n注意：这个界面只是用来生成各个字号的对齐设置，用户点击
+[完成对齐设置并重置字号] 按钮之后，cnfonts 将重置到已经
+保存的字号，这个字号是使用 cnfonts-increase-fontsize 和
+cnfonts-decrease-fontsize 两个命令来控制的。")))
 
 (defun cnfonts-ui--create-fonts-page (page-name)
   (let ((index (cnfonts-ui--get-page-info page-name :index))
