@@ -364,9 +364,9 @@ TODO: IGNORE-FACE."
           (cnfonts-ui--create-align-test-buttons (car fontsize-list) i))
         (widget-insert "\n")))
     (widget-insert "\n")
-    (widget-insert (format "%-38s" (format "( %s )" (cnfonts--get-current-profile t))))
+    (widget-insert (format "%-22s" (format "( %s )" (cnfonts--get-current-profile t))))
     (widget-create 'push-button
-                   :tag "[ 对齐设置完成 ]"
+                   :tag (format "[ 完成对齐设置并恢复到%4s字号 ]" (cnfonts--get-fontsizes))
                    :tab-stop-point t
                    :button-face-get 'ignore
                    :mouse-face-get 'ignore
