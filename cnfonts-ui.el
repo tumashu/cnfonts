@@ -366,7 +366,10 @@ TODO: IGNORE-FACE."
     (widget-insert "\n")
     (widget-insert (format "%-22s" (format "( %s )" (cnfonts--get-current-profile t))))
     (widget-create 'push-button
-                   :tag (format "[ 完成对齐设置并恢复到%4s字号 ]" (cnfonts--get-fontsizes))
+                   :tag (format "[ 完成对齐设置并恢复到%s字号 ]"
+                                (car (cnfonts--get-fontsizes
+                                      (cnfonts--get-profile-step
+                                       (cnfonts--get-current-profile t)))))
                    :tab-stop-point t
                    :button-face-get 'ignore
                    :mouse-face-get 'ignore
@@ -502,8 +505,8 @@ TODO: IGNORE-FACE."
 如果用户觉得 cnfonts *太厚重*, 可以将下面一段 elisp 粘贴到
 ~/.emacs 文件，然后保存，就不需要启动 cnfonts 来配置字体了。
 
-注意：下面的设置使用的字号是 (cnfonts--get-fontsizes) 返回
-的字号。
+注意：下面的设置使用的字号是 `cnfonts-increase-fontsize'
+或者 `cnfonts-decrease-fontsize' 两个命令设置的默认使用字号。
 
 -------
 ")
