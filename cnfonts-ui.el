@@ -637,7 +637,8 @@ cnfonts-decrease-fontsize 两个命令来控制的。")))
           (cnfonts--set-font fontsizes-list))))))
 
 (defun cnfonts-ui--create-tab-stop-point ()
-  "Create a widget, the curse will stop to this widget when forward/backward widget."
+  "Create a widget.
+the curse will stop to this widget when forward/backward widget."
   (widget-create 'push-button
                  :tag "\n"
                  :tab-stop-point t

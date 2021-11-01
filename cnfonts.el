@@ -1023,7 +1023,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
     (define-key keymap (kbd "C-<right>") 'cnfonts-increment-fontsize-at-point)
     (define-key keymap (kbd "C-<left>") 'cnfonts-decrement-fontsize-at-point)
     keymap)
-  "Keymap for variable `cnfonts-profile-edit-mode', a minor mode used to setup fonts names and sizes.")
+  "Keymap for variable `cnfonts-profile-edit-mode'.")
 
 (define-minor-mode cnfonts-profile-edit-mode
   "Minor for setup fonts names and sizes."
@@ -1248,7 +1248,7 @@ FONTSIZES-LIST."
         (`cygwin
          (setq fallback-font-name "MS Gothic")
          (setq fallback-font-name2 "Lucida Sans Unicode"))
-        (other
+        (_
          (setq fallback-font-name nil)
          (setq fallback-font-name2 nil)))
       (when (and fallback-font-name fallback-font-name2)
