@@ -506,8 +506,12 @@ cnfonts-decrease-fontsize 两个命令来控制的。")))
 如果用户觉得 cnfonts *太厚重*, 可以将下面一段 elisp 粘贴到
 ~/.emacs 文件，然后保存，就不需要启动 cnfonts 来配置字体了。
 
-注意：下面的设置使用的字号是 `cnfonts-increase-fontsize'
-或者 `cnfonts-decrease-fontsize' 两个命令设置的默认使用字号。
+注意事项：
+1. 下面的设置使用的字号是 `cnfonts-increase-fontsize'
+   或者 `cnfonts-decrease-fontsize' 两个命令设置的默认使用字号。
+2, 如果用户使用 emacs daemon, 那么下面的设置可能需要调整，
+   比如包装成一个函数放到 after-make-frame-functions 和
+   window-setup-hook 中。
 
 -------
 ")
