@@ -1027,7 +1027,8 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
 
 (define-minor-mode cnfonts-profile-edit-mode
   "Minor for setup fonts names and sizes."
-  nil " Rem" cnfonts-profile-edit-mode-map)
+  :lighter " Rem"
+  :keymap cnfonts-profile-edit-mode-map)
 
 (defun cnfonts--select-profile (profile-name)
   "选择 PROFILE-NAME."
