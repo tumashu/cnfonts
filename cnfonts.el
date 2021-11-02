@@ -420,6 +420,7 @@ The below is an example which is used to set symbol fonts:
               :weight 'normal
               :slant 'normal
               :size %c)))
+(setq face-font-rescale-alist '%R)
 "
   "A string used to generate fonts configure snippet.
 It can be inserted into '~/.emacs' file to config Emacs fonts.
@@ -1123,17 +1124,20 @@ FONTSIZES-LIST."
 
 (defun cnfonts--return-fonts-configure-string ()
   "返回一个 elisp 片断，这个 elisp 片断可以用来配置中文和英文字体."
-  (let* ((fonts (cnfonts--get-valid-fonts t))
+  (let* ((fonts (cnfonts--get-valid-fonts))
          (fontsizes (cnfonts--get-current-fontsizes))
          (english-fontname (nth 0 fonts))
          (chinese-fontname (nth 1 fonts))
          (english-fontsize (cnfonts--float (nth 0 fontsizes)))
-         (chinese-fontsize (cnfonts--float (nth 1 fontsizes))))
+         (chinese-fontsize
+          (unless cnfonts-use-face-font-rescale
+            (cnfonts--float (nth 1 fontsizes)))))
     (format-spec cnfonts-fonts-configure-template
                  `((?E . ,english-fontname)
                    (?C . ,chinese-fontname)
                    (?e . ,english-fontsize)
-                   (?c . ,chinese-fontsize)))))
+                   (?c . ,chinese-fontsize)
+                   (?R . ,(format "%S" face-font-rescale-alist))))))
 
 ;;;###autoload
 (defun cnfonts-insert-fontname ()
