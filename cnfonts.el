@@ -236,7 +236,7 @@
 ;;                               :size fontsize
 ;;                               :weight 'normal
 ;;                               :slant 'normal)))
-;;     (if (cnfonts--fontspec-valid-p fontspec)
+;;     (if (fontp fontspec)
 ;;         (set-fontset-font "fontset-default" 'symbol fontspec nil 'append)
 ;;       (message "字体 %S 不存在！" fontname))))
 
@@ -252,7 +252,7 @@
 ;;                               :size fontsize
 ;;                               :weight 'normal
 ;;                               :slant 'normal)))
-;;     (if (cnfonts--fontspec-valid-p fontspec)
+;;     (if (fontp fontspec)
 ;;         (set-fontset-font "fontset-default" '(#x3400 . #x4DFF) fontspec nil 'append)
 ;;       (message "字体 %S 不存在！" fontname))))
 
@@ -778,10 +778,6 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
                  collect (cons font (/ (float size)
                                        (car fontsizes-list))))))
 
-(defun cnfonts--fontspec-valid-p (fontspec)
-  "检查 FONTSPEC 是否有效."
-  (and fontspec (list-fonts fontspec)))
-
 (defun cnfonts--float (num)
   "确保一个 NUM 总是浮点格式."
   (when (numberp num)
@@ -865,14 +861,14 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
                        :weight 'normal
                        :slant 'normal))))
 
-    (when (cnfonts--fontspec-valid-p english-main-fontspec)
+    (when (fontp english-main-fontspec)
       ;; 设置英文字体。
       (set-face-attribute
        'default nil :font english-main-fontspec)
       ;; 设置英文粗体。
       (if cnfonts-disable-bold
           (set-face-font 'bold english-main-fontspec)
-        (if (cnfonts--fontspec-valid-p english-bold-fontspec)
+        (if (fontp english-bold-fontspec)
             (set-face-font 'bold english-bold-fontspec)
           (cnfonts-message t "[cnfonts]: %S 对应的粗体没有找到，不作处理！"
                            english-main-short-fontname)))
@@ -880,7 +876,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
       ;; 设置英文斜体。
       (if cnfonts-disable-italic
           (set-face-font 'italic english-main-fontspec)
-        (if (cnfonts--fontspec-valid-p english-italic-fontspec)
+        (if (fontp english-italic-fontspec)
             (set-face-font 'italic english-italic-fontspec)
           (cnfonts-message t "[cnfonts]: %S 对应的斜体没有找到，不作处理！"
                            english-main-short-fontname)))
@@ -888,26 +884,26 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
       ;; 设置英文粗斜体。
       (if cnfonts-disable-bold-italic
           (set-face-font 'bold-italic english-main-fontspec)
-        (if (cnfonts--fontspec-valid-p english-bold-italic-fontspec)
+        (if (fontp english-bold-italic-fontspec)
             (set-face-font 'bold-italic english-bold-italic-fontspec)
           (cnfonts-message t "[cnfonts]: %S 对应的粗斜体没有找到，不作处理！"
                            english-main-short-fontname))))
 
     ;; 设置中文字体，注意，不要使用 'unicode charset,
     ;; 否则上面的英文字体设置将会失效。
-    (when (cnfonts--fontspec-valid-p chinese-main-fontspec)
+    (when (fontp chinese-main-fontspec)
       (dolist (charset '(kana han cjk-misc bopomofo gb18030))
         (set-fontset-font "fontset-default" charset chinese-main-fontspec)))
 
     ;; 设置 symbol 字体。
-    (when (cnfonts--fontspec-valid-p english-main-fontspec)
+    (when (fontp english-main-fontspec)
       (set-fontset-font "fontset-default" 'symbol english-symbol-fontspec))
 
-    ;; (when (cnfonts--fontspec-valid-p chinese-main-fontset)
+    ;; (when (fontp chinese-main-fontset)
     ;;   (set-fontset-font t 'symbol chinese-symbol-fontspec nil 'append))
 
     ;; 设置 fallback 字体，用于显示不常用的字符。
-    (when (cnfonts--fontspec-valid-p chinese-extra-fontspec)
+    (when (fontp chinese-extra-fontspec)
       (set-fontset-font "fontset-default" nil chinese-extra-fontspec nil 'prepend))
 
     (setq cnfonts--minibuffer-echo-string
