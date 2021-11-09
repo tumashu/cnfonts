@@ -234,7 +234,7 @@
 ;;          (fontsize (nth 0 fontsizes-list))
 ;;          (fontspec (font-spec :name fontname
 ;;                               :size fontsize
-;;                               :weight 'normal
+;;                               :weight 'medium
 ;;                               :slant 'normal)))
 ;;     (if (fontp fontspec)
 ;;         (set-fontset-font "fontset-default" 'symbol fontspec nil 'append)
@@ -250,7 +250,7 @@
 ;;          (fontsize (nth 1 fontsizes-list))
 ;;          (fontspec (font-spec :name fontname
 ;;                               :size fontsize
-;;                               :weight 'normal
+;;                               :weight 'medium
 ;;                               :slant 'normal)))
 ;;     (if (fontp fontspec)
 ;;         (set-fontset-font "fontset-default" '(#x3400 . #x4DFF) fontspec nil 'append)
@@ -411,7 +411,7 @@ The below is an example which is used to set symbol fonts:
   (set-face-attribute
    'default nil
    :font (font-spec :name \"%E\"
-                    :weight 'normal
+                    :weight 'medium
                     :slant 'normal
                     :size %e))
   (dolist (charset '(kana han symbol cjk-misc bopomofo))
@@ -419,7 +419,7 @@ The below is an example which is used to set symbol fonts:
      \"fontset-default\"
      charset
      (font-spec :name \"%C\"
-                :weight 'normal
+                :weight 'medium
                 :slant 'normal
                 :size %c))))
 "
@@ -813,7 +813,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
           (when english-main-fontname
             (font-spec :name english-main-fontname
                        :size english-main-fontsize
-                       :weight 'normal
+                       :weight 'medium
                        :slant 'normal)))
          (english-bold-fontspec
           (when english-main-fontname
@@ -825,7 +825,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
           (when english-main-fontname
             (font-spec :name  english-main-fontname
                        :size english-main-fontsize
-                       :weight 'normal
+                       :weight 'medium
                        :slant 'italic)))
          (english-bold-italic-fontspec
           (when english-main-fontname
@@ -838,27 +838,27 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
             (font-spec :name english-main-fontname
                        :size (or english-symbol-fontsize
                                  english-main-fontsize)
-                       :weight 'normal
+                       :weight 'medium
                        :slant 'normal)))
          (chinese-main-fontspec
           (when chinese-main-fontname
             (font-spec :name chinese-main-fontname
                        :size chinese-main-fontsize
-                       :weight 'normal
+                       :weight 'medium
                        :slant 'normal)))
          ;; (chinese-symbol-fontspec
          ;;  (when chinese-main-fontname
          ;;    (font-spec :name chinese-main-fontname
          ;;               :size (or chinese-symbol-fontsize
          ;;                         chinese-main-fontsize)
-         ;;               :weight 'normal
+         ;;               :weight 'medium
          ;;               :slant 'normal)))
          (chinese-extra-fontspec
           (when chinese-extra-fontname
             (font-spec :name chinese-extra-fontname
                        :size (or chinese-extra-fontsize
                                  chinese-main-fontsize)
-                       :weight 'normal
+                       :weight 'medium
                        :slant 'normal))))
 
     (when (fontp english-main-fontspec)
