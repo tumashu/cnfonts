@@ -149,22 +149,7 @@
 ;; [[./snapshots/cnfonts-ui-6.png]]
 ;; [[./snapshots/cnfonts-ui-7.png]]
 
-;; *** 使用 cnfonts-edit-profile-without-ui 命令编辑 profile
-;; 除了使用 `cnfonts-edit-profile' , *有经验* 的用户也可以使用
-;; `cnfonts-edit-profile-without-ui' 命令，直接编辑当前 profile 文件，
-;; 两个命令的效果是一样的。
-
-;; 在编辑的过程中，用户可以使用下面三个命令 *快速* 的测试编辑效果：
-
-;; | Key     | Command                             | Help                                   |
-;; |---------+-------------------------------------+----------------------------------------|
-;; | C-c C-c | cnfonts-test-fontsizes-at-point     | 查看字体显示效果                       |
-;; | C-up    | cnfonts-increment-fontsize-at-point | 增大光标下字号的大小，同时显示对齐效果 |
-;; | C-down  | cnfonts-decrement-fontsize-at-point | 减小光标下字号的大小，同时显示对齐效果 |
-
-;; 注1: 不建议 cnfonts 新用户使用这种方式
-
-;; 注2: 配置完成后，有可能需要重启 Emacs, 参考：http://debbugs.gnu.org/db/17/1785.html
+;; 注1: 配置完成后，有可能需要重启 Emacs, 参考：http://debbugs.gnu.org/db/17/1785.html
 
 ;; *** 使用 cnfonts-regenerate-profile 重置 profile
 ;; `cnfonts-regenerate-profile' 命令会使用 cnfonts 自带的
@@ -330,23 +315,19 @@
 
 (defcustom cnfonts-profiles '("profile1" "profile2" "profile3")
   "Lists cnfonts profiles."
-  :group 'cnfonts
   :type '(repeat string))
 
 (defcustom cnfonts-default-step 5
   "Default cnfonts step."
-  :group 'cnfonts
   :type 'integer)
 
 (defcustom cnfonts-directory (locate-user-emacs-file "cnfonts/")
   "Directory, cnfonts config file and profiles will be stored in."
-  :group 'cnfonts
   :type 'directory)
 
 (defcustom cnfonts-config-filename "cnfonts.conf"
   "Filename of cnfonts config file.
 It record the current profile and profile steps."
-  :group 'cnfonts
   :type 'string)
 
 (defcustom cnfonts-use-system-type nil
@@ -354,32 +335,26 @@ It record the current profile and profile steps."
 
 假设当前系统为 Linux, 当这个选项设置为 t 后，profile1 文件的路径，
 将从 'DIR/profile1.el' 转为 'DIR/SYSTEM-TYPE/profile.el'"
-  :group 'cnfonts
   :type 'boolean)
 
 (defcustom cnfonts-keep-frame-size t
   "在调整字体的时候，是否保持当前 frame 大小不变."
-  :group 'cnfonts
   :type 'boolean)
 
 (defcustom cnfonts-disable-bold nil
   "是否禁用英文粗体."
-  :group 'cnfonts
   :type 'boolean)
 
 (defcustom cnfonts-disable-italic nil
   "是否禁用英文斜体."
-  :group 'cnfonts
   :type 'boolean)
 
 (defcustom cnfonts-disable-bold-italic nil
   "是否禁用英文粗斜体."
-  :group 'cnfonts
   :type 'boolean)
 
 (defcustom cnfonts-save-current-profile t
   "是否保存将当前 profile 的信息."
-  :group 'cnfonts
   :type 'boolean)
 
 (defcustom cnfonts-use-face-font-rescale nil
@@ -387,7 +362,6 @@ It record the current profile and profile steps."
 
 在 window 平台下，将这个变量设置为 t 会导致 cnfonts
 字体对齐功能失效，在大多数 linux 平台下这个功能都可以正常使用。"
-  :group 'cnfonts
   :type 'boolean)
 
 (defcustom cnfonts-set-font-finish-hook nil
@@ -400,7 +374,6 @@ The below is an example which is used to set symbol fonts:
    (set-fontset-font t 'unicode \"Segoe UI Emoji\" nil 'append)
    (set-fontset-font t 'unicode \"STIX\" nil 'append))
  (add-hook 'cnfonts-set-font-finish-hook 'cnfonts-set-symbol-fonts)"
-  :group 'cnfonts
   :type 'hook)
 
 (defcustom cnfonts-fonts-configure-template "
@@ -431,7 +404,6 @@ It can be inserted into '~/.emacs' file to config Emacs fonts.
 2. %e   英文字体字号
 3. %C   中文字体名称
 3. %c   中文字体字号"
-  :group 'cnfonts
   :type 'string)
 
 (defvar cnfonts-use-cache nil
@@ -521,22 +493,12 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
      "Hanazono Mincho Ex A2" "Hanazono Mincho Ex B" "Hanazono Mincho Ex C"
      "Hanazono Mincho I")))
 
-(defconst cnfonts--test-string "
-| 如果此表格无法对齐，请调整下面变量中的数字 |
-|       `cnfonts--custom-set-fontsizes'      |
-| 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄇 |
-")
-
 (defconst cnfonts--profile-comment-1 "
 ;;; `cnfonts--custom-set-fontsnames' 列表有3个子列表，第1个为英文字体列表，第2个为中文字体列表，
-;;; 第3个列表中的字体用于显示不常用汉字，每一个字体列表中，*第一个* *有效并可用* 的字体将被使用。
-;;; 将光标移动到上述列表中，按 `C-c C-c' 可以测试字体显示效果。另外，用户可以通过命令
-;;; `cnfonts-insert-fontname’ 来选择一个 *可用* 字体，然后在当前光标处插入其字体名称。")
+;;; 第3个列表中的字体用于显示不常用汉字，每一个字体列表中，*第一个* *有效并可用* 的字体将被使用。")
 
 (defconst cnfonts--profile-comment-2 "
-;;; `cnfonts--custom-set-fontsizes' 中，所有元素的结构都类似：(英文字号 中文字号 EXT-B字体字号)
-;;; 将光标移动到各个数字上，按 C-c C-c 查看光标处字号的对齐效果。
-;;; 按 C-<up> 增大光标处字号，按 C-<down> 减小光标处字号。")
+;;; `cnfonts--custom-set-fontsizes' 中，所有元素的结构都类似：(英文字号 中文字号 EXT-B字体字号)。")
 
 (defvar cnfonts--minibuffer-echo-string nil)
 
@@ -967,21 +929,6 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   (interactive)
   (cnfonts--step-fontsize 1))
 
-(defvar cnfonts-profile-edit-mode-map
-  (let ((keymap (make-sparse-keymap)))
-    (define-key keymap "\C-c\C-c" 'cnfonts-test-fontsize-at-point)
-    (define-key keymap (kbd "C-<up>") 'cnfonts-increment-fontsize-at-point)
-    (define-key keymap (kbd "C-<down>") 'cnfonts-decrement-fontsize-at-point)
-    (define-key keymap (kbd "C-<right>") 'cnfonts-increment-fontsize-at-point)
-    (define-key keymap (kbd "C-<left>") 'cnfonts-decrement-fontsize-at-point)
-    keymap)
-  "Keymap for variable `cnfonts-profile-edit-mode'.")
-
-(define-minor-mode cnfonts-profile-edit-mode
-  "Minor for setup fonts names and sizes."
-  :lighter " Rem"
-  :keymap cnfonts-profile-edit-mode-map)
-
 (defun cnfonts--select-profile (profile-name)
   "选择 PROFILE-NAME."
   (if (member profile-name cnfonts-profiles)
@@ -1027,20 +974,6 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
       (cnfonts-ui))))
 
 ;;;###autoload
-(defun cnfonts-edit-profile-without-ui ()
-  "编辑当前 cnfonts profile, 不使用 ‘cnfonts-ui’ 组件."
-  (interactive)
-  (if (not (display-graphic-p))
-      (cnfonts-message t "cnfonts 不支持 emacs 终端模式！")
-    (let ((file (cnfonts--get-current-profile)))
-      (unless (file-readable-p file)
-        (cnfonts--save-profile cnfonts--fontnames-fallback
-                               cnfonts--fontsizes-fallback))
-      (find-file file)
-      (cnfonts-profile-edit-mode 1)
-      (goto-char (point-min)))))
-
-;;;###autoload
 (defun cnfonts-regenerate-profile ()
   "重新生成当前 profile."
   (interactive)
@@ -1049,64 +982,6 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
         (cnfonts--save-profile cnfonts--fontnames-fallback
                                cnfonts--fontsizes-fallback profile-name)
       (cnfonts-message t "Ignore regenerate profile!"))))
-
-(defun cnfonts-test-fontsize-at-point ()
-  "Test fontsizes list at point, which is usd to edit fontsizes list."
-  (interactive)
-  (let ((fontsizes-list (list-at-point)))
-    (if (and (listp fontsizes-list)
-             (numberp (car fontsizes-list)))
-        (progn
-          (cnfonts--set-font fontsizes-list)
-          (cnfonts--show-font-effect fontsizes-list))
-      ;; 如果当前 point 不在 profile 文件中的 `cnfonts--custom-set-fontsizes‘ 中
-      ;; 使用一组预定义字体大小来查看字体效果。
-      (cnfonts--set-font '(14 15 15))
-      (cnfonts--show-font-effect '(14 15 15)))))
-
-(defun cnfonts-change-fontsize-at-point (step)
-  "按照 STEP 改变光标处的字号对应的数字."
-  (interactive)
-  (skip-chars-backward "0123456789\\.")
-  (or (looking-at "[0123456789.]+")
-      (error "No number at point"))
-  (replace-match
-   (format "%.5s"
-           (number-to-string
-            (min 50 (max 5 (+ step (string-to-number (match-string 0))))))))
-  (backward-char 1)
-  (cnfonts-test-fontsize-at-point))
-
-(defun cnfonts-increment-fontsize-at-point ()
-  "增大光标处的字号数字."
-  (interactive)
-  (cnfonts-change-fontsize-at-point 0.5))
-
-(defun cnfonts-decrement-fontsize-at-point ()
-  "减小光标处的字号数字."
-  (interactive)
-  (cnfonts-change-fontsize-at-point -0.5))
-
-(defun cnfonts--show-font-effect (&optional fontsizes-list)
-  "Show font and its size in a new buffer.
-FONTSIZES-LIST."
-  (interactive)
-  (let ((buffer (get-buffer-create "*Show-font-effect*")))
-    (with-current-buffer buffer
-      (erase-buffer)
-      (setq truncate-lines 1)
-      (setq cursor-type nil)
-      (insert cnfonts--test-string)
-      (goto-char (point-min))
-      ;; Remove blank line at the beginning of buffer
-      (delete-region (point)
-                     (progn (forward-line 1)
-                            (point))))
-    (display-buffer buffer)
-    (when (and (nth 0 fontsizes-list)
-               (nth 1 fontsizes-list))
-      (cnfonts--set-font fontsizes-list))
-    (cnfonts-message t cnfonts--minibuffer-echo-string)))
 
 ;;;###autoload
 (defun cnfonts-insert-fonts-configure ()
