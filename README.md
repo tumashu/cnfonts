@@ -3,34 +3,33 @@ Note: this file is auto converted from cnfonts.el by [el2org](https://github.com
 
 # &#30446;&#24405;
 
-1.  [cnfonts README](#org54e59c7)
-    1.  [简介](#orgc91c7b8)
-    2.  [基本原理](#org263926f)
-    3.  [使用特点](#org6da96ac)
-    4.  [下载安装](#orgc49d5c9)
-    5.  [配置使用](#orgf7d94f2)
-        1.  [最简单的用法（懒人必备）](#orgc6021bd)
-        2.  [profile 的概念](#orgdd3e892)
-        3.  [profile 命名与切换](#org6bce990)
-        4.  [使用 cnfonts-edit-profile 命令调整 profile](#org6c7165b)
-        5.  [使用 cnfonts-edit-profile-without-ui 命令编辑 profile](#orgc5ee391)
-        6.  [使用 cnfonts-regenerate-profile 重置 profile](#orge47f7ba)
-        7.  [调整字体大小](#org003eccd)
-        8.  [使用 cnfonts-use-system-type](#org637ea07)
-        9.  [让 cnfonts 随着 Emacs 自动启动](#org460b5bc)
-        10. [cnfonts 与 org-mode 配合使用](#org6064e70)
-        11. [使用 cnfonts 生成 elisp 字体配置片断](#org3268d99)
-        12. [cnfonts 高级功能](#org0ed3ed8)
-    6.  [Tips](#orgf81170e)
-    7.  [参考文章](#orgc5b8c95)
+1.  [cnfonts README](#org7172eb9)
+    1.  [简介](#orge9d094a)
+    2.  [基本原理](#orgcbe3ddf)
+    3.  [使用特点](#org627490f)
+    4.  [下载安装](#org54756b3)
+    5.  [配置使用](#org2439cfa)
+        1.  [最简单的用法（懒人必备）](#orgd65f474)
+        2.  [profile 的概念](#org7be035e)
+        3.  [profile 命名与切换](#org98f661a)
+        4.  [使用 cnfonts-edit-profile 命令调整 profile](#org1ba6138)
+        5.  [使用 cnfonts-regenerate-profile 重置 profile](#org0c7afce)
+        6.  [调整字体大小](#org04ea98c)
+        7.  [使用 cnfonts-use-system-type](#org2b86a76)
+        8.  [让 cnfonts 随着 Emacs 自动启动](#org5d4b81b)
+        9.  [cnfonts 与 org-mode 配合使用](#org8504d0c)
+        10. [使用 cnfonts 生成 elisp 字体配置片断](#org0d17df8)
+        11. [cnfonts 高级功能](#org912944f)
+    6.  [Tips](#org2c0f101)
+    7.  [参考文章](#orgab13dd0)
 
 
-<a id="org54e59c7"></a>
+<a id="org7172eb9"></a>
 
 # cnfonts README
 
 
-<a id="orgc91c7b8"></a>
+<a id="orge9d094a"></a>
 
 ## 简介
 
@@ -42,7 +41,7 @@ cnfonts 是一个 Emacs 中英文字体配置工具。可以比较方便地实�
 注： 这个 package 特别适用于需要处理中英文混合表格的中文 org-mode 用户。
 
 
-<a id="org263926f"></a>
+<a id="orgcbe3ddf"></a>
 
 ## 基本原理
 
@@ -54,7 +53,7 @@ cnfonts 的核心很简单，就是让中文字体和英文字体使用不同的
                         charset (font-spec :family "Microsoft Yahei" :size 16)))
 
 
-<a id="org6da96ac"></a>
+<a id="org627490f"></a>
 
 ## 使用特点
 
@@ -64,7 +63,7 @@ cnfonts 添加了许多辅助工具，使配置和调节字体和字号的工作
 2.  设置方便：cnfonts 自带一个 profile 文件调整工具，这个工具有直观的图形界面，可以让用户设置字体名称和字体大小，分分钟实现中文字体和英文字体的等宽对齐。
 
 
-<a id="orgc49d5c9"></a>
+<a id="org54756b3"></a>
 
 ## 下载安装
 
@@ -79,12 +78,12 @@ cnfonts 添加了许多辅助工具，使配置和调节字体和字号的工作
         ;; (cnfonts-set-spacemacs-fallback-fonts)
 
 
-<a id="orgf7d94f2"></a>
+<a id="org2439cfa"></a>
 
 ## 配置使用
 
 
-<a id="orgc6021bd"></a>
+<a id="orgd65f474"></a>
 
 ### 最简单的用法（懒人必备）
 
@@ -126,7 +125,7 @@ cnfonts 添加了许多辅助工具，使配置和调节字体和字号的工作
 </table>
 
 
-<a id="orgdd3e892"></a>
+<a id="org7be035e"></a>
 
 ### profile 的概念
 
@@ -157,7 +156,7 @@ profile 代表了一套字体配置，cnfonts 使用 profile 的概念，来维�
             (32   33.0 33.0)))
 
 
-<a id="org6bce990"></a>
+<a id="org98f661a"></a>
 
 ### profile 命名与切换
 
@@ -199,7 +198,7 @@ cnfonts 使用下面两个命令来切换 profile ：
 </table>
 
 
-<a id="org6c7165b"></a>
+<a id="org1ba6138"></a>
 
 ### 使用 cnfonts-edit-profile 命令调整 profile
 
@@ -214,63 +213,10 @@ cnfonts 使用下面两个命令来切换 profile ：
 ![img](./snapshots/cnfonts-ui-6.png)
 ![img](./snapshots/cnfonts-ui-7.png)
 
-
-<a id="orgc5ee391"></a>
-
-### 使用 cnfonts-edit-profile-without-ui 命令编辑 profile
-
-除了使用 \`cnfonts-edit-profile' , **有经验** 的用户也可以使用
-\`cnfonts-edit-profile-without-ui' 命令，直接编辑当前 profile 文件，两个命令的效果是一样的。
-
-在编辑的过程中，用户可以使用下面三个命令 **快速** 的测试编辑效果：
-
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+注1: 配置完成后，有可能需要重启 Emacs, 参考：<http://debbugs.gnu.org/db/17/1785.html>
 
 
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Key</th>
-<th scope="col" class="org-left">Command</th>
-<th scope="col" class="org-left">Help</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td class="org-left">C-c C-c</td>
-<td class="org-left">cnfonts-test-fontsizes-at-point</td>
-<td class="org-left">查看字体显示效果</td>
-</tr>
-
-
-<tr>
-<td class="org-left">C-up</td>
-<td class="org-left">cnfonts-increment-fontsize-at-point</td>
-<td class="org-left">增大光标下字号的大小，同时显示对齐效果</td>
-</tr>
-
-
-<tr>
-<td class="org-left">C-down</td>
-<td class="org-left">cnfonts-decrement-fontsize-at-point</td>
-<td class="org-left">减小光标下字号的大小，同时显示对齐效果</td>
-</tr>
-</tbody>
-</table>
-
-注1: 不建议 cnfonts 新用户使用这种方式
-
-注2: 配置完成后，有可能需要重启 Emacs, 参考：<http://debbugs.gnu.org/db/17/1785.html>
-
-
-<a id="orge47f7ba"></a>
+<a id="org0c7afce"></a>
 
 ### 使用 cnfonts-regenerate-profile 重置 profile
 
@@ -278,7 +224,7 @@ cnfonts 使用下面两个命令来切换 profile ：
 fallback 信息，覆盖需要 **重置** 的 profile, 这个 profile 原来的内容将丢失，请紧慎使用！
 
 
-<a id="org003eccd"></a>
+<a id="org04ea98c"></a>
 
 ### 调整字体大小
 
@@ -319,7 +265,7 @@ fallback 信息，覆盖需要 **重置** 的 profile, 这个 profile 原来的�
 ![img](./snapshots/cnfonts-increase-and-decrease-fontsize.gif)
 
 
-<a id="org637ea07"></a>
+<a id="org2b86a76"></a>
 
 ### 使用 cnfonts-use-system-type
 
@@ -327,7 +273,7 @@ fallback 信息，覆盖需要 **重置** 的 profile, 这个 profile 原来的�
 设置为 t, 这样，相同名称的 profile 在不同的操作系统下，保存的位置也不同，可以避免 profile 冲突。
 
 
-<a id="org460b5bc"></a>
+<a id="org5d4b81b"></a>
 
 ### 让 cnfonts 随着 Emacs 自动启动
 
@@ -341,7 +287,7 @@ Emacs 自动启动，这个命令将 \`cnfonts-set-font-with-saved-step' 添加�
 cnfonts 生效。
 
 
-<a id="org6064e70"></a>
+<a id="org8504d0c"></a>
 
 ### cnfonts 与 org-mode 配合使用
 
@@ -352,7 +298,7 @@ cnfonts 生效。
 注：这个功能不能在 window 系统下使用，它会让对齐功能失效，Linux 下这个功能 **一般** 可以使用，Mac 系统未测试，同学可以亲自试一试。
 
 
-<a id="org3268d99"></a>
+<a id="org0d17df8"></a>
 
 ### 使用 cnfonts 生成 elisp 字体配置片断
 
@@ -361,7 +307,7 @@ cnfonts 生效。
 "字体配置 elisp 片断", 并插入光标处，将这个片断写入 .emacs 文件后，就不需要启动 cnfonts 来设置字体了。
 
 
-<a id="org0ed3ed8"></a>
+<a id="org912944f"></a>
 
 ### cnfonts 高级功能
 
@@ -380,7 +326,7 @@ hook 使用的函数只有一个参数 fontsizes-list, 用来记录 **当前使�
                                       :size fontsize
                                       :weight 'normal
                                       :slant 'normal)))
-            (if (cnfonts--fontspec-valid-p fontspec)
+            (if (fontp fontspec)
                 (set-fontset-font "fontset-default" 'symbol fontspec nil 'append)
               (message "字体 %S 不存在！" fontname))))
         
@@ -395,7 +341,7 @@ hook 使用的函数只有一个参数 fontsizes-list, 用来记录 **当前使�
                                       :size fontsize
                                       :weight 'normal
                                       :slant 'normal)))
-            (if (cnfonts--fontspec-valid-p fontspec)
+            (if (fontp fontspec)
                 (set-fontset-font "fontset-default" '(#x3400 . #x4DFF) fontspec nil 'append)
               (message "字体 %S 不存在！" fontname))))
         
@@ -431,7 +377,7 @@ hook 使用的函数只有一个参数 fontsizes-list, 用来记录 **当前使�
         (add-hook 'cnfonts-set-font-finish-hook #'my-line-spacing-setup)
 
 
-<a id="orgf81170e"></a>
+<a id="org2c0f101"></a>
 
 ## Tips
 
@@ -451,7 +397,7 @@ hook 使用的函数只有一个参数 fontsizes-list, 用来记录 **当前使�
 7.  字体设置和 coding 设置也有关系，如果 cnfonts 的行为很奇怪，又找不到确切原因，可以参考：<https://github.com/tumashu/cnfonts/issues/54#issuecomment-246228904>
 
 
-<a id="orgc5b8c95"></a>
+<a id="orgab13dd0"></a>
 
 ## 参考文章
 
