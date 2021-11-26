@@ -98,10 +98,9 @@
 (declare-function cnfonts--font-exists-p "cnfonts" (font))
 (declare-function cnfonts--save-profile "cnfonts" (fontnames fontsizes &optional profile-name))
 (declare-function cnfonts--set-font "cnfonts" (fontsizes-list))
-(declare-function cnfonts--step-fontsize "cnfonts" (num))
 (declare-function cnfonts--get-current-profile "cnfonts" (&optional return-profile-name))
 (declare-function cnfonts--get-current-fontsizes "cnfonts" ())
-(declare-function cnfonts-set-font-with-saved-step "cnfonts" (&optional frame))
+(declare-function cnfonts-set-font-with-saved-fontsize "cnfonts" (&optional frame))
 (declare-function cnfonts--return-fonts-configure-string "cnfonts" ())
 (declare-function cnfonts-message "cnfonts" (force-show &rest args))
 (declare-function cnfonts-decrease-fontsize "cnfonts" ())
@@ -264,10 +263,8 @@ TODO: IGNORE-FACE."
 
 (defun cnfonts-ui--create-align-page (_page-name)
   (let* ((profile-name (cnfonts--get-current-profile t))
-         (profile-step
-          (or (cnfonts--get-profile-step profile-name)
-              (length cnfonts--fontsizes-fallback)))
-         (fontsize-list (cnfonts--get-fontsizes profile-step)))
+         (profile-fontsize (cnfonts--get-profile-fontsize profile-name))
+         (fontsize-list (cnfonts--get-fontsizes profile-fontsize)))
     (widget-insert "\n")
     (cnfonts-ui--create-navigation)
     (widget-insert "\n\n")
@@ -352,7 +349,7 @@ NA:   表示系统没有安装当前字体。\n\n")
                                   (cnfonts--save-profile cnfonts--fontnames-fallback
                                                          cnfonts--fontsizes-fallback
                                                          cnfonts--current-profile)
-                                  (cnfonts-set-font-with-saved-step)
+                                  (cnfonts-set-font-with-saved-fontsize)
                                   (cnfonts-ui-restart)))
         (widget-insert " 强制
      *重置* 当前 profile。")))))
@@ -502,7 +499,7 @@ NA:   表示系统没有安装当前字体。\n\n")
                  `(,font ,@(nth index fontname-alist))
                  :from-end t :test 'equal))
           (cnfonts--save-profile fontname-alist fontsize-alist)
-          (cnfonts-set-font-with-saved-step))))))
+          (cnfonts-set-font-with-saved-fontsize))))))
 
 (defun cnfonts-ui--operate-align (&optional widget _event n)
   (let* ((widget (or widget (widget-at)))
