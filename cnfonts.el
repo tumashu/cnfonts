@@ -364,6 +364,17 @@ It record the current profile and profile steps."
 字体对齐功能失效，在大多数 linux 平台下这个功能都可以正常使用。"
   :type 'boolean)
 
+(defcustom cnfonts-use-display-property t
+  "设置是否使用 display property 来实现中英文对齐, 比如 min-width。
+
+这个选项设置为 t 之后，中英文对齐的操作余地变大，理论上只要中文字
+体的宽度不超过英文字体宽度的两倍，就可以实现对齐，但由于在
+`post-command-hook' 中添加了一个命令, 所以会一些命令的性能产生少
+许影响。
+
+另外，这个选项要求 emacs 版本不小于 29."
+  :type 'boolean)
+
 (defcustom cnfonts-set-font-finish-hook nil
   "A hook, by which user can set additional fonts.
 The below is an example which is used to set symbol fonts:
@@ -1045,7 +1056,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   (let ((cnfonts-use-cache t))
     (cnfonts-set-font-with-saved-step frame)))
 
-(defun cnfonts-add-min-width-property ()
+(defun cnfonts-use-display-property ()
   "Add display property :min-width '(2.0) to all Chinese Char."
   (interactive)
   (ignore-errors
@@ -1081,8 +1092,9 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   (setq cnfonts--enabled-p t)
   (add-hook 'after-make-frame-functions #'cnfonts-set-font-first-time)
   (add-hook 'window-setup-hook #'cnfonts-set-font-first-time)
-  (unless (version< emacs-version "29.0.50")
-    (add-hook 'post-command-hook #'cnfonts-add-min-width-property)))
+  (when (and cnfonts-use-display-property
+             (not (version< emacs-version "29.0.50")))
+    (add-hook 'post-command-hook #'cnfonts-use-display-property)))
 
 ;;;###autoload
 (defun cnfonts-disable ()
@@ -1091,8 +1103,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   (setq cnfonts--enabled-p nil)
   (remove-hook 'after-make-frame-functions #'cnfonts-set-font-first-time)
   (remove-hook 'window-setup-hook #'cnfonts-set-font-first-time)
-  (unless (version< emacs-version "29.0.50")
-    (remove-hook 'post-command-hook #'cnfonts-add-min-width-property)))
+  (remove-hook 'post-command-hook #'cnfonts-use-display-property))
 
 ;; Steal code from `spacemacs/set-default-font'
 (defun cnfonts--set-spacemacs-fallback-fonts (fontsizes-list)
