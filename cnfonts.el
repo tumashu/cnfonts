@@ -447,22 +447,22 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
 (defvar cnfonts--read-config-file-p nil)
 
 (defconst cnfonts--fontsizes-fallback
-  '((9    10.5 10.5)
-    (10   12.0 12.0)
-    (11.5 13.5 13.5)
-    (12.5 15.0 15.0)
-    (14   16.5 16.5)
-    (15   18.0 18.0)
-    (16   19.5 19.5)
-    (18   21.0 21.0)
-    (20   24.0 24.0)
-    (22   25.5 25.5)
-    (24   28.5 28.5)
-    (26   31.5 31.5)
-    (28   33.0 33.0)
-    (30   36.0 36.0)
-    (32   39.0 39.0))
-  "一个列表，每一个元素都有类似结构：(英文字号 中文字号 EXT-B字体字号).")
+  '((9    10.5 10.5 9)
+    (10   12.0 12.0 10)
+    (11.5 13.5 13.5 11.5)
+    (12.5 15.0 15.0 12.5)
+    (14   16.5 16.5 14)
+    (15   18.0 18.0 15)
+    (16   19.5 19.5 16)
+    (18   21.0 21.0 18)
+    (20   24.0 24.0 20)
+    (22   25.5 25.5 22)
+    (24   28.5 28.5 24)
+    (26   31.5 31.5 26)
+    (28   33.0 33.0 28)
+    (30   36.0 36.0 30)
+    (32   39.0 39.0 32))
+  "一个列表，每一个元素都有类似结构：(英文字号 中文字号 EXT-B字体字号 Symbol字体字号).")
 
 (defcustom cnfonts-personal-fontnames nil
   "用户自己维护的字体列表，其结构与 `cnfonts--fontnames-fallback' 一致."
@@ -506,14 +506,14 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
      "Hanazono Mincho" "Hanazono Mincho A" "Hanazono Mincho B"
      "Hanazono Mincho C" "Hanazono Mincho Ex" "Hanazono Mincho Ex A1"
      "Hanazono Mincho Ex A2" "Hanazono Mincho Ex B" "Hanazono Mincho Ex C"
-     "Hanazono Mincho I")))
+     "Hanazono Mincho I")
+    ("Segoe UI Symbol" "Symbola")))
 
 (defconst cnfonts--profile-comment-1 "
-;;; `cnfonts--custom-set-fontsnames' 列表有3个子列表，第1个为英文字体列表，第2个为中文字体列表，
-;;; 第3个列表中的字体用于显示不常用汉字，每一个字体列表中，*第一个* *有效并可用* 的字体将被使用。")
+;;; `cnfonts--custom-set-fontsnames' 的结构与 `cnfonts--fontnames-fallback' 相同。")
 
 (defconst cnfonts--profile-comment-2 "
-;;; `cnfonts--custom-set-fontsizes' 中，所有元素的结构都类似：(英文字号 中文字号 EXT-B字体字号)。")
+;;; `cnfonts--custom-set-fontsizes' 的结构与 `cnfonts--fontsizes-fallback' 相同。")
 
 (defvar cnfonts--minibuffer-echo-string nil)
 
@@ -647,8 +647,15 @@ When PROFILE-NAME is non-nil, save to this profile instead."
                                                           cnfonts--fontnames-fallback)
                           (cnfonts--merge-fontname-list cnfonts-personal-fontnames
                                                         cnfonts--fontnames-fallback))
-                        (or cnfonts--custom-set-fontsizes
-                            cnfonts--fontsizes-fallback))))
+
+                        (mapcar
+                         (lambda (fontsizes)
+                           ;; 添加 symbol 字体支持之后，做的兼容。
+                           (if (< (length fontsizes) 4)
+                               `(,@fontsizes ,(car fontsizes))
+                             fontsizes))
+                         (or cnfonts--custom-set-fontsizes
+                             cnfonts--fontsizes-fallback)))))
         (setq cnfonts--current-profile-cache
               (list cnfonts--fontnames-fallback
                     cnfonts--fontsizes-fallback))))))
@@ -669,7 +676,10 @@ When PROFILE-NAME is non-nil, save to this profile instead."
               (cl-remove-duplicates lst :from-end t :test 'equal))
           `((,@(nth 0 list1) ,@(nth 0 list2) ,@(nth 0 list3))
             (,@(nth 1 list1) ,@(nth 1 list2) ,@(nth 1 list3))
-            (,@(nth 2 list1) ,@(nth 2 list2) ,@(nth 2 list3)))))
+            (,@(nth 2 list1) ,@(nth 2 list2) ,@(nth 2 list3))
+            (,@(ignore-errors (nth 3 list1))
+             ,@(ignore-errors (nth 3 list2))
+             ,@(nth 3 list3)))))
 
 (defun cnfonts--font-exists-p (font)
   "Test FONT exist or not."
@@ -711,7 +721,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
 
 (defun cnfonts--get-fontsizes (&optional fontsize)
   "获取 FONTSIZE 对应的 fontsize-list."
-  (let* ((fontsizes-list (car (cdr (cnfonts--read-profile)))))
+  (let ((fontsizes-list (car (cdr (cnfonts--read-profile)))))
     (unless (file-exists-p (cnfonts--get-current-profile))
       (cnfonts-message t "如果中英文不能对齐，请运行`cnfonts-edit-profile'编辑当前profile。"))
     (when (numberp fontsize)
@@ -772,17 +782,17 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
          (english-main-fontname (nth 0 valid-fonts))
          (chinese-main-fontname (nth 1 valid-fonts))
          (chinese-extra-fontname (nth 2 valid-fonts))
+         (symbol-fontname (nth 3 valid-fonts))
 
          (english-main-short-fontname (nth 0 valid-short-fontnames))
          (chinese-main-short-fontname (nth 1 valid-short-fontnames))
          (chinese-extra-short-fontname (nth 2 valid-short-fontnames))
+         (symbol-short-fontname (nth 3 valid-short-fontnames))
 
          (english-main-fontsize (cnfonts--float (nth 0 fontsizes-list)))
          (chinese-main-fontsize (cnfonts--float (nth 1 fontsizes-list)))
          (chinese-extra-fontsize (cnfonts--float (nth 2 fontsizes-list)))
-
-         (english-symbol-fontsize (cnfonts--float (nth 0 fontsizes-list)))
-         ;; (chinese-symbol-fontsize (cnfonts--float (nth 1 fontsizes-list)))
+         (symbol-fontsize (cnfonts--float (nth 3 fontsizes-list)))
 
          (english-main-fontspec
           (when english-main-fontname
@@ -808,11 +818,10 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
                        :size english-main-fontsize
                        :weight 'bold
                        :slant 'italic)))
-         (english-symbol-fontspec
-          (when english-main-fontname
-            (font-spec :name english-main-fontname
-                       :size (or english-symbol-fontsize
-                                 english-main-fontsize)
+         (symbol-fontspec
+          (when symbol-fontname
+            (font-spec :name symbol-fontname
+                       :size symbol-fontsize
                        :weight 'normal
                        :slant 'normal)))
          (chinese-main-fontspec
@@ -821,13 +830,6 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
                        :size chinese-main-fontsize
                        :weight 'normal
                        :slant 'normal)))
-         ;; (chinese-symbol-fontspec
-         ;;  (when chinese-main-fontname
-         ;;    (font-spec :name chinese-main-fontname
-         ;;               :size (or chinese-symbol-fontsize
-         ;;                         chinese-main-fontsize)
-         ;;               :weight 'normal
-         ;;               :slant 'normal)))
          (chinese-extra-fontspec
           (when chinese-extra-fontname
             (font-spec :name chinese-extra-fontname
@@ -871,8 +873,9 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
         (set-fontset-font "fontset-default" charset chinese-main-fontspec)))
 
     ;; 设置 symbol 字体。
-    (when (fontp english-main-fontspec)
-      (set-fontset-font "fontset-default" 'symbol english-symbol-fontspec))
+    (when (fontp symbol-fontspec)
+      (print symbol-fontspec)
+      (set-fontset-font "fontset-default" 'symbol symbol-fontspec nil 'prepend))
 
     ;; (when (fontp chinese-main-fontset)
     ;;   (set-fontset-font t 'symbol chinese-symbol-fontspec nil 'append))

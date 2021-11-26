@@ -47,6 +47,14 @@
      :index 2
      :keybinding "x"
      :button-name "EXT-B")
+    (symbol-fonts-page
+     :index 3
+     :keybinding "s"
+     :note "
+注意：默认情况下，emacs 会使用英文字体来显示符号，只有英文字体不
+支持某个符号时，才会使用这里列出的符号字体，混用符号字体有时候很
+难做到完全对齐。"
+     :button-name "符号")
     (align-page
      :align-page t
      :keybinding "1"
@@ -265,17 +273,19 @@ TODO: IGNORE-FACE."
   (let* ((profile-name (cnfonts--get-current-profile t))
          (profile-fontsize (cnfonts--get-profile-fontsize profile-name))
          (fontsize-list (cnfonts--get-fontsizes profile-fontsize)))
+
     (widget-insert "\n")
     (cnfonts-ui--create-navigation)
     (widget-insert "\n\n")
 
-    (widget-insert "字体类别 字号 ")
+    (widget-insert "字体类别    字号 ")
     (widget-insert (format "%39s\n" (format "( %s )" (cnfonts--get-current-profile t))))
-    (widget-insert "-------- --------------------------------------------\n")
+    (widget-insert "----------  --------------------------------------------\n")
 
-    (cnfonts-ui--create-align-line 0 "ASCII" fontsize-list "| More haste, less speed. |")
-    (cnfonts-ui--create-align-line 1 "CJKV " fontsize-list "| 为天地立心，为生民立命；|")
-    (cnfonts-ui--create-align-line 2 "EXT-B" fontsize-list "| 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀。|")
+    (cnfonts-ui--create-align-line 0 "ASCII   " fontsize-list "| More haste, less speed. |")
+    (cnfonts-ui--create-align-line 1 "CJKV    " fontsize-list "| 为天地立心，为生民立命；|")
+    (cnfonts-ui--create-align-line 2 "EXT-B   " fontsize-list "| 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀。|")
+    (cnfonts-ui--create-align-line 3 "Symbol  " fontsize-list "| ≤∞ƒ♣♦♥↔←→°±≥∝∂•÷≠≡Σϕαβ. |")
 
     (widget-insert "\n")
 
@@ -286,23 +296,25 @@ TODO: IGNORE-FACE."
                    :action '(lambda (widget event)
                               (cnfonts-decrease-fontsize)
                               (cnfonts-ui-page-align-page nil nil t)))
-    (widget-insert "                     ")
+    (widget-insert "                        ")
     (widget-create 'push-button
                    :button-face-get 'ignore
                    :mouse-face-get 'ignore
                    :tag "[设置下一个字号]"
                    :action '(lambda (widget event)
                               (cnfonts-increase-fontsize)
-                              (cnfonts-ui-page-align-page nil nil t)))
-    ))
+                              (cnfonts-ui-page-align-page nil nil t)))))
 
 (defun cnfonts-ui--create-fonts-page (page-name)
   (let ((index (cnfonts-ui--get-page-info page-name :index))
+        (note (cnfonts-ui--get-page-info page-name :note) )
         (fontname-alist (car (cnfonts--read-profile))))
     (widget-insert "\n")
     (cnfonts-ui--create-navigation)
     (widget-insert "\n")
     (cnfonts-ui--create-warning-board)
+    (when note
+      (widget-insert note "\n"))
     (widget-insert "
 P:    表示当前字体包含在变量 `cnfonts-personal-fontnames' 中。
 NA:   表示系统没有安装当前字体。\n\n")
@@ -362,6 +374,9 @@ NA:   表示系统没有安装当前字体。\n\n")
 
 (cnfonts-ui-create-page extb-fonts-page
   (cnfonts-ui--create-fonts-page 'extb-fonts-page))
+
+(cnfonts-ui-create-page symbol-fonts-page
+  (cnfonts-ui--create-fonts-page 'symbol-fonts-page))
 
 (cnfonts-ui-create-page align-page
   (cnfonts-ui--create-align-page 'align-page))
