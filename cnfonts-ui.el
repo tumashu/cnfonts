@@ -383,7 +383,9 @@ cnfonts-decrease-fontsize 两个命令来控制的。")))
     (cnfonts-ui--create-main-navigation)
     (widget-insert "\n")
     (cnfonts-ui--create-warning-board)
-    (widget-insert "\n")
+    (widget-insert "
+P:    表示当前字体包含在变量 `cnfonts-personal-fontnames' 中。
+NA:   表示系统没有安装当前字体。\n\n")
     (let ((fonts (nth index fontname-alist))
           widget1 widget2 widget3)
       (widget-insert "状态  当前字体")
@@ -427,9 +429,6 @@ cnfonts-decrease-fontsize 两个命令来控制的。")))
         (push (cons widget2 widget2) cnfonts-ui--widgets-alist)
         (push (cons widget3 widget2) cnfonts-ui--widgets-alist)
         (widget-insert "\n" ))
-      (widget-insert "
-注1: \"P\"  表示当前字体包含在 `cnfonts-personal-fontnames' 中
-     \"NA\" 表示系统没有安装当前字体\n")
       (when (cnfonts--upgrade-profile-need-p)
         (widget-insert "
 注2: profile 的格式已经更新，用户可以点击 ")
