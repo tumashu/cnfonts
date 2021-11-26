@@ -1045,13 +1045,44 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   (let ((cnfonts-use-cache t))
     (cnfonts-set-font-with-saved-step frame)))
 
+(defun cnfonts-add-min-width-property ()
+  "Add display property :min-width '(2.0) to all Chinese Char."
+  (interactive)
+  (ignore-errors
+    (unless (version< emacs-version "29.0.50")
+      (dolist (window (window-list))
+        (with-selected-window window
+          (let ((buffer (window-buffer window)))
+            (with-current-buffer buffer
+              (when (memq major-mode
+                          '(;; 暂时在这几个 mode 中试用。
+                            org-mode md-mode org-agenda-mode
+                            gnus-summary-mode cnfonts-ui-mode))
+                (let* ((n1 (window-start window))
+                       (n2 (window-end window))
+                       (inhibit-read-only t)
+                       (flag t))
+                  (with-silent-modifications
+                    (while flag
+                      (if (< n1 n2)
+                          (let ((str (buffer-substring n1 (+ n1 1))))
+                            (when (and str
+                                       (stringp str)
+                                       (string-match-p "\\cc" str)
+                                       (not (equal (get-display-property n1 'min-width) '(2.0))))
+                              (add-display-text-property n1 (+ n1 1) 'min-width (list 2.0))))
+                        (setq flag nil))
+                      (setq n1 (+ n1 1)))))))))))))
+
 ;;;###autoload
 (defun cnfonts-enable ()
   "运行这个函数，可以让 Emacs 启动的时候就激活 cnfonts."
   (interactive)
   (setq cnfonts--enabled-p t)
   (add-hook 'after-make-frame-functions #'cnfonts-set-font-first-time)
-  (add-hook 'window-setup-hook #'cnfonts-set-font-first-time))
+  (add-hook 'window-setup-hook #'cnfonts-set-font-first-time)
+  (unless (version< emacs-version "29.0.50")
+    (add-hook 'post-command-hook #'cnfonts-add-min-width-property)))
 
 ;;;###autoload
 (defun cnfonts-disable ()
@@ -1059,7 +1090,9 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   (interactive)
   (setq cnfonts--enabled-p nil)
   (remove-hook 'after-make-frame-functions #'cnfonts-set-font-first-time)
-  (remove-hook 'window-setup-hook #'cnfonts-set-font-first-time))
+  (remove-hook 'window-setup-hook #'cnfonts-set-font-first-time)
+  (unless (version< emacs-version "29.0.50")
+    (remove-hook 'post-command-hook #'cnfonts-add-min-width-property)))
 
 ;; Steal code from `spacemacs/set-default-font'
 (defun cnfonts--set-spacemacs-fallback-fonts (fontsizes-list)
