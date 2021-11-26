@@ -1072,7 +1072,9 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
             (with-current-buffer buffer
               (when (setq func (cdr (assq major-mode cnfonts-use-display-property-alist)))
                 (let* ((n1 (window-start window))
-                       (n2 (window-end window))
+                       (n2 (min (window-end window)
+                                (+ n1 (* (window-width)
+                                         (window-height)))))
                        (inhibit-read-only t)
                        (flag t))
                   (save-excursion
