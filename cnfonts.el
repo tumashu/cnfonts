@@ -31,40 +31,34 @@
 ;; * cnfonts README                                         :README:
 
 ;; ** 简介
-;; 注意：cnfonts 原来叫： chinese-fonts-setup, 一开始使用三个词的首字
-;; 母组成的字符串 "cfs-" 做为包的前缀，但不幸和 gnu 的项目 cfs.el 冲突，
-;; 所以将包的前缀更改为 "cnfonts".  chinese-fonts-setup 将做为 cnfonts
-;; 的别名使用。
 
-;; cnfonts 是一个 Emacs 中英文字体配置工具。可以比较方便地实
-;; 现中文字体和英文字体等宽（也就是大家常说的中英文对齐）。
+;; cnfonts 原来叫: chinese-fonts-setup, 是一个 Emacs 中英文字体配置工
+;; 具。可以比较方便地实现中文字体和英文字体等宽（也就是大家常说的中英
+;; 文对齐）。
 
-;; 注： 这个 package 特别适用于需要处理中英文混合表格的中文 org-mode 用户。
+;; 注：这个 package 特别适用于需要处理中英文混合表格的中文 org-mode 用
+;; 户。
 
 ;; ** 基本原理
-;; cnfonts 的核心很简单，就是让中文字体和英文字体使用不同的字
-;; 号，从而实现中英文对齐，它和下面的样例代码原理是 *类似* 的，只是用的命令
-;; 稍微不同。
 
-;; #+BEGIN_EXAMPLE
-;; (set-frame-font "-unknown-PragmataPro-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1")
-;; (dolist (charset '(kana han symbol cjk-misc bopomofo))
-;;   (set-fontset-font "fontset-default"
-;;                     charset (font-spec :family "Microsoft Yahei" :size 16)))
-;; #+END_EXAMPLE
+;; cnfonts 的核心很简单，就是让中文字体和英文字体使用不同的字号，从而
+;; 实现中英文对齐。
 
 ;; ** 使用特点
-;; cnfonts 添加了许多辅助工具，使配置和调节字体和字号的工作更
-;; 加简便快捷，它有几个优点：
 
-;; 1. 安装即用：cnfonts 内置字体 fallback 功能，只需安装，就能
-;;    够配置中文字体和英文字体，让中文可以 *正确* 显示（但未必完美），不会
-;;    因为 Emacs 配置中指定的字体不存在而报错。
-;; 2. 设置方便：cnfonts 自带一个 profile 文件调整工具，这个工具
-;;    有直观的图形界面，可以让用户设置字体名称和字体大小，分分钟实现中文字
-;;    体和英文字体的等宽对齐。
+;; cnfonts 添加了许多辅助工具，使配置和调节字体和字号的工作更加简便快
+;; 捷，它有几个优点：
+
+;; 1. 安装即用：cnfonts 内置字体 fallback 功能，只需安装，就能够配置中
+;;    文字体和英文字体，让中文可以 *正确* 显示（但未必完美），不会因为
+;;    Emacs 配置中指定的字体不存在而报错。
+
+;; 2. 设置方便：cnfonts 自带一个 profile 文件调整工具，这个工具有直观
+;;    的图形界面，可以让用户设置字体名称和字体大小，分分钟实现中文字体
+;;    和英文字体的等宽对齐。
 
 ;; ** 下载安装
+
 ;; 1. 配置melpa源，参考：http://melpa.org/#/getting-started
 ;; 2. M-x package-install RET cnfonts RET
 ;; 3. 在emacs配置文件中（比如: ~/.emacs）添加如下代码：
@@ -72,14 +66,16 @@
 ;;    #+BEGIN_EXAMPLE
 ;;    (require 'cnfonts)
 ;;    ;; 让 cnfonts 随着 Emacs 自动生效。
-;;    ;; (cnfonts-enable)
+;;    (cnfonts-enable)
 ;;    #+END_EXAMPLE
 
 ;; ** 配置使用
 ;; *** 最简单的用法（懒人必备）
-;; 通过下面几个命令，用户可以 *快速* 了解 cnfonts 的大部分功能，
-;; 而不需要阅读整篇文档，如果用户想深入了解 cnfonts 或者自定义
-;; 一些特殊的功能，阅读整篇文档是逃不开的。
+
+;; 通过下面几个命令，用户可以 *快速* 了解 cnfonts 的大部分功能，而不需
+;; 要阅读整篇文档，如果用户想深入了解 cnfonts 或者自定义一些特殊的功能，
+;; 阅读整篇文档是逃不开的。
+
 ;; | 命令                      | 功能         |
 ;; |---------------------------+--------------|
 ;; | cnfonts-edit-profile      | 调整字体设置 |
@@ -87,41 +83,19 @@
 ;; | cnfonts-decrease-fontsize | 减小字号     |
 
 ;; *** profile 的概念
-;; profile 代表了一套字体配置，cnfonts 使用 profile 的概念，
-;; 来维护多套字体配置，从而实现特定的环境使用特定的字体配置，比如：在编程
-;; 时使用 “Consolas + 微米黑”，在阅读文章时使用 “PragmataPro + 黑体”，
-;; 等等。
 
-;; 每一个 profile 都对应一个 emacs-lisp 文件, 保存在 `cnfonts-directory'
-;; 对应的目录中, 这些文件包含了英文字体设置，中文字体设置以及中文字体大小，
-;; 其结构类似：
+;; profile 代表了一套字体配置，cnfonts 使用 profile 的概念，来维护多套
+;; 字体配置，从而实现特定的环境使用特定的字体配置，比如：在编程时使用
+;; “Consolas + 微米黑”，在阅读文章时使用 “PragmataPro + 黑体”，等等。
 
-;; #+BEGIN_EXAMPLE
-;; (setq cnfonts--custom-set-fontnames
-;;       '(("PragmataPro" "Ubuntu Mono" "DejaVu Sans Mono")
-;;         ("文泉驿等宽微米黑" "Ubuntu Mono" "隶书" "新宋体")
-;;         ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB")))
-
-;; (setq cnfonts--custom-set-fontsizes
-;;       '((9    9.0  9.5 )
-;;         (10   11.0 11.0)
-;;         (11.5 12.5 12.5)
-;;         (12.5 13.5 13.5)
-;;         (14   15.0 15.0)
-;;         (16   17.0 17.0)
-;;         (18   18.0 18.0)
-;;         (20   21.0 21.0)
-;;         (22   23.0 23.0)
-;;         (24   25.5 25.5)
-;;         (26   27.0 27.0)
-;;         (28   29.0 29.0)
-;;         (30   32.0 32.0)
-;;         (32   33.0 33.0)))
-;; #+END_EXAMPLE
+;; 每一个 profile 都对应一个 emacs-lisp 文件, 保存在
+;; `cnfonts-directory' 对应的目录中, 这些文件包含了英文字体设置，中文
+;; 字体设置以及中文字体大小等。
 
 ;; *** profile 命名与切换
-;; cnfonts 默认使用三个 profile: profile1, profile2 和
-;; profile3, 如果想使用其它有意义的名称，可以设置:
+
+;; cnfonts 默认使用三个 profile: profile1, profile2 和 profile3, 如果
+;; 想使用其它有意义的名称，可以设置:
 
 ;; #+BEGIN_EXAMPLE
 ;; (setq cnfonts-profiles
@@ -136,8 +110,10 @@
 ;; | cnfonts-next-profile   | 直接切换到下一个profile |
 
 ;; *** 使用 cnfonts-edit-profile 命令调整 profile
-;; 如果 *当前使用* 的字体不符合使用习惯，用户可以运行 `cnfonts-edit-profile'
-;; 命令来调整 *当前* profile,这个命令会弹出一个图形化界面，类似：
+
+;; 如果 *当前使用* 的字体不符合使用习惯，用户可以运行
+;; `cnfonts-edit-profile'命令来调整 *当前* profile,这个命令会弹出一个
+;; 图形化界面，类似：
 
 ;; [[./snapshots/cnfonts-ui-1.png]]
 ;; [[./snapshots/cnfonts-ui-2.png]]
@@ -147,12 +123,14 @@
 ;; [[./snapshots/cnfonts-ui-6.png]]
 ;; [[./snapshots/cnfonts-ui-7.png]]
 
-;; 注1: 配置完成后，有可能需要重启 Emacs, 参考：http://debbugs.gnu.org/db/17/1785.html
+;; 注1: 配置完成后，有可能需要重启 Emacs, 参考：
+;; http://debbugs.gnu.org/db/17/1785.html
 
 ;; *** 使用 cnfonts-regenerate-profile 重置 profile
-;; `cnfonts-regenerate-profile' 命令会使用 cnfonts 自带的
-;; fallback 信息，覆盖需要 *重置* 的 profile, 这个 profile 原来的
-;; 内容将丢失，请紧慎使用！
+
+;; `cnfonts-regenerate-profile' 命令会使用 cnfonts 自带的 fallback 信
+;; 息，覆盖需要 *重置* 的 profile, 这个 profile 原来的内容将丢失，请紧
+;; 慎使用！
 
 ;; *** 调整字体大小
 ;; `cnfonts' 使用下述两个命令调整字体大小:
@@ -162,21 +140,22 @@
 ;; | cnfonts-increase-fontsize | 增大字体大小 |
 ;; | cnfonts-decrease-fontsize | 减小字体大小 |
 
-;; 注意：在调整字体大小的同时，字号信息也会保存到 `cnfonts-directory' 目录下
-;; `cnfonts-config-filename' 对应的文件中。
+;; 注意：在调整字体大小的同时，字号信息也会保存到 `cnfonts-directory'
+;; 目录下`cnfonts-config-filename' 对应的文件中。
 
 ;; [[./snapshots/cnfonts-increase-and-decrease-fontsize.gif]]
 
 ;; *** 使用 cnfonts-use-system-type
-;; 有些用户希望将 profile 配置文件做为自己的 Emacs 配置，在不同
-;; 的计算机上同步和管理，我建议这些用户将 `cnfonts-use-system-type'
-;; 设置为 t, 这样，相同名称的 profile 在不同的操作系统下，保存的
-;; 位置也不同，可以避免 profile 冲突。
+
+;; 有些用户希望将 profile 配置文件做为自己的 Emacs 配置，在不同的计算
+;; 机上同步和管理，我建议这些用户将 `cnfonts-use-system-type'设置为 t,
+;; 这样，相同名称的 profile 在不同的操作系统下，保存的位置也不同，可以
+;; 避免 profile 冲突。
 
 ;; *** 让 cnfonts 随着 Emacs 自动启动
-;; `cnfonts-enable' 命令可以让 cnfonts 随着
-;; Emacs 自动启动，这个命令将 `cnfonts-set-font-with-saved-fontsize' 添加到
-;; 下面两个 hook:
+
+;; `cnfonts-enable' 命令可以让 cnfonts 随着 Emacs 自动启动，这个命令将
+;; `cnfonts-set-font-with-saved-fontsize' 添加到下面两个 hook:
 
 ;; 1. `after-make-frame-functions'
 ;; 2. `window-setup-hook'
@@ -185,8 +164,9 @@
 ;; cnfonts 生效。
 
 ;; *** cnfonts 与 org-mode 配合使用
-;; 许多用户使用 org-mode 时，习惯让不同的标题，使用的字体大小也不同，这个
-;; 特性需要用户设置：
+
+;; 许多用户使用 org-mode 时，习惯让不同的标题，使用的字体大小也不同，
+;; 这个特性需要用户设置：
 
 ;; #+BEGIN_EXAMPLE
 ;; (setq cnfonts-use-face-font-rescale t)
@@ -195,52 +175,14 @@
 ;; 注：这个功能不能在 window 系统下使用，它会让对齐功能失效，Linux 下
 ;; 这个功能 *一般* 可以使用，Mac 系统未测试，同学可以亲自试一试。
 
-;; *** 使用 cnfonts 生成 elisp 字体配置片断
-;; 有些用户觉得 cnfonts *太过厚重* , 他们喜欢使用简单的
-;; 方式来配置字体，这些用户可以了解一下 `cnfonts-insert-fonts-configure'
-;; 命令，这个命令可以根据 cnfonts 的设置自动生成一个
-;; "字体配置 elisp 片断", 并插入光标处，将这个片断写入 .emacs 文件
-;; 后，就不需要启动 cnfonts 来设置字体了。
-
 ;; *** cnfonts 高级功能
-;; cnfonts *仅仅* 设置英文，中文和 EXT-B 字体，不处理
-;; 其它字符的字体，比如：symbol 字符，但 cnfonts 可以
-;; 通过 hook: `cnfonts-set-font-finish-hook' 来处理类似的问题（这个
-;; hook 使用的函数只有一个参数 fontsizes-list, 用来记录 *当前使用*
-;; 的英文字体，中文字体和 EXT-B 字体的字号）。
-
-;; 下面是一些例子：
-;; **** 设置 symbol 字符的字体
-;; #+BEGIN_EXAMPLE
-;; (defun my-set-symbol-fonts (fontsizes-list)
-;;   (let* ((fontname "Inconsolata")
-;;          (fontsize (nth 0 fontsizes-list))
-;;          (fontspec (font-spec :name fontname
-;;                               :size fontsize
-;;                               :weight 'normal
-;;                               :slant 'normal)))
-;;     (if (fontp fontspec)
-;;         (set-fontset-font "fontset-default" 'symbol fontspec nil 'append)
-;;       (message "字体 %S 不存在！" fontname))))
-
-;; (add-hook 'cnfonts-set-font-finish-hook 'my-set-symbol-fonts)
-;; #+END_EXAMPLE
 
 ;; **** 设置一些不常用汉字字符的字体
-;; #+BEGIN_EXAMPLE
-;; (defun my-set-exta-fonts (fontsizes-list)
-;;   (let* ((fontname "微软雅黑")
-;;          (fontsize (nth 1 fontsizes-list))
-;;          (fontspec (font-spec :name fontname
-;;                               :size fontsize
-;;                               :weight 'normal
-;;                               :slant 'normal)))
-;;     (if (fontp fontspec)
-;;         (set-fontset-font "fontset-default" '(#x3400 . #x4DFF) fontspec nil 'append)
-;;       (message "字体 %S 不存在！" fontname))))
 
-;; (add-hook 'cnfonts-set-font-finish-hook 'my-set-exta-fonts)
+;; #+BEGIN_EXAMPLE
+;; (push '(#x3400 . #x4DFF) cnfonts-ornaments)
 ;; #+END_EXAMPLE
+
 ;; 注意事项：
 
 ;; 1. "(#x3400 . #x4DFF)" 代表了待设字符在 unicode-bmp 中的范围。
@@ -275,24 +217,29 @@
 ;; ** Tips
 
 ;; 1. 如果用户需要在自己的 Emacs 配置中管理一些个人字体，可以使用变量
-;;    `cnfonts-personal-fontnames' , 其结构与 `cnfonts--fontnames-fallback'一样。
+;;    `cnfonts-personal-fontnames' , 其结构与
+;;    `cnfonts--fontnames-fallback'一样。
 ;; 2. 使用命令: `describe-char' 可以了解光标处字符使用什么字体。
 ;; 3. 在 scratch 中写一行 elisp 代码：
+
 ;;    #+BEGIN_EXAMPLE
 ;;    (cl-prettyprint (font-family-list))
 ;;    #+END_EXAMPLE
-;;    执行后，就会在 scratch 中插入当前可用字体的名称列表，这是一个很有用
-;;    的技巧。
-;; 4. 命令：`cnfonts-insert-fontname', 可以让用户选择一个可用字体插入到当前光
-;;    标处。
-;; 5. Windows 用户 (特别是 Windows XP 用户) 可以安装 MacType 软件来优化字
-;;    体显示效果，推荐使用。
-;; 6. Mac 用户配置 profile 文件的时候，偶尔会遇到 'C-c C-c' 刷新缓慢的问
-;;    题，这可能是 ext-b 字体缺失引起的，建议安装 ext-b 字体试试。
+
+;;    执行后，就会在 scratch 中插入当前可用字体的名称列表，这是一个很
+;;    有用的技巧。
+
+;; 4. 命令：`cnfonts-insert-fontname', 可以让用户选择一个可用字体插入
+;;    到当前光标处。
+;; 5. Windows 用户 (特别是 Windows XP 用户) 可以安装 MacType 软件来优
+;;    化字体显示效果，推荐使用。
+;; 6. Mac 用户配置 profile 文件的时候，偶尔会遇到 'C-c C-c' 刷新缓慢的
+;;    问题，这可能是 ext-b 字体缺失引起的，建议安装 ext-b 字体试试。
 ;;    1. Ext-B字符列表: https://cdo.wikipedia.org/wiki/Wikipedia:Unicode%E6%93%B4%E5%B1%95%E6%BC%A2%E5%AD%97
 ;;    2. HanaMinB 下载地址: https://osdn.jp/projects/hanazono-font/downloads/62072/hanazono-20141012.zip/
-;; 7. 字体设置和 coding 设置也有关系，如果 cnfonts 的行为很奇怪，
-;;    又找不到确切原因，可以参考：https://github.com/tumashu/cnfonts/issues/54#issuecomment-246228904
+;; 7. 字体设置和 coding 设置也有关系，如果 cnfonts 的行为很奇怪，又找
+;;    不到确切原因，可以参考：
+;;    https://github.com/tumashu/cnfonts/issues/54#issuecomment-246228904
 
 ;; ** 参考文章
 ;; 1. http://baohaojun.github.io/perfect-emacs-chinese-font.html
