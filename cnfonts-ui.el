@@ -51,10 +51,14 @@
      :index 3
      :keybinding "s"
      :note "
-注意：默认情况下，emacs 会使用英文字体来显示符号，只有英文字体不
-支持某个符号时，才会使用这里列出的符号字体，混用符号字体有时候很
-难做到完全对齐。"
-     :button-name "符号")
+注意：字符等宽对齐往往不容易设置，涉及字体混用, char-width, 字体
+优先级等多种原因，有兴趣的同学可以看看这个链接：
+
+    https://github.com/tumashu/cnfonts/issues/64
+
+Emacs 25.2 以后，当 default font 有某个字符的时候，优先使用这个
+字体，可以将 use-default-font-for-symbols 设置为 nil 来关闭。"
+     :button-name "字符")
     (ornament-fonts-page
      :index 4
      :keybinding "d"
