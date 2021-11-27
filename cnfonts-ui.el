@@ -237,7 +237,7 @@ TODO: IGNORE-FACE."
       (push (cons widget3 widget2) cnfonts-ui--widgets-alist)
       (push (cons widget4 widget2) cnfonts-ui--widgets-alist))
     (setq widget5 (widget-create 'push-button
-                                 :value "      "
+                                 :value "                  "
                                  :flag t
                                  :key (car fontsize-list)
                                  :button-face-get 'ignore
@@ -293,8 +293,8 @@ TODO: IGNORE-FACE."
     (widget-insert "\n\n")
 
     (widget-insert "字体类别    字号 ")
-    (widget-insert (format "%39s\n" (format "( %s )" (cnfonts--get-current-profile t))))
-    (widget-insert "----------  --------------------------------------------\n")
+    (widget-insert (format "%51s\n" (format "( %s )" (cnfonts--get-current-profile t))))
+    (widget-insert "---------- ---------------------------------------------------------\n")
 
     (cnfonts-ui--create-align-line 0 "ASCII   " fontsize-list "| More haste, less speed. |")
     (cnfonts-ui--create-align-line 1 "CJKV    " fontsize-list "| 为天地立心，为生民立命；|")
@@ -311,7 +311,7 @@ TODO: IGNORE-FACE."
                    :action '(lambda (widget event)
                               (cnfonts-decrease-fontsize)
                               (cnfonts-ui-page-align-page nil nil t)))
-    (widget-insert "                        ")
+    (widget-insert "                                    ")
     (widget-create 'push-button
                    :button-face-get 'ignore
                    :mouse-face-get 'ignore
@@ -338,8 +338,8 @@ NA:   表示系统没有安装当前字体。\n\n")
     (let ((fonts (nth index fontname-alist))
           widget1 widget2 widget3)
       (widget-insert "状态  当前字体")
-      (widget-insert (format "%39s\n" (format "( %s )" (cnfonts--get-current-profile t))))
-      (widget-insert "----  -----------------------------------------------\n")
+      (widget-insert (format "%53s\n" (format "( %s )" (cnfonts--get-current-profile t))))
+      (widget-insert "----  -------------------------------------------------------------\n")
       (dolist (font fonts)
         (setq widget1
               (widget-create 'push-button
@@ -430,7 +430,6 @@ NA:   表示系统没有安装当前字体。\n\n")
   (cnfonts-ui--create-navigation)
   (widget-insert "
 
-------------------------------------------------------
 ** 根据 cnfonts 的设置，自动生成一个 elisp 字体配置片断
 
 如果用户觉得 cnfonts *太厚重*, 可以将下面一段 elisp 粘贴到
