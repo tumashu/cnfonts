@@ -131,7 +131,7 @@
 
 (defun cnfonts-ui--switch-to-page (page-name)
   "Switch to page which name is PAGE-NAME."
-  (switch-to-buffer (format "*cnfonts: %S*" page-name))
+  (switch-to-buffer (format " *cnfonts: %S*" page-name))
   (dolist (widget cnfonts-ui--widgets-navigation)
     (let ((orig-value (widget-value widget))
           (widget-page (widget-get widget :page-name)))
@@ -262,7 +262,7 @@ TODO: IGNORE-FACE."
         (buffer-name (make-symbol "buffer-name")))
     `(defun ,func-name (&optional _widget _event create-buffer)
        (interactive)
-       (let ((,buffer-name (format "*cnfonts: %S*" ',page-name)))
+       (let ((,buffer-name (format " *cnfonts: %S*" ',page-name)))
          (if create-buffer
              (with-current-buffer (get-buffer-create ,buffer-name)
                (let ((inhibit-read-only t))
