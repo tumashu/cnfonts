@@ -325,15 +325,7 @@ It record the current profile and profile fontsize."
 另外，这个选项要求 emacs 版本不小于 29.")
 
 (defcustom cnfonts-set-font-finish-hook nil
-  "A hook, by which user can set additional fonts.
-The below is an example which is used to set symbol fonts:
-
- (defun cnfonts-set-symbol-fonts (fontsizes-list)
-   (set-fontset-font t 'symbol \"Inconsolata\" nil 'append)
-   (set-fontset-font t 'symbol \"Symbola\" nil 'append)
-   (set-fontset-font t 'unicode \"Segoe UI Emoji\" nil 'append)
-   (set-fontset-font t 'unicode \"STIX\" nil 'append))
- (add-hook 'cnfonts-set-font-finish-hook 'cnfonts-set-symbol-fonts)"
+  "A hook, by which user can set additional fonts."
   :type 'hook)
 
 (defcustom cnfonts-fonts-configure-template "
