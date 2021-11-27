@@ -413,7 +413,7 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
      "Hanazono Mincho C" "Hanazono Mincho Ex" "Hanazono Mincho Ex A1"
      "Hanazono Mincho Ex A2" "Hanazono Mincho Ex B" "Hanazono Mincho Ex C"
      "Hanazono Mincho I")
-    ("Segoe UI Symbol" "Symbola")
+    ("Segoe UI Symbol" "Symbola" "Standard Symbols L")
     ("NanumGothic" "Arial Unicode MS" "MS Gothic" "Lucida Sans Unicode")))
 
 (defcustom cnfonts-ornaments
