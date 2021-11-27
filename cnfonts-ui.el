@@ -339,8 +339,8 @@ TODO: IGNORE-FACE."
           (widget-insert (funcall note) "\n")
         (widget-insert note "\n")))
     (widget-insert "
-             P:    表示当前字体包含在变量 `cnfonts-personal-fontnames' 中。
-             NA:   表示系统没有安装当前字体。\n\n")
+P:    表示当前字体包含在变量 `cnfonts-personal-fontnames' 中。
+NA:   表示系统没有安装当前字体。\n\n")
     (let ((fonts (nth index fontname-alist))
           widget1 widget2 widget3)
       (widget-insert "状态  当前字体")
