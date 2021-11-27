@@ -337,7 +337,7 @@ TODO: IGNORE-FACE."
     (when note
       (if (functionp note)
           (widget-insert (funcall note) "\n")
-      (widget-insert note "\n")))
+        (widget-insert note "\n")))
     (widget-insert "
              P:    表示当前字体包含在变量 `cnfonts-personal-fontnames' 中。
              NA:   表示系统没有安装当前字体。\n\n")
@@ -419,16 +419,16 @@ TODO: IGNORE-FACE."
         (insert-file-contents file)
         (goto-char (point-min))
         (when (re-search-forward "^;;; Commentary:$" nil t)
-             (setq begin (line-beginning-position 2))
-             (when (re-search-forward "^;;; Code:$")
-               (setq end (line-beginning-position))))
-     (when (and begin end)
-       (setq string (replace-regexp-in-string
-                     ":README:" ""
-                     (replace-regexp-in-string
-                      "^;; " ""
-                      (buffer-substring-no-properties begin end)))))))
-  (widget-insert (or string "")))
+          (setq begin (line-beginning-position 2))
+          (when (re-search-forward "^;;; Code:$")
+            (setq end (line-beginning-position))))
+        (when (and begin end)
+          (setq string (replace-regexp-in-string
+                        ":README:" ""
+                        (replace-regexp-in-string
+                         "^;; " ""
+                         (buffer-substring-no-properties begin end)))))))
+    (widget-insert (or string "")))
   (cnfonts-ui--create-tab-stop-point))
 
 (cnfonts-ui-create-page other-features-page
