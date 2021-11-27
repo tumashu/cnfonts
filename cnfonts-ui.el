@@ -299,8 +299,14 @@ TODO: IGNORE-FACE."
     (cnfonts-ui--create-align-line 0 "ASCII   " fontsize-list "| More haste, less speed. |")
     (cnfonts-ui--create-align-line 1 "CJKV    " fontsize-list "| 为天地立心，为生民立命；|")
     (cnfonts-ui--create-align-line 2 "EXT-B   " fontsize-list "| 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀。|")
-    (cnfonts-ui--create-align-line 3 "Symbol  " fontsize-list "> °±≥∝∂•∂°±≥∝∂•∂")
-    (cnfonts-ui--create-align-line 4 "Ornament" fontsize-list "> ❶➓Ⓐ⓾⊕")
+    (cnfonts-ui--create-align-line 3 "Symbol  " fontsize-list "> °±≥∝∂•∂°±≥∝∂•∂ℜ℘⊗⊕")
+    (cnfonts-ui--create-align-line 4 "Ornament" fontsize-list
+                                   (concat "> "
+                                           (mapconcat (lambda (x)
+                                                        (when (ignore-errors (consp x))
+                                                          (concat (char-to-string (car x))
+                                                                  (char-to-string (cdr x)))))
+                                                      cnfonts-ornaments "")))
 
     (widget-insert "\n")
 
@@ -333,8 +339,8 @@ TODO: IGNORE-FACE."
           (widget-insert (funcall note) "\n")
       (widget-insert note "\n")))
     (widget-insert "
-P:    表示当前字体包含在变量 `cnfonts-personal-fontnames' 中。
-NA:   表示系统没有安装当前字体。\n\n")
+             P:    表示当前字体包含在变量 `cnfonts-personal-fontnames' 中。
+             NA:   表示系统没有安装当前字体。\n\n")
     (let ((fonts (nth index fontname-alist))
           widget1 widget2 widget3)
       (widget-insert "状态  当前字体")
@@ -368,7 +374,7 @@ NA:   表示系统没有安装当前字体。\n\n")
         (widget-insert "\n" ))
       (when (cnfonts--upgrade-profile-need-p)
         (widget-insert "
-注2: profile 的格式已经更新，用户可以点击 ")
+             注2: profile 的格式已经更新，用户可以点击 ")
         (widget-create 'push-button
                        :tag "[ 这里 ]"
                        :tab-stop-point t
@@ -381,7 +387,7 @@ NA:   表示系统没有安装当前字体。\n\n")
                                   (cnfonts-set-font-with-saved-fontsize)
                                   (cnfonts-ui-restart)))
         (widget-insert " 强制
-     *重置* 当前 profile。")))))
+             *重置* 当前 profile。")))))
 
 (cnfonts-ui-create-page english-fonts-page
   (cnfonts-ui--create-fonts-page 'english-fonts-page))
@@ -413,16 +419,16 @@ NA:   表示系统没有安装当前字体。\n\n")
         (insert-file-contents file)
         (goto-char (point-min))
         (when (re-search-forward "^;;; Commentary:$" nil t)
-          (setq begin (line-beginning-position 2))
-          (when (re-search-forward "^;;; Code:$")
-            (setq end (line-beginning-position))))
-        (when (and begin end)
-          (setq string (replace-regexp-in-string
-                        ":README:" ""
-                        (replace-regexp-in-string
-                         "^;; " ""
-                         (buffer-substring-no-properties begin end)))))))
-    (widget-insert (or string "")))
+             (setq begin (line-beginning-position 2))
+             (when (re-search-forward "^;;; Code:$")
+               (setq end (line-beginning-position))))
+     (when (and begin end)
+       (setq string (replace-regexp-in-string
+                     ":README:" ""
+                     (replace-regexp-in-string
+                      "^;; " ""
+                      (buffer-substring-no-properties begin end)))))))
+  (widget-insert (or string "")))
   (cnfonts-ui--create-tab-stop-point))
 
 (cnfonts-ui-create-page other-features-page
