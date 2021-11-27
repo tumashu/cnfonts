@@ -320,7 +320,8 @@ It record the current profile and profile fontsize."
 `post-command-hook' 中添加了一个命令, 所以会一些命令的性能产生少
 许影响。
 
-另外，这个选项要求 emacs 版本不小于 29.")
+另外，这个选项要求 emacs 版本不小于 29."
+  :type 'sexp)
 
 (defcustom cnfonts-set-font-finish-hook nil
   "A hook, by which user can set additional fonts."
@@ -425,7 +426,8 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
    '(#x2295 . #x22a1)
    ;; spacemacs new version lighter
    '(#x2190 . #x2200))
-  "字符区间组成的列表，emacs 社区配置来美化和点缀。")
+  "字符区间组成的列表，emacs 社区配置来美化和点缀。"
+  :type 'sexp)
 
 (defconst cnfonts--profile-comment-1 "
 ;;; `cnfonts--custom-set-fontsnames' 的结构与 `cnfonts--fontnames-fallback' 相同。")
@@ -709,8 +711,6 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
          (english-main-short-fontname (nth 0 valid-short-fontnames))
          (chinese-main-short-fontname (nth 1 valid-short-fontnames))
          (chinese-extra-short-fontname (nth 2 valid-short-fontnames))
-         (symbol-short-fontname (nth 3 valid-short-fontnames))
-         (ornament-short-fontname (nth 4 valid-short-fontnames))
 
          (english-main-fontsize (cnfonts--float (nth 0 fontsizes-list)))
          (chinese-main-fontsize (cnfonts--float (nth 1 fontsizes-list)))
@@ -806,9 +806,6 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
     ;; 设置 symbol 字体。
     (when (fontp symbol-fontspec)
       (set-fontset-font "fontset-default" 'symbol symbol-fontspec nil 'prepend))
-
-    ;; (when (fontp chinese-main-fontset)
-    ;;   (set-fontset-font t 'symbol chinese-symbol-fontspec nil 'append))
 
     ;; 设置 fallback 字体，用于显示不常用的字符。
     (when (fontp chinese-extra-fontspec)
