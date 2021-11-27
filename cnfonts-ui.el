@@ -55,6 +55,20 @@
 支持某个符号时，才会使用这里列出的符号字体，混用符号字体有时候很
 难做到完全对齐。"
      :button-name "符号")
+    (ornament-fonts-page
+     :index 4
+     :keybinding "d"
+     :note (lambda ()
+             (format "
+某些 Emacs 社区配置（比如：spacemacs）使用某些特殊字符或者符号做
+为装饰或者点缀，这个页面用于设置这些特殊字符的字体。
+比如: %S"
+                     (mapconcat (lambda (x)
+                                  (when (ignore-errors (consp x))
+                                    (concat (char-to-string (car x))
+                                            (char-to-string (cdr x)))))
+                                cnfonts-ornaments "")))
+     :button-name "点缀")
     (align-page
      :align-page t
      :keybinding "1"
@@ -286,6 +300,7 @@ TODO: IGNORE-FACE."
     (cnfonts-ui--create-align-line 1 "CJKV    " fontsize-list "| 为天地立心，为生民立命；|")
     (cnfonts-ui--create-align-line 2 "EXT-B   " fontsize-list "| 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀。|")
     (cnfonts-ui--create-align-line 3 "Symbol  " fontsize-list "| ≤∞ƒ♣♦♥↔←→°±≥∝∂•÷≠≡Σϕαβ. |")
+    (cnfonts-ui--create-align-line 4 "Ornament" fontsize-list "| UI目前还不支持装饰字体。|")
 
     (widget-insert "\n")
 
@@ -314,7 +329,9 @@ TODO: IGNORE-FACE."
     (widget-insert "\n")
     (cnfonts-ui--create-warning-board)
     (when note
-      (widget-insert note "\n"))
+      (if (functionp note)
+          (widget-insert (funcall note) "\n")
+      (widget-insert note "\n")))
     (widget-insert "
 P:    表示当前字体包含在变量 `cnfonts-personal-fontnames' 中。
 NA:   表示系统没有安装当前字体。\n\n")
@@ -377,6 +394,9 @@ NA:   表示系统没有安装当前字体。\n\n")
 
 (cnfonts-ui-create-page symbol-fonts-page
   (cnfonts-ui--create-fonts-page 'symbol-fonts-page))
+
+(cnfonts-ui-create-page ornament-fonts-page
+  (cnfonts-ui--create-fonts-page 'ornament-fonts-page))
 
 (cnfonts-ui-create-page align-page
   (cnfonts-ui--create-align-page 'align-page))

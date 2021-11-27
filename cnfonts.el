@@ -73,8 +73,6 @@
 ;;    (require 'cnfonts)
 ;;    ;; 让 cnfonts 随着 Emacs 自动生效。
 ;;    ;; (cnfonts-enable)
-;;    ;; 让 spacemacs mode-line 中的 Unicode 图标正确显示。
-;;    ;; (cnfonts-set-spacemacs-fallback-fonts)
 ;;    #+END_EXAMPLE
 
 ;; ** 配置使用
@@ -447,21 +445,21 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
 (defvar cnfonts--read-config-file-p nil)
 
 (defconst cnfonts--fontsizes-fallback
-  '((9    10.5 10.5 9)
-    (10   12.0 12.0 10)
-    (11.5 13.5 13.5 11.5)
-    (12.5 15.0 15.0 12.5)
-    (14   16.5 16.5 14)
-    (15   18.0 18.0 15)
-    (16   19.5 19.5 16)
-    (18   21.0 21.0 18)
-    (20   24.0 24.0 20)
-    (22   25.5 25.5 22)
-    (24   28.5 28.5 24)
-    (26   31.5 31.5 26)
-    (28   33.0 33.0 28)
-    (30   36.0 36.0 30)
-    (32   39.0 39.0 32))
+  '((9    10.5  10.5  9    9   )
+    (10   12.0  12.0  10   10  )
+    (11.5 13.5  13.5  11.5 11.5)
+    (12.5 15.0  15.0  12.5 12.5)
+    (14   16.5  16.5  14   14.5)
+    (15   18.0  18.0  15   15  )
+    (16   19.5  19.5  16   16  )
+    (18   21.0  21.0  18   18  )
+    (20   24.0  24.0  20   20  )
+    (22   25.5  25.5  22   22  )
+    (24   28.5  28.5  24   24  )
+    (26   31.5  31.5  26   26  )
+    (28   33.0  33.0  28   28  )
+    (30   36.0  36.0  30   30  )
+    (32   39.0  39.0  32   32  ))
   "一个列表，每一个元素都有类似结构：(英文字号 中文字号 EXT-B字体字号 Symbol字体字号).")
 
 (defcustom cnfonts-personal-fontnames nil
@@ -507,7 +505,20 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
      "Hanazono Mincho C" "Hanazono Mincho Ex" "Hanazono Mincho Ex A1"
      "Hanazono Mincho Ex A2" "Hanazono Mincho Ex B" "Hanazono Mincho Ex C"
      "Hanazono Mincho I")
-    ("Segoe UI Symbol" "Symbola")))
+    ("Segoe UI Symbol" "Symbola")
+    ("NanumGothic" "Arial Unicode MS" "MS Gothic" "Lucida Sans Unicode")))
+
+(defcustom cnfonts-ornaments
+  (list
+   ;; spacemacs window numbers
+   '(#x2776 . #x2793)
+   ;; spacemacs mode-line circled letters
+   '(#x24b6 . #x24fe)
+   ;; spacemacs mode-line additional characters
+   '(#x2295 . #x22a1)
+   ;; spacemacs new version lighter
+   '(#x2190 . #x2200))
+  "字符区间组成的列表，emacs 社区配置来美化和点缀。")
 
 (defconst cnfonts--profile-comment-1 "
 ;;; `cnfonts--custom-set-fontsnames' 的结构与 `cnfonts--fontnames-fallback' 相同。")
@@ -650,9 +661,9 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 
                         (mapcar
                          (lambda (fontsizes)
-                           ;; 添加 symbol 字体支持之后，做的兼容。
-                           (if (< (length fontsizes) 4)
-                               `(,@fontsizes ,(car fontsizes))
+                           ;; 添加 symbol 和点缀字符的字体支持之后，做的兼容。
+                           (if (< (length fontsizes) 5)
+                               `(,@fontsizes ,(car fontsizes) ,(car fontsizes))
                              fontsizes))
                          (or cnfonts--custom-set-fontsizes
                              cnfonts--fontsizes-fallback)))))
@@ -679,7 +690,10 @@ When PROFILE-NAME is non-nil, save to this profile instead."
             (,@(nth 2 list1) ,@(nth 2 list2) ,@(nth 2 list3))
             (,@(ignore-errors (nth 3 list1))
              ,@(ignore-errors (nth 3 list2))
-             ,@(nth 3 list3)))))
+             ,@(nth 3 list3))
+            (,@(ignore-errors (nth 4 list1))
+             ,@(ignore-errors (nth 4 list2))
+             ,@(nth 4 list3)))))
 
 (defun cnfonts--font-exists-p (font)
   "Test FONT exist or not."
@@ -783,16 +797,19 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
          (chinese-main-fontname (nth 1 valid-fonts))
          (chinese-extra-fontname (nth 2 valid-fonts))
          (symbol-fontname (nth 3 valid-fonts))
+         (ornament-fontname (nth 4 valid-fonts))
 
          (english-main-short-fontname (nth 0 valid-short-fontnames))
          (chinese-main-short-fontname (nth 1 valid-short-fontnames))
          (chinese-extra-short-fontname (nth 2 valid-short-fontnames))
          (symbol-short-fontname (nth 3 valid-short-fontnames))
+         (ornament-short-fontname (nth 4 valid-short-fontnames))
 
          (english-main-fontsize (cnfonts--float (nth 0 fontsizes-list)))
          (chinese-main-fontsize (cnfonts--float (nth 1 fontsizes-list)))
          (chinese-extra-fontsize (cnfonts--float (nth 2 fontsizes-list)))
          (symbol-fontsize (cnfonts--float (nth 3 fontsizes-list)))
+         (ornament-fontsize (cnfonts--float (nth 4 fontsizes-list)))
 
          (english-main-fontspec
           (when english-main-fontname
@@ -824,6 +841,13 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
                        :size symbol-fontsize
                        :weight 'normal
                        :slant 'normal)))
+         (ornament-fontspec
+          (when ornament-fontname
+            (font-spec :name ornament-fontname
+                       :size ornament-fontsize
+                       :weight 'normal
+                       :slant 'normal)))
+
          (chinese-main-fontspec
           (when chinese-main-fontname
             (font-spec :name chinese-main-fontname
@@ -874,7 +898,6 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
 
     ;; 设置 symbol 字体。
     (when (fontp symbol-fontspec)
-      (print symbol-fontspec)
       (set-fontset-font "fontset-default" 'symbol symbol-fontspec nil 'prepend))
 
     ;; (when (fontp chinese-main-fontset)
@@ -883,6 +906,11 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
     ;; 设置 fallback 字体，用于显示不常用的字符。
     (when (fontp chinese-extra-fontspec)
       (set-fontset-font "fontset-default" nil chinese-extra-fontspec nil 'prepend))
+
+    ;; 设置点缀字符的字体。
+    (when (fontp ornament-fontspec)
+      (dolist (charset cnfonts-ornaments)
+        (set-fontset-font "fontset-default" charset ornament-fontspec nil 'prepend)))
 
     (setq cnfonts--minibuffer-echo-string
           (format "[%s]: 英文字体: %s-%.1f，中文字体: %s, EXTB字体：%s"
@@ -1118,58 +1146,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   (remove-hook 'window-setup-hook #'cnfonts-set-font-first-time)
   (remove-hook 'post-command-hook #'cnfonts-use-display-property))
 
-;; Steal code from `spacemacs/set-default-font'
-(defun cnfonts--set-spacemacs-fallback-fonts (fontsizes-list)
-  "Spacmacs 支持.
-FONTSIZES-LIST."
-  (let (fallback-font-name fallback-font-name2)
-    (when (featurep 'spacemacs)
-      (pcase system-type
-        (`gnu/linux
-         (setq fallback-font-name "NanumGothic")
-         (setq fallback-font-name2 "NanumGothic"))
-        (`darwin
-         (setq fallback-font-name "Arial Unicode MS")
-         (setq fallback-font-name2 "Arial Unicode MS"))
-        (`windows-nt
-         (setq fallback-font-name "MS Gothic")
-         (setq fallback-font-name2 "Lucida Sans Unicode"))
-        (`cygwin
-         (setq fallback-font-name "MS Gothic")
-         (setq fallback-font-name2 "Lucida Sans Unicode"))
-        (_
-         (setq fallback-font-name nil)
-         (setq fallback-font-name2 nil)))
-      (when (and fallback-font-name fallback-font-name2)
-        (let ((fallback-spec (apply 'font-spec
-                                    :name fallback-font-name
-                                    :size (car fontsizes-list)))
-              (fallback-spec2 (apply 'font-spec
-                                     :name fallback-font-name2
-                                     :size (car fontsizes-list))))
-          ;; window numbers
-          (set-fontset-font "fontset-default"
-                            '(#x2776 . #x2793) fallback-spec nil 'prepend)
-          ;; mode-line circled letters
-          (set-fontset-font "fontset-default"
-                            '(#x24b6 . #x24fe) fallback-spec nil 'prepend)
-          ;; mode-line additional characters
-          (set-fontset-font "fontset-default"
-                            '(#x2295 . #x22a1) fallback-spec nil 'prepend)
-          ;; new version lighter
-          (set-fontset-font "fontset-default"
-                            '(#x2190 . #x2200) fallback-spec2 nil 'prepend))))))
-
-;;;###autoload
-(defun cnfonts-set-spacemacs-fallback-fonts ()
-  "显示 Spacemace mode-line 上面有一些 Unicode 字符.
-这些字符需要专门的字体来显示，spacemacs 将这些字体的名字内置在
-`spacemacs/set-default-font' 的代码中。运行这个函数后，cnfonts
-将使用同样的字体来显示这些 Unicode 字符。"
-  (interactive)
-  (add-hook 'cnfonts-set-font-finish-hook
-            #'cnfonts--set-spacemacs-fallback-fonts)
-  (cnfonts-message nil "[cnfonts]: 激活 spacemacs fallback 字体，用于显示 mode-line 中的漂亮图标。"))
+(define-obsolete-function-alias 'cnfonts-set-spacemacs-fallback-fonts 'ignore "1.0")
 
 ;; * Footer
 (provide 'cnfonts)
