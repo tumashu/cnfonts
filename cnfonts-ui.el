@@ -430,39 +430,11 @@ NA:   表示系统没有安装当前字体。\n\n")
   (cnfonts-ui--create-navigation)
   (widget-insert "
 
-** 根据 cnfonts 的设置，自动生成一个 elisp 字体配置片断
+** 注意事项
 
-如果用户觉得 cnfonts *太厚重*, 可以将下面一段 elisp 粘贴到
-~/.emacs 文件，然后保存，就不需要启动 cnfonts 来配置字体了。
-
-注意事项：
-1. 下面的设置使用的字号是 `cnfonts-increase-fontsize'
-   或者 `cnfonts-decrease-fontsize' 两个命令设置的默认使用字号。
-2, 如果用户使用 emacs daemon, 那么下面的设置可能需要调整，
-   比如包装成一个函数放到 after-make-frame-functions 和
-   window-setup-hook 中。
-
--------
-")
-  (setq cnfonts-ui--widgets-elisp-snippet
-        (widget-create 'push-button
-                       :value (cnfonts--return-fonts-configure-string)
-                       :tab-stop-point t
-                       :button-face-get 'ignore
-                       :mouse-face-get 'ignore))
-  (widget-insert "\n")
-  (widget-create 'push-button
-                 :tag "[ 重新生成 ]"
-                 :tab-stop-point t
-                 :button-face-get 'ignore
-                 :mouse-face-get 'ignore
-                 :action (lambda (_widget _event)
-                           (widget-value-set
-                            cnfonts-ui--widgets-elisp-snippet
-                            (cnfonts--return-fonts-configure-string))))
-  (widget-insert "
-------------------------------------------------------\n")
-  (cnfonts-ui--create-tab-stop-point))
+生成 elisp 字体配置片段的功能去掉了，因为 cnfonts 内部机制现在越
+来越复杂，简单生成的 elisp 字体设置往往很难达到对齐效果，调试特别
+麻烦，不如去掉。" ))
 
 ;; key-page *must* create at the end, make sure other page's
 ;; keybinding are defined.
