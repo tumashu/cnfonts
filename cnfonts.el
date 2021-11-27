@@ -967,7 +967,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
                             (let ((str (buffer-substring n1 (+ n1 1))))
                               (when (and str
                                          (stringp str)
-                                         (string-match-p "\\cc" str)
+                                         (= (string-width str) 2)
                                          (not (equal (get-display-property n1 'min-width) '(2.0)))
                                          (or (eq func t)
                                              (and (functionp func)
