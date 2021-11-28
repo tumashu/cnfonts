@@ -127,7 +127,6 @@ Emacs 25.2 以后，当 default font 有某个字符的时候，优先使用这�
 (declare-function cnfonts--get-current-profile "cnfonts" (&optional return-profile-name))
 (declare-function cnfonts--get-current-fontsizes "cnfonts" ())
 (declare-function cnfonts-set-font-with-saved-fontsize "cnfonts" (&optional frame))
-(declare-function cnfonts--return-fonts-configure-string "cnfonts" ())
 (declare-function cnfonts-message "cnfonts" (force-show &rest args))
 (declare-function cnfonts-decrease-fontsize "cnfonts" ())
 (declare-function cnfonts-increase-fontsize "cnfonts" ())
