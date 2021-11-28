@@ -382,7 +382,8 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
   :type 'integer)
 
 (defconst cnfonts--fontnames-fallback
-  '(("Monaco" "Consolas" "DejaVu Sans Mono" "Droid Sans Mono" "PragmataPro"
+  '(;; 英文字体
+    ("Monaco" "Consolas" "DejaVu Sans Mono" "Droid Sans Mono" "PragmataPro"
      "Courier" "Courier New" "Ubuntu Mono" "Liberation Mono" "MonacoB" "MonacoB2"
      "MonacoBSemi" "Droid Sans Mono Pro" "Inconsolata" "Source Code Pro" "Lucida Console"
      "Envy Code R" "Andale Mono" "Lucida Sans Typewriter" "monoOne" "Lucida Typewriter"
@@ -396,6 +397,7 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
      "Noto Sans Mono CJK" "InputMonoCompressed" "Hasklig" "Terminus" "FantasqueSansMono"
      "AnonymousPro" "3270" "Arimo" "D2Coding" "Inconsolata-g" "ProFont for Powerline"
      "Meslo" "Meslo Dotted" "Noto Mono" "Symbol Neu" "Tinos" "Space Mono" "SFMono Nerd Font")
+    ;; 中文字体
     ("微软雅黑" "Noto Sans S Chinese Regular" "Microsoft Yahei" "Microsoft YaHei Mono"
      "Microsoft_Yahei" "Ubuntu Mono" "文泉驿等宽微米黑" "文泉驿等宽正黑" "黑体" "Source Han Sans SC"
      "Source Han Serif SC" "思源黑体 CN Regular" "思源黑体 CN Medium" "思源黑体 CN Normal" "思源宋体 CN"
@@ -406,12 +408,15 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
      "STXingkai" "STXinwei" "方正姚体" "方正舒体" "方正粗圆_GBK" "华文仿宋" "华文中宋"
      "华文行楷" "华文彩云" "华文仿宋" "华文中宋" "华文隶书" "华文行楷" "华文细黑" "华文琥珀"
      "华文楷体" "华文新魏" "微软雅黑")
+    ;; EXT-B 字体
     ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB" "PMingLiU-ExtB" "MingLiU_HKSCS-ExtB"
      "Hanazono Mincho" "Hanazono Mincho A" "Hanazono Mincho B"
      "Hanazono Mincho C" "Hanazono Mincho Ex" "Hanazono Mincho Ex A1"
      "Hanazono Mincho Ex A2" "Hanazono Mincho Ex B" "Hanazono Mincho Ex C"
      "Hanazono Mincho I")
+    ;; Symbol 字符字体
     ("Segoe UI Symbol" "Symbola" "Standard Symbols L")
+    ;; Emacs 社区配置中，用于装饰的字符使用的字体
     ("NanumGothic" "Arial Unicode MS" "MS Gothic" "Lucida Sans Unicode")))
 
 (defcustom cnfonts-ornaments
