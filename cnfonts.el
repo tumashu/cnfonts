@@ -859,7 +859,6 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
     (redisplay t)))
 
 ;;;###autoload
-
 (defun cnfonts-reset-fontsize ()
   "使用 `cnfonts-default-fontsize' 重置字号."
   (interactive)
