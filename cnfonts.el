@@ -592,17 +592,13 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 
 (defun cnfonts--merge-fontname-list (list1 list2 &optional list3)
   "Merge fontname lists  LIST1, LIST2 and LIST3 into one."
-  (mapcar #'(lambda (lst)
-              (cl-remove-duplicates lst :from-end t :test 'equal))
-          `((,@(nth 0 list1) ,@(nth 0 list2) ,@(nth 0 list3))
-            (,@(nth 1 list1) ,@(nth 1 list2) ,@(nth 1 list3))
-            (,@(nth 2 list1) ,@(nth 2 list2) ,@(nth 2 list3))
-            (,@(ignore-errors (nth 3 list1))
-             ,@(ignore-errors (nth 3 list2))
-             ,@(nth 3 list3))
-            (,@(ignore-errors (nth 4 list1))
-             ,@(ignore-errors (nth 4 list2))
-             ,@(nth 4 list3)))))
+  (mapcar (lambda (i)
+            (let ((x1 (ignore-errors (nth i list1)))
+                  (x2 (ignore-errors (nth i list2)))
+                  (x3 (ignore-errors (nth i list3))))
+              (delete-dups
+               (remove nil `(,@x1 ,@x2 ,@x3)))))
+          '(0 1 2 3 4)))
 
 (defun cnfonts--font-exists-p (font)
   "Test FONT exist or not."
