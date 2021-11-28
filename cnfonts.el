@@ -345,11 +345,8 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
 (defvar cnfonts--current-profile-cache nil
   "这个变量用于保存 profile 设置的缓存.")
 
-(defvar cnfonts--current-profile-name nil
-  "Current profile name used by cnfonts.")
-
-(defvar cnfonts--profiles-fontsize nil
-  "用来保存每一个 profile 使用 `cnfonts--fontsizes-fallback' 中第几个字号组合.")
+(defvar cnfonts--config-info nil
+  "The cofonts config info read from config file.")
 
 (defvar cnfonts--read-config-file-p nil)
 
@@ -480,10 +477,11 @@ ARGS is the same as message's ARGS."
 (defun cnfonts--get-current-profile (&optional return-profile-name)
   "Get current profile file.
 When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
-  (let ((profile-name
-         (if (member cnfonts--current-profile-name cnfonts-profiles)
-             cnfonts--current-profile-name
-           (car cnfonts-profiles))))
+  (let* ((profile-name (car (car cnfonts--config-info)))
+         (profile-name
+          (if (member profile-name cnfonts-profiles)
+              profile-name
+            (car cnfonts-profiles))))
     (if return-profile-name
         profile-name
       (cnfonts--get-profile profile-name))))
@@ -509,14 +507,15 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
 
 (defun cnfonts--save-config-file (profile-name &optional fontsize)
   "Save PROFILE-NAME and FONTSIZE into config file."
-  (when fontsize
-    (if (assoc profile-name cnfonts--profiles-fontsize)
-        (setf (cdr (assoc profile-name cnfonts--profiles-fontsize)) fontsize)
-      (push `(,profile-name . ,fontsize) cnfonts--profiles-fontsize)))
+  (let ((fontsize (or fontsize (cdr (assoc profile-name cnfonts--config-info)))))
+    (push (cons profile-name fontsize) cnfonts--config-info))
   (with-temp-file (cnfonts--return-config-file-path)
-    (when cnfonts-save-current-profile
-      (prin1 (list cnfonts--current-profile-name) (current-buffer)))
-    (prin1 cnfonts--profiles-fontsize (current-buffer))))
+    (prin1 (cl-remove-duplicates
+            cnfonts--config-info
+            :test (lambda (x y)
+                    (equal (car x) (car y)))
+            :from-end t)
+           (current-buffer))))
 
 (defun cnfonts--read-config-file ()
   "Read cnfonts's config file."
@@ -526,14 +525,22 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
       (if (file-readable-p save-file)
           (with-temp-buffer
             (insert-file-contents save-file)
-            (ignore-errors
-              (when cnfonts-save-current-profile
-                (setq cnfonts--current-profile-name (car (read (current-buffer)))))
-              (setq cnfonts--profiles-fontsize (read (current-buffer)))))))))
+            ;; NOTE: 兼容性代码，以前的时候，cnfonts config 文件类似下面的结构：
+            ;;
+            ;;   ("profile1")(("profile1" . 15) ("profile2" .15))
+            ;;
+            ;; 而且 ("profile1") 有可能不存在。
+            (let* ((x (ignore-errors (read (current-buffer))))
+                   (y (ignore-errors (read (current-buffer))))
+                   (z (assoc (car x) y)))
+              (if y
+                  (setq cnfonts--config-info
+                        `(,z ,@(remove z y)))
+                (setq cnfonts--config-info x))))))))
 
 (defun cnfonts--get-profile-fontsize (profile-name)
   "Get the font size info from profile which name is PROFILE-NAME."
-  (let ((fontsize (cdr (assoc profile-name cnfonts--profiles-fontsize))))
+  (let ((fontsize (cdr (assoc profile-name cnfonts--config-info))))
     (min (max (or fontsize 12.5) 9) 32)))
 
 (defun cnfonts--save-profile (fontnames fontsizes &optional profile-name)
@@ -885,8 +892,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
 (defun cnfonts--select-profile (profile-name)
   "选择 PROFILE-NAME."
   (if (member profile-name cnfonts-profiles)
-      (progn (setq cnfonts--current-profile-name profile-name)
-             (cnfonts--save-config-file profile-name)
+      (progn (cnfonts--save-config-file profile-name)
              (cnfonts-set-font-with-saved-fontsize))
     (cnfonts-message t "%s doesn't exist." profile-name)))
 
@@ -908,7 +914,6 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
           (or (cadr (member current-profile profiles))
               (car profiles)))
     (when next-profile
-      (setq cnfonts--current-profile-name next-profile)
       (cnfonts--save-config-file next-profile))
     (when (display-graphic-p)
       (cnfonts-set-font-with-saved-fontsize))
