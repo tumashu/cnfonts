@@ -427,12 +427,6 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
   "字符区间组成的列表，emacs 社区配置来美化和点缀。"
   :type 'sexp)
 
-(defconst cnfonts--profile-comment-1 "
-;;; `cnfonts--custom-set-fontsnames' 的结构与 `cnfonts--fontnames-fallback' 相同。")
-
-(defconst cnfonts--profile-comment-2 "
-;;; `cnfonts--custom-set-fontsizes' 的结构与 `cnfonts--fontsizes-fallback' 相同。")
-
 (defvar cnfonts--minibuffer-echo-string nil)
 
 (defvar cnfonts--custom-set-fontnames nil
@@ -547,12 +541,10 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
   "Save FONTNAMES and FONTSIZES to current profile.
 When PROFILE-NAME is non-nil, save to this profile instead."
   (with-temp-buffer
-    (erase-buffer)
-    (insert (replace-regexp-in-string
-             "^ *\n" ""
-             cnfonts--profile-comment-1))
+    (insert ";; `cnfonts--custom-set-fontsnames' 结构与 `cnfonts--fontnames-fallback' 相同。")
     (cnfonts--dump-variable 'cnfonts--custom-set-fontnames fontnames)
-    (insert cnfonts--profile-comment-2)
+    (insert "\n")
+    (insert ";; `cnfonts--custom-set-fontsizes' 结构与 `cnfonts--fontsizes-fallback' 相同。")
     (cnfonts--dump-variable 'cnfonts--custom-set-fontsizes fontsizes)
     (write-file (cnfonts--get-profile
                  (or profile-name (cnfonts--get-current-profile t))))))
