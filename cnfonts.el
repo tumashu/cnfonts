@@ -489,8 +489,8 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
         (t (insert (format "\n(setq %S\n      '(" variable))
            (dolist (e value)
              (insert (concat "\n        ("
-                             (mapconcat #'(lambda (x)
-                                            (format "%-4S" x)) e  " ") ")")))
+                             (mapconcat (lambda (x)
+                                          (format "%-4S" x)) e  " ") ")")))
            (insert "\n        ))\n"))))
 
 (defun cnfonts--return-config-file-path ()
@@ -616,12 +616,12 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 (defun cnfonts--get-valid-fonts (&optional prefer-shortname)
   "Get a list of valid fonts.
 If PREFER-SHORTNAME is non-nil, return shortname list instead."
-  (mapcar #'(lambda (x)
-              (let ((font (cl-find-if #'cnfonts--font-exists-p x)))
-                (when font
-                  (if prefer-shortname
-                      font
-                    (or (cnfonts--get-xlfd font) font)))))
+  (mapcar (lambda (x)
+            (let ((font (cl-find-if #'cnfonts--font-exists-p x)))
+              (when font
+                (if prefer-shortname
+                    font
+                  (or (cnfonts--get-xlfd font) font)))))
           (car (cnfonts--read-profile))))
 
 (defun cnfonts--get-xlfd (fontname &optional uncheck)
