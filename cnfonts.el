@@ -312,7 +312,8 @@ It record the current profile and profile fontsize."
     (markdown-mode . markdown-table-at-point-p)
     (org-agenda-mode . t)
     (gnus-summary-mode . t)
-    (cnfonts-ui-mode . t))
+    (cnfonts-ui-mode . t)
+    (emacs-lisp-mode . t))
   "设置是否使用 display property 来实现中英文对齐, 比如 min-width。
 
 这个选项设置之后，中英文对齐的操作余地变大，理论上只要中文字体的
