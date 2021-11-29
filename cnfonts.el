@@ -66,7 +66,7 @@
 ;;    #+BEGIN_EXAMPLE
 ;;    (require 'cnfonts)
 ;;    ;; 让 cnfonts 随着 Emacs 自动生效。
-;;    (cnfonts-enable)
+;;    (cnfonts-mode 1)
 ;;    #+END_EXAMPLE
 
 ;; ** 配置使用
@@ -154,7 +154,7 @@
 
 ;; *** 让 cnfonts 随着 Emacs 自动启动
 
-;; `cnfonts-enable' 命令可以让 cnfonts 随着 Emacs 自动启动，这个命令将
+;; `cnfonts-mode' 命令可以让 cnfonts 随着 Emacs 自动启动，这个命令将
 ;; `cnfonts-set-font-with-saved-fontsize' 添加到下面两个 hook:
 
 ;; 1. `after-make-frame-functions'
@@ -422,8 +422,6 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
   "*专用* 变量，只用与 cnfonts 的 profile 文件.
 这些 profile 文件保存在 `cnfonts-directory' 对应的目录中。在其它地方
 设置这个变量没有任何用处！")
-
-(defvar cnfonts--enabled-p nil)
 
 (defun cnfonts-message (force-show &rest args)
   "Cnfonts's message function.
@@ -929,20 +927,28 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
     (cnfonts-set-font-with-saved-fontsize frame)))
 
 ;;;###autoload
+(define-minor-mode cnfonts-mode
+  "cnfonts mode."
+  :global t
+  (cond
+   (cnfonts-mode
+    (add-hook 'after-make-frame-functions #'cnfonts-set-font-first-time)
+    (add-hook 'window-setup-hook #'cnfonts-set-font-first-time))
+   (t
+    (remove-hook 'after-make-frame-functions #'cnfonts-set-font-first-time)
+    (remove-hook 'window-setup-hook #'cnfonts-set-font-first-time))))
+
+;;;###autoload
 (defun cnfonts-enable ()
-  "运行这个函数，可以让 Emacs 启动的时候就激活 cnfonts."
+  "启用 cnfonts, 建议使用 `cnfonts-mode'."
   (interactive)
-  (setq cnfonts--enabled-p t)
-  (add-hook 'after-make-frame-functions #'cnfonts-set-font-first-time)
-  (add-hook 'window-setup-hook #'cnfonts-set-font-first-time))
+  (cnfonts-mode 1))
 
 ;;;###autoload
 (defun cnfonts-disable ()
-  "清除与 cnfonts 相关的 hook 设定."
+  "警用 cnfonts, 建议使用 `cnfonts-mode'."
   (interactive)
-  (setq cnfonts--enabled-p nil)
-  (remove-hook 'after-make-frame-functions #'cnfonts-set-font-first-time)
-  (remove-hook 'window-setup-hook #'cnfonts-set-font-first-time))
+  (cnfonts-mode -1))
 
 (define-obsolete-function-alias 'cnfonts-set-spacemacs-fallback-fonts 'ignore "1.0")
 
