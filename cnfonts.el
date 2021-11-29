@@ -247,8 +247,6 @@
 
 ;; * 代码                                                                 :code:
 (require 'cl-lib)
-(require 'format-spec)
-(require 'thingatpt)
 (require 'cnfonts-ui)
 
 (defgroup cnfonts nil
