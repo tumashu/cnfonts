@@ -523,7 +523,7 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
 (defun cnfonts--get-profile-fontsize (profile-name)
   "Get the font size info from profile which name is PROFILE-NAME."
   (let ((fontsize (cdr (assoc profile-name cnfonts--config-info))))
-    (min (max (or fontsize 12.5) 9) 32)))
+    (min (max (or fontsize cnfonts-default-fontsize) 9) 32)))
 
 (defun cnfonts--save-profile (fontnames fontsizes &optional profile-name)
   "Save FONTNAMES and FONTSIZES to current profile.
