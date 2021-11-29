@@ -307,23 +307,6 @@ It record the current profile and profile fontsize."
 字体对齐功能失效，在大多数 linux 平台下这个功能都可以正常使用。"
   :type 'boolean)
 
-(defcustom cnfonts-use-display-property-alist
-  '((org-mode . org-at-table-p)
-    (markdown-mode . markdown-table-at-point-p)
-    (org-agenda-mode . t)
-    (gnus-summary-mode . t)
-    (cnfonts-ui-mode . t)
-    (emacs-lisp-mode . t))
-  "设置是否使用 display property 来实现中英文对齐, 比如 min-width。
-
-这个选项设置之后，中英文对齐的操作余地变大，理论上只要中文字体的
-宽度不超过英文字体宽度的两倍，就可以实现对齐，但由于在
-`post-command-hook' 中添加了一个命令, 所以会一些命令的性能产生少
-许影响。
-
-另外，这个选项要求 emacs 版本不小于 29."
-  :type 'sexp)
-
 (defcustom cnfonts-set-font-finish-hook nil
   "A hook, by which user can set additional fonts."
   :type 'hook)
@@ -940,50 +923,13 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   (let ((cnfonts-use-cache t))
     (cnfonts-set-font-with-saved-fontsize frame)))
 
-(defun cnfonts-use-display-property ()
-  "Add display property :min-width '(2.0) to all Chinese Char."
-  (interactive)
-  (ignore-errors
-    (unless (version< emacs-version "29.0.50")
-      (dolist (window (window-list))
-        (with-selected-window window
-          (let ((buffer (window-buffer window))
-                func)
-            (with-current-buffer buffer
-              (when (setq func (cdr (assq major-mode cnfonts-use-display-property-alist)))
-                (let* ((n1 (window-start window))
-                       (n2 (min (window-end window)
-                                (+ n1 (* (window-width)
-                                         (window-height)))))
-                       (inhibit-read-only t)
-                       (flag t))
-                  (save-excursion
-                    (with-silent-modifications
-                      (while flag
-                        (goto-char n1)
-                        (if (< n1 n2)
-                            (let ((str (buffer-substring n1 (+ n1 1))))
-                              (when (and str
-                                         (stringp str)
-                                         (= (string-width str) 2)
-                                         (not (equal (get-display-property n1 'min-width) '(2.0)))
-                                         (or (eq func t)
-                                             (and (functionp func)
-                                                  (funcall func))))
-                                (add-display-text-property n1 (+ n1 1) 'min-width (list 2.0))))
-                          (setq flag nil))
-                        (setq n1 (+ n1 1))))))))))))))
-
 ;;;###autoload
 (defun cnfonts-enable ()
   "运行这个函数，可以让 Emacs 启动的时候就激活 cnfonts."
   (interactive)
   (setq cnfonts--enabled-p t)
   (add-hook 'after-make-frame-functions #'cnfonts-set-font-first-time)
-  (add-hook 'window-setup-hook #'cnfonts-set-font-first-time)
-  (when (and cnfonts-use-display-property-alist
-             (not (version< emacs-version "29.0.50")))
-    (add-hook 'post-command-hook #'cnfonts-use-display-property)))
+  (add-hook 'window-setup-hook #'cnfonts-set-font-first-time))
 
 ;;;###autoload
 (defun cnfonts-disable ()
@@ -991,8 +937,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   (interactive)
   (setq cnfonts--enabled-p nil)
   (remove-hook 'after-make-frame-functions #'cnfonts-set-font-first-time)
-  (remove-hook 'window-setup-hook #'cnfonts-set-font-first-time)
-  (remove-hook 'post-command-hook #'cnfonts-use-display-property))
+  (remove-hook 'window-setup-hook #'cnfonts-set-font-first-time))
 
 (define-obsolete-function-alias 'cnfonts-set-spacemacs-fallback-fonts 'ignore "1.0")
 
