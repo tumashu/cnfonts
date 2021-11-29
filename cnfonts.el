@@ -350,7 +350,9 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
   :type '(choice (const :tag "None" nil)
                  (list (repeat :tag "English fonts" string)
                        (repeat :tag "Chinese fonts" string)
-                       (repeat :tag "Ext-B fonts" string))))
+                       (repeat :tag "Ext-B fonts" string)
+                       (repeat :tag "Symbol fonts" string)
+                       (repeat :tag "Fonts used for ornament chars " string))))
 
 (defcustom cnfonts-verbose t
   "设置为 t 时， cnfonts 将 message 较多信息."
