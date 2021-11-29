@@ -296,10 +296,6 @@ It record the current profile and profile fontsize."
   "是否禁用英文粗斜体."
   :type 'boolean)
 
-(defcustom cnfonts-save-current-profile t
-  "是否保存将当前 profile 的信息."
-  :type 'boolean)
-
 (defcustom cnfonts-use-face-font-rescale nil
   "是否通过设定 `face-font-rescale-alist' 来达到中英文对齐.
 
