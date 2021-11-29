@@ -247,7 +247,6 @@
 
 ;; * 代码                                                                 :code:
 (require 'cl-lib)
-(require 'cnfonts-ui)
 
 (defgroup cnfonts nil
   "Chinese fonts setup."
@@ -896,6 +895,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
     (cnfonts-message t "Current cnfonts profile is set to: \"%s\"" next-profile)))
 
 ;;;###autoload
+(declare-function cnfonts-ui "cnfonts-ui")
 (defun cnfonts-edit-profile ()
   "编辑当前 cnfonts profile."
   (interactive)
@@ -905,6 +905,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
       (unless (file-readable-p file)
         (cnfonts--save-profile cnfonts--fontnames-fallback
                                cnfonts--fontsizes-fallback))
+      (require 'cnfonts-ui)
       (cnfonts-ui))))
 
 ;;;###autoload

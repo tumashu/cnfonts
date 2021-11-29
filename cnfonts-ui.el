@@ -33,6 +33,7 @@
 ;; * 代码                                                                 :code:
 (require 'cl-lib)
 (require 'cus-edit)
+(require 'cnfonts)
 
 (defconst cnfonts-ui--pages
   '((english-fonts-page
@@ -112,25 +113,6 @@ Emacs 25.2 以后，当 default font 有某个字符的时候，优先使用这�
 (defvar cnfonts-ui--current-page nil)
 (defvar cnfonts-ui--widgets-navigation nil)
 (defvar cnfonts-ui--widgets-elisp-snippet nil)
-
-;; Deal with compile warn.
-(defvar cnfonts-personal-fontnames)
-(defvar cnfonts--enabled-p)
-(defvar cnfonts-verbose)
-
-(declare-function cnfonts--get-xlfd "cnfonts" (fontname &optional uncheck))
-(declare-function cnfonts--get-valid-fonts "cnfonts" (&optional prefer-shortname))
-(declare-function cnfonts--read-profile "cnfonts" ())
-(declare-function cnfonts--font-exists-p "cnfonts" (font))
-(declare-function cnfonts--save-profile "cnfonts" (fontnames fontsizes &optional profile-name))
-(declare-function cnfonts--set-font "cnfonts" (fontsizes-list))
-(declare-function cnfonts--get-current-profile "cnfonts" (&optional return-profile-name))
-(declare-function cnfonts--get-current-fontsizes "cnfonts" ())
-(declare-function cnfonts-set-font-with-saved-fontsize "cnfonts" (&optional frame))
-(declare-function cnfonts-message "cnfonts" (force-show &rest args))
-(declare-function cnfonts-decrease-fontsize "cnfonts" ())
-(declare-function cnfonts-increase-fontsize "cnfonts" ())
-(declare-function cnfonts--upgrade-profile-need-p "cnfonts" ())
 
 (defun cnfonts-ui--switch-to-page (page-name)
   "Switch to page which name is PAGE-NAME."
