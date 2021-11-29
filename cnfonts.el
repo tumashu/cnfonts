@@ -517,10 +517,17 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
             (let* ((x (ignore-errors (read (current-buffer))))
                    (y (ignore-errors (read (current-buffer))))
                    (z (assoc (car x) y)))
-              (if y
-                  (setq cnfonts--config-info
-                        `(,z ,@(remove z y)))
-                (setq cnfonts--config-info x))))))))
+              (setq cnfonts--config-info
+                    (mapcar
+                     (lambda (x)
+                       ;; 以前的时候， cnfonts.el 保存的是 step 而不是
+                       ;; fontsize, 所以有小于9的情况，这里做一下兼容。
+                       (if (and (integerp (cdr x))
+                                (< (cdr x) 9))
+                           (cons (car x)
+                                 (car (nth (- (cdr x) 1) cnfonts--fontsizes-fallback)))
+                         x))
+                     (if y `(,z ,@(remove z y)) x)))))))))
 
 (defun cnfonts--get-profile-fontsize (profile-name)
   "Get the font size info from profile which name is PROFILE-NAME."
