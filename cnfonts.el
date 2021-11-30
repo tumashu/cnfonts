@@ -633,7 +633,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
         height width)
 
     (if (not cnfonts-use-face-font-rescale)
-        (setq face-font-rescale-alist nil)
+        (cnfonts--set-face-font-rescale nil)
       (cnfonts--set-face-font-rescale fontsizes-list)
       ;; 通过设定 `face-font-rescale-alist' 来实现中英文对齐时，
       ;; 只设定英文字体字号，中文等字体字号不设定。
@@ -657,10 +657,11 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
 (defun cnfonts--set-face-font-rescale (fontsizes-list)
   "根据 FONTSIZES-LIST 设定 `face-font-rescale-alist' 系数."
   (setq face-font-rescale-alist
-        (cl-loop for font in (cnfonts--get-valid-fonts t)
-                 for size in fontsizes-list
-                 collect (cons font (/ (float size)
-                                       (car fontsizes-list))))))
+        (when fontsizes-list
+          (cl-loop for font in (cnfonts--get-valid-fonts t)
+                   for size in fontsizes-list
+                   collect (cons font (/ (float size)
+                                         (car fontsizes-list)))))))
 
 (defun cnfonts--float (num)
   "确保一个 NUM 总是浮点格式."
