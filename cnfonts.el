@@ -476,14 +476,12 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
   (let ((fontsize (or fontsize (cdr (assoc profile-name cnfonts--config-info)))))
     (push (cons profile-name fontsize) cnfonts--config-info))
   (with-temp-file (cnfonts--return-config-file-path)
-    (prin1
-     (remove nil
-             (cl-remove-duplicates
-              cnfonts--config-info
-              :test (lambda (x y)
-                      (equal (car x) (car y)))
-              :from-end t))
-     (current-buffer))))
+    (prin1 (cl-remove-duplicates
+            (remove nil cnfonts--config-info)
+            :test (lambda (x y)
+                    (equal (car x) (car y)))
+            :from-end t)
+           (current-buffer))))
 
 (defun cnfonts--read-config-file ()
   "Read cnfonts's config file."
@@ -496,7 +494,7 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
             ;;
             ;;   ("profile1")(("profile1" . 15) ("profile2" .15))
             ;;
-            ;; 而且 ("profile1") 有可能不存在。
+            ;; 而且 ("profile1") 有可能不存在，v1.0 以后简化代码。
             (let* ((x (ignore-errors (read (current-buffer))))
                    (y (ignore-errors (read (current-buffer))))
                    (z (assoc (car x) y)))
@@ -505,6 +503,7 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
                      (lambda (x)
                        ;; 以前的时候， cnfonts.el 保存的是 step 而不是
                        ;; fontsize, 所以有小于9的情况，这里做一下兼容。
+                       ;; v1.0 以后简化代码。
                        (if (and (integerp (cdr x))
                                 (< (cdr x) 9))
                            (cons (car x)
@@ -629,10 +628,10 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 
 (defun cnfonts--set-font-1 (fontsizes-list)
   "核心函数，用于设置字体.
+
 参数 FONTSIZES-LIST 是一个列表，其结构类似：
 
-    (英文字体字号 中文字体字号 EXT-B字体字号
-                  英文symbol字体字号 中文symbol字体字号)
+    (英文字号 中文字号 EXT-B字号 Symbol字号 装饰用字体字号)
 
 其中，英文字体字号必须设定，其余字体字号可以设定，也可以省略。"
   (let* ((valid-fonts (cnfonts--get-valid-fonts))
@@ -755,7 +754,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
     (message "")))
 
 (defun cnfonts--next-fontsize (n)
-  "使用下N个字号."
+  "使用下 N 个字号."
   (if (not (display-graphic-p))
       (message "cnfonts 不支持 emacs 终端模式！")
     (let* ((steps (mapcar #'car cnfonts--fontsizes-fallback))
@@ -788,6 +787,8 @@ When PROFILE-NAME is non-nil, save to this profile instead."
             (cnfonts--set-font fontsizes-list)))
       (when (display-graphic-p)
         (cnfonts--set-font fontsizes-list)))
+    ;; NOTE: 这行代码主要用于升级 cnfonts.conf 的格式，以后 v1.0 可以去掉。
+    (cnfonts--save-config-file profile-name (car fontsizes-list))
     ;; This is useful for exwm to adjust mode-line, please see:
     ;; https://github.com/ch11ng/exwm/issues/249#issuecomment-299692305
     (redisplay t)))
