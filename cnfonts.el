@@ -558,16 +558,6 @@ When PROFILE-NAME is non-nil, save to this profile instead."
                 cnfonts--fontsizes-fallback)))))
    (t nil)))
 
-(defun cnfonts--upgrade-profile-need-p ()
-  "测试是否需要升级 profile 格式."
-  (let* ((profile-info (cnfonts--read-profile))
-         (profile-fontnames (nth 0 profile-info))
-         (profile-fontsizes (nth 1 profile-info)))
-    (not (and (= (length profile-fontnames)
-                 (length cnfonts--fontnames-fallback))
-              (= (length profile-fontsizes)
-                 (length cnfonts--fontsizes-fallback))))))
-
 (defun cnfonts--merge-fontname-list (list1 list2 &optional list3)
   "Merge fontname lists  LIST1, LIST2 and LIST3 into one."
   (mapcar (lambda (i)

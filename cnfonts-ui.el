@@ -328,23 +328,7 @@ NA:   表示系统没有安装当前字体。\n\n")
         (push (cons widget1 widget2) cnfonts-ui--widgets-alist)
         (push (cons widget2 widget2) cnfonts-ui--widgets-alist)
         (push (cons widget3 widget2) cnfonts-ui--widgets-alist)
-        (widget-insert "\n" ))
-      (when (cnfonts--upgrade-profile-need-p)
-        (widget-insert "
-             注2: profile 的格式已经更新，用户可以点击 ")
-        (widget-create 'push-button
-                       :tag "[ 这里 ]"
-                       :tab-stop-point t
-                       :button-face-get 'ignore
-                       :mouse-face-get 'ignore
-                       :action '(lambda (widget event)
-                                  (cnfonts--save-profile cnfonts--fontnames-fallback
-                                                         cnfonts--fontsizes-fallback
-                                                         cnfonts--current-profile)
-                                  (cnfonts-set-font-with-saved-fontsize)
-                                  (cnfonts-ui-restart)))
-        (widget-insert " 强制
-             *重置* 当前 profile。")))))
+        (widget-insert "\n" )))))
 
 (cnfonts-ui-create-page english-fonts-page
   (cnfonts-ui--create-fonts-page 'english-fonts-page))
