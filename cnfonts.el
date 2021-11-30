@@ -485,7 +485,7 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
 
 (defun cnfonts--read-config-file ()
   "Read cnfonts's config file."
-  (unless cnfonts-use-cache
+  (unless (and cnfonts-use-cache cnfonts--config-info)
     (let ((save-file (cnfonts--return-config-file-path)))
       (if (file-readable-p save-file)
           (with-temp-buffer
