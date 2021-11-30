@@ -425,15 +425,14 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
   "Get profile file which name is PROFILE-NAME."
   (let* ((cnfonts-profile-version "v4") ;; 升级 profile 格式时改变版本号
          (directory-name
-          (expand-file-name
-           (file-name-as-directory
-            (concat (file-name-as-directory cnfonts-directory)
-                    cnfonts-profile-version
-                    "/"
-                    (if cnfonts-use-system-type
-                        (replace-regexp-in-string
-                         "/" "-" (symbol-name system-type))
-                      ""))))))
+          (file-name-as-directory
+           (concat (file-name-as-directory cnfonts-directory)
+                   cnfonts-profile-version
+                   "/"
+                   (if cnfonts-use-system-type
+                       (replace-regexp-in-string
+                        "/" "-" (symbol-name system-type))
+                     "")))))
     (make-directory directory-name t)
     (expand-file-name
      (concat directory-name
