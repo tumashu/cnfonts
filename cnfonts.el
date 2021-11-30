@@ -580,39 +580,21 @@ When PROFILE-NAME is non-nil, save to this profile instead."
                (remove nil `(,@x1 ,@x2 ,@x3)))))
           '(0 1 2 3 4)))
 
-(defun cnfonts--font-exists-p (font)
+(defun cnfonts--font-exists-p (font &optional fast)
   "Test FONT exist or not."
-  (or (cnfonts--get-xlfd font)
-      (cl-member font (font-family-list)
-                 :test (lambda (a b)
-                         (or (equal a b)
-                             (equal (encode-coding-string a 'gbk) b)
-                             (equal (encode-coding-string a 'utf-8) b))))))
+  (or (x-list-fonts font nil nil 1)
+      (unless fast
+        (cl-member font (font-family-list)
+                   :test (lambda (a b)
+                           (or (equal a b)
+                               (equal (encode-coding-string a 'gbk) b)
+                               (equal (encode-coding-string a 'utf-8) b)))))))
 
-(defun cnfonts--get-valid-fonts (&optional prefer-shortname)
-  "Get a list of valid fonts.
-If PREFER-SHORTNAME is non-nil, return shortname list instead."
-  (mapcar (lambda (x)
-            (let ((font (cl-find-if #'cnfonts--font-exists-p x)))
-              (when font
-                (if prefer-shortname
-                    font
-                  (or (cnfonts--get-xlfd font) font)))))
+(defun cnfonts--get-valid-fonts ()
+  "Get a list of valid fonts."
+  (mapcar (lambda (fonts)
+            (cl-find-if #'cnfonts--font-exists-p fonts))
           (car (cnfonts--read-profile))))
-
-(defun cnfonts--get-xlfd (fontname &optional uncheck)
-  "返回 FONTNAME 对应的 xlfd 格式的 fontset.
-如果 UNCHECK 是 non-nil, 不检查返回的 xlfd 格式
-是否为有效的 xlfd.  字体中含有 \"-\" 往往返回有问题
-的 xlfd."
-  (when fontname
-    (let ((font-xlfd (car (x-list-fonts fontname nil nil 1))))
-      (when (and font-xlfd
-                 ;; 当字体名称中包含 "-" 时，`x-list-fonts'
-                 ;; 返回无效的 XLFD 字符串，具体细节请参考 emacs bug#17457 。
-                 ;; 忽略无效 XLFD 字符串。
-                 (or uncheck (x-decompose-font-name font-xlfd)))
-        font-xlfd))))
 
 (defun cnfonts--get-fontsizes (&optional fontsize)
   "获取 FONTSIZE 对应的 fontsize-list."
@@ -654,7 +636,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   "根据 FONTSIZES-LIST 设定 `face-font-rescale-alist' 系数."
   (setq face-font-rescale-alist
         (when fontsizes-list
-          (cl-loop for font in (cnfonts--get-valid-fonts t)
+          (cl-loop for font in (cnfonts--get-valid-fonts)
                    for size in fontsizes-list
                    collect (cons font (/ (float size)
                                          (car fontsizes-list)))))))
@@ -673,46 +655,41 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
 
 其中，英文字体字号必须设定，其余字体字号可以设定，也可以省略。"
   (let* ((valid-fonts (cnfonts--get-valid-fonts))
-         (valid-short-fontnames (cnfonts--get-valid-fonts t))
 
-         (english-main-fontname (nth 0 valid-fonts))
-         (chinese-main-fontname (nth 1 valid-fonts))
-         (chinese-extra-fontname (nth 2 valid-fonts))
+         (english-fontname (nth 0 valid-fonts))
+         (chinese-fontname (nth 1 valid-fonts))
+         (extb-fontname (nth 2 valid-fonts))
          (symbol-fontname (nth 3 valid-fonts))
          (ornament-fontname (nth 4 valid-fonts))
 
-         (english-main-short-fontname (nth 0 valid-short-fontnames))
-         (chinese-main-short-fontname (nth 1 valid-short-fontnames))
-         (chinese-extra-short-fontname (nth 2 valid-short-fontnames))
-
-         (english-main-fontsize (cnfonts--float (nth 0 fontsizes-list)))
-         (chinese-main-fontsize (cnfonts--float (nth 1 fontsizes-list)))
-         (chinese-extra-fontsize (cnfonts--float (nth 2 fontsizes-list)))
+         (english-fontsize (cnfonts--float (nth 0 fontsizes-list)))
+         (chinese-fontsize (cnfonts--float (nth 1 fontsizes-list)))
+         (extb-fontsize (cnfonts--float (nth 2 fontsizes-list)))
          (symbol-fontsize (cnfonts--float (nth 3 fontsizes-list)))
          (ornament-fontsize (cnfonts--float (nth 4 fontsizes-list)))
 
-         (english-main-fontspec
-          (when english-main-fontname
-            (font-spec :name english-main-fontname
-                       :size english-main-fontsize
+         (english-fontspec
+          (when english-fontname
+            (font-spec :name english-fontname
+                       :size english-fontsize
                        :weight 'normal
                        :slant 'normal)))
          (english-bold-fontspec
-          (when english-main-fontname
-            (font-spec :name english-main-fontname
-                       :size english-main-fontsize
+          (when english-fontname
+            (font-spec :name english-fontname
+                       :size english-fontsize
                        :weight 'bold
                        :slant 'normal)))
          (english-italic-fontspec
-          (when english-main-fontname
-            (font-spec :name  english-main-fontname
-                       :size english-main-fontsize
+          (when english-fontname
+            (font-spec :name  english-fontname
+                       :size english-fontsize
                        :weight 'normal
                        :slant 'italic)))
          (english-bold-italic-fontspec
-          (when english-main-fontname
-            (font-spec :name english-main-fontname
-                       :size english-main-fontsize
+          (when english-fontname
+            (font-spec :name english-fontname
+                       :size english-fontsize
                        :weight 'bold
                        :slant 'italic)))
          (symbol-fontspec
@@ -728,61 +705,61 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
                        :weight 'normal
                        :slant 'normal)))
 
-         (chinese-main-fontspec
-          (when chinese-main-fontname
-            (font-spec :name chinese-main-fontname
-                       :size chinese-main-fontsize
+         (chinese-fontspec
+          (when chinese-fontname
+            (font-spec :name chinese-fontname
+                       :size chinese-fontsize
                        :weight 'normal
                        :slant 'normal)))
-         (chinese-extra-fontspec
-          (when chinese-extra-fontname
-            (font-spec :name chinese-extra-fontname
-                       :size (or chinese-extra-fontsize
-                                 chinese-main-fontsize)
+         (extb-fontspec
+          (when extb-fontname
+            (font-spec :name extb-fontname
+                       :size (or extb-fontsize
+                                 chinese-fontsize)
                        :weight 'normal
                        :slant 'normal))))
 
-    (when (fontp english-main-fontspec)
+    (when (fontp english-fontspec)
       ;; 设置英文字体。
       (set-face-attribute
-       'default nil :font english-main-fontspec)
+       'default nil :font english-fontspec)
       ;; 设置英文粗体。
       (if cnfonts-disable-bold
-          (set-face-font 'bold english-main-fontspec)
+          (set-face-font 'bold english-fontspec)
         (if (fontp english-bold-fontspec)
             (set-face-font 'bold english-bold-fontspec)
           (message "[cnfonts]: %S 对应的粗体没有找到，不作处理！"
-                           english-main-short-fontname)))
+                   english-fontname)))
 
       ;; 设置英文斜体。
       (if cnfonts-disable-italic
-          (set-face-font 'italic english-main-fontspec)
+          (set-face-font 'italic english-fontspec)
         (if (fontp english-italic-fontspec)
             (set-face-font 'italic english-italic-fontspec)
           (message "[cnfonts]: %S 对应的斜体没有找到，不作处理！"
-                           english-main-short-fontname)))
+                   english-fontname)))
 
       ;; 设置英文粗斜体。
       (if cnfonts-disable-bold-italic
-          (set-face-font 'bold-italic english-main-fontspec)
+          (set-face-font 'bold-italic english-fontspec)
         (if (fontp english-bold-italic-fontspec)
             (set-face-font 'bold-italic english-bold-italic-fontspec)
           (message "[cnfonts]: %S 对应的粗斜体没有找到，不作处理！"
-                           english-main-short-fontname))))
+                   english-fontname))))
 
     ;; 设置中文字体，注意，不要使用 'unicode charset,
     ;; 否则上面的英文字体设置将会失效。
-    (when (fontp chinese-main-fontspec)
+    (when (fontp chinese-fontspec)
       (dolist (charset '(kana han cjk-misc bopomofo gb18030))
-        (set-fontset-font "fontset-default" charset chinese-main-fontspec)))
+        (set-fontset-font "fontset-default" charset chinese-fontspec)))
+
+    ;; 设置 EXT-B 字体，用于显示不常用的汉字。
+    (when (fontp extb-fontspec)
+      (set-fontset-font "fontset-default" nil extb-fontspec nil 'prepend))
 
     ;; 设置 symbol 字体。
     (when (fontp symbol-fontspec)
       (set-fontset-font "fontset-default" 'symbol symbol-fontspec nil 'prepend))
-
-    ;; 设置 fallback 字体，用于显示不常用的字符。
-    (when (fontp chinese-extra-fontspec)
-      (set-fontset-font "fontset-default" nil chinese-extra-fontspec nil 'prepend))
 
     ;; 设置点缀字符的字体。
     (when (fontp ornament-fontspec)
@@ -792,9 +769,9 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
     (setq cnfonts--minibuffer-echo-string
           (format "[%s]: 英文字体: %s-%.1f，中文字体: %s, EXTB字体：%s"
                   (cnfonts--get-current-profile t)
-                  (or english-main-short-fontname "无") english-main-fontsize
-                  (or chinese-main-short-fontname "无")
-                  (or chinese-extra-short-fontname "无")))
+                  (or english-fontname "无") english-fontsize
+                  (or chinese-fontname "无")
+                  (or extb-fontname "无")))
     (message "")))
 
 (defun cnfonts--next-fontsize (n)

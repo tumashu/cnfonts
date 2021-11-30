@@ -208,7 +208,7 @@ TODO: IGNORE-FACE."
 
 (defun cnfonts-ui--return-status-string (font index)
   (format "%-2s %-2s"
-          (if (cnfonts--get-xlfd font t) "" "NA")
+          (if (cnfonts--font-exists-p font t) "" "NA")
           (if (member font (nth index cnfonts-personal-fontnames)) "P" "")))
 
 (defun cnfonts-ui--get-page-function (page-name)
