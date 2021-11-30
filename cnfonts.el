@@ -321,7 +321,7 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
 其他情况下，将这个变量设置为t，很有可能会让 cnfonts 调整字体的
 功能失效，请谨慎使用。")
 
-(defvar cnfonts--current-profile-cache nil
+(defvar cnfonts--cache nil
   "这个变量用于保存 profile 设置的缓存.")
 
 (defvar cnfonts--config-info nil
@@ -434,10 +434,11 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
                          "/" "-" (symbol-name system-type))
                       ""))))))
     (make-directory directory-name t)
-    (concat directory-name
-            (replace-regexp-in-string
-             "/" "-"
-             profile-name) ".el")))
+    (expand-file-name
+     (concat directory-name
+             (replace-regexp-in-string
+              "/" "-"
+              profile-name) ".el"))))
 
 (defun cnfonts--get-current-profile (&optional return-profile-name)
   "Get current profile file.
@@ -532,33 +533,33 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 (defun cnfonts--read-profile ()
   "Get previously saved fontnames and fontsizes from current profile."
   (interactive)
-  (if (and cnfonts-use-cache
-           cnfonts--current-profile-cache)
-      cnfonts--current-profile-cache
-    (let ((file (cnfonts--get-current-profile)))
-      (if (file-readable-p file)
-          (progn (when (load (expand-file-name file) nil t)
-                   (message "[cnfonts]: load %S successfully." (cnfonts--get-current-profile t)))
-                 (setq cnfonts--current-profile-cache
-                       (list
-                        (if cnfonts--custom-set-fontnames
-                            (cnfonts--merge-fontname-list cnfonts--custom-set-fontnames
-                                                          cnfonts-personal-fontnames
-                                                          cnfonts--fontnames-fallback)
-                          (cnfonts--merge-fontname-list cnfonts-personal-fontnames
-                                                        cnfonts--fontnames-fallback))
-
-                        (mapcar
-                         (lambda (fontsizes)
-                           ;; 添加 symbol 和点缀字符的字体支持之后，做的兼容。
-                           (if (< (length fontsizes) 5)
-                               `(,@fontsizes ,(car fontsizes) ,(car fontsizes))
-                             fontsizes))
-                         (or cnfonts--custom-set-fontsizes
-                             cnfonts--fontsizes-fallback)))))
-        (setq cnfonts--current-profile-cache
-              (list cnfonts--fontnames-fallback
-                    cnfonts--fontsizes-fallback))))))
+  (cond
+   ((and cnfonts-use-cache cnfonts--cache)
+    cnfonts--cache)
+   ((not (file-readable-p (cnfonts--get-current-profile)))
+    (setq cnfonts--cache
+          (list cnfonts--fontnames-fallback
+                cnfonts--fontsizes-fallback)))
+   ((load (cnfonts--get-current-profile) nil t)
+    (setq cnfonts--cache
+          (list
+           (if cnfonts--custom-set-fontnames
+               (cnfonts--merge-fontname-list
+                cnfonts--custom-set-fontnames
+                cnfonts-personal-fontnames
+                cnfonts--fontnames-fallback)
+             (cnfonts--merge-fontname-list
+              cnfonts-personal-fontnames
+              cnfonts--fontnames-fallback))
+           (mapcar
+            (lambda (fontsizes)
+              ;; 添加 symbol 和点缀字符的字体支持之后，做的兼容。
+              (if (< (length fontsizes) 5)
+                  `(,@fontsizes ,(car fontsizes) ,(car fontsizes))
+                fontsizes))
+            (or cnfonts--custom-set-fontsizes
+                cnfonts--fontsizes-fallback)))))
+   (t nil)))
 
 (defun cnfonts--upgrade-profile-need-p ()
   "测试是否需要升级 profile 格式."
@@ -600,7 +601,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   "获取 FONTSIZE 对应的 fontsize-list."
   (let ((fontsizes-list (car (cdr (cnfonts--read-profile)))))
     (unless (file-exists-p (cnfonts--get-current-profile))
-      (message "如果中英文不能对齐，请运行`cnfonts-edit-profile'编辑当前profile。"))
+      (message "如果中英文不能对齐，请运行 `cnfonts-edit-profile' 编辑当前 profile。"))
     (when (numberp fontsize)
       (assoc fontsize fontsizes-list #'=))))
 
@@ -692,19 +693,6 @@ When PROFILE-NAME is non-nil, save to this profile instead."
                        :size english-fontsize
                        :weight 'bold
                        :slant 'italic)))
-         (symbol-fontspec
-          (when symbol-fontname
-            (font-spec :name symbol-fontname
-                       :size symbol-fontsize
-                       :weight 'normal
-                       :slant 'normal)))
-         (ornament-fontspec
-          (when ornament-fontname
-            (font-spec :name ornament-fontname
-                       :size ornament-fontsize
-                       :weight 'normal
-                       :slant 'normal)))
-
          (chinese-fontspec
           (when chinese-fontname
             (font-spec :name chinese-fontname
@@ -716,6 +704,18 @@ When PROFILE-NAME is non-nil, save to this profile instead."
             (font-spec :name extb-fontname
                        :size (or extb-fontsize
                                  chinese-fontsize)
+                       :weight 'normal
+                       :slant 'normal)))
+         (symbol-fontspec
+          (when symbol-fontname
+            (font-spec :name symbol-fontname
+                       :size symbol-fontsize
+                       :weight 'normal
+                       :slant 'normal)))
+         (ornament-fontspec
+          (when ornament-fontname
+            (font-spec :name ornament-fontname
+                       :size ornament-fontsize
                        :weight 'normal
                        :slant 'normal))))
 
