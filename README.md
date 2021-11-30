@@ -3,32 +3,32 @@ Note: this file is auto converted from cnfonts.el by [el2org](https://github.com
 
 # &#30446;&#24405;
 
-1.  [cnfonts README](#orgede6949)
-    1.  [简介](#orgdb743ea)
-    2.  [基本原理](#org316b9e3)
-    3.  [使用特点](#org0246c4f)
-    4.  [下载安装](#org23449a6)
-    5.  [配置使用](#orgabb3c4b)
-        1.  [最简单的用法（懒人必备）](#org64ea046)
-        2.  [profile 的概念](#org73213e0)
-        3.  [profile 命名与切换](#org25c9f12)
-        4.  [使用 cnfonts-edit-profile 命令调整 profile](#org5f32b56)
-        5.  [使用 cnfonts-regenerate-profile 重置 profile](#orgcf646b8)
-        6.  [调整字体大小](#org99078e3)
-        7.  [使用 cnfonts-use-system-type](#org2a7efe3)
-        8.  [让 cnfonts 随着 Emacs 自动启动](#org4956c72)
-        9.  [cnfonts 与 org-mode 配合使用](#org3359e2c)
-        10. [cnfonts 高级功能](#org894afd0)
-    6.  [Tips](#orgf093dfd)
-    7.  [参考文章](#org00772b9)
+1.  [cnfonts README](#org3d3a52f)
+    1.  [简介](#orgfb848af)
+    2.  [基本原理](#org1fa1f4f)
+    3.  [使用特点](#orgb54ea55)
+    4.  [下载安装](#orgca51d15)
+    5.  [配置使用](#orgaad5bf8)
+        1.  [最简单的用法（懒人必备）](#org5cc16b9)
+        2.  [profile 的概念](#org6a57b2d)
+        3.  [profile 命名与切换](#orgeb3b4a1)
+        4.  [使用 cnfonts-edit-profile 命令调整 profile](#org438b8bd)
+        5.  [使用 cnfonts-regenerate-profile 重置 profile](#org5f641ed)
+        6.  [调整字体大小](#org7138129)
+        7.  [使用 cnfonts-use-system-type](#org8ebf27f)
+        8.  [让 cnfonts 随着 Emacs 自动启动](#orgfb6a8b8)
+        9.  [cnfonts 与 org-mode 配合使用](#org3aaa17d)
+        10. [cnfonts 高级功能](#orgf95fea6)
+    6.  [Tips](#orgaf75091)
+    7.  [参考文章](#org7fce6d5)
 
 
-<a id="orgede6949"></a>
+<a id="org3d3a52f"></a>
 
 # cnfonts README
 
 
-<a id="orgdb743ea"></a>
+<a id="orgfb848af"></a>
 
 ## 简介
 
@@ -37,14 +37,14 @@ cnfonts 原来叫: chinese-fonts-setup, 是一个 Emacs 中英文字体配置工
 注：这个 package 特别适用于需要处理中英文混合表格的中文 org-mode 用户。
 
 
-<a id="org316b9e3"></a>
+<a id="org1fa1f4f"></a>
 
 ## 基本原理
 
 cnfonts 的核心很简单，就是让中文字体和英文字体使用不同的字号，从而实现中英文对齐。
 
 
-<a id="org0246c4f"></a>
+<a id="orgb54ea55"></a>
 
 ## 使用特点
 
@@ -56,7 +56,7 @@ cnfonts 添加了许多辅助工具，使配置和调节字体和字号的工作
 2.  设置方便：cnfonts 自带一个 profile 文件调整工具，这个工具有直观的图形界面，可以让用户设置字体名称和字体大小，分分钟实现中文字体和英文字体的等宽对齐。
 
 
-<a id="org23449a6"></a>
+<a id="orgca51d15"></a>
 
 ## 下载安装
 
@@ -67,14 +67,17 @@ cnfonts 添加了许多辅助工具，使配置和调节字体和字号的工作
         (require 'cnfonts)
         ;; 让 cnfonts 在 Emacs 启动时自动生效。
         (cnfonts-mode 1)
+        ;; 添加两个字号增大缩小的快捷键
+        ;; (define-key cnfonts-mode-map (kbd "C--") #'cnfonts-decrease-fontsize)
+        ;; (define-key cnfonts-mode-map (kbd "C-=") #'cnfonts-increase-fontsize)
 
 
-<a id="orgabb3c4b"></a>
+<a id="orgaad5bf8"></a>
 
 ## 配置使用
 
 
-<a id="org64ea046"></a>
+<a id="org5cc16b9"></a>
 
 ### 最简单的用法（懒人必备）
 
@@ -116,7 +119,7 @@ cnfonts 添加了许多辅助工具，使配置和调节字体和字号的工作
 </table>
 
 
-<a id="org73213e0"></a>
+<a id="org6a57b2d"></a>
 
 ### profile 的概念
 
@@ -126,7 +129,7 @@ profile 代表了一套字体配置，cnfonts 使用 profile 的概念，来维�
 \`cnfonts-directory' 对应的目录中, 这些文件包含了英文字体设置，中文字体设置以及中文字体大小等。
 
 
-<a id="org25c9f12"></a>
+<a id="orgeb3b4a1"></a>
 
 ### profile 命名与切换
 
@@ -167,7 +170,7 @@ cnfonts 使用下面两个命令来切换 profile ：
 </table>
 
 
-<a id="org5f32b56"></a>
+<a id="org438b8bd"></a>
 
 ### 使用 cnfonts-edit-profile 命令调整 profile
 
@@ -186,14 +189,14 @@ cnfonts 使用下面两个命令来切换 profile ：
 <http://debbugs.gnu.org/db/17/1785.html>
 
 
-<a id="orgcf646b8"></a>
+<a id="org5f641ed"></a>
 
 ### 使用 cnfonts-regenerate-profile 重置 profile
 
 \`cnfonts-regenerate-profile' 命令会使用 cnfonts 自带的 fallback 信息，覆盖需要 **重置** 的 profile, 这个 profile 原来的内容将丢失，请紧慎使用！
 
 
-<a id="org99078e3"></a>
+<a id="org7138129"></a>
 
 ### 调整字体大小
 
@@ -234,7 +237,7 @@ cnfonts 使用下面两个命令来切换 profile ：
 ![img](./snapshots/cnfonts-increase-and-decrease-fontsize.gif)
 
 
-<a id="org2a7efe3"></a>
+<a id="org8ebf27f"></a>
 
 ### 使用 cnfonts-use-system-type
 
@@ -242,7 +245,7 @@ cnfonts 使用下面两个命令来切换 profile ：
 这样，相同名称的 profile 在不同的操作系统下，保存的位置也不同，可以避免 profile 冲突。
 
 
-<a id="org4956c72"></a>
+<a id="orgfb6a8b8"></a>
 
 ### 让 cnfonts 随着 Emacs 自动启动
 
@@ -256,7 +259,7 @@ cnfonts 使用下面两个命令来切换 profile ：
 cnfonts 生效。
 
 
-<a id="org3359e2c"></a>
+<a id="org3aaa17d"></a>
 
 ### cnfonts 与 org-mode 配合使用
 
@@ -267,7 +270,7 @@ cnfonts 生效。
 注：这个功能不能在 window 系统下使用，它会让对齐功能失效，Linux 下这个功能 **一般** 可以使用，Mac 系统未测试，同学可以亲自试一试。
 
 
-<a id="org894afd0"></a>
+<a id="orgf95fea6"></a>
 
 ### cnfonts 高级功能
 
@@ -305,7 +308,7 @@ cnfonts 生效。
         (add-hook 'cnfonts-set-font-finish-hook #'my-line-spacing-setup)
 
 
-<a id="orgf093dfd"></a>
+<a id="orgaf75091"></a>
 
 ## Tips
 
@@ -327,7 +330,7 @@ cnfonts 生效。
     <https://github.com/tumashu/cnfonts/issues/54#issuecomment-246228904>
 
 
-<a id="org00772b9"></a>
+<a id="org7fce6d5"></a>
 
 ## 参考文章
 
