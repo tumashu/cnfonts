@@ -327,8 +327,6 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
 (defvar cnfonts--config-info nil
   "The cofonts config info read from config file.")
 
-(defvar cnfonts--read-config-file-p nil)
-
 (defconst cnfonts--fontsizes-fallback
   '((9    10.5  10.5  9    9   )
     (10   12.0  12.0  10   10  )
@@ -487,8 +485,7 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
 
 (defun cnfonts--read-config-file ()
   "Read cnfonts's config file."
-  (unless (and cnfonts-use-cache
-               cnfonts--read-config-file-p)
+  (unless cnfonts-use-cache
     (let ((save-file (cnfonts--return-config-file-path)))
       (if (file-readable-p save-file)
           (with-temp-buffer
