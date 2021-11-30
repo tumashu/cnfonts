@@ -583,15 +583,11 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 (defun cnfonts--font-exists-p (font)
   "Test FONT exist or not."
   (or (cnfonts--get-xlfd font)
-      (let ((all-fonts (font-family-list))
-            result)
-        (dolist (x all-fonts)
-          (when (or (equal font x)
-                    (equal (encode-coding-string font 'gbk) x)
-                    (equal (encode-coding-string font 'utf-8) x))
-            (setq result font)
-            (setq all-fonts nil)))
-        result)))
+      (cl-member font (font-family-list)
+                 :test (lambda (a b)
+                         (or (equal a b)
+                             (equal (encode-coding-string a 'gbk) b)
+                             (equal (encode-coding-string a 'utf-8) b))))))
 
 (defun cnfonts--get-valid-fonts (&optional prefer-shortname)
   "Get a list of valid fonts.
@@ -610,7 +606,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
 是否为有效的 xlfd.  字体中含有 \"-\" 往往返回有问题
 的 xlfd."
   (when fontname
-    (let* ((font-xlfd (car (x-list-fonts fontname nil nil 1))))
+    (let ((font-xlfd (car (x-list-fonts fontname nil nil 1))))
       (when (and font-xlfd
                  ;; 当字体名称中包含 "-" 时，`x-list-fonts'
                  ;; 返回无效的 XLFD 字符串，具体细节请参考 emacs bug#17457 。
