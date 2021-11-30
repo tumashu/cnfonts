@@ -6,7 +6,7 @@
 ;; Author: Feng Shu <tumashu@163.com>
 ;; URL: https://github.com/tumashu/cnfonts
 ;; Package-Requires: ((emacs "24"))
-;; Version: 0.6
+;; Version: 0.9.2
 ;; Keywords: convenience, Chinese, font
 
 ;; This file is not part of GNU Emacs.
