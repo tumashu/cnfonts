@@ -585,11 +585,12 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   "Test FONT exist or not."
   (or (x-list-fonts font nil nil 1)
       (unless fast
-        (cl-member font (font-family-list)
-                   :test (lambda (a b)
-                           (or (equal a b)
-                               (equal (encode-coding-string a 'gbk) b)
-                               (equal (encode-coding-string a 'utf-8) b)))))))
+        (cl-find-if
+         (lambda (x)
+           (or (equal font x)
+               (equal (encode-coding-string font 'utf-8) x)
+               (equal (encode-coding-string font 'gbk) x)))
+         (font-family-list)))))
 
 (defun cnfonts--get-valid-fonts ()
   "Get a list of valid fonts."
