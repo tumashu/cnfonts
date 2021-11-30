@@ -422,14 +422,6 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
 这些 profile 文件保存在 `cnfonts-directory' 对应的目录中。在其它地方
 设置这个变量没有任何用处！")
 
-(defun cnfonts-message (force-show &rest args)
-  "Cnfonts's message function.
-When FORCE-SHOW is non-nil, show message force.
-ARGS is the same as message's ARGS."
-  (if (or cnfonts-verbose force-show)
-      (apply 'message args)
-    (apply 'format args)))
-
 (defun cnfonts--get-profile (profile-name)
   "Get profile file which name is PROFILE-NAME."
   (let* ((cnfonts-profile-version "v4") ;; 升级 profile 格式时改变版本号
@@ -548,7 +540,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
     (let ((file (cnfonts--get-current-profile)))
       (if (file-readable-p file)
           (progn (when (load (expand-file-name file) nil t)
-                   (cnfonts-message t "[cnfonts]: load %S successfully." (cnfonts--get-current-profile t)))
+                   (message "[cnfonts]: load %S successfully." (cnfonts--get-current-profile t)))
                  (setq cnfonts--current-profile-cache
                        (list
                         (if cnfonts--custom-set-fontnames
@@ -632,7 +624,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   "获取 FONTSIZE 对应的 fontsize-list."
   (let ((fontsizes-list (car (cdr (cnfonts--read-profile)))))
     (unless (file-exists-p (cnfonts--get-current-profile))
-      (cnfonts-message t "如果中英文不能对齐，请运行`cnfonts-edit-profile'编辑当前profile。"))
+      (message "如果中英文不能对齐，请运行`cnfonts-edit-profile'编辑当前profile。"))
     (when (numberp fontsize)
       (assoc fontsize fontsizes-list #'=))))
 
@@ -764,7 +756,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
           (set-face-font 'bold english-main-fontspec)
         (if (fontp english-bold-fontspec)
             (set-face-font 'bold english-bold-fontspec)
-          (cnfonts-message t "[cnfonts]: %S 对应的粗体没有找到，不作处理！"
+          (message "[cnfonts]: %S 对应的粗体没有找到，不作处理！"
                            english-main-short-fontname)))
 
       ;; 设置英文斜体。
@@ -772,7 +764,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
           (set-face-font 'italic english-main-fontspec)
         (if (fontp english-italic-fontspec)
             (set-face-font 'italic english-italic-fontspec)
-          (cnfonts-message t "[cnfonts]: %S 对应的斜体没有找到，不作处理！"
+          (message "[cnfonts]: %S 对应的斜体没有找到，不作处理！"
                            english-main-short-fontname)))
 
       ;; 设置英文粗斜体。
@@ -780,7 +772,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
           (set-face-font 'bold-italic english-main-fontspec)
         (if (fontp english-bold-italic-fontspec)
             (set-face-font 'bold-italic english-bold-italic-fontspec)
-          (cnfonts-message t "[cnfonts]: %S 对应的粗斜体没有找到，不作处理！"
+          (message "[cnfonts]: %S 对应的粗斜体没有找到，不作处理！"
                            english-main-short-fontname))))
 
     ;; 设置中文字体，注意，不要使用 'unicode charset,
@@ -813,7 +805,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
 (defun cnfonts--next-fontsize (n)
   "使用下N个字号."
   (if (not (display-graphic-p))
-      (cnfonts-message t "cnfonts 不支持 emacs 终端模式！")
+      (message "cnfonts 不支持 emacs 终端模式！")
     (let* ((steps (mapcar #'car cnfonts--fontsizes-fallback))
            (profile-name (cnfonts--get-current-profile t))
            (profile-fontsize (cnfonts--get-profile-fontsize profile-name))
@@ -822,7 +814,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
       (when fontsizes-list
         (cnfonts--set-font fontsizes-list)
         (cnfonts--save-config-file profile-name (car fontsizes-list))
-        (cnfonts-message t cnfonts--minibuffer-echo-string)))))
+        (message cnfonts--minibuffer-echo-string)))))
 
 (define-obsolete-function-alias
   'cnfonts-set-font-with-saved-step
@@ -871,7 +863,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   (if (member profile-name cnfonts-profiles)
       (progn (cnfonts--save-config-file profile-name)
              (cnfonts-set-font-with-saved-fontsize))
-    (cnfonts-message t "%s doesn't exist." profile-name)))
+    (message "%s doesn't exist." profile-name)))
 
 ;;;###autoload
 (defun cnfonts-switch-profile ()
@@ -894,7 +886,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
       (cnfonts--save-config-file next-profile))
     (when (display-graphic-p)
       (cnfonts-set-font-with-saved-fontsize))
-    (cnfonts-message t "Current cnfonts profile is set to: \"%s\"" next-profile)))
+    (message "Current cnfonts profile is set to: \"%s\"" next-profile)))
 
 ;;;###autoload
 (declare-function cnfonts-ui "cnfonts-ui")
@@ -902,7 +894,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   "编辑当前 cnfonts profile."
   (interactive)
   (if (not (display-graphic-p))
-      (cnfonts-message t "cnfonts 不支持 emacs 终端模式！")
+      (message "cnfonts 不支持 emacs 终端模式！")
     (let ((file (cnfonts--get-current-profile)))
       (unless (file-readable-p file)
         (cnfonts--save-profile cnfonts--fontnames-fallback
@@ -918,7 +910,7 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
     (if (yes-or-no-p (format "Regenerate (%s)? " profile-name))
         (cnfonts--save-profile cnfonts--fontnames-fallback
                                cnfonts--fontsizes-fallback profile-name)
-      (cnfonts-message t "Ignore regenerate profile!"))))
+      (message "Ignore regenerate profile!"))))
 
 (defun cnfonts-set-font-first-time (&optional frame)
   "Emacs 启动后，第一次设置 FRAME 字体使用的函数.
