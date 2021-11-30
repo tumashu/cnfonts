@@ -596,9 +596,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 (defun cnfonts--set-font (fontsizes-list)
   "根据 FONTSIZES-LIST 调整当前 frame 使用的字体.
 当全局变量 `cnfonts-keep-frame-size'设置为 t 时，调整字体时保持当前 frame 大小不变。"
-  (let ((frame (selected-frame))
-        height width)
-
+  (let ((frame (selected-frame)))
     (if (not cnfonts-use-face-font-rescale)
         (cnfonts--set-face-font-rescale nil)
       (cnfonts--set-face-font-rescale fontsizes-list)
@@ -606,20 +604,13 @@ When PROFILE-NAME is non-nil, save to this profile instead."
       ;; 只设定英文字体字号，中文等字体字号不设定。
       (setq fontsizes-list
             (list (car fontsizes-list))))
-
     (when (display-multi-font-p frame)
-      (when cnfonts-keep-frame-size
-        (setq height (* (frame-parameter frame 'height)
-                        (frame-char-height frame))
-              width  (* (frame-parameter frame 'width)
-                        (frame-char-width frame))))
-      (cnfonts--set-font-1 fontsizes-list)
-      (run-hook-with-args 'cnfonts-set-font-finish-hook fontsizes-list)
-      (when cnfonts-keep-frame-size
-        (modify-frame-parameters
-         frame
-         (list (cons 'height (round height (frame-char-height frame)))
-               (cons 'width  (round width  (frame-char-width frame)))))))))
+      (let ((width (frame-pixel-width))
+            (height (frame-pixel-height)))
+        (cnfonts--set-font-1 fontsizes-list)
+        (run-hook-with-args 'cnfonts-set-font-finish-hook fontsizes-list)
+        (when cnfonts-keep-frame-size
+          (set-frame-size frame width height t))))))
 
 (defun cnfonts--set-face-font-rescale (fontsizes-list)
   "根据 FONTSIZES-LIST 设定 `face-font-rescale-alist' 系数."
