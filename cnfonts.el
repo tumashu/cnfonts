@@ -65,7 +65,7 @@
 
 ;;    #+BEGIN_EXAMPLE
 ;;    (require 'cnfonts)
-;;    ;; 让 cnfonts 随着 Emacs 自动生效。
+;;    ;; 让 cnfonts 在 Emacs 启动时自动生效。
 ;;    (cnfonts-mode 1)
 ;;    #+END_EXAMPLE
 
@@ -304,6 +304,9 @@ It record the current profile and profile fontsize."
   "A hook, by which user can set additional fonts."
   :type 'hook)
 
+(defvar cnfonts-mode-map (make-sparse-keymap)
+  "Keymap for `cnfonts-mode'.")
+
 (defvar cnfonts-use-cache nil
   "是否使用缓存.
 
@@ -353,11 +356,6 @@ cnfont 的设置都保存在文件中，在默认情况下，每次读取 profil
                        (repeat :tag "Ext-B fonts" string)
                        (repeat :tag "Symbol fonts" string)
                        (repeat :tag "Fonts used for ornament chars " string))))
-
-(defcustom cnfonts-verbose t
-  "设置为 t 时， cnfonts 将 message 较多信息."
-  :group 'cnfonts
-  :type 'integer)
 
 (defconst cnfonts--fontnames-fallback
   '(;; 英文字体
@@ -924,9 +922,10 @@ If PREFER-SHORTNAME is non-nil, return shortname list instead."
   "cnfonts mode."
   :global t
   (cond
-   (cnfonts-mode
+   ((and (display-graphic-p) cnfonts-mode)
     (add-hook 'after-make-frame-functions #'cnfonts-set-font-first-time)
-    (add-hook 'window-setup-hook #'cnfonts-set-font-first-time))
+    (add-hook 'window-setup-hook #'cnfonts-set-font-first-time)
+    (message "cnfonts-mode 激活，使用 `cnfonts-edit-profile' 命令调整字体设置。"))
    (t
     (remove-hook 'after-make-frame-functions #'cnfonts-set-font-first-time)
     (remove-hook 'window-setup-hook #'cnfonts-set-font-first-time))))

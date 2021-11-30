@@ -36,7 +36,10 @@
 (require 'cnfonts)
 
 (defconst cnfonts-ui--pages
-  '((english-fonts-page
+  '((start-page
+     :keybinding "t"
+     :button-name "开始")
+    (english-fonts-page
      :index 0
      :keybinding "e"
      :button-name "英文")
@@ -78,9 +81,6 @@ Emacs 25.2 以后，当 default font 有某个字符的时候，优先使用这�
      :align-page t
      :keybinding "1"
      :button-name "对齐")
-    (other-features-page
-     :keybinding "o"
-     :button-name "其它")
     (key-page
      :keybinding "k"
      :button-name "快捷键")
@@ -113,6 +113,7 @@ Emacs 25.2 以后，当 default font 有某个字符的时候，优先使用这�
 (defvar cnfonts-ui--current-page nil)
 (defvar cnfonts-ui--widgets-navigation nil)
 (defvar cnfonts-ui--widgets-elisp-snippet nil)
+(defvar cnfonts-ui--verbose nil)
 
 (defun cnfonts-ui--switch-to-page (page-name)
   "Switch to page which name is PAGE-NAME."
@@ -150,34 +151,6 @@ TODO: IGNORE-FACE."
     (push (cnfonts-ui--create-page-switch-button page-name)
           cnfonts-ui--widgets-navigation)
     (widget-insert " ")))
-
-(defun cnfonts-ui--create-warning-board ()
-  (cond
-   (cnfonts-verbose
-    (widget-insert "
-+----------------------------------------------------+
-| 如果需要 emacs 启动时激活 cnfonts，请在 emacs 配置 |
-| 文件中添加一行代码：                               |
-|                                                    |
-|                (cnfonts-enable)                    |
-|                                                    |
-| 常用命令                      功能                 |
-| ----------------------        -------------        |
-| cnfonts-edit-profile          调整字体设置         |
-| cnfonts-increase-fontsize     增大字号             |
-| cnfonts-decrease-fontsize     减小字号             |
-|                                                    |
-| 注: 设置 cnfonts-verbose 为 nil , 可以隐藏这个消息 |
-+----------------------------------------------------+
-"))
-   ((not (nth 2 (cnfonts--get-valid-fonts)))
-    (widget-insert "
-+----------------------------------------------------+
-| 注：如果安装 cnfonts 后，发现 emacs 卡顿甚至崩溃， |
-| 可以安装 HanaMinB 字体试试，这个字体的下载地址可   |
-| 以从 [ 帮助 ] 页面中找到。                         |
-+----------------------------------------------------+
-"))))
 
 (defun cnfonts-ui--create-align-line (index label fontsize-list align-string)
   (let ((fontsize (number-to-string (nth index fontsize-list)))
@@ -318,7 +291,6 @@ TODO: IGNORE-FACE."
     (widget-insert "\n")
     (cnfonts-ui--create-navigation)
     (widget-insert "\n")
-    (cnfonts-ui--create-warning-board)
     (when note
       (if (functionp note)
           (widget-insert (funcall note) "\n")
@@ -416,16 +388,28 @@ NA:   表示系统没有安装当前字体。\n\n")
     (widget-insert (or string "")))
   (cnfonts-ui--create-tab-stop-point))
 
-(cnfonts-ui-create-page other-features-page
+(cnfonts-ui-create-page start-page
   (cnfonts-ui--create-tab-stop-point)
   (cnfonts-ui--create-navigation)
   (widget-insert "
 
 ** 注意事项
 
-生成 elisp 字体配置片段的功能去掉了，因为 cnfonts 内部机制现在越
-来越复杂，简单生成的 elisp 字体设置往往很难达到对齐效果，调试特别
-麻烦，不如去掉。" ))
+如果需要 Emacs 启动时激活 cnfonts，请在 Emacs 配置文件中添加一行
+代码：
+
+                     (cnfonts-mode 1)
+
+常用命令                                        功能
+----------------------------------------------  ----------------
+cnfonts-edit-profile                            调整字体设置
+cnfonts-increase-fontsize                       增大字号
+cnfonts-decrease-fontsize                       减小字号
+
+
+注意：如果安装 cnfonts 后，发现 Emacs 卡顿甚至崩溃，可以安装
+HanaMinB 字体试试，这个字体的下载地址可以从 [ 帮助 ] 页面中找到。
+" ))
 
 ;; key-page *must* create at the end, make sure other page's
 ;; keybinding are defined.
@@ -441,11 +425,11 @@ NA:   表示系统没有安装当前字体。\n\n")
  ----------------------  --------
  切换到下一个标签        \\[cnfonts-ui-next-page]
  切换到上一个标签        \\[cnfonts-ui-previous-page]
+ 切换到 [ 开始 ] 标签    \\[cnfonts-ui-page-start-page]
  切换到 [ 英文 ] 标签    \\[cnfonts-ui-page-english-fonts-page]
  切换到 [ 中文 ] 标签    \\[cnfonts-ui-page-chinese-fonts-page]
  切换到 [ EXT-B ] 标签   \\[cnfonts-ui-page-extb-fonts-page]
  切换到 [ 对齐 ] 标签    \\[cnfonts-ui-page-align-page]
- 切换到 [ 其他 ] 标签    \\[cnfonts-ui-page-other-features-page]
  切换到 [ 快捷键 ] 标签  \\[cnfonts-ui-page-key-page]
  切换到 [ 帮助 ] 标签    \\[cnfonts-ui-page-help-page]
 
@@ -607,8 +591,8 @@ It is meant for internal use."
 (defun cnfonts-ui ()
   (interactive)
   (if (not (display-graphic-p))
-      (message "cnfonts 不支持 emacs 终端模式！")
-    ;; "cus-edit" 不能很好的在 emacs daemon 下工作，hack!
+      (message "cnfonts 不支持 Emacs 终端模式！")
+    ;; "cus-edit" 不能很好的在 Emacs daemon 下工作，hack!
     (setq custom-raised-buttons
           (not (equal (face-valid-attribute-values :box)
                       '(("unspecified" . unspecified)))))
@@ -616,7 +600,7 @@ It is meant for internal use."
     (dolist (page-info cnfonts-ui--pages)
       (let ((page-name (car page-info)))
         (funcall (cnfonts-ui--get-page-function page-name) nil nil t)))
-    (funcall (cnfonts-ui--get-page-function 'english-fonts-page))))
+    (funcall (cnfonts-ui--get-page-function 'start-page))))
 
 ;; * Footer
 (provide 'cnfonts-ui)
