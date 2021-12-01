@@ -577,12 +577,9 @@ When PROFILE-NAME is non-nil, save to this profile instead."
     (setq fontsizes-list
           (list (car fontsizes-list))))
   (when (display-multi-font-p)
-    (let ((width (frame-pixel-width))
-          (height (frame-pixel-height)))
+    (let ((frame-inhibit-implied-resize cnfonts-keep-frame-size))
       (cnfonts--set-font-1 fontsizes-list)
-      (run-hook-with-args 'cnfonts-set-font-finish-hook fontsizes-list)
-      (when cnfonts-keep-frame-size
-        (set-frame-size nil width height t)))))
+      (run-hook-with-args 'cnfonts-set-font-finish-hook fontsizes-list))))
 
 (defun cnfonts--set-face-font-rescale (fontsizes-list)
   "根据 FONTSIZES-LIST 设定 `face-font-rescale-alist' 系数."
