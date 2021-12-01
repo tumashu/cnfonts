@@ -454,8 +454,8 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
    (concat (file-name-as-directory cnfonts-directory)
            cnfonts-config-filename)))
 
-(defun cnfonts--save-config (profile-name &optional fontsize)
-  "Save PROFILE-NAME and FONTSIZE into config file."
+(defun cnfonts--update-config (profile-name &optional fontsize)
+  "Update and save PROFILE-NAME and FONTSIZE into config file."
   (when profile-name
     (let ((fontsize (or fontsize (cdr (assoc profile-name cnfonts--config-info)))))
       (push (cons profile-name fontsize) cnfonts--config-info))
@@ -500,19 +500,24 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
   (let ((fontsize (cdr (assoc profile-name cnfonts--config-info))))
     (min (max (or fontsize cnfonts-default-fontsize) 9) 32)))
 
-(defun cnfonts--save-profile (fontnames fontsizes &optional profile-name)
-  "Save FONTNAMES and FONTSIZES to current profile.
+(defun cnfonts--update-profile (&optional profile-name use-fallback)
+  "Update and save FONTNAMES and FONTSIZES to current profile.
 When PROFILE-NAME is non-nil, save to this profile instead."
   (with-temp-buffer
     (insert ";; `cnfonts--custom-set-fontsnames' 结构与 `cnfonts--fontnames-fallback' 相同。")
     (cnfonts--dump-variable
      'cnfonts--custom-set-fontnames
-     (mapcar #'delete-dups fontnames))
+     (mapcar #'delete-dups
+             (if use-fallback
+                 cnfonts--fontnames-fallback
+               cnfonts--custom-set-fontnames)))
     (insert "\n")
     (insert ";; `cnfonts--custom-set-fontsizes' 结构与 `cnfonts--fontsizes-fallback' 相同。")
     (cnfonts--dump-variable
      'cnfonts--custom-set-fontsizes
-     fontsizes)
+     (if use-fallback
+         cnfonts--fontsizes-fallback
+       cnfonts--custom-set-fontsizes))
     (write-file (cnfonts--get-profile
                  (or profile-name (cnfonts--get-current-profile t))))))
 
@@ -757,7 +762,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
            (fontsizes-list (cnfonts--get-fontsizes (nth index steps))))
       (when fontsizes-list
         (cnfonts--set-font fontsizes-list)
-        (cnfonts--save-config profile-name (car fontsizes-list))
+        (cnfonts--update-config profile-name (car fontsizes-list))
         (message cnfonts--minibuffer-echo-string)))))
 
 (define-obsolete-function-alias
@@ -785,8 +790,8 @@ When PROFILE-NAME is non-nil, save to this profile instead."
           (with-selected-frame frame
             (cnfonts--set-font fontsizes-list))
         (cnfonts--set-font fontsizes-list)))
-    (cnfonts--save-config profile-name (car fontsizes-list))
-    (cnfonts--save-profile cnfonts--custom-set-fontnames cnfonts--custom-set-fontsizes)
+    (cnfonts--update-config profile-name (car fontsizes-list))
+    (cnfonts--update-profile)
     ;; This is useful for exwm to adjust mode-line, please see:
     ;; https://github.com/ch11ng/exwm/issues/249#issuecomment-299692305
     (redisplay t)))
@@ -814,7 +819,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   (if (not (member profile-name cnfonts-profiles))
       (message "%s doesn't exist." profile-name)
     (cnfonts--read-config)
-    (cnfonts--save-config profile-name)
+    (cnfonts--update-config profile-name)
     (cnfonts--read-profile t)
     (cnfonts-set-font)))
 
@@ -835,7 +840,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
                            (car profiles))))
     (when next-profile
       (cnfonts--read-config)
-      (cnfonts--save-config next-profile)
+      (cnfonts--update-config next-profile)
       (cnfonts--read-profile t)
       (cnfonts-set-font)
       (message "Current cnfonts profile is set to: \"%s\"" next-profile))))
@@ -851,8 +856,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
     (cnfonts--read-profile)
     (let ((file (cnfonts--get-current-profile)))
       (unless (file-readable-p file)
-        (cnfonts--save-profile cnfonts--fontnames-fallback
-                               cnfonts--fontsizes-fallback))
+        (cnfonts--update-profile nil t))
       (require 'cnfonts-ui)
       (cnfonts-ui))))
 
@@ -862,8 +866,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   (interactive)
   (let ((profile-name (completing-read "Regenerate profile: " cnfonts-profiles)))
     (if (yes-or-no-p (format "Regenerate (%s)? " profile-name))
-        (cnfonts--save-profile cnfonts--fontnames-fallback
-                               cnfonts--fontsizes-fallback profile-name)
+        (cnfonts--update-profile profile-name)
       (message "Ignore regenerate profile!"))))
 
 ;;;###autoload

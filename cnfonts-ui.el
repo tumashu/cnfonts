@@ -461,7 +461,7 @@ HanaMinB 字体试试，这个字体的下载地址可以从 [ 帮助 ] 页面�
                 (cl-remove-duplicates
                  `(,font ,@(nth index cnfonts--custom-set-fontnames))
                  :from-end t :test 'equal))
-          (cnfonts--save-profile cnfonts--custom-set-fontnames cnfonts--custom-set-fontsizes)
+          (cnfonts--update-profile)
           (cnfonts-set-font))))))
 
 (defun cnfonts-ui--operate-align (&optional widget _event n)
@@ -479,7 +479,7 @@ HanaMinB 字体试试，这个字体的下载地址可以从 [ 帮助 ] 页面�
          widget-show-fontsize
          (format "%-5s" (nth index (assoc key cnfonts--custom-set-fontsizes)))))
       (when key
-        (cnfonts--save-profile cnfonts--custom-set-fontnames cnfonts--custom-set-fontsizes)
+        (cnfonts--update-profile)
         (cnfonts--set-font (assoc key cnfonts--custom-set-fontsizes))))))
 
 (defun cnfonts-ui--create-tab-stop-point ()
