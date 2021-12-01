@@ -456,15 +456,16 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
 
 (defun cnfonts--save-config (profile-name &optional fontsize)
   "Save PROFILE-NAME and FONTSIZE into config file."
-  (let ((fontsize (or fontsize (cdr (assoc profile-name cnfonts--config-info)))))
-    (push (cons profile-name fontsize) cnfonts--config-info))
-  (with-temp-file (cnfonts--return-config-file-path)
-    (prin1 (cl-remove-duplicates
-            (remove nil cnfonts--config-info)
-            :test (lambda (x y)
-                    (equal (car x) (car y)))
-            :from-end t)
-           (current-buffer))))
+  (when profile-name
+    (let ((fontsize (or fontsize (cdr (assoc profile-name cnfonts--config-info)))))
+      (push (cons profile-name fontsize) cnfonts--config-info))
+    (with-temp-file (cnfonts--return-config-file-path)
+      (prin1 (cl-remove-duplicates
+              (remove nil cnfonts--config-info)
+              :test (lambda (x y)
+                      (equal (car x) (car y)))
+              :from-end t)
+             (current-buffer)))))
 
 (defun cnfonts--read-config ()
   "Read cnfonts's config file."
