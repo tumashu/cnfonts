@@ -537,7 +537,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
                 (length list2)
                 (length list3)))
         output)
-    (dotimes (i (- n 1))
+    (dotimes (i n)
       (let ((x1 (ignore-errors (nth i list1)))
             (x2 (ignore-errors (nth i list2)))
             (x3 (ignore-errors (nth i list3))))
