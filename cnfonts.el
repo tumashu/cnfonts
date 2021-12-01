@@ -515,11 +515,12 @@ When PROFILE-NAME is non-nil, save to this profile instead."
     (write-file (cnfonts--get-profile
                  (or profile-name (cnfonts--get-current-profile t))))))
 
-(defun cnfonts--read-profile ()
+(defun cnfonts--read-profile (&optional force-read)
   "Get previously saved fontnames and fontsizes from current profile."
   (interactive)
-  (when (not (and cnfonts--custom-set-fontnames
-                  cnfonts--custom-set-fontsizes))
+  (when (or force-read
+            (not (and cnfonts--custom-set-fontnames
+                      cnfonts--custom-set-fontsizes)))
     (load (cnfonts--get-current-profile) nil t)
     (setq cnfonts--custom-set-fontnames
           (cnfonts--merge-fontnames
@@ -807,10 +808,11 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 
 (defun cnfonts--select-profile (profile-name)
   "选择 PROFILE-NAME."
-  (if (member profile-name cnfonts-profiles)
-      (progn (cnfonts--save-config profile-name)
-             (cnfonts-set-font))
-    (message "%s doesn't exist." profile-name)))
+  (if (not (member profile-name cnfonts-profiles))
+      (message "%s doesn't exist." profile-name)
+    (cnfonts--save-config profile-name)
+    (cnfonts--read-profile t)
+    (cnfonts-set-font)))
 
 ;;;###autoload
 (defun cnfonts-switch-profile ()
@@ -829,6 +831,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
                            (car profiles))))
     (when next-profile
       (cnfonts--save-config next-profile)
+      (cnfonts--read-profile t)
       (cnfonts-set-font)
       (message "Current cnfonts profile is set to: \"%s\"" next-profile))))
 
