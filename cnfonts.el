@@ -748,6 +748,8 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   "使用下 N 个字号."
   (if (not (display-graphic-p))
       (message "cnfonts 不支持 emacs 终端模式！")
+    (cnfonts--read-config)
+    (cnfonts--read-profile)
     (let* ((steps (mapcar #'car cnfonts--fontsizes-fallback))
            (profile-name (cnfonts--get-current-profile t))
            (profile-fontsize (cnfonts--get-profile-fontsize profile-name))
@@ -811,6 +813,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   "选择 PROFILE-NAME."
   (if (not (member profile-name cnfonts-profiles))
       (message "%s doesn't exist." profile-name)
+    (cnfonts--read-config)
     (cnfonts--save-config profile-name)
     (cnfonts--read-profile t)
     (cnfonts-set-font)))
@@ -831,6 +834,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
          (next-profile (or (cadr (member current-profile profiles))
                            (car profiles))))
     (when next-profile
+      (cnfonts--read-config)
       (cnfonts--save-config next-profile)
       (cnfonts--read-profile t)
       (cnfonts-set-font)
@@ -843,6 +847,8 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   (interactive)
   (if (not (display-graphic-p))
       (message "cnfonts 不支持 emacs 终端模式！")
+    (cnfonts--read-config)
+    (cnfonts--read-profile)
     (let ((file (cnfonts--get-current-profile)))
       (unless (file-readable-p file)
         (cnfonts--save-profile cnfonts--fontnames-fallback
