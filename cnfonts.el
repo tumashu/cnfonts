@@ -518,29 +518,42 @@ When PROFILE-NAME is non-nil, save to this profile instead."
                   cnfonts--custom-set-fontsizes))
     (load (cnfonts--get-current-profile) nil t)
     (setq cnfonts--custom-set-fontnames
-          (cnfonts--merge-fontname-list
+          (cnfonts--merge-fontnames
            cnfonts--custom-set-fontnames
            cnfonts-personal-fontnames
            cnfonts--fontnames-fallback))
     (setq cnfonts--custom-set-fontsizes
-          (mapcar
-           (lambda (fontsizes)
-             ;; 添加 symbol 和点缀字符的字体支持之后，做的兼容。
-             (if (< (length fontsizes) 5)
-                 `(,@fontsizes ,(car fontsizes) ,(car fontsizes))
-               fontsizes))
-           (or cnfonts--custom-set-fontsizes
-               cnfonts--fontsizes-fallback)))))
+          (cnfonts--merge-fontsizes
+           cnfonts--custom-set-fontsizes
+           cnfonts--fontsizes-fallback))))
 
-(defun cnfonts--merge-fontname-list (list1 list2 &optional list3)
-  "Merge fontname lists  LIST1, LIST2 and LIST3 into one."
-  (mapcar (lambda (i)
-            (let ((x1 (ignore-errors (nth i list1)))
-                  (x2 (ignore-errors (nth i list2)))
-                  (x3 (ignore-errors (nth i list3))))
-              (delete-dups
-               (remove nil `(,@x1 ,@x2 ,@x3)))))
-          '(0 1 2 3 4)))
+(defun cnfonts--merge-fontnames (list1 list2 list3)
+  "Merge fontname lists LIST1, LIST2 and LIST3 into one."
+  (let ((n (max (length list1)
+                (length list2)
+                (length list3)))
+        output)
+    (dotimes (i (- n 1))
+      (let ((x1 (ignore-errors (nth i list1)))
+            (x2 (ignore-errors (nth i list2)))
+            (x3 (ignore-errors (nth i list3))))
+        (push (delete-dups
+               (remove nil `(,@x1 ,@x2 ,@x3)))
+              output)))
+    (reverse output)))
+
+(defun cnfonts--merge-fontsizes (list1 list2)
+  "Merge fontsizes lists LIST1, LIST2 and LIST3 into one."
+  (let (result)
+    (dotimes (i (- (length list1) 1))
+      (let* ((x1 (nth i list1))
+             (x2 (nth i list2))
+             (n1 (length x1))
+             (n2 (length x2)))
+        (if (>= n1 n2)
+            (push x1 result)
+          (push `(,@x1 ,@(nthcdr n1 x2)) result))))
+    (reverse result)))
 
 (defun cnfonts--font-exists-p (font &optional fast)
   "Test FONT exist or not."
