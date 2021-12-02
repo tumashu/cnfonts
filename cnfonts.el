@@ -524,6 +524,15 @@ When PROFILE-NAME is non-nil, save to this profile instead."
     (write-file (cnfonts--get-profile
                  (or profile-name (cnfonts--get-current-profile t))))))
 
+(defun cnfonts--update-profile-fontnames (font-type-index font)
+  (setf (nth font-type-index cnfonts--custom-set-fontnames)
+        (delete-dups
+         `(,font ,@(nth font-type-index cnfonts--custom-set-fontnames)))))
+
+(defun cnfonts--update-profile-fontsizes (english-size font-type-index incf-x)
+  (when (and font-type-index font-type-index (numberp incf-x))
+    (cl-incf (nth font-type-index (assoc english-size cnfonts--custom-set-fontsizes)) incf-x)))
+
 (defun cnfonts--read-profile (&optional force-read)
   "Get previously saved fontnames and fontsizes from current profile."
   (interactive)

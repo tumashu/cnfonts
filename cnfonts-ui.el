@@ -457,10 +457,7 @@ HanaMinB 字体试试，这个字体的下载地址可以从 [ 帮助 ] 页面�
       (if (not (cnfonts--font-exists-p font))
           (message "cnfonts UI: 系统没有安装字体: %S ." font)
         (when (widget-value widget1)
-          (setf (nth index cnfonts--custom-set-fontnames)
-                (cl-remove-duplicates
-                 `(,font ,@(nth index cnfonts--custom-set-fontnames))
-                 :from-end t :test 'equal))
+          (cnfonts--update-profile-fontnames index font)
           (cnfonts--save-profile)
           (cnfonts-set-font))))))
 
@@ -473,14 +470,14 @@ HanaMinB 字体试试，这个字体的下载地址可以从 [ 帮助 ] 页面�
     (if (not flag)
         (message "当前光标所在位置不对，请将光标移动到 ‘中文字号’ 或者 ‘EXT-B字体字号’ 对应的数字上。")
       (when (and index key (numberp n))
-        (cl-incf (nth index (assoc key cnfonts--custom-set-fontsizes)) n)
+        (cnfonts--update-profile-fontsizes key index n)
         ;; 更新加号按钮和减号按钮前面的数字标签
         (widget-value-set
          widget-show-fontsize
-         (format "%-5s" (nth index (assoc key cnfonts--custom-set-fontsizes)))))
+         (format "%-5s" (nth index (cnfonts--get-fontsizes key)))))
       (when key
         (cnfonts--save-profile)
-        (cnfonts--set-font (assoc key cnfonts--custom-set-fontsizes))))))
+        (cnfonts--set-font (cnfonts--get-fontsizes key))))))
 
 (defun cnfonts-ui--create-tab-stop-point ()
   "Create a widget.
