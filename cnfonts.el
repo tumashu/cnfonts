@@ -455,17 +455,20 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
            cnfonts-config-filename)))
 
 (defun cnfonts--update-config (profile-name &optional fontsize)
-  "Update and save PROFILE-NAME and FONTSIZE into config file."
+  "Update PROFILE-NAME and FONTSIZE into config file."
   (when profile-name
     (let ((fontsize (or fontsize (cdr (assoc profile-name cnfonts--config-info)))))
-      (push (cons profile-name fontsize) cnfonts--config-info))
-    (with-temp-file (cnfonts--return-config-file-path)
-      (prin1 (cl-remove-duplicates
-              (remove nil cnfonts--config-info)
-              :test (lambda (x y)
-                      (equal (car x) (car y)))
-              :from-end t)
-             (current-buffer)))))
+      (push (cons profile-name fontsize) cnfonts--config-info))))
+
+(defun cnfonts--save-config ()
+  "Save cnfonts config ."
+  (with-temp-file (cnfonts--return-config-file-path)
+    (prin1 (cl-remove-duplicates
+            (remove nil cnfonts--config-info)
+            :test (lambda (x y)
+                    (equal (car x) (car y)))
+            :from-end t)
+           (current-buffer))))
 
 (defun cnfonts--read-config ()
   "Read cnfonts's config file."
@@ -763,6 +766,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
       (when fontsizes-list
         (cnfonts--set-font fontsizes-list)
         (cnfonts--update-config profile-name (car fontsizes-list))
+        (cnfonts--save-config)
         (message cnfonts--minibuffer-echo-string)))))
 
 (define-obsolete-function-alias
@@ -791,6 +795,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
             (cnfonts--set-font fontsizes-list))
         (cnfonts--set-font fontsizes-list)))
     (cnfonts--update-config profile-name (car fontsizes-list))
+    (cnfonts--save-config)
     (cnfonts--update-profile)
     ;; This is useful for exwm to adjust mode-line, please see:
     ;; https://github.com/ch11ng/exwm/issues/249#issuecomment-299692305
@@ -820,6 +825,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
       (message "%s doesn't exist." profile-name)
     (cnfonts--read-config)
     (cnfonts--update-config profile-name)
+    (cnfonts--save-config)
     (cnfonts--read-profile t)
     (cnfonts-set-font)))
 
@@ -841,6 +847,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
     (when next-profile
       (cnfonts--read-config)
       (cnfonts--update-config next-profile)
+      (cnfonts--save-config)
       (cnfonts--read-profile t)
       (cnfonts-set-font)
       (message "Current cnfonts profile is set to: \"%s\"" next-profile))))
