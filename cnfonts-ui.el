@@ -271,6 +271,18 @@ TODO: IGNORE-FACE."
     (widget-create 'push-button
                    :button-face-get 'ignore
                    :mouse-face-get 'ignore
+                   :tag "[测试 Minibuffer 抖动情况]"
+                   :action '(lambda (widget event)
+                              (dotimes (i 5)
+                                (message "Minibuffer 抖动测试 (%s/%s)" (+ i 1) 5)
+                                (sit-for 0.3)
+                                (message nil)
+                                (sit-for 0.3))))
+    (widget-insert "\n\n")
+
+    (widget-create 'push-button
+                   :button-face-get 'ignore
+                   :mouse-face-get 'ignore
                    :tag "[设置上一个字号]"
                    :action '(lambda (widget event)
                               (cnfonts-decrease-fontsize)
