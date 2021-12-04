@@ -117,16 +117,17 @@ Emacs 25.2 以后，当 default font 有某个字符的时候，优先使用这�
 
 (defun cnfonts-ui--switch-to-page (page-name)
   "Switch to page which name is PAGE-NAME."
-  (switch-to-buffer (format " *cnfonts: %S*" page-name))
-  (dolist (widget cnfonts-ui--widgets-navigation)
-    (let ((orig-value (widget-value widget))
-          (widget-page (widget-get widget :page-name)))
-      (if (eq cnfonts-ui--current-page widget-page)
+  (let ((point (point)))
+    (switch-to-buffer (format " *cnfonts: %S*" page-name))
+    (dolist (widget cnfonts-ui--widgets-navigation)
+      (let ((orig-value (widget-value widget))
+            (widget-page (widget-get widget :page-name)))
+        (if (eq cnfonts-ui--current-page widget-page)
+            (widget-value-set
+             widget (replace-regexp-in-string " " "*" orig-value))
           (widget-value-set
-           widget (replace-regexp-in-string " " "*" orig-value))
-        (widget-value-set
-         widget (replace-regexp-in-string "*" " " orig-value)))))
-  (goto-char (point-min)))
+           widget (replace-regexp-in-string "*" " " orig-value)))))
+    (goto-char point)))
 
 (defun cnfonts-ui--create-page-switch-button (page-name &optional ignore-face)
   "Create a button which used to switch page named PAGE-NAME.
