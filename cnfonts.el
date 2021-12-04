@@ -659,20 +659,16 @@ When PROFILE-NAME is non-nil, save to this profile instead."
          (english-fontspec
           (when english-fontname
             (font-spec :name english-fontname
-                       :size english-fontsize
-                       :weight 'normal
-                       :slant 'normal)))
+                       :size english-fontsize)))
          (english-bold-fontspec
           (when english-fontname
             (font-spec :name english-fontname
                        :size english-fontsize
-                       :weight 'bold
-                       :slant 'normal)))
+                       :weight 'bold)))
          (english-italic-fontspec
           (when english-fontname
             (font-spec :name  english-fontname
                        :size english-fontsize
-                       :weight 'normal
                        :slant 'italic)))
          (english-bold-italic-fontspec
           (when english-fontname
