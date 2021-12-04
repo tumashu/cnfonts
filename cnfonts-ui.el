@@ -154,7 +154,7 @@ TODO: IGNORE-FACE."
 
 (defun cnfonts-ui--create-align-line (index label fontsize-list align-string)
   (let ((fontsize (number-to-string (nth index fontsize-list)))
-        widget1 widget2 widget3 widget4 widget5)
+        widget1 widget2 widget3 widget4)
     (widget-insert (format "%s. " (+ index 1)))
     (widget-insert (format "%-5s " label))
     (if (= index 0)
@@ -163,8 +163,7 @@ TODO: IGNORE-FACE."
                                             :flag t
                                             :key (car fontsize-list)
                                             :button-face-get 'ignore
-                                            :mouse-face-get 'ignore
-                                            :action 'cnfonts-ui-test-align))
+                                            :mouse-face-get 'ignore))
                (push (cons widget1 widget1) cnfonts-ui--widgets-alist))
       (setq widget2 (widget-create 'push-button
                                    :value (format "%-5s" fontsize)
@@ -173,8 +172,7 @@ TODO: IGNORE-FACE."
                                    :key (car fontsize-list)
                                    :tab-stop-point t
                                    :button-face-get 'ignore
-                                   :mouse-face-get 'ignore
-                                   :action 'cnfonts-ui-test-align))
+                                   :mouse-face-get 'ignore))
       (setq widget3 (widget-create 'push-button
                                    :tag "[-]"
                                    :index index
@@ -194,15 +192,7 @@ TODO: IGNORE-FACE."
       (push (cons widget2 widget2) cnfonts-ui--widgets-alist)
       (push (cons widget3 widget2) cnfonts-ui--widgets-alist)
       (push (cons widget4 widget2) cnfonts-ui--widgets-alist))
-    (setq widget5 (widget-create 'push-button
-                                 :value "                  "
-                                 :flag t
-                                 :key (car fontsize-list)
-                                 :button-face-get 'ignore
-                                 :mouse-face-get 'ignore
-                                 :action 'cnfonts-ui-test-align))
-    (push (cons widget5 widget5) cnfonts-ui--widgets-alist)
-
+    (widget-insert "                  ")
     (widget-insert align-string)
     (widget-insert "\n")))
 
@@ -492,11 +482,6 @@ the curse will stop to this widget when forward/backward widget."
                  :tab-stop-point t
                  :button-face-get 'ignore
                  :mouse-face-get 'ignore))
-
-(defun cnfonts-ui-test-align (&optional widget event)
-  "Align test command."
-  (interactive)
-  (cnfonts-ui--operate-align widget event))
 
 (defun cnfonts-ui-increase-align (&optional widget event)
   (interactive)
