@@ -106,6 +106,8 @@ Emacs 25.2 以后，当 default font 有某个字符的时候，优先使用这�
     (define-key map "-" 'cnfonts-ui-decrease-align)
     (define-key map (kbd "C-<up>") 'cnfonts-ui-increase-align)
     (define-key map (kbd "C-<down>") 'cnfonts-ui-decrease-align)
+    (define-key map [drag-mouse-1] 'ignore)
+    (define-key map [mouse-1]      'ignore)
     map)
   "Keymap for `cnfonts-ui-mode'.")
 
