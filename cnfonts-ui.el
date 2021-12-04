@@ -271,18 +271,6 @@ TODO: IGNORE-FACE."
     (widget-create 'push-button
                    :button-face-get 'ignore
                    :mouse-face-get 'ignore
-                   :tag "[测试 Minibuffer 抖动情况]"
-                   :action '(lambda (widget event)
-                              (dotimes (i 5)
-                                (message "Minibuffer 抖动测试 (%s/%s)" (+ i 1) 5)
-                                (sit-for 0.3)
-                                (message nil)
-                                (sit-for 0.3))))
-    (widget-insert "\n\n")
-
-    (widget-create 'push-button
-                   :button-face-get 'ignore
-                   :mouse-face-get 'ignore
                    :tag "[设置上一个字号]"
                    :action '(lambda (widget event)
                               (cnfonts-decrease-fontsize)
@@ -489,7 +477,12 @@ HanaMinB 字体试试，这个字体的下载地址可以从 [ 帮助 ] 页面�
          (format "%-5s" (nth index (cnfonts--get-fontsizes key)))))
       (when key
         (cnfonts--save-profile)
-        (cnfonts--set-font (cnfonts--get-fontsizes key))))))
+        (cnfonts--set-font (cnfonts--get-fontsizes key)))
+      (dotimes (i 5)
+        (sit-for 0.3)
+        (message "[cnfonts] 测试 Minibuffer 是否抖动 (%s/%s)" (+ i 1) 5)
+        (sit-for 0.3)
+        (message nil)))))
 
 (defun cnfonts-ui--create-tab-stop-point ()
   "Create a widget.
