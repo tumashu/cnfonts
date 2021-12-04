@@ -683,7 +683,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
          (extb-fontspec
           (when extb-fontname
             (font-spec :name extb-fontname
-                       :size (or extb-fontsize chinese-fontsize))))
+                       :size extb-fontsize)))
          (symbol-fontspec
           (when symbol-fontname
             (font-spec :name symbol-fontname
