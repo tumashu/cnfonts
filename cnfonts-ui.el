@@ -114,6 +114,16 @@ Emacs 25.2 以后，当 default font 有某个字符的时候，优先使用这�
 (defvar cnfonts-ui--widgets-navigation nil)
 (defvar cnfonts-ui--widgets-elisp-snippet nil)
 (defvar cnfonts-ui--verbose nil)
+(defvar cnfonts-ui--move-mouse nil)
+
+(defun cnfonts-ui--move-mouse ()
+  "Move mouse to current point."
+  (let ((x-y (posn-x-y (posn-at-point (+ (point) 1)))))
+    (when (and (car x-y) (cdr x-y))
+      (set-mouse-pixel-position
+       (window-frame)
+       (+ (car x-y) (/ (default-font-width) 2))
+       (+ (cdr x-y) (/ (default-font-height) 2))))))
 
 (defun cnfonts-ui--switch-to-page (page-name)
   "Switch to page which name is PAGE-NAME."
@@ -228,7 +238,9 @@ TODO: IGNORE-FACE."
                ,@body
                (widget-setup)
                (goto-char ,point))
-           (cnfonts-ui--switch-to-page ',page-name))))))
+           (cnfonts-ui--switch-to-page ',page-name))
+         (when cnfonts-ui--move-mouse
+           (cnfonts-ui--move-mouse))))))
 
 (defun cnfonts-ui--get-page-info (page-name key)
   (let ((page-info (cdr (assq page-name cnfonts-ui--pages))))
@@ -266,16 +278,18 @@ TODO: IGNORE-FACE."
                    :mouse-face-get 'ignore
                    :tag "[设置上一个字号]"
                    :action '(lambda (widget event)
-                              (cnfonts-decrease-fontsize)
-                              (cnfonts-ui-page-align-page nil nil t)))
+                              (let ((cnfonts-ui--move-mouse t))
+                                (cnfonts-decrease-fontsize)
+                                (cnfonts-ui-page-align-page nil nil t))))
     (widget-insert "                                    ")
     (widget-create 'push-button
                    :button-face-get 'ignore
                    :mouse-face-get 'ignore
                    :tag "[设置下一个字号]"
                    :action '(lambda (widget event)
-                              (cnfonts-increase-fontsize)
-                              (cnfonts-ui-page-align-page nil nil t)))))
+                              (let ((cnfonts-ui--move-mouse t))
+                                (cnfonts-increase-fontsize)
+                                (cnfonts-ui-page-align-page nil nil t))))))
 
 (defun cnfonts-ui--create-fonts-page (page-name)
   (let ((index (cnfonts-ui--get-page-info page-name :index))
