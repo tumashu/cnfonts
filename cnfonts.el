@@ -683,28 +683,19 @@ When PROFILE-NAME is non-nil, save to this profile instead."
          (chinese-fontspec
           (when chinese-fontname
             (font-spec :name chinese-fontname
-                       :size chinese-fontsize
-                       :weight 'normal
-                       :slant 'normal)))
+                       :size chinese-fontsize)))
          (extb-fontspec
           (when extb-fontname
             (font-spec :name extb-fontname
-                       :size (or extb-fontsize
-                                 chinese-fontsize)
-                       :weight 'normal
-                       :slant 'normal)))
+                       :size (or extb-fontsize chinese-fontsize))))
          (symbol-fontspec
           (when symbol-fontname
             (font-spec :name symbol-fontname
-                       :size symbol-fontsize
-                       :weight 'normal
-                       :slant 'normal)))
+                       :size symbol-fontsize)))
          (ornament-fontspec
           (when ornament-fontname
             (font-spec :name ornament-fontname
-                       :size ornament-fontsize
-                       :weight 'normal
-                       :slant 'normal))))
+                       :size ornament-fontsize))))
 
     (when (fontp english-fontspec)
       ;; 设置英文字体。
