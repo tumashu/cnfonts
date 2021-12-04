@@ -207,10 +207,12 @@ TODO: IGNORE-FACE."
 (defmacro cnfonts-ui-create-page (page-name &rest body)
   (declare (indent 1) (debug t))
   (let ((func-name (intern (concat "cnfonts-ui-page-" (symbol-name page-name))))
-        (buffer-name (make-symbol "buffer-name")))
+        (buffer-name (make-symbol "buffer-name"))
+        (point (make-symbol "point")))
     `(defun ,func-name (&optional _widget _event create-buffer)
        (interactive)
-       (let ((,buffer-name (format " *cnfonts: %S*" ',page-name)))
+       (let ((,buffer-name (format " *cnfonts: %S*" ',page-name))
+             (,point (point)))
          (if create-buffer
              (with-current-buffer (get-buffer-create ,buffer-name)
                (let ((inhibit-read-only t))
@@ -223,8 +225,8 @@ TODO: IGNORE-FACE."
                (set (make-local-variable 'cnfonts-ui--widgets-elisp-snippet) nil)
                (setq truncate-lines t)
                ,@body
-               (goto-char (point-min))
-               (widget-setup))
+               (widget-setup)
+               (goto-char ,point))
            (cnfonts-ui--switch-to-page ',page-name))))))
 
 (defun cnfonts-ui--get-page-info (page-name key)
