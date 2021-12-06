@@ -869,7 +869,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   (interactive)
   (let ((profile-name (completing-read "Regenerate profile: " cnfonts-profiles)))
     (if (yes-or-no-p (format "Regenerate (%s)? " profile-name))
-        (cnfonts--save-profile profile-name)
+        (cnfonts--save-profile profile-name t)
       (message "Ignore regenerate profile!"))))
 
 ;;;###autoload
