@@ -361,13 +361,13 @@ It record the current profile and profile fontsize."
      "AnonymousPro" "3270" "Arimo" "D2Coding" "Inconsolata-g" "ProFont for Powerline"
      "Meslo" "Meslo Dotted" "Noto Mono" "Symbol Neu" "Tinos" "Space Mono" "SFMono Nerd Font")
     ;; 中文字体
-    ("微软雅黑" "Noto Sans S Chinese Regular" "Microsoft Yahei" "Microsoft YaHei Mono"
-     "Microsoft_Yahei" "Ubuntu Mono" "文泉驿等宽微米黑" "文泉驿等宽正黑" "黑体" "Source Han Sans SC"
-     "Source Han Serif SC" "思源黑体 CN Regular" "思源黑体 CN Medium" "思源黑体 CN Normal" "思源宋体 CN"
-     "思源宋体 CN Medium" "思源宋体 CN SemiBold" "Hiragino Sans GB"  "文泉驿正黑" "文泉驿点阵正黑"
-     "SimHei" "SimSun" "NSimSun" "FangSong" "KaiTi" "FangSong_GB2312" "KaiTi_GB2312" "LiSu"
-     "YouYuan" "新宋体" "宋体" "楷体_GB2312" "仿宋_GB2312" "幼圆" "隶书" "STXihei" "STKaiti"
-     "STSong" "STFangsong" "STXingkai" "华文仿宋" "华文行楷" "华文细黑" "华文楷体" )
+    ("微软雅黑" "Noto Sans Mono CJK SC" "Noto Sans Mono CJK TC" "Noto Sans CJK SC" "Noto Sans CJK TC"
+     "Microsoft Yahei" "Microsoft YaHei Mono" "Microsoft_Yahei" "Ubuntu Mono" "文泉驿等宽微米黑"
+     "文泉驿等宽正黑" "黑体" "Source Han Serif CN" "Source Han Sans CN" "思源黑体 CN" "思源宋体 CN"
+     "Hiragino Sans GB"  "文泉驿正黑" "文泉驿点阵正黑" "SimHei" "SimSun" "NSimSun" "FangSong" "KaiTi"
+     "FangSong_GB2312" "KaiTi_GB2312" "LiSu" "YouYuan" "新宋体" "宋体" "楷体_GB2312" "仿宋_GB2312"
+     "幼圆" "隶书" "STXihei" "STKaiti" "STSong" "STFangsong" "STXingkai" "华文仿宋" "华文行楷"
+     "华文细黑" "华文楷体" )
     ;; EXT-B 字体
     ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB" "PMingLiU-ExtB" "MingLiU_HKSCS-ExtB"
      "Hanazono Mincho" "Hanazono Mincho A" "Hanazono Mincho B"
