@@ -521,8 +521,9 @@ When PROFILE-NAME is non-nil, save to this profile instead."
      (if use-fallback
          cnfonts--fontsizes-fallback
        cnfonts--custom-set-fontsizes))
-    (write-file (cnfonts--get-profile
-                 (or profile-name (cnfonts--get-current-profile t))))))
+    (write-region (point-min) (point-max)
+                  (cnfonts--get-profile (or profile-name (cnfonts--get-current-profile t)))
+                  nil :silent)))
 
 (defun cnfonts--update-profile-fontnames (font-type-index font)
   (setf (nth font-type-index cnfonts--custom-set-fontnames)
