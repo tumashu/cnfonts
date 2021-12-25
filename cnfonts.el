@@ -540,7 +540,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   (when (or force-read
             (not (and cnfonts--custom-set-fontnames
                       cnfonts--custom-set-fontsizes)))
-    (load (cnfonts--get-current-profile) nil t)
+    (load (cnfonts--get-current-profile) t t)
     (setq cnfonts--custom-set-fontnames
           (cnfonts--merge-fontnames
            cnfonts--custom-set-fontnames
@@ -602,7 +602,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 (defun cnfonts--get-fontsizes (&optional fontsize)
   "获取 FONTSIZE 对应的 fontsize-list."
   (unless (file-exists-p (cnfonts--get-current-profile))
-    (message "如果中英文不能对齐，请运行 `cnfonts-edit-profile' 编辑当前 profile。"))
+    (message "[cnfonts]: 如果中英文不能对齐，请运行 `cnfonts-edit-profile' 编辑当前 profile。"))
   (when (numberp fontsize)
     (assoc fontsize cnfonts--custom-set-fontsizes #'=)))
 
@@ -742,7 +742,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
         (set-fontset-font "fontset-default" charset ornament-fontspec nil 'prepend)))
 
     (setq cnfonts--minibuffer-echo-string
-          (format "[%s]: 英文字体: %s-%.1f，中文字体: %s, EXTB字体：%s"
+          (format "[cnfonts]: %s 英文字体: %s-%.1f，中文字体: %s, EXTB字体：%s"
                   (cnfonts--get-current-profile t)
                   (or english-fontname "无") english-fontsize
                   (or chinese-fontname "无")
@@ -752,7 +752,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 (defun cnfonts--next-fontsize (n)
   "使用下 N 个字号."
   (if (not (display-graphic-p))
-      (message "cnfonts 不支持 emacs 终端模式！")
+      (message "[cnfonts]: 不支持 emacs 终端模式！")
     (cnfonts--read-config)
     (cnfonts--read-profile)
     (let* ((steps (mapcar #'car cnfonts--fontsizes-fallback))
@@ -819,7 +819,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 (defun cnfonts--select-profile (profile-name)
   "选择 PROFILE-NAME."
   (if (not (member profile-name cnfonts-profiles))
-      (message "%s doesn't exist." profile-name)
+      (message "[cnfonts]: %s doesn't exist." profile-name)
     (cnfonts--read-config)
     (cnfonts--update-config profile-name)
     (cnfonts--save-config)
@@ -847,7 +847,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
       (cnfonts--save-config)
       (cnfonts--read-profile t)
       (cnfonts-set-font)
-      (message "Current cnfonts profile is set to: \"%s\"" next-profile))))
+      (message "[cnfonts]: Current cnfonts profile is set to: \"%s\"" next-profile))))
 
 ;;;###autoload
 (declare-function cnfonts-ui "cnfonts-ui")
@@ -855,7 +855,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   "编辑当前 cnfonts profile."
   (interactive)
   (if (not (display-graphic-p))
-      (message "cnfonts 不支持 emacs 终端模式！")
+      (message "[cnfonts]: 不支持 emacs 终端模式！")
     (cnfonts--read-config)
     (cnfonts--read-profile)
     (let ((file (cnfonts--get-current-profile)))
@@ -871,7 +871,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   (let ((profile-name (completing-read "Regenerate profile: " cnfonts-profiles)))
     (if (yes-or-no-p (format "Regenerate (%s)? " profile-name))
         (cnfonts--save-profile profile-name t)
-      (message "Ignore regenerate profile!"))))
+      (message "[cnfonts]: Ignore regenerate profile!"))))
 
 ;;;###autoload
 (define-minor-mode cnfonts-mode
@@ -881,7 +881,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
    ((and (display-graphic-p) cnfonts-mode)
     (add-hook 'after-make-frame-functions #'cnfonts-set-font)
     (add-hook 'window-setup-hook #'cnfonts-set-font)
-    (message "cnfonts-mode 激活，使用 `cnfonts-edit-profile' 命令调整字体设置。"))
+    (message "[cnfonts]: cnfonts-mode 激活，使用 `cnfonts-edit-profile' 命令调整字体设置。"))
    (t
     (remove-hook 'after-make-frame-functions #'cnfonts-set-font)
     (remove-hook 'window-setup-hook #'cnfonts-set-font))))

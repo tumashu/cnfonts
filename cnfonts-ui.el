@@ -457,14 +457,14 @@ HanaMinB 字体试试，这个字体的下载地址可以从 [ 帮助 ] 页面�
          (index (widget-get widget1 :index))
          (flag (widget-get widget1 :flag)))
     (if (not flag)
-        (message "当前光标所在位置不对，请将光标移动到字体所在的行上面。")
+        (message "[cnfonts]: 当前光标所在位置不对，请将光标移动到字体所在的行上面。")
       (widget-toggle-action widget1 event)
       (dolist (w widgets)
         (unless (equal (widget-get w :font-name) font)
           (widget-value-set w nil)
           (widget-apply w :notify w event)))
       (if (not (cnfonts--font-exists-p font))
-          (message "cnfonts UI: 系统没有安装字体: %S ." font)
+          (message "[cnfonts]: 系统没有安装字体: %S ." font)
         (when (widget-value widget1)
           (cnfonts--update-profile-fontnames index font)
           (cnfonts--save-profile)
@@ -477,7 +477,7 @@ HanaMinB 字体试试，这个字体的下载地址可以从 [ 帮助 ] 页面�
          (flag (widget-get widget :flag))
          (widget-show-fontsize (cdr (assoc widget cnfonts-ui--widgets-alist))))
     (if (not flag)
-        (message "当前光标所在位置不对，请将光标移动到 ‘中文字号’ 或者 ‘EXT-B字体字号’ 对应的数字上。")
+        (message "[cnfonts]: 当前光标所在位置不对，请将光标移动到 ‘中文字号’ 或者 ‘EXT-B字体字号’ 对应的数字上。")
       (when (and index key (numberp n))
         (cnfonts--update-profile-fontsizes key index n)
         ;; 更新加号按钮和减号按钮前面的数字标签
@@ -489,7 +489,7 @@ HanaMinB 字体试试，这个字体的下载地址可以从 [ 帮助 ] 页面�
         (cnfonts--set-font (cnfonts--get-fontsizes key)))
       (dotimes (i 5)
         (sit-for 0.3)
-        (message "[cnfonts] 测试 Minibuffer 是否抖动 (%s/%s)" (+ i 1) 5)
+        (message "[cnfonts]: 测试 Minibuffer 是否抖动 (%s/%s)" (+ i 1) 5)
         (sit-for 0.3)
         (message nil)))))
 
@@ -576,7 +576,7 @@ It is meant for internal use."
 (defun cnfonts-ui ()
   (interactive)
   (if (not (display-graphic-p))
-      (message "cnfonts 不支持 Emacs 终端模式！")
+      (message "[cnfonts]: 不支持 Emacs 终端模式！")
     ;; "cus-edit" 不能很好的在 Emacs daemon 下工作，hack!
     (setq custom-raised-buttons
           (not (equal (face-valid-attribute-values :box)
