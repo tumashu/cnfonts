@@ -878,7 +878,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   "cnfonts mode."
   :global t
   (cond
-   ((and (display-graphic-p) cnfonts-mode)
+   (cnfonts-mode
     (add-hook 'after-make-frame-functions #'cnfonts-set-font)
     (add-hook 'window-setup-hook #'cnfonts-set-font)
     (message "[cnfonts]: cnfonts-mode 激活，使用 `cnfonts-edit-profile' 命令调整字体设置。"))
