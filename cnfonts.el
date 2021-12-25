@@ -786,7 +786,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   (let* ((profile-name (cnfonts--get-current-profile t))
          (profile-fontsize (cnfonts--get-profile-fontsize profile-name))
          (fontsizes-list (cnfonts--get-fontsizes profile-fontsize)))
-    (when (display-graphic-p)
+    (when (display-graphic-p frame)
       (if frame
           (with-selected-frame frame
             (cnfonts--set-font fontsizes-list))
