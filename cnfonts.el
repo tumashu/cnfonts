@@ -694,14 +694,14 @@ When PROFILE-NAME is non-nil, save to this profile instead."
             (font-spec :name ornament-fontname
                        :size ornament-fontsize))))
 
-    (when (fontp english-fontspec)
+    (when (cnfonts--fontspec-valid-p english-fontspec)
       ;; 设置英文字体。
       (set-face-attribute
        'default nil :font english-fontspec)
       ;; 设置英文粗体。
       (if cnfonts-disable-bold
           (set-face-font 'bold english-fontspec)
-        (if (fontp english-bold-fontspec)
+        (if (cnfonts--fontspec-valid-p english-bold-fontspec)
             (set-face-font 'bold english-bold-fontspec)
           (message "[cnfonts]: %S 对应的粗体没有找到，不作处理！"
                    english-fontname)))
@@ -709,7 +709,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
       ;; 设置英文斜体。
       (if cnfonts-disable-italic
           (set-face-font 'italic english-fontspec)
-        (if (fontp english-italic-fontspec)
+        (if (cnfonts--fontspec-valid-p english-italic-fontspec)
             (set-face-font 'italic english-italic-fontspec)
           (message "[cnfonts]: %S 对应的斜体没有找到，不作处理！"
                    english-fontname)))
@@ -717,27 +717,27 @@ When PROFILE-NAME is non-nil, save to this profile instead."
       ;; 设置英文粗斜体。
       (if cnfonts-disable-bold-italic
           (set-face-font 'bold-italic english-fontspec)
-        (if (fontp english-bold-italic-fontspec)
+        (if (cnfonts--fontspec-valid-p english-bold-italic-fontspec)
             (set-face-font 'bold-italic english-bold-italic-fontspec)
           (message "[cnfonts]: %S 对应的粗斜体没有找到，不作处理！"
                    english-fontname))))
 
     ;; 设置中文字体，注意，不要使用 'unicode charset,
     ;; 否则上面的英文字体设置将会失效。
-    (when (fontp chinese-fontspec)
+    (when (cnfonts--fontspec-valid-p chinese-fontspec)
       (dolist (charset '(kana han cjk-misc bopomofo gb18030))
         (set-fontset-font "fontset-default" charset chinese-fontspec)))
 
     ;; 设置 EXT-B 字体，用于显示不常用的汉字。
-    (when (fontp extb-fontspec)
+    (when (cnfonts--fontspec-valid-p extb-fontspec)
       (set-fontset-font "fontset-default" nil extb-fontspec nil 'prepend))
 
     ;; 设置 symbol 字体。
-    (when (fontp symbol-fontspec)
+    (when (cnfonts--fontspec-valid-p symbol-fontspec)
       (set-fontset-font "fontset-default" 'symbol symbol-fontspec nil 'prepend))
 
     ;; 设置点缀字符的字体。
-    (when (fontp ornament-fontspec)
+    (when (cnfonts--fontspec-valid-p ornament-fontspec)
       (dolist (charset cnfonts-ornaments)
         (set-fontset-font "fontset-default" charset ornament-fontspec nil 'prepend)))
 
@@ -748,6 +748,10 @@ When PROFILE-NAME is non-nil, save to this profile instead."
                   (or chinese-fontname "无")
                   (or extb-fontname "无")))
     (message "")))
+
+(defun cnfonts--fontspec-valid-p (fontspec)
+  "检查 FONTSPEC 是否有效."
+  (and fontspec (list-fonts fontspec)))
 
 (defun cnfonts--next-fontsize (n)
   "使用下 N 个字号."
