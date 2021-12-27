@@ -226,6 +226,8 @@ TODO: IGNORE-FACE."
        (interactive)
        (let ((,buffer-name (format " *cnfonts: %S*" ',page-name))
              (,point (point)))
+         ;; 创建或者切换 page 时，强制重新读取 profile.
+         (cnfonts--read-profile t)
          (if create-buffer
              (with-current-buffer (get-buffer-create ,buffer-name)
                (let ((inhibit-read-only t))
