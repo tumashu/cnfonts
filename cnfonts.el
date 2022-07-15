@@ -313,7 +313,8 @@ It record the current profile and profile fontsize."
   "The cofonts config info read from config file.")
 
 (defconst cnfonts--fontsizes-fallback
-  '((9    10.5  10.5  9    9   )
+  '((8    9     9     8    8   )
+    (9    10.5  10.5  9    9   )
     (10   12.0  12.0  10   10  )
     (11   13.0  13.0  11   11  )
     (11.5 13.5  13.5  11.5 11.5)
