@@ -313,7 +313,9 @@ It record the current profile and profile fontsize."
   "The cofonts config info read from config file.")
 
 (defconst cnfonts--fontsizes-fallback
-  '((8    9     9     8    8   )
+  '((6    7     7     6    6   )
+    (7    8     8     7    7   )
+    (8    9     9     8    8   )
     (9    10.5  10.5  9    9   )
     (10   12.0  12.0  10   10  )
     (11   13.0  13.0  11   11  )
@@ -494,7 +496,7 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
                        ;; fontsize, 所以有小于9的情况，这里做一下兼容。
                        ;; v1.0 以后简化代码。
                        (if (and (integerp (cdr x))
-                                (< (cdr x) 8))
+                                (< (cdr x) 6))
                            (cons (car x)
                                  (car (nth (- (cdr x) 1) cnfonts--fontsizes-fallback)))
                          x))
@@ -503,7 +505,7 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
 (defun cnfonts--get-profile-fontsize (profile-name)
   "Get the font size info from profile which name is PROFILE-NAME."
   (let ((fontsize (cdr (assoc profile-name cnfonts--config-info))))
-    (min (max (or fontsize cnfonts-default-fontsize) 8) 32)))
+    (min (max (or fontsize cnfonts-default-fontsize) 6) 32)))
 
 (defun cnfonts--save-profile (&optional profile-name use-fallback)
   "Save FONTNAMES and FONTSIZES to current profile.
