@@ -732,6 +732,10 @@ When PROFILE-NAME is non-nil, save to this profile instead."
       (dolist (charset '(kana han cjk-misc bopomofo gb18030))
         (set-fontset-font "fontset-default" charset chinese-fontspec)))
 
+    ;; 当所选的 chinese-fontspec 不支持韩语(hangul)时, 用 extb-fontspec 来显示
+    (when (cnfonts--fontspec-valid-p extb-fontspec)
+      (set-fontset-font "fontset-default" 'hangul extb-fontspec nil 'append))
+
     ;; 设置 EXT-B 字体，用于显示不常用的汉字。
     (when (cnfonts--fontspec-valid-p extb-fontspec)
       (set-fontset-font "fontset-default" nil extb-fontspec nil 'prepend))
