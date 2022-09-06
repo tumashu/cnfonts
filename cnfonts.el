@@ -742,7 +742,8 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 
     ;; 设置 symbol 字体。
     (when (cnfonts--fontspec-valid-p symbol-fontspec)
-      (set-fontset-font "fontset-default" 'symbol symbol-fontspec nil 'prepend))
+      (dolist (charset '(symbol phonetic))
+        (set-fontset-font "fontset-default" charset symbol-fontspec nil 'prepend)))
 
     ;; 设置点缀字符的字体。
     (when (cnfonts--fontspec-valid-p ornament-fontspec)

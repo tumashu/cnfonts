@@ -266,7 +266,7 @@ TODO: IGNORE-FACE."
     (cnfonts-ui--create-align-line 0 "ASCII   " fontsize-list "| More haste, less speed. |")
     (cnfonts-ui--create-align-line 1 "CJKV    " fontsize-list "| 为天地立心，为生民立命；|")
     (cnfonts-ui--create-align-line 2 "EXT-B   " fontsize-list "| 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀。|")
-    (cnfonts-ui--create-align-line 3 "Symbol  " fontsize-list "> αβχδεφγηιϕκλνοπθρστυ")
+    (cnfonts-ui--create-align-line 3 "Symbol  " fontsize-list "> αβχδεφγηιϕκλνοπθρστυʌɯʊ <")
     (cnfonts-ui--create-align-line 4 "Ornament" fontsize-list
                                    (concat "> "
                                            (mapconcat (lambda (x)
