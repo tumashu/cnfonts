@@ -907,7 +907,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 
 ;;;###autoload
 (defun cnfonts-disable ()
-  "警用 cnfonts, 建议使用 `cnfonts-mode'."
+  "禁用 cnfonts, 建议使用 `cnfonts-mode'."
   (interactive)
   (cnfonts-mode -1))
 
