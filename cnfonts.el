@@ -763,16 +763,6 @@ When PROFILE-NAME is non-nil, save to this profile instead."
         (cnfonts--save-config)
         (message cnfonts--minibuffer-echo-string)))))
 
-(define-obsolete-function-alias
-  'cnfonts-set-font-with-saved-step
-  'cnfonts-set-font
-  "1.0")
-
-(define-obsolete-function-alias
-  'cnfonts-set-font-with-saved-fontsize
-  'cnfonts-set-font
-  "1.0")
-
 ;;;###autoload
 (defun cnfonts-set-font (&optional frame)
   "使用已经保存的字号设置字体.
