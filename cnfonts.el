@@ -478,29 +478,10 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
   "Read cnfonts's config file."
   (unless cnfonts--config-info
     (let ((save-file (cnfonts--return-config-file-path)))
-      (if (file-readable-p save-file)
-          (with-temp-buffer
-            (insert-file-contents save-file)
-            ;; NOTE: 兼容性代码，以前的时候，cnfonts config 文件类似下面的结构：
-            ;;
-            ;;   ("profile1")(("profile1" . 15) ("profile2" .15))
-            ;;
-            ;; 而且 ("profile1") 有可能不存在，v1.0 以后简化代码。
-            (let* ((x (ignore-errors (read (current-buffer))))
-                   (y (ignore-errors (read (current-buffer))))
-                   (z (assoc (car x) y)))
-              (setq cnfonts--config-info
-                    (mapcar
-                     (lambda (x)
-                       ;; 以前的时候， cnfonts.el 保存的是 step 而不是
-                       ;; fontsize, 所以有小于9的情况，这里做一下兼容。
-                       ;; v1.0 以后简化代码。
-                       (if (and (integerp (cdr x))
-                                (< (cdr x) 6))
-                           (cons (car x)
-                                 (car (nth (- (cdr x) 1) cnfonts--fontsizes-fallback)))
-                         x))
-                     (if y `(,z ,@(remove z y)) x)))))))))
+      (when (file-readable-p save-file)
+        (with-temp-buffer
+          (insert-file-contents save-file)
+          (read (current-buffer)))))))
 
 (defun cnfonts--get-profile-fontsize (profile-name)
   "Get the font size info from profile which name is PROFILE-NAME."
