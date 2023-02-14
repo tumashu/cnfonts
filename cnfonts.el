@@ -446,10 +446,13 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
         ((atom (car value))
          (insert (format "\n(setq %S\n      '%S)\n" variable value)))
         (t (insert (format "\n(setq %S\n      '(" variable))
-           (dolist (e value)
+           (dolist (exp value)
              (insert (concat "\n        ("
-                             (mapconcat (lambda (x)
-                                          (format "%-4S" x)) e  " ") ")")))
+                             (mapconcat
+                              (lambda (x)
+                                (format "%-4S" x))
+                              exp  " ")
+                             ")")))
            (insert "\n        ))\n"))))
 
 (defun cnfonts--return-config-file-path ()
