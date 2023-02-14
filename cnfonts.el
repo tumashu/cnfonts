@@ -350,7 +350,7 @@ It record the current profile and profile fontsize."
 
 (defconst cnfonts--fontnames-fallback
   '(;; 英文字体
-    ("Monaco" "Consolas" "DejaVu Sans Mono" "Droid Sans Mono" "PragmataPro"
+    ("Monaco" "Consolas" "DejaVu Sans Mono" "Droid Sans Mono" "PragmataPro Mono"
      "Courier" "Courier New" "Ubuntu Mono" "Liberation Mono" "MonacoB" "MonacoB2"
      "MonacoBSemi" "Droid Sans Mono Pro" "Inconsolata" "Source Code Pro" "Lucida Console"
      "Envy Code R" "Andale Mono" "Lucida Sans Typewriter" "monoOne" "Lucida Typewriter"
