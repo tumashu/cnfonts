@@ -911,8 +911,6 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   (interactive)
   (cnfonts-mode -1))
 
-(define-obsolete-function-alias 'cnfonts-set-spacemacs-fallback-fonts 'ignore "1.0")
-
 ;; * Footer
 (provide 'cnfonts)
 
