@@ -128,7 +128,7 @@ Emacs 25.2 以后，当 default font 有某个字符的时候，优先使用这�
        (let ((,buffer-name (format " *cnfonts: %S*" ',page-name))
              (,point (point)))
          ;; 创建或者切换 page 时，强制重新读取 profile.
-         (cnfonts--read-profile t)
+         (cnfonts--read-profile nil t)
          (if create-buffer
              (with-current-buffer (get-buffer-create ,buffer-name)
                (let ((inhibit-read-only t))
