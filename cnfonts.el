@@ -408,52 +408,57 @@ It record the current profile and profile fontsize."
 这些 profile 文件保存在 `cnfonts-directory' 对应的目录中。在其它地方
 设置这个变量没有任何用处！")
 
-(defun cnfonts--get-profile (profile-name)
-  "Get profile file which name is PROFILE-NAME."
-  (let* ((cnfonts-profile-version "v4") ;; 升级 profile 格式时改变版本号
-         (directory-name
-          (file-name-as-directory
-           (concat (file-name-as-directory cnfonts-directory)
-                   cnfonts-profile-version
-                   "/"
-                   (if cnfonts-use-system-type
-                       (replace-regexp-in-string
-                        "/" "-" (symbol-name system-type))
-                     "")))))
-    (make-directory directory-name t)
-    (expand-file-name
-     (concat directory-name
-             (replace-regexp-in-string
-              "/" "-"
-              profile-name) ".el"))))
+;;;###autoload
+(defun cnfonts-set-font (&optional frame)
+  "使用已经保存的字号设置字体.
+如果 FRAME 是 non-nil, 设置对应的 FRAME 的字体。"
+  (interactive)
+  (cnfonts--read-profile)
+  (let* ((profile-name (cnfonts--get-current-profile t))
+         (profile-fontsize (cnfonts--get-profile-fontsize profile-name))
+         (fontsizes-list (cnfonts--get-fontsizes profile-fontsize)))
+    (when (display-graphic-p frame)
+      (if frame
+          (with-selected-frame frame
+            (cnfonts--set-font fontsizes-list))
+        (cnfonts--set-font fontsizes-list)))
+    (cnfonts--update-and-save-config profile-name (car fontsizes-list))
+    (cnfonts--save-profile)
+    ;; This is useful for exwm to adjust mode-line, please see:
+    ;; https://github.com/ch11ng/exwm/issues/249#issuecomment-299692305
+    (redisplay t)))
 
-(defun cnfonts--get-current-profile (&optional return-profile-name)
-  "Get current profile file.
-When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
-  (let* ((profile-name (car (car cnfonts--config-info)))
-         (profile-name
-          (if (member profile-name cnfonts-profiles)
-              profile-name
-            (car cnfonts-profiles))))
-    (if return-profile-name
-        profile-name
-      (cnfonts--get-profile profile-name))))
+(defun cnfonts--read-profile (&optional profile-name force-read)
+  "Get previously saved fontnames and fontsizes from current profile.
+When PROFILE-NAME is provided, read it instead of current profile.
+When FORCE-READ is non-nil, profile file will be re-read."
+  (interactive)
+  (cnfonts--read-config)
+  (when profile-name
+    (cnfonts--update-and-save-config profile-name))
+  (when (or force-read
+            (not (and cnfonts--custom-set-fontnames
+                      cnfonts--custom-set-fontsizes)))
+    (load (cnfonts--get-current-profile) t t)
+    (setq cnfonts--custom-set-fontnames
+          (cnfonts--merge-fontnames
+           cnfonts--custom-set-fontnames
+           cnfonts-personal-fontnames
+           cnfonts--fontnames-fallback))
+    (setq cnfonts--custom-set-fontsizes
+          (cnfonts--merge-fontsizes
+           cnfonts--custom-set-fontsizes
+           cnfonts--fontsizes-fallback))))
 
-(defun cnfonts--dump-variable (variable value)
-  "Insert a \"(setq VARIABLE VALUE)\" in the current buffer."
-  (cond ((atom value)
-         (insert (format "\n(setq %S %S)\n" variable value)))
-        ((atom (car value))
-         (insert (format "\n(setq %S\n      '%S)\n" variable value)))
-        (t (insert (format "\n(setq %S\n      '(" variable))
-           (dolist (exp value)
-             (insert (concat "\n        ("
-                             (mapconcat
-                              (lambda (x)
-                                (format "%-4S" x))
-                              exp  " ")
-                             ")")))
-           (insert "\n        ))\n"))))
+(defun cnfonts--read-config ()
+  "Read cnfonts's config file."
+  (unless cnfonts--config-info
+    (let ((save-file (cnfonts--return-config-file-path)))
+      (when (file-readable-p save-file)
+        (with-temp-buffer
+          (insert-file-contents save-file)
+          (setq cnfonts--config-info
+                (read (current-buffer))))))))
 
 (defun cnfonts--return-config-file-path ()
   "Return the path of config file."
@@ -478,73 +483,36 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
             :from-end t)
            (current-buffer))))
 
-(defun cnfonts--read-config ()
-  "Read cnfonts's config file."
-  (unless cnfonts--config-info
-    (let ((save-file (cnfonts--return-config-file-path)))
-      (when (file-readable-p save-file)
-        (with-temp-buffer
-          (insert-file-contents save-file)
-          (setq cnfonts--config-info
-                (read (current-buffer))))))))
+(defun cnfonts--get-current-profile (&optional return-profile-name)
+  "Get current profile file.
+When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
+  (let* ((profile-name (car (car cnfonts--config-info)))
+         (profile-name
+          (if (member profile-name cnfonts-profiles)
+              profile-name
+            (car cnfonts-profiles))))
+    (if return-profile-name
+        profile-name
+      (cnfonts--get-profile profile-name))))
 
-(defun cnfonts--get-profile-fontsize (profile-name)
-  "Get the font size info from profile which name is PROFILE-NAME."
-  (let ((fontsize (cdr (assoc profile-name cnfonts--config-info))))
-    (min (max (or fontsize cnfonts-default-fontsize) 6) 32)))
-
-(defun cnfonts--save-profile (&optional profile-name use-fallback)
-  "Save FONTNAMES and FONTSIZES to current profile.
-When PROFILE-NAME is non-nil, save to this profile instead."
-  (with-temp-buffer
-    (insert ";; `cnfonts--custom-set-fontsnames' 结构与 `cnfonts--fontnames-fallback' 相同。")
-    (cnfonts--dump-variable
-     'cnfonts--custom-set-fontnames
-     (mapcar #'delete-dups
-             (if use-fallback
-                 cnfonts--fontnames-fallback
-               cnfonts--custom-set-fontnames)))
-    (insert "\n")
-    (insert ";; `cnfonts--custom-set-fontsizes' 结构与 `cnfonts--fontsizes-fallback' 相同。")
-    (cnfonts--dump-variable
-     'cnfonts--custom-set-fontsizes
-     (if use-fallback
-         cnfonts--fontsizes-fallback
-       cnfonts--custom-set-fontsizes))
-    (write-region (point-min) (point-max)
-                  (cnfonts--get-profile (or profile-name (cnfonts--get-current-profile t)))
-                  nil :silent)))
-
-(defun cnfonts--update-profile-fontnames (font-type-index font)
-  (setf (nth font-type-index cnfonts--custom-set-fontnames)
-        (delete-dups
-         `(,font ,@(nth font-type-index cnfonts--custom-set-fontnames)))))
-
-(defun cnfonts--update-profile-fontsizes (english-size font-type-index incf-x)
-  (when (and font-type-index font-type-index (numberp incf-x))
-    (cl-incf (nth font-type-index (assoc english-size cnfonts--custom-set-fontsizes)) incf-x)))
-
-(defun cnfonts--read-profile (&optional profile-name force-read)
-  "Get previously saved fontnames and fontsizes from current profile.
-When PROFILE-NAME is provided, read it instead of current profile.
-When FORCE-READ is non-nil, profile file will be re-read."
-  (interactive)
-  (cnfonts--read-config)
-  (when profile-name
-    (cnfonts--update-and-save-config profile-name))
-  (when (or force-read
-            (not (and cnfonts--custom-set-fontnames
-                      cnfonts--custom-set-fontsizes)))
-    (load (cnfonts--get-current-profile) t t)
-    (setq cnfonts--custom-set-fontnames
-          (cnfonts--merge-fontnames
-           cnfonts--custom-set-fontnames
-           cnfonts-personal-fontnames
-           cnfonts--fontnames-fallback))
-    (setq cnfonts--custom-set-fontsizes
-          (cnfonts--merge-fontsizes
-           cnfonts--custom-set-fontsizes
-           cnfonts--fontsizes-fallback))))
+(defun cnfonts--get-profile (profile-name)
+  "Get profile file which name is PROFILE-NAME."
+  (let* ((cnfonts-profile-version "v4") ;; 升级 profile 格式时改变版本号
+         (directory-name
+          (file-name-as-directory
+           (concat (file-name-as-directory cnfonts-directory)
+                   cnfonts-profile-version
+                   "/"
+                   (if cnfonts-use-system-type
+                       (replace-regexp-in-string
+                        "/" "-" (symbol-name system-type))
+                     "")))))
+    (make-directory directory-name t)
+    (expand-file-name
+     (concat directory-name
+             (replace-regexp-in-string
+              "/" "-"
+              profile-name) ".el"))))
 
 (defun cnfonts--merge-fontnames (list1 list2 list3)
   "Merge fontname lists LIST1, LIST2 and LIST3 into one."
@@ -577,22 +545,10 @@ When FORCE-READ is non-nil, profile file will be re-read."
           (push `(,@x1 ,@(nthcdr n1 x2)) result))))
     (reverse result)))
 
-(defun cnfonts--font-exists-p (font &optional fast)
-  "Test FONT exist or not."
-  (or (x-list-fonts font nil nil 1)
-      (unless fast
-        (cl-find-if
-         (lambda (x)
-           (or (equal font x)
-               (equal (encode-coding-string font 'utf-8) x)
-               (equal (encode-coding-string font 'gbk) x)))
-         (font-family-list)))))
-
-(defun cnfonts--get-valid-fonts ()
-  "Get a list of valid fonts."
-  (mapcar (lambda (fonts)
-            (cl-find-if #'cnfonts--font-exists-p fonts))
-          cnfonts--custom-set-fontnames))
+(defun cnfonts--get-profile-fontsize (profile-name)
+  "Get the font size info from profile which name is PROFILE-NAME."
+  (let ((fontsize (cdr (assoc profile-name cnfonts--config-info))))
+    (min (max (or fontsize cnfonts-default-fontsize) 6) 32)))
 
 (defun cnfonts--get-fontsizes (&optional fontsize)
   "获取 FONTSIZE 对应的 fontsize-list."
@@ -625,10 +581,22 @@ When FORCE-READ is non-nil, profile file will be re-read."
                    collect (cons font (/ (float size)
                                          (car fontsizes-list)))))))
 
-(defun cnfonts--float (num)
-  "确保一个 NUM 总是浮点格式."
-  (when (numberp num)
-    (float num)))
+(defun cnfonts--get-valid-fonts ()
+  "Get a list of valid fonts."
+  (mapcar (lambda (fonts)
+            (cl-find-if #'cnfonts--font-exists-p fonts))
+          cnfonts--custom-set-fontnames))
+
+(defun cnfonts--font-exists-p (font &optional fast)
+  "Test FONT exist or not."
+  (or (x-list-fonts font nil nil 1)
+      (unless fast
+        (cl-find-if
+         (lambda (x)
+           (or (equal font x)
+               (equal (encode-coding-string font 'utf-8) x)
+               (equal (encode-coding-string font 'gbk) x)))
+         (font-family-list)))))
 
 (defun cnfonts--set-font-1 (fontsizes-list)
   "核心函数，用于设置字体.
@@ -749,9 +717,67 @@ When FORCE-READ is non-nil, profile file will be re-read."
                   (or extb-fontname "无")))
     (message "")))
 
+(defun cnfonts--float (num)
+  "确保一个 NUM 总是浮点格式."
+  (when (numberp num)
+    (float num)))
+
 (defun cnfonts--fontspec-valid-p (fontspec)
   "检查 FONTSPEC 是否有效."
   (and fontspec (list-fonts fontspec)))
+
+(defun cnfonts--save-profile (&optional profile-name use-fallback)
+  "Save FONTNAMES and FONTSIZES to current profile.
+When PROFILE-NAME is non-nil, save to this profile instead."
+  (with-temp-buffer
+    (insert ";; `cnfonts--custom-set-fontsnames' 结构与 `cnfonts--fontnames-fallback' 相同。")
+    (cnfonts--dump-variable
+     'cnfonts--custom-set-fontnames
+     (mapcar #'delete-dups
+             (if use-fallback
+                 cnfonts--fontnames-fallback
+               cnfonts--custom-set-fontnames)))
+    (insert "\n")
+    (insert ";; `cnfonts--custom-set-fontsizes' 结构与 `cnfonts--fontsizes-fallback' 相同。")
+    (cnfonts--dump-variable
+     'cnfonts--custom-set-fontsizes
+     (if use-fallback
+         cnfonts--fontsizes-fallback
+       cnfonts--custom-set-fontsizes))
+    (write-region (point-min) (point-max)
+                  (cnfonts--get-profile (or profile-name (cnfonts--get-current-profile t)))
+                  nil :silent)))
+
+(defun cnfonts--dump-variable (variable value)
+  "Insert a \"(setq VARIABLE VALUE)\" in the current buffer."
+  (cond ((atom value)
+         (insert (format "\n(setq %S %S)\n" variable value)))
+        ((atom (car value))
+         (insert (format "\n(setq %S\n      '%S)\n" variable value)))
+        (t (insert (format "\n(setq %S\n      '(" variable))
+           (dolist (exp value)
+             (insert (concat "\n        ("
+                             (mapconcat
+                              (lambda (x)
+                                (format "%-4S" x))
+                              exp  " ")
+                             ")")))
+           (insert "\n        ))\n"))))
+
+(defun cnfonts--update-profile-fontnames (font-type-index font)
+  (setf (nth font-type-index cnfonts--custom-set-fontnames)
+        (delete-dups
+         `(,font ,@(nth font-type-index cnfonts--custom-set-fontnames)))))
+
+(defun cnfonts--update-profile-fontsizes (english-size font-type-index incf-x)
+  (when (and font-type-index font-type-index (numberp incf-x))
+    (cl-incf (nth font-type-index (assoc english-size cnfonts--custom-set-fontsizes)) incf-x)))
+
+;;;###autoload
+(defun cnfonts-increase-fontsize ()
+  "Cnfonts 增大字体."
+  (interactive)
+  (cnfonts--next-fontsize 1))
 
 (defun cnfonts--next-fontsize (n)
   "使用下 N 个字号."
@@ -769,42 +795,16 @@ When FORCE-READ is non-nil, profile file will be re-read."
         (message cnfonts--minibuffer-echo-string)))))
 
 ;;;###autoload
-(defun cnfonts-set-font (&optional frame)
-  "使用已经保存的字号设置字体.
-如果 FRAME 是 non-nil, 设置对应的 FRAME 的字体。"
-  (interactive)
-  (cnfonts--read-profile)
-  (let* ((profile-name (cnfonts--get-current-profile t))
-         (profile-fontsize (cnfonts--get-profile-fontsize profile-name))
-         (fontsizes-list (cnfonts--get-fontsizes profile-fontsize)))
-    (when (display-graphic-p frame)
-      (if frame
-          (with-selected-frame frame
-            (cnfonts--set-font fontsizes-list))
-        (cnfonts--set-font fontsizes-list)))
-    (cnfonts--update-and-save-config profile-name (car fontsizes-list))
-    (cnfonts--save-profile)
-    ;; This is useful for exwm to adjust mode-line, please see:
-    ;; https://github.com/ch11ng/exwm/issues/249#issuecomment-299692305
-    (redisplay t)))
-
-;;;###autoload
-(defun cnfonts-reset-fontsize ()
-  "使用 `cnfonts-default-fontsize' 重置字号."
-  (interactive)
-  (cnfonts--next-fontsize 0))
-
-;;;###autoload
 (defun cnfonts-decrease-fontsize ()
   "Cnfonts 减小字体."
   (interactive)
   (cnfonts--next-fontsize -1))
 
 ;;;###autoload
-(defun cnfonts-increase-fontsize ()
-  "Cnfonts 增大字体."
+(defun cnfonts-reset-fontsize ()
+  "使用 `cnfonts-default-fontsize' 重置字号."
   (interactive)
-  (cnfonts--next-fontsize 1))
+  (cnfonts--next-fontsize 0))
 
 (defun cnfonts--select-profile (profile-name)
   "选择 PROFILE-NAME."
