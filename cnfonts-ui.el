@@ -432,10 +432,10 @@ NA:   表示系统没有安装当前字体。\n\n")
      :mouse-face-get 'ignore
      :tag "[设置上一个字号]"
      :action
-     '(lambda (widget event)
-        (let ((cnfonts-ui--move-mouse t))
-          (cnfonts-decrease-fontsize)
-          (cnfonts-ui-page-align-page nil nil t))))
+     (lambda (widget event)
+       (let ((cnfonts-ui--move-mouse t))
+         (cnfonts-decrease-fontsize)
+         (cnfonts-ui-page-align-page nil nil t))))
     (widget-insert "                                    ")
     (widget-create
      'push-button
@@ -443,10 +443,10 @@ NA:   表示系统没有安装当前字体。\n\n")
      :mouse-face-get 'ignore
      :tag "[设置下一个字号]"
      :action
-     '(lambda (widget event)
-        (let ((cnfonts-ui--move-mouse t))
-          (cnfonts-increase-fontsize)
-          (cnfonts-ui-page-align-page nil nil t))))))
+     (lambda (widget event)
+       (let ((cnfonts-ui--move-mouse t))
+         (cnfonts-increase-fontsize)
+         (cnfonts-ui-page-align-page nil nil t))))))
 
 (defun cnfonts-ui--create-align-line (index
                                       label
