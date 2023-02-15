@@ -523,9 +523,15 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   (when (and font-type-index font-type-index (numberp incf-x))
     (cl-incf (nth font-type-index (assoc english-size cnfonts--custom-set-fontsizes)) incf-x)))
 
-(defun cnfonts--read-profile (&optional force-read)
-  "Get previously saved fontnames and fontsizes from current profile."
+(defun cnfonts--read-profile (&optional profile-name force-read)
+  "Get previously saved fontnames and fontsizes from current profile.
+When PROFILE-NAME is provided, read it instead of current profile.
+When FORCE-READ is non-nil, profile file will be re-read."
   (interactive)
+  (cnfonts--read-config)
+  (when profile-name
+    (cnfonts--update-config profile-name)
+    (cnfonts--save-config))
   (when (or force-read
             (not (and cnfonts--custom-set-fontnames
                       cnfonts--custom-set-fontsizes)))
@@ -751,7 +757,6 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   "使用下 N 个字号."
   (if (not (display-graphic-p))
       (message "[cnfonts]: 不支持 emacs 终端模式！")
-    (cnfonts--read-config)
     (cnfonts--read-profile)
     (let* ((steps (mapcar #'car cnfonts--fontsizes-fallback))
            (profile-name (cnfonts--get-current-profile t))
@@ -769,7 +774,6 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   "使用已经保存的字号设置字体.
 如果 FRAME 是 non-nil, 设置对应的 FRAME 的字体。"
   (interactive)
-  (cnfonts--read-config)
   (cnfonts--read-profile)
   (let* ((profile-name (cnfonts--get-current-profile t))
          (profile-fontsize (cnfonts--get-profile-fontsize profile-name))
@@ -808,10 +812,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   "选择 PROFILE-NAME."
   (if (not (member profile-name cnfonts-profiles))
       (message "[cnfonts]: %s doesn't exist." profile-name)
-    (cnfonts--read-config)
-    (cnfonts--update-config profile-name)
-    (cnfonts--save-config)
-    (cnfonts--read-profile t)
+    (cnfonts--read-profile profile-name t)
     (cnfonts-set-font)))
 
 ;;;###autoload
@@ -830,10 +831,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
          (next-profile (or (cadr (member current-profile profiles))
                            (car profiles))))
     (when next-profile
-      (cnfonts--read-config)
-      (cnfonts--update-config next-profile)
-      (cnfonts--save-config)
-      (cnfonts--read-profile t)
+      (cnfonts--read-profile next-profile t)
       (cnfonts-set-font)
       (message "[cnfonts]: Current cnfonts profile is set to: \"%s\"" next-profile))))
 
@@ -844,7 +842,6 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   (interactive)
   (if (not (display-graphic-p))
       (message "[cnfonts]: 不支持 emacs 终端模式！")
-    (cnfonts--read-config)
     (cnfonts--read-profile)
     (let ((file (cnfonts--get-current-profile)))
       (unless (file-readable-p file)
