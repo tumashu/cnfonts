@@ -461,11 +461,12 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
    (concat (file-name-as-directory cnfonts-directory)
            cnfonts-config-filename)))
 
-(defun cnfonts--update-config (profile-name &optional fontsize)
+(defun cnfonts--update-and-save-config (profile-name &optional fontsize)
   "Update PROFILE-NAME and FONTSIZE into config file."
   (when profile-name
     (let ((fontsize (or fontsize (cdr (assoc profile-name cnfonts--config-info)))))
-      (push (cons profile-name fontsize) cnfonts--config-info))))
+      (push (cons profile-name fontsize) cnfonts--config-info)))
+  (cnfonts--save-config))
 
 (defun cnfonts--save-config ()
   "Save cnfonts config ."
@@ -530,8 +531,7 @@ When FORCE-READ is non-nil, profile file will be re-read."
   (interactive)
   (cnfonts--read-config)
   (when profile-name
-    (cnfonts--update-config profile-name)
-    (cnfonts--save-config))
+    (cnfonts--update-and-save-config profile-name))
   (when (or force-read
             (not (and cnfonts--custom-set-fontnames
                       cnfonts--custom-set-fontsizes)))
@@ -765,8 +765,7 @@ When FORCE-READ is non-nil, profile file will be re-read."
            (fontsizes-list (cnfonts--get-fontsizes (nth index steps))))
       (when fontsizes-list
         (cnfonts--set-font fontsizes-list)
-        (cnfonts--update-config profile-name (car fontsizes-list))
-        (cnfonts--save-config)
+        (cnfonts--update-and-save-config profile-name (car fontsizes-list))
         (message cnfonts--minibuffer-echo-string)))))
 
 ;;;###autoload
@@ -783,8 +782,7 @@ When FORCE-READ is non-nil, profile file will be re-read."
           (with-selected-frame frame
             (cnfonts--set-font fontsizes-list))
         (cnfonts--set-font fontsizes-list)))
-    (cnfonts--update-config profile-name (car fontsizes-list))
-    (cnfonts--save-config)
+    (cnfonts--update-and-save-config profile-name (car fontsizes-list))
     (cnfonts--save-profile)
     ;; This is useful for exwm to adjust mode-line, please see:
     ;; https://github.com/ch11ng/exwm/issues/249#issuecomment-299692305
