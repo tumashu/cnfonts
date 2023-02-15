@@ -60,8 +60,8 @@
 
     https://github.com/tumashu/cnfonts/issues/64
 
-Emacs 25.2 以后，当 default font 有某个字符的时候，优先使用这个
-字体，可以将 use-default-font-for-symbols 设置为 nil 来关闭。"
+Emacs 25.2 以后，当 default font 有某个字符的时候，优先使用这个字
+体，可以将 use-default-font-for-symbols 设置为 nil 来关闭。"
      :button-name "字符")
     (ornament-fonts-page
      :index 4
@@ -90,8 +90,10 @@ Emacs 25.2 以后，当 default font 有某个字符的时候，优先使用这�
 
 (defvar cnfonts-ui-mode-map
   (let ((map (make-keymap)))
-    (set-keymap-parent map (make-composed-keymap widget-keymap
-                                                 special-mode-map))
+    (set-keymap-parent
+     map (make-composed-keymap
+          widget-keymap
+          special-mode-map))
     (suppress-keymap map)
     (define-key map "n" 'next-line)
     (define-key map "p" 'previous-line)
@@ -120,7 +122,9 @@ Emacs 25.2 以后，当 default font 有某个字符的时候，优先使用这�
 
 (defmacro cnfonts-ui-create-page (page-name &rest body)
   (declare (indent 1) (debug t))
-  (let ((func-name (intern (concat "cnfonts-ui-page-" (symbol-name page-name))))
+  (let ((func-name
+         (intern (concat "cnfonts-ui-page-"
+                         (symbol-name page-name))))
         (buffer-name (make-symbol "buffer-name"))
         (point (make-symbol "point")))
     `(defun ,func-name (&optional _widget _event create-buffer)
@@ -134,7 +138,10 @@ Emacs 25.2 以后，当 default font 有某个字符的时候，优先使用这�
                (let ((inhibit-read-only t))
                  (erase-buffer))
                (cnfonts-ui-mode)
-               (define-key cnfonts-ui-mode-map (cnfonts-ui--get-page-info ',page-name :keybinding) ',func-name)
+               (define-key cnfonts-ui-mode-map
+                           (cnfonts-ui--get-page-info
+                            ',page-name :keybinding)
+                           ',func-name)
                (set (make-local-variable 'cnfonts-ui--widgets-alist) nil)
                (set (make-local-variable 'cnfonts-ui--current-page) ',page-name)
                (set (make-local-variable 'cnfonts-ui--widgets-navigation) nil)
@@ -167,9 +174,11 @@ It is meant for internal use."
             (widget-page (widget-get widget :page-name)))
         (if (eq cnfonts-ui--current-page widget-page)
             (widget-value-set
-             widget (replace-regexp-in-string " " "*" orig-value))
+             widget (replace-regexp-in-string
+                     " " "*" orig-value))
           (widget-value-set
-           widget (replace-regexp-in-string "*" " " orig-value)))))
+           widget (replace-regexp-in-string
+                   "*" " " orig-value)))))
     (goto-char point)))
 
 (defun cnfonts-ui--move-mouse ()
@@ -192,11 +201,13 @@ It is meant for internal use."
     (load-library "cus-edit")
     (dolist (page-info cnfonts-ui--pages)
       (let ((page-name (car page-info)))
-        (funcall (cnfonts-ui--get-page-function page-name) nil nil t)))
+        (funcall (cnfonts-ui--get-page-function page-name)
+                 nil nil t)))
     (funcall (cnfonts-ui--get-page-function 'start-page))))
 
 (defun cnfonts-ui--get-page-function (page-name)
-  (intern (concat "cnfonts-ui-page-" (symbol-name page-name))))
+  (intern (concat "cnfonts-ui-page-"
+                  (symbol-name page-name))))
 
 (cnfonts-ui-create-page start-page
   (cnfonts-ui--create-tab-stop-point)
@@ -224,11 +235,12 @@ HanaMinB 字体试试，这个字体的下载地址可以从 [ 帮助 ] 页面�
 (defun cnfonts-ui--create-tab-stop-point ()
   "Create a widget.
 the curse will stop to this widget when forward/backward widget."
-  (widget-create 'push-button
-                 :tag "\n"
-                 :tab-stop-point t
-                 :button-face-get 'ignore
-                 :mouse-face-get 'ignore))
+  (widget-create
+   'push-button
+   :tag "\n"
+   :tab-stop-point t
+   :button-face-get 'ignore
+   :mouse-face-get 'ignore))
 
 (defun cnfonts-ui--create-navigation ()
   (dolist (page-name (mapcar #'car cnfonts-ui--pages))
@@ -236,23 +248,33 @@ the curse will stop to this widget when forward/backward widget."
           cnfonts-ui--widgets-navigation)
     (widget-insert " ")))
 
-(defun cnfonts-ui--create-page-switch-button (page-name &optional ignore-face)
+(defun cnfonts-ui--create-page-switch-button (page-name
+                                              &optional ignore-face)
   "Create a button which used to switch page named PAGE-NAME.
 TODO: IGNORE-FACE."
-  (let ((button-name (cnfonts-ui--get-page-info page-name :button-name))
-        (alter-button-name (cnfonts-ui--get-page-info page-name :alter-button-name))
-        (action (cnfonts-ui--get-page-function page-name)))
+  (let ((button-name
+         (cnfonts-ui--get-page-info
+          page-name :button-name))
+        (alter-button-name
+         (cnfonts-ui--get-page-info
+          page-name :alter-button-name))
+        (action
+         (cnfonts-ui--get-page-function page-name)))
     (if ignore-face
-        (widget-create 'push-button
-                       :value (format "[ %s ]" (or alter-button-name button-name))
-                       :button-face-get 'ignore
-                       :mouse-face-get 'ignore
-                       :page-name page-name
-                       :action action)
-      (widget-create 'push-button
-                     :value (format " %s " button-name)
-                     :page-name page-name
-                     :action action))))
+        (widget-create
+         'push-button
+         :value
+         (format "[ %s ]" (or alter-button-name
+                              button-name))
+         :button-face-get 'ignore
+         :mouse-face-get 'ignore
+         :page-name page-name
+         :action action)
+      (widget-create
+       'push-button
+       :value (format " %s " button-name)
+       :page-name page-name
+       :action action))))
 
 (cnfonts-ui-create-page english-fonts-page
   (cnfonts-ui--create-fonts-page 'english-fonts-page))
@@ -274,39 +296,56 @@ NA:   表示系统没有安装当前字体。\n\n")
     (let ((fonts (nth index fontname-alist))
           widget1 widget2 widget3)
       (widget-insert "状态  当前字体")
-      (widget-insert (format "%53s\n" (format "( %s )" (cnfonts--get-current-profile t))))
-      (widget-insert "----  -------------------------------------------------------------\n")
+      (widget-insert
+       (format "%53s\n"
+               (format "( %s )"
+                       (cnfonts--get-current-profile t))))
+      (widget-insert
+       (concat "----  ----------------------------"
+               "---------------------------------\n"))
       (dolist (font fonts)
         (setq widget1
-              (widget-create 'push-button
-                             :font-name font
-                             :index index
-                             :button-face-get 'ignore
-                             :mouse-face-get 'ignore
-                             :value (format "%-6s" (cnfonts-ui--return-status-string font index))))
+              (widget-create
+               'push-button
+               :font-name font
+               :index index
+               :button-face-get 'ignore
+               :mouse-face-get 'ignore
+               :value
+               (format "%-6s"
+                       (cnfonts-ui--return-status-string
+                        font index))))
         (setq widget2
-              (widget-create 'checkbox
-                             :value (equal font (car (nth index fontname-alist)))
-                             :font-name font
-                             :flag t
-                             :tab-stop-point t
-                             :index index
-                             :action 'cnfonts-ui-toggle-select-font))
+              (widget-create
+               'checkbox
+               :value
+               (equal font (car (nth index fontname-alist)))
+               :font-name font
+               :flag t
+               :tab-stop-point t
+               :index index
+               :action 'cnfonts-ui-toggle-select-font))
         (setq widget3
-              (widget-create 'push-button
-                             :button-face-get 'ignore
-                             :mouse-face-get 'ignore
-                             :value (format " %-50s" font)
-                             :action 'cnfonts-ui-toggle-select-font))
+              (widget-create
+               'push-button
+               :button-face-get 'ignore
+               :mouse-face-get 'ignore
+               :value (format " %-50s" font)
+               :action 'cnfonts-ui-toggle-select-font))
         (push (cons widget1 widget2) cnfonts-ui--widgets-alist)
         (push (cons widget2 widget2) cnfonts-ui--widgets-alist)
         (push (cons widget3 widget2) cnfonts-ui--widgets-alist)
         (widget-insert "\n" )))))
 
 (defun cnfonts-ui--return-status-string (font index)
-  (format "%-2s %-2s"
-          (if (cnfonts--font-exists-p font t) "" "NA")
-          (if (member font (nth index cnfonts-personal-fontnames)) "P" "")))
+  (format
+   "%-2s %-2s"
+   (if (cnfonts--font-exists-p font t)
+       ""
+     "NA")
+   (if (member font (nth index cnfonts-personal-fontnames))
+       "P"
+     "")))
 
 (defun cnfonts-ui-toggle-select-font (&optional widget event)
   (interactive)
@@ -317,7 +356,8 @@ NA:   表示系统没有安装当前字体。\n\n")
          (index (widget-get widget1 :index))
          (flag (widget-get widget1 :flag)))
     (if (not flag)
-        (message "[cnfonts]: 当前光标所在位置不对，请将光标移动到字体所在的行上面。")
+        (message (concat "[cnfonts]: 当前光标所在位置不对，"
+                         " 请将光标移动到字体所在的行上面。"))
       (widget-toggle-action widget1 event)
       (dolist (w widgets)
         (unless (equal (widget-get w :font-name) font)
@@ -347,89 +387,118 @@ NA:   表示系统没有安装当前字体。\n\n")
 
 (defun cnfonts-ui--create-align-page (_page-name)
   (let* ((profile-name (cnfonts--get-current-profile t))
-         (profile-fontsize (cnfonts--get-profile-fontsize profile-name))
-         (fontsize-list (cnfonts--get-fontsizes profile-fontsize)))
+         (profile-fontsize
+          (cnfonts--get-profile-fontsize profile-name))
+         (fontsize-list
+          (cnfonts--get-fontsizes profile-fontsize)))
 
     (widget-insert "\n")
     (cnfonts-ui--create-navigation)
     (widget-insert "\n\n")
 
     (widget-insert "字体类别    字号 ")
-    (widget-insert (format "%51s\n" (format "( %s )" (cnfonts--get-current-profile t))))
-    (widget-insert "---------- ---------------------------------------------------------\n")
+    (widget-insert
+     (format "%51s\n"
+             (format "( %s )"
+                     (cnfonts--get-current-profile t))))
+    (widget-insert
+     (concat "---------- ------------------------"
+             "---------------------------------\n"))
 
-    (cnfonts-ui--create-align-line 0 "ASCII   " fontsize-list "| More haste, less speed. |")
-    (cnfonts-ui--create-align-line 1 "CJKV    " fontsize-list "| 为天地立心，为生民立命；|")
-    (cnfonts-ui--create-align-line 2 "EXT-B   " fontsize-list "| 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀。|")
-    (cnfonts-ui--create-align-line 3 "Symbol  " fontsize-list "> αβχδεφγηιϕκλνοπθρστυʌɯʊ <")
-    (cnfonts-ui--create-align-line 4 "Ornament" fontsize-list
-                                   (concat "> "
-                                           (mapconcat (lambda (x)
-                                                        (when (ignore-errors (consp x))
-                                                          (concat (char-to-string (car x))
-                                                                  (char-to-string (cdr x)))))
-                                                      cnfonts-ornaments "")))
+    (cnfonts-ui--create-align-line
+     0 "ASCII   " fontsize-list  "| More haste, less speed. |")
+    (cnfonts-ui--create-align-line
+     1 "CJKV    " fontsize-list  "| 为天地立心，为生民立命；|")
+    (cnfonts-ui--create-align-line
+     2 "EXT-B   " fontsize-list  "| 𠄀𠄁𠄂𠄃𠄄𠄅𠄆𠄇𠄈𠄉𠄀。|")
+    (cnfonts-ui--create-align-line
+     3 "Symbol  " fontsize-list  "> αβχδεφγηιϕκλνοπθρστυʌɯʊ <")
+    (cnfonts-ui--create-align-line
+     4 "Ornament" fontsize-list
+     (concat
+      "> "
+      (mapconcat
+       (lambda (x)
+         (when (ignore-errors (consp x))
+           (concat (char-to-string (car x))
+                   (char-to-string (cdr x)))))
+       cnfonts-ornaments "")))
 
     (widget-insert "\n")
 
-    (widget-create 'push-button
-                   :button-face-get 'ignore
-                   :mouse-face-get 'ignore
-                   :tag "[设置上一个字号]"
-                   :action '(lambda (widget event)
-                              (let ((cnfonts-ui--move-mouse t))
-                                (cnfonts-decrease-fontsize)
-                                (cnfonts-ui-page-align-page nil nil t))))
+    (widget-create
+     'push-button
+     :button-face-get 'ignore
+     :mouse-face-get 'ignore
+     :tag "[设置上一个字号]"
+     :action
+     '(lambda (widget event)
+        (let ((cnfonts-ui--move-mouse t))
+          (cnfonts-decrease-fontsize)
+          (cnfonts-ui-page-align-page nil nil t))))
     (widget-insert "                                    ")
-    (widget-create 'push-button
-                   :button-face-get 'ignore
-                   :mouse-face-get 'ignore
-                   :tag "[设置下一个字号]"
-                   :action '(lambda (widget event)
-                              (let ((cnfonts-ui--move-mouse t))
-                                (cnfonts-increase-fontsize)
-                                (cnfonts-ui-page-align-page nil nil t))))))
+    (widget-create
+     'push-button
+     :button-face-get 'ignore
+     :mouse-face-get 'ignore
+     :tag "[设置下一个字号]"
+     :action
+     '(lambda (widget event)
+        (let ((cnfonts-ui--move-mouse t))
+          (cnfonts-increase-fontsize)
+          (cnfonts-ui-page-align-page nil nil t))))))
 
-(defun cnfonts-ui--create-align-line (index label fontsize-list align-string)
-  (let ((fontsize (number-to-string (nth index fontsize-list)))
+(defun cnfonts-ui--create-align-line (index
+                                      label
+                                      fontsize-list
+                                      align-string)
+  (let ((fontsize (number-to-string
+                   (nth index fontsize-list)))
         widget1 widget2 widget3 widget4)
     (widget-insert (format "%s. " (+ index 1)))
     (widget-insert (format "%-5s " label))
     (if (= index 0)
-        (progn (setq widget1 (widget-create 'push-button
-                                            :value (format "%-6s     " fontsize)
-                                            :flag t
-                                            :key (car fontsize-list)
-                                            :button-face-get 'ignore
-                                            :mouse-face-get 'ignore))
+        (progn (setq widget1 (widget-create
+                              'push-button
+                              :value (format "%-6s     " fontsize)
+                              :flag t
+                              :key (car fontsize-list)
+                              :button-face-get 'ignore
+                              :mouse-face-get 'ignore))
                (push (cons widget1 widget1) cnfonts-ui--widgets-alist))
-      (setq widget2 (widget-create 'push-button
-                                   :value (format "%-5s" fontsize)
-                                   :index index
-                                   :flag t
-                                   :key (car fontsize-list)
-                                   :tab-stop-point t
-                                   :button-face-get 'ignore
-                                   :mouse-face-get 'ignore))
-      (setq widget3 (widget-create 'push-button
-                                   :tag "[-]"
-                                   :index index
-                                   :flag t
-                                   :key (car fontsize-list)
-                                   :button-face-get 'ignore
-                                   :mouse-face-get 'ignore
-                                   :action 'cnfonts-ui-decrease-align))
-      (setq widget4 (widget-create 'push-button
-                                   :tag "[+]"
-                                   :index index
-                                   :flag t
-                                   :key (car fontsize-list)
-                                   :button-face-get 'ignore
-                                   :mouse-face-get 'ignore
-                                   :action 'cnfonts-ui-increase-align))
-      (push (cons widget2 widget2) cnfonts-ui--widgets-alist)
-      (push (cons widget3 widget2) cnfonts-ui--widgets-alist)
-      (push (cons widget4 widget2) cnfonts-ui--widgets-alist))
+      (setq widget2 (widget-create
+                     'push-button
+                     :value (format "%-5s" fontsize)
+                     :index index
+                     :flag t
+                     :key (car fontsize-list)
+                     :tab-stop-point t
+                     :button-face-get 'ignore
+                     :mouse-face-get 'ignore))
+      (setq widget3 (widget-create
+                     'push-button
+                     :tag "[-]"
+                     :index index
+                     :flag t
+                     :key (car fontsize-list)
+                     :button-face-get 'ignore
+                     :mouse-face-get 'ignore
+                     :action 'cnfonts-ui-decrease-align))
+      (setq widget4 (widget-create
+                     'push-button
+                     :tag "[+]"
+                     :index index
+                     :flag t
+                     :key (car fontsize-list)
+                     :button-face-get 'ignore
+                     :mouse-face-get 'ignore
+                     :action 'cnfonts-ui-increase-align))
+      (push (cons widget2 widget2)
+            cnfonts-ui--widgets-alist)
+      (push (cons widget3 widget2)
+            cnfonts-ui--widgets-alist)
+      (push (cons widget4 widget2)
+            cnfonts-ui--widgets-alist))
     (widget-insert "                  ")
     (widget-insert align-string)
     (widget-insert "\n")))
@@ -443,9 +512,13 @@ NA:   表示系统没有安装当前字体。\n\n")
          (key (widget-get widget :key))
          (index (widget-get widget :index))
          (flag (widget-get widget :flag))
-         (widget-show-fontsize (cdr (assoc widget cnfonts-ui--widgets-alist))))
+         (widget-show-fontsize
+          (cdr (assoc widget cnfonts-ui--widgets-alist))))
     (if (not flag)
-        (message "[cnfonts]: 当前光标所在位置不对，请将光标移动到 ‘中文字号’ 或者 ‘EXT-B字体字号’ 对应的数字上。")
+        (message (concat
+                  "[cnfonts]: 当前光标所在位置不对，"
+                  "请将光标移动到 ‘中文字号’  "
+                  "或者 ‘EXT-B字体字号’ 对应的数字上。"))
       (when (and index key (numberp n))
         (cnfonts--update-profile-fontsizes key index n)
         ;; 更新加号按钮和减号按钮前面的数字标签
@@ -457,7 +530,8 @@ NA:   表示系统没有安装当前字体。\n\n")
         (cnfonts--set-font (cnfonts--get-fontsizes key)))
       (dotimes (i 5)
         (sit-for 0.3)
-        (message "[cnfonts]: 测试 Minibuffer 是否抖动 (%s/%s)" (+ i 1) 5)
+        (message "[cnfonts]: 测试 Minibuffer 是否抖动 (%s/%s)"
+                 (+ i 1) 5)
         (sit-for 0.3)
         (message nil)))))
 
@@ -513,8 +587,10 @@ NA:   表示系统没有安装当前字体。\n\n")
   (cnfonts-ui--create-tab-stop-point)
   (cnfonts-ui--create-navigation)
   (widget-insert "\n\n")
-  (let ((file (concat (file-name-directory (locate-library "cnfonts"))
-                      "cnfonts.el"))
+  (let ((file (concat
+               (file-name-directory
+                (locate-library "cnfonts"))
+               "cnfonts.el"))
         begin end string)
     (when (file-exists-p file)
       (with-temp-buffer
@@ -525,11 +601,13 @@ NA:   表示系统没有安装当前字体。\n\n")
           (when (re-search-forward "^;;; Code:$")
             (setq end (line-beginning-position))))
         (when (and begin end)
-          (setq string (replace-regexp-in-string
-                        ":README:" ""
-                        (replace-regexp-in-string
-                         "^;; " ""
-                         (buffer-substring-no-properties begin end)))))))
+          (setq string
+                (replace-regexp-in-string
+                 ":README:" ""
+                 (replace-regexp-in-string
+                  "^;; " ""
+                  (buffer-substring-no-properties
+                   begin end)))))))
     (widget-insert (or string "")))
   (cnfonts-ui--create-tab-stop-point))
 
