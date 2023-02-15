@@ -424,6 +424,23 @@ It record the current profile and profile fontsize."
 地方设置这个变量没有任何用处！")
 
 ;;;###autoload
+(define-minor-mode cnfonts-mode
+  "cnfonts mode."
+  :global t
+  (cond
+   (cnfonts-mode
+    (add-hook 'after-make-frame-functions #'cnfonts-set-font)
+    (add-hook 'window-setup-hook #'cnfonts-set-font)
+    (message (concat "[cnfonts]: cnfonts-mode 激活, "
+                     "使用 `cnfonts-edit-profile' 命令调整字体设置。")))
+   (t (remove-hook 'after-make-frame-functions #'cnfonts-set-font)
+      (remove-hook 'window-setup-hook #'cnfonts-set-font))))
+
+;; 两个兼容命令，未来会删除，建议使用 cnfonts-mode.
+(defun cnfonts-enable  () (cnfonts-mode 1))
+(defun cnfonts-disable () (cnfonts-mode -1))
+
+;;;###autoload
 (defun cnfonts-set-font (&optional frame)
   "使用已经保存的字号设置字体.
 如果 FRAME 是 non-nil, 设置对应的 FRAME 的字体。"
@@ -452,7 +469,6 @@ It record the current profile and profile fontsize."
 When PROFILE-NAME is provided, read it instead of current
 profile. When FORCE-READ is non-nil, profile file will be
 re-read."
-  (interactive)
   (cnfonts--read-config)
   (when profile-name
     (cnfonts--update-and-save-config profile-name))
@@ -836,6 +852,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
                              ")")))
            (insert "\n        ))\n"))))
 
+;; Functions used by cnfonts-ui.
 (defun cnfonts--update-profile-fontnames (font-type-index
                                           font)
   (setf (nth font-type-index cnfonts--custom-set-fontnames)
@@ -891,22 +908,21 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   (interactive)
   (cnfonts--next-fontsize 0))
 
+;;;###autoload
+(defun cnfonts-switch-profile ()
+  "切换 cnfonts profile."
+  (interactive)
+  (let ((profile (completing-read
+                  "Set cnfonts profile to:"
+                  cnfonts-profiles)))
+    (cnfonts--select-profile profile)))
+
 (defun cnfonts--select-profile (profile-name)
   "选择 PROFILE-NAME."
   (if (not (member profile-name cnfonts-profiles))
       (message "[cnfonts]: %s doesn't exist." profile-name)
     (cnfonts--read-profile profile-name t)
     (cnfonts-set-font)))
-
-;;;###autoload
-(defun cnfonts-switch-profile ()
-  "切换 cnfonts profile."
-  (interactive)
-  (let ((profile
-         (completing-read
-          "Set cnfonts profile to:"
-          cnfonts-profiles)))
-    (cnfonts--select-profile profile)))
 
 ;;;###autoload
 (defun cnfonts-next-profile (&optional _)
@@ -942,39 +958,12 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 (defun cnfonts-regenerate-profile ()
   "重新生成当前 profile."
   (interactive)
-  (let ((profile-name
-         (completing-read
-          "Regenerate profile: "
-          cnfonts-profiles)))
+  (let ((profile-name (completing-read
+                       "Regenerate profile: "
+                       cnfonts-profiles)))
     (if (yes-or-no-p (format "Regenerate (%s)? " profile-name))
         (cnfonts--save-profile profile-name t)
       (message "[cnfonts]: Ignore regenerate profile!"))))
-
-;;;###autoload
-(define-minor-mode cnfonts-mode
-  "cnfonts mode."
-  :global t
-  (cond
-   (cnfonts-mode
-    (add-hook 'after-make-frame-functions #'cnfonts-set-font)
-    (add-hook 'window-setup-hook #'cnfonts-set-font)
-    (message (concat "[cnfonts]: cnfonts-mode 激活, "
-                     "使用 `cnfonts-edit-profile' 命令调整字体设置。")))
-   (t
-    (remove-hook 'after-make-frame-functions #'cnfonts-set-font)
-    (remove-hook 'window-setup-hook #'cnfonts-set-font))))
-
-;;;###autoload
-(defun cnfonts-enable ()
-  "启用 cnfonts, 建议使用 `cnfonts-mode'."
-  (interactive)
-  (cnfonts-mode 1))
-
-;;;###autoload
-(defun cnfonts-disable ()
-  "禁用 cnfonts, 建议使用 `cnfonts-mode'."
-  (interactive)
-  (cnfonts-mode -1))
 
 ;; * Footer
 (provide 'cnfonts)
