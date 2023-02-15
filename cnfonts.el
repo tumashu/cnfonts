@@ -484,7 +484,8 @@ When RETURN-PROFILE-NAME is non-nil, return current profile file's name."
       (when (file-readable-p save-file)
         (with-temp-buffer
           (insert-file-contents save-file)
-          (read (current-buffer)))))))
+          (setq cnfonts--config-info
+                (read (current-buffer))))))))
 
 (defun cnfonts--get-profile-fontsize (profile-name)
   "Get the font size info from profile which name is PROFILE-NAME."
