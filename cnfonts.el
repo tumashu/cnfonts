@@ -644,14 +644,24 @@ file's name."
                                  (car fontsizes-list)))))))
 
 (defun cnfonts--get-valid-fonts ()
-  "Get a list of valid fonts."
-  (mapcar (lambda (fonts)
-            (cl-find-if #'cnfonts--font-exists-p fonts))
+  "获取当前可用字体并返回一个列表。"
+  (mapcar #'cnfonts--find-valid-font
           cnfonts--custom-set-fontnames))
 
+(defun cnfonts--find-valid-font (fonts)
+  "从 FONTS 中寻找一个可用的字体。"
+  (let (font)
+    (while fonts
+      (setq font (pop fonts))
+      (when (setq font (cnfonts--font-exists-p font))
+        (setq fonts nil)))
+    font))
+
 (defun cnfonts--font-exists-p (font &optional fast)
-  "Test FONT exist or not."
-  (or (x-list-fonts font nil nil 1)
+  "测试 FONT 是否存在，如果存在，则返回可用字体名称."
+  (or (when-let ((xlfd (car (x-list-fonts font nil nil 1))))
+        ;; 从 xlfd 字符串中截取字体名称。
+        (nth 2 (split-string xlfd "-")))
       (unless fast
         (cl-find-if
          (lambda (x)
