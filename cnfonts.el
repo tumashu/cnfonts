@@ -660,14 +660,13 @@ file's name."
 (defun cnfonts--font-exists-p (font &optional fast)
   "测试 FONT 是否存在，如果存在，则返回可用字体名称."
   (or (when-let* ((xlfd (car (x-list-fonts font nil nil 1)))
-                  (name (nth 2 (split-string xlfd "-"))))
-        (cond
-         ;; 字体名称中带 "-" 的特殊处理。
-         ((and name (string-match-p "-" font)) font)
-         ;; 字体名称全是数字的不做处理。
-         ((not (string-match-p "[^0-9]" font)) nil)
-         (name name)
-         (t nil)))
+                  (lst (split-string xlfd "-"))
+                  (name (string-join
+                         (cl-subseq lst 2 (- (length lst) 12))
+                         "-"))
+                  ;; 名称只包含数字的字体不做处理。
+                  (non-num-p (string-match-p "[^0-9]" font)))
+        name)
       (unless fast
         (cl-find-if
          (lambda (x)
