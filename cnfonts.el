@@ -470,27 +470,13 @@ When PROFILE-NAME is provided, read it instead of current
 profile. When FORCE-READ is non-nil, profile file will be
 re-read."
   (cnfonts--read-config)
-  (when profile-name
-    (cnfonts--update-and-save-config profile-name))
-  (when (or force-read
-            (not (and cnfonts--custom-set-fontnames
-                      cnfonts--custom-set-fontsizes)))
-    (load (cnfonts--get-current-profile) t t)
-    (setq cnfonts--custom-set-fontnames
-          (cnfonts--merge-fontnames
-           cnfonts--custom-set-fontnames
-           cnfonts-personal-fontnames
-           cnfonts--fontnames-fallback))
-    (setq cnfonts--custom-set-fontsizes
-          (cnfonts--merge-fontsizes
-           cnfonts--custom-set-fontsizes
-           cnfonts--fontsizes-fallback))))
+  (cnfonts--read-profile-1 profile-name force-read)
+  (cnfonts--update-and-save-config profile-name))
 
 (defun cnfonts--read-config ()
   "Read cnfonts's config file."
   (unless cnfonts--config-info
-    (let ((save-file
-           (cnfonts--return-config-file-path)))
+    (let ((save-file (cnfonts--return-config-file-path)))
       (when (file-readable-p save-file)
         (with-temp-buffer
           (insert-file-contents save-file)
@@ -503,43 +489,24 @@ re-read."
    (concat (file-name-as-directory cnfonts-directory)
            cnfonts-config-filename)))
 
-(defun cnfonts--update-and-save-config (profile-name
-                                        &optional
-                                        fontsize)
-  "Update PROFILE-NAME and FONTSIZE into config file."
-  (when profile-name
-    (let ((fontsize
-           (or fontsize
-               (cdr (assoc profile-name
-                           cnfonts--config-info)))))
-      (push (cons profile-name fontsize)
-            cnfonts--config-info)))
-  (cnfonts--save-config))
-
-(defun cnfonts--save-config ()
-  "Save cnfonts config ."
-  (with-temp-file (cnfonts--return-config-file-path)
-    (prin1 (cl-remove-duplicates
-            (remove nil cnfonts--config-info)
-            :test (lambda (x y)
-                    (equal (car x) (car y)))
-            :from-end t)
-           (current-buffer))))
-
-(defun cnfonts--get-current-profile (&optional return-profile-name)
-  "Get current profile file.
-
-When RETURN-PROFILE-NAME is non-nil, return current profile
-file's name."
-  (let* ((profile-name
-          (car (car cnfonts--config-info)))
-         (profile-name
-          (if (member profile-name cnfonts-profiles)
-              profile-name
-            (car cnfonts-profiles))))
-    (if return-profile-name
-        profile-name
-      (cnfonts--get-profile profile-name))))
+(defun cnfonts--read-profile-1 (profile-name force-read)
+  "Internal function of `cnfonts--read-profile'."
+  (when (or force-read
+            (not (and cnfonts--custom-set-fontnames
+                      cnfonts--custom-set-fontsizes)))
+    (load (if profile-name
+              (cnfonts--get-profile profile-name)
+            (cnfonts--get-current-profile))
+          t t)
+    (setq cnfonts--custom-set-fontnames
+          (cnfonts--merge-fontnames
+           cnfonts--custom-set-fontnames
+           cnfonts-personal-fontnames
+           cnfonts--fontnames-fallback))
+    (setq cnfonts--custom-set-fontsizes
+          (cnfonts--merge-fontsizes
+           cnfonts--custom-set-fontsizes
+           cnfonts--fontsizes-fallback))))
 
 (defun cnfonts--get-profile (profile-name)
   "Get profile file which name is PROFILE-NAME."
@@ -561,6 +528,20 @@ file's name."
               "/" "-"
               profile-name)
              ".el"))))
+
+(defun cnfonts--get-current-profile (&optional return-profile-name)
+  "Get current profile file.
+
+When RETURN-PROFILE-NAME is non-nil, return current profile
+file's name."
+  (let* ((profile-name (car (car cnfonts--config-info)))
+         (profile-name
+          (if (member profile-name cnfonts-profiles)
+              profile-name
+            (car cnfonts-profiles))))
+    (if return-profile-name
+        profile-name
+      (cnfonts--get-profile profile-name))))
 
 (defun cnfonts--merge-fontnames (list1 list2 list3)
   "Merge fontname lists LIST1, LIST2 and LIST3 into one."
@@ -592,6 +573,30 @@ file's name."
             (push x1 result)
           (push `(,@x1 ,@(nthcdr n1 x2)) result))))
     (reverse result)))
+
+(defun cnfonts--update-and-save-config (profile-name &optional fontsize)
+  "Update PROFILE-NAME and FONTSIZE into config file."
+  (when profile-name
+    (let* ((size (cdr (assoc profile-name cnfonts--config-info)))
+           (fontsize (or fontsize size)))
+      (setq cnfonts--config-info
+            (cons (cons profile-name fontsize)
+                  (cl-remove-if
+                   (lambda (x)
+                     (or (equal (car x) profile-name)
+                         (equal (car x) 't)))
+                   cnfonts--config-info)))))
+  (cnfonts--save-config))
+
+(defun cnfonts--save-config ()
+  "Save cnfonts config ."
+  (with-temp-file (cnfonts--return-config-file-path)
+    (prin1 (cl-remove-duplicates
+            (remove nil cnfonts--config-info)
+            :test (lambda (x y)
+                    (equal (car x) (car y)))
+            :from-end t)
+           (current-buffer))))
 
 (defun cnfonts--get-profile-fontsize (profile-name)
   "Get the font size info from profile which name is PROFILE-NAME."
