@@ -370,9 +370,9 @@ It record the current profile and profile fontsize."
      "NanumGothicCoding" "Monoid" "Edlo" "Iosevka" "Mononoki"
      "Robot Mono" "Fantasque" "Fira Code" "Go Mono" "Noto Sans Mono CJK"
      "InputMonoCompressed" "Hasklig" "Terminus" "FantasqueSansMono"
-     "AnonymousPro" "3270" "Arimo" "D2Coding" "Inconsolata-g"
-     "ProFont for Powerline" "Meslo" "Meslo Dotted" "Noto Mono"
-     "Symbol Neu" "Tinos" "Space Mono" "SFMono Nerd Font")
+     "AnonymousPro" "Arimo" "D2Coding" "Inconsolata-g" "Noto Mono"
+     "ProFont for Powerline" "Meslo" "Meslo Dotted" "Symbol Neu"
+     "Tinos" "Space Mono" "SFMono Nerd Font")
     ;; 中文字体
     ("微软雅黑" "Noto Sans Mono CJK SC" "Noto Sans Mono CJK TC"
      "Noto Sans CJK SC" "Noto Sans CJK TC" "Microsoft Yahei"
@@ -659,9 +659,15 @@ file's name."
 
 (defun cnfonts--font-exists-p (font &optional fast)
   "测试 FONT 是否存在，如果存在，则返回可用字体名称."
-  (or (when-let ((xlfd (car (x-list-fonts font nil nil 1))))
-        ;; 从 xlfd 字符串中截取字体名称。
-        (nth 2 (split-string xlfd "-")))
+  (or (when-let* ((xlfd (car (x-list-fonts font nil nil 1)))
+                  (name (nth 2 (split-string xlfd "-"))))
+        (cond
+         ;; 字体名称中带 "-" 的特殊处理。
+         ((and name (string-match-p "-" font)) font)
+         ;; 字体名称全是数字的不做处理。
+         ((not (string-match-p "[^0-9]" font)) nil)
+         (name name)
+         (t nil)))
       (unless fast
         (cl-find-if
          (lambda (x)
