@@ -567,7 +567,7 @@ file's name."
     ;; 设置中文字体，注意，不要使用 'unicode charset,
     ;; 否则上面的英文字体设置将会失效。
     (when (cnfonts--fontspec-valid-p chinese-fontspec)
-      (dolist (charset '(kana han cjk-misc bopomofo gb18030))
+      (dolist (charset '(kana han cjk-misc bopomofo))
         (set-fontset-font
          "fontset-default"
          charset chinese-fontspec)))
