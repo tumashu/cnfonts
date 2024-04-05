@@ -5,7 +5,7 @@
 
 ;; Author: Feng Shu <tumashu@163.com>
 ;; Package-Requires: ((emacs "24"))
-;; Version: 1.1.0
+;; Version: 1.1.2
 ;; Keywords: convenience, Chinese, font
 
 ;; This file is not part of GNU Emacs.
