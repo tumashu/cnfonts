@@ -695,6 +695,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   (interactive)
   (cnfonts--next-fontsize 1))
 
+;;;###autoload
 (defun cnfonts--next-fontsize (n)
   "使用下 N 个字号."
   (if (not (display-graphic-p))
