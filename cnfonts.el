@@ -100,10 +100,10 @@ It record the current profile and profile fontsize."
 
 (defvar cnfonts-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-<mouse-5>") #'cnfonts-mouse-wheel-text-scale)
-    (define-key map (kbd "C-<mouse-4>") #'cnfonts-mouse-wheel-text-scale)
-    (define-key map (kbd "C-<wheel-down>") #'cnfonts-mouse-wheel-text-scale)
-    (define-key map (kbd "C-<wheel-up>") #'cnfonts-mouse-wheel-text-scale)
+    (define-key map (kbd "C-<mouse-5>") #'cnfonts-mouse-wheel)
+    (define-key map (kbd "C-<mouse-4>") #'cnfonts-mouse-wheel)
+    (define-key map (kbd "C-<wheel-down>") #'cnfonts-mouse-wheel)
+    (define-key map (kbd "C-<wheel-up>") #'cnfonts-mouse-wheel)
     (define-key map (kbd "<touchscreen-pinch>") #'cnfonts-touch-screen-pinch)
     map)
   "Keymap used by `cnfonts-mode'.")
@@ -729,33 +729,27 @@ When PROFILE-NAME is non-nil, save to this profile instead."
   (interactive)
   (cnfonts--next-fontsize 0))
 
-
-
-(defun cnfonts-mouse-wheel-text-scale (event)
-  "修改emacs原本代码，把改变字体大小的部分换成cnfonts的，原来的可以参见 `text-scale-adjust'."
+;;;###autoload
+(defun cnfonts-mouse-wheel (event)
+  "使用 mouse wheel 调整字体大小，类似 `text-scale-adjust'."
   (interactive (list last-input-event))
   (let ((selected-window (selected-window))
         (scroll-window (mouse-wheel--get-scroll-window event))
         (button (mwheel-event-button event)))
     (select-window scroll-window 'mark-for-redisplay)
     (unwind-protect
-        (cond ((memq button (list mouse-wheel-down-event
-                                  mouse-wheel-down-alternate-event))
-	       (cnfonts-increase-fontsize)
-	       ;;替换成cnfonts
-	       ;;(text-scale-increase 1)
-	       )
-	      ((memq button (list mouse-wheel-up-event
-                                  mouse-wheel-up-alternate-event))
-	       ;;(text-scale-decrease 1)
-	       ;;替换成cnfonts
-	       (cnfonts-decrease-fontsize)
-	       ))
+        (cond
+         ((memq button (list mouse-wheel-down-event
+                             mouse-wheel-down-alternate-event))
+	  (cnfonts-increase-fontsize))
+	 ((memq button (list mouse-wheel-up-event
+                             mouse-wheel-up-alternate-event))
+	  (cnfonts-decrease-fontsize)))
       (select-window selected-window))))
 
 ;;;###autoload
 (defun cnfonts-touch-screen-pinch (event)
-  "修改emacs原本代码，把改变字体大小的部分换成cnfonts的"
+  "使用 touch screen pinch 调整字体大小，类似: `text-scale-pinch'."
   (interactive "e")
   (require 'face-remap)
   (let* ((posn (cadr event))
@@ -771,14 +765,10 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 	      start-scale (or (aref touch-screen-aux-tool 7)
 			      (aset touch-screen-aux-tool 7
 				    current-scale)))
-        ;; Set the text scale.
-	;;这里就是设置字体缩放的地方
-        ;;(text-scale-set (+ start-scale
-        ;;                   (round (log scale text-scale-mode-step))))
+        ;; Set font size.
         (if (> (round (log scale text-scale-mode-step )) 0)
 	    (cnfonts-increase-fontsize)
-	  (cnfonts-decrease-fontsize)
-	  )
+	  (cnfonts-decrease-fontsize))
         ;; Subsequently move the row which was at the centrum to its Y
         ;; position.
         (if (and (not (eq current-scale
@@ -787,8 +777,8 @@ When PROFILE-NAME is non-nil, save to this profile instead."
                  (cdr (posn-x-y posn)))
 	    (touch-screen-scroll-point-to-y (posn-point posn)
 					    (cdr (posn-x-y posn)))
-          ;; Rather than scroll POSN's point to its old row, scroll the
-          ;; display by the Y axis deltas within EVENT.
+          ;; Rather than scroll POSN's point to its old row, scroll
+          ;; the display by the Y axis deltas within EVENT.
           (let ((height (window-default-line-height))
                 (y-accumulator (or (aref touch-screen-aux-tool 8) 0)))
 	    (setq y-accumulator (+ y-accumulator (nth 4 event)))
