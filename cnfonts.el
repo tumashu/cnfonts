@@ -743,9 +743,6 @@ When PROFILE-NAME is non-nil, save to this profile instead."
         (mouse-wheel-text-scale event))
     (message "当前 Emacs 版本没有 `mouse-wheel-text-scale' 命令。")))
 
-;; Ignore warn.
-(defvar start-scale)
-
 ;;;###autoload
 (defun cnfonts-touch-screen-pinch (event)
   "使用 touch screen pinch 调整字体大小，类似: `touch-screen-pinch'."
@@ -755,6 +752,7 @@ When PROFILE-NAME is non-nil, save to this profile instead."
                  (lambda (x)
                    ;; 注意： start-scale 是 `touch-screen-pinch' 命令
                    ;; 的内部变量，这是一个闭包。
+                   (defvar start-scale)
                    (if (> (- x start-scale) 0)
                        (cnfonts-increase-fontsize)
                      (cnfonts-decrease-fontsize)))))
