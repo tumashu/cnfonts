@@ -41,6 +41,8 @@
 
 ;; * 代码                                                                 :code:
 (require 'cl-lib)
+(require 'mwheel)
+(require 'touch-screen nil t)
 
 (defgroup cnfonts nil
   "Chinese fonts setup."
@@ -690,10 +692,10 @@ When PROFILE-NAME is non-nil, save to this profile instead."
              incf-x)))
 
 ;;;###autoload
-(defun cnfonts-increase-fontsize ()
+(defun cnfonts-increase-fontsize (&optional arg)
   "Cnfonts 增大字体."
   (interactive)
-  (cnfonts--next-fontsize 1))
+  (cnfonts--next-fontsize (or arg 1)))
 
 ;;;###autoload
 (defun cnfonts--next-fontsize (n)
@@ -718,10 +720,10 @@ When PROFILE-NAME is non-nil, save to this profile instead."
         (message cnfonts--minibuffer-echo-string)))))
 
 ;;;###autoload
-(defun cnfonts-decrease-fontsize ()
+(defun cnfonts-decrease-fontsize (&optional arg)
   "Cnfonts 减小字体."
   (interactive)
-  (cnfonts--next-fontsize -1))
+  (cnfonts--next-fontsize (if arg (* arg -1) -1)))
 
 ;;;###autoload
 (defun cnfonts-reset-fontsize ()
@@ -731,82 +733,30 @@ When PROFILE-NAME is non-nil, save to this profile instead."
 
 ;;;###autoload
 (defun cnfonts-mouse-wheel (event)
-  "使用 mouse wheel 调整字体大小，类似 `text-scale-adjust'."
+  "使用 mouse wheel 调整字体大小，类似 `mouse-wheel-text-scale'."
   (interactive (list last-input-event))
-  (let ((selected-window (selected-window))
-        (scroll-window (mouse-wheel--get-scroll-window event))
-        (button (mwheel-event-button event)))
-    (select-window scroll-window 'mark-for-redisplay)
-    (unwind-protect
-        (cond
-         ((memq button (list mouse-wheel-down-event
-                             mouse-wheel-down-alternate-event))
-	  (cnfonts-increase-fontsize))
-	 ((memq button (list mouse-wheel-up-event
-                             mouse-wheel-up-alternate-event))
-	  (cnfonts-decrease-fontsize)))
-      (select-window selected-window))))
+  (if (functionp 'mouse-wheel-text-scale)
+      (cl-letf (((symbol-function 'text-scale-increase)
+                 #'cnfonts-increase-fontsize)
+                ((symbol-function 'text-scale-decrease)
+                 #'cnfonts-decrease-fontsize))
+        (mouse-wheel-text-scale event))
+    (message "当前 Emacs 版本没有 `mouse-wheel-text-scale' 命令。")))
 
 ;;;###autoload
 (defun cnfonts-touch-screen-pinch (event)
-  "使用 touch screen pinch 调整字体大小，类似: `text-scale-pinch'."
+  "使用 touch screen pinch 调整字体大小，类似: `touch-screen-pinch'."
   (interactive "e")
-  (require 'face-remap)
-  (let* ((posn (cadr event))
-         (window (posn-window posn))
-         (scale (nth 2 event))
-         (ratio-diff (nth 5 event))
-         current-scale start-scale)
-    (when (windowp window)
-      (with-selected-window window
-        (setq current-scale (if text-scale-mode
-                                text-scale-mode-amount
-			      0)
-	      start-scale (or (aref touch-screen-aux-tool 7)
-			      (aset touch-screen-aux-tool 7
-				    current-scale)))
-        ;; Set font size.
-        (if (> (round (log scale text-scale-mode-step )) 0)
-	    (cnfonts-increase-fontsize)
-	  (cnfonts-decrease-fontsize))
-        ;; Subsequently move the row which was at the centrum to its Y
-        ;; position.
-        (if (and (not (eq current-scale
-                          text-scale-mode-amount))
-                 (posn-point posn)
-                 (cdr (posn-x-y posn)))
-	    (touch-screen-scroll-point-to-y (posn-point posn)
-					    (cdr (posn-x-y posn)))
-          ;; Rather than scroll POSN's point to its old row, scroll
-          ;; the display by the Y axis deltas within EVENT.
-          (let ((height (window-default-line-height))
-                (y-accumulator (or (aref touch-screen-aux-tool 8) 0)))
-	    (setq y-accumulator (+ y-accumulator (nth 4 event)))
-	    (when (or (> y-accumulator height)
-		      (< y-accumulator (- height)))
-	      (ignore-errors
-                (if (> y-accumulator 0)
-		    (scroll-down 1)
-                  (scroll-up 1)))
-	      (setq y-accumulator 0))
-	    (aset touch-screen-aux-tool 8 y-accumulator))
-          ;; Likewise for the X axis deltas.
-          (let ((width (frame-char-width))
-                (x-accumulator (or (aref touch-screen-aux-tool 9) 0)))
-	    (setq x-accumulator (+ x-accumulator (nth 3 event)))
-	    (when (or (> x-accumulator width)
-		      (< x-accumulator (- width)))
-	      ;; Do not hscroll if the ratio has shrunk, for that is
-	      ;; generally attended by the centerpoint moving left,
-	      ;; and Emacs can hscroll left even when no lines are
-	      ;; truncated.
-	      (unless (and (< x-accumulator 0)
-                           (< ratio-diff 0))
-                (if (> x-accumulator 0)
-		    (scroll-right 1)
-                  (scroll-left 1)))
-	      (setq x-accumulator 0))
-            (aset touch-screen-aux-tool 9 x-accumulator)))))))
+  (if (functionp 'touch-screen-pinch)
+      (cl-letf (((symbol-function 'text-scale-set)
+                 (lambda (x)
+                   ;; 注意： start-scale 是 `touch-screen-pinch' 命令
+                   ;; 的内部变量，这是一个闭包。
+                   (if (> (- x start-scale) 0)
+                       (cnfonts-increase-fontsize)
+                     (cnfonts-decrease-fontsize)))))
+        (touch-screen-pinch event)))
+  (message "当前 Emacs 版本没有 `touch-screen-pinch' 命令。"))
 
 ;;;###autoload
 (defun cnfonts-switch-profile ()
