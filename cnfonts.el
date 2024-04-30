@@ -174,7 +174,7 @@ It record the current profile and profile fontsize."
      "InputMonoCompressed" "Hasklig" "Terminus" "FantasqueSansMono"
      "AnonymousPro" "Arimo" "D2Coding" "Inconsolata-g" "Noto Mono"
      "ProFont for Powerline" "Meslo" "Meslo Dotted" "Symbol Neu"
-     "Tinos" "Space Mono" "SFMono Nerd Font")
+     "Tinos" "Space Mono" "SFMono Nerd Font" "终端更纱黑体-简 Nerd" "Sarasa Term SC Nerd")
     ;; 中文字体
     ("微软雅黑" "Noto Sans Mono CJK SC" "Noto Sans Mono CJK TC"
      "Noto Sans CJK SC" "Noto Sans CJK TC" "Microsoft Yahei"
@@ -185,7 +185,7 @@ It record the current profile and profile fontsize."
      "FangSong" "KaiTi" "FangSong_GB2312" "KaiTi_GB2312" "LiSu"
      "YouYuan" "新宋体" "宋体" "楷体_GB2312" "仿宋_GB2312" "幼圆"
      "隶书" "STXihei" "STKaiti" "STSong" "STFangsong" "STXingkai"
-     "华文仿宋" "华文行楷" "华文细黑" "华文楷体" )
+     "华文仿宋" "华文行楷" "华文细黑" "华文楷体" "终端更纱黑体-简 Nerd" "Sarasa Term SC Nerd")
     ;; EXT-B 字体
     ("HanaMinB" "SimSun-ExtB" "MingLiU-ExtB" "PMingLiU-ExtB"
      "MingLiU_HKSCS-ExtB" "Hanazono Mincho" "Hanazono Mincho A"
@@ -198,6 +198,48 @@ It record the current profile and profile fontsize."
     ("NanumGothic" "Arial Unicode MS" "MS Gothic"
      "Lucida Sans Unicode")))
 
+;; 默认安装带Nerd的更纱黑体
+(defvar cnfonts-default-font-names '("sarasa-term-sc-nerd-regular.ttf")
+  "List of defined font file names.")
+
+(defun cnfonts-install-default-fonts (&optional pfx)
+  "Helper function to download and install the latests fonts based on OS.
+The provided Font is Sarasa term SC nerd.
+When PFX is non-nil, ignore the prompt and just install"
+  (interactive "P")
+  (when (or pfx (yes-or-no-p "This will download and install fonts, are you sure you want to do this?"))
+    (let* ((url-format "https://raw.githubusercontent.com/sherylynn/fonts/main/%s")
+           (font-dest (cond
+                       ;; Default Linux install directories
+                       ((member system-type '(gnu gnu/linux gnu/kfreebsd))
+                        (concat (or (getenv "XDG_DATA_HOME")
+                                    (concat (getenv "HOME") "/.local/share"))
+                                "/fonts/"
+                                ))
+                       ;; Default MacOS install directory
+                       ((eq system-type 'darwin)
+                        (concat (getenv "HOME")
+                                "/Library/Fonts/"
+                                ))
+                       ;; Default Android install directory
+                       ((eq system-type 'android)
+                        (concat (getenv "HOME")
+                                "/fonts/"
+                                ))))
+           (known-dest? (stringp font-dest))
+           (font-dest (or font-dest (read-directory-name "Font installation directory: " "~/"))))
+
+      (unless (file-directory-p font-dest) (mkdir font-dest t))
+
+      (mapc (lambda (font)
+              (url-copy-file (format url-format font) (expand-file-name font font-dest) t))
+            cnfonts-default-font-names)
+      (when known-dest?
+        (message "Fonts downloaded, updating font cache... <fc-cache -f -v> ")
+        (shell-command-to-string (format "fc-cache -f -v")))
+      (message "Successfully %s `sarasa-nerd' fonts to `%s'!"
+               (if known-dest? "installed" "downloaded")
+               font-dest))))
 (defcustom cnfonts-ornaments
   (list
    ;; spacemacs window numbers

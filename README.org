@@ -50,11 +50,12 @@ cnfonts 添加了许多辅助工具，使配置和调节字体和字号的工作
 要阅读整篇文档，如果用户想深入了解 cnfonts 或者自定义一些特殊的功能，
 阅读整篇文档是逃不开的。
 
-| 命令                      | 功能         |
-|---------------------------+--------------|
-| cnfonts-edit-profile      | 调整字体设置 |
-| cnfonts-increase-fontsize | 增大字号     |
-| cnfonts-decrease-fontsize | 减小字号     |
+| 命令                           | 功能                         |
+|-------------------------------+-----------------------------|
+| cnfonts-edit-profile          | 调整字体设置                 |
+| cnfonts-increase-fontsize     | 增大字号                     |
+| cnfonts-decrease-fontsize     | 减小字号                     |
+| cnfonts-install-default-fonts | 安装默认字体【更纱黑体 Nerd】 |
 
 ** profile 的概念
 
