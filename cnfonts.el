@@ -756,8 +756,8 @@ When PROFILE-NAME is non-nil, save to this profile instead."
                    (if (> (- x start-scale) 0)
                        (cnfonts-increase-fontsize)
                      (cnfonts-decrease-fontsize)))))
-        (touch-screen-pinch event)))
-  (message "当前 Emacs 版本没有 `touch-screen-pinch' 命令。"))
+        (touch-screen-pinch event))
+    (message "当前 Emacs 版本没有 `touch-screen-pinch' 命令。")))
 
 ;;;###autoload
 (defun cnfonts-switch-profile ()
